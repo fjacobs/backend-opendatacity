@@ -14,7 +14,7 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven/>
 
-	<context:component-scan base-package="com.dynacore.mymvc.controller" />
+	<context:component-scan base-package="com.dynacore.livemap.controller" />
 					
 	<mvc:interceptors>
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="language"/>

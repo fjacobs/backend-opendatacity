@@ -1,4 +1,4 @@
-package com.dynacore.mymvc.controller;
+package com.dynacore.livemap.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

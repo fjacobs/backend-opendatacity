@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="fileContactLogData")
-public class FileContactLogData {
+@Table(name="brugContactLogData")
+public class BrugContactLogData {
 	
 		@Id
 		@GeneratedValue
@@ -16,9 +16,9 @@ public class FileContactLogData {
 		private String PubDate;
 		private String State;
 						
-		public FileContactLogData(){};
+		public BrugContactLogData(){};
 		
-		public FileContactLogData(String name, String pubDate,	String state) {
+		public BrugContactLogData(String name, String pubDate,	String state) {
 			Name = name;
 			PubDate = pubDate;
 			setState(state);			
