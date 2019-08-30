@@ -52,7 +52,7 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
 		  public void run() { 
 			RestTemplate restTemplate = createRestTemplate();
 			try {								
-					json = restTemplate.getForObject("http://www.trafficlink-online.nl/trafficlinkdata/wegdata/IDPA_GuidanceSign.GeoJSON", GeoJsonCollection.class);
+					json = restTemplate.getForObject(getDataSourceLocation(GuidanceSign.class.getSimpleName()), GeoJsonCollection.class);
 				//	saveCollection(json);	 //XXX implement hibernate one to many
 					customizeJson(json); //Customize Json for frontend.
 				

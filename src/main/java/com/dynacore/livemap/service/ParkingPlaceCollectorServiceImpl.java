@@ -78,7 +78,7 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
 		  public void run() { 
 			RestTemplate restTemplate = createRestTemplate();
 			try {
-				parkingJson = restTemplate.getForObject("http://www.trafficlink-online.nl/trafficlinkdata/wegdata/IDPA_ParkingLocation.GeoJSON", GeoJsonCollection.class);
+				parkingJson = restTemplate.getForObject(getDataSourceLocation(ParkingPlace.class.getSimpleName()), GeoJsonCollection.class);
 					saveCollection(parkingJson);
 					customizeJson(parkingJson); //Customize Json for frontend.
 				
