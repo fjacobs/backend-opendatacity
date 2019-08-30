@@ -5,21 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.FeatureCollection;
-import com.dynacore.livemap.service.GuidanceSignService;
+import com.dynacore.livemap.entity.jsonrepresentations.GeoJsonCollection;
+import com.dynacore.livemap.service.TrafficDataCollectorService;
+import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.GuidanceSign;
 
 @Controller
 public class GuidanceSignController {
 	
-	@Autowired 
-	GuidanceSignService guidanceSignService;
-	FeatureCollection top;
-	
+	@Autowired
+	TrafficDataCollectorService<GeoJsonCollection<GuidanceSign>> guidanceSignService;
+
 	public GuidanceSignController() { }
 	
 	@RequestMapping(value = "getCustomGuidanceSignJson")
 	@ResponseBody
-	public FeatureCollection getCustomJson() {
+	public GeoJsonCollection<GuidanceSign> getCustomJson() {
 		return guidanceSignService.getProcessedJson();
 	}
  

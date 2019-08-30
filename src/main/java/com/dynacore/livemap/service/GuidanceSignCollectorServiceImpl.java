@@ -1,6 +1,5 @@
 package com.dynacore.livemap.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -16,16 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.dynacore.livemap.entity.hibernate.GuidanceSignLogData;
-import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.FeatureCollection;
 import com.dynacore.livemap.repository.GuidanceSignRepository;
-
+import com.dynacore.livemap.entity.jsonrepresentations.GeoJsonCollection;
+import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.GuidanceSign;
 
 @Service("guidanceSignService")
-public class GuidanceSignServiceImpl implements GuidanceSignService {
+public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorService<GeoJsonCollection<GuidanceSign>> {
 	
 	@Autowired 
 	private GuidanceSignRepository guidanceSignRepository;
-	private FeatureCollection json;
+	private GeoJsonCollection<GuidanceSign> json;
 
 	private String latestPubdate, currentPubdate;
 	private int updateInterval = 60; 
@@ -34,18 +33,18 @@ public class GuidanceSignServiceImpl implements GuidanceSignService {
 	private RestTemplate createRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();			
-		List<MediaType> supportedMediaTypes = new ArrayList<MediaType>(); 
+		List<MediaType> supportedMediaTypes = new ArrayList<>();
 		supportedMediaTypes.add(MediaType.ALL);			
 		jacksonMessageConverter.setSupportedMediaTypes(supportedMediaTypes);			
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>(); 
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
 		messageConverters.add(jacksonMessageConverter);		
 		restTemplate.getMessageConverters().add(jacksonMessageConverter);
 		return restTemplate;
 	}	
 
-	public GuidanceSignServiceImpl() {		
-		latestPubdate = new String();
-		currentPubdate = new String();
+	public GuidanceSignCollectorServiceImpl() {
+		latestPubdate = "";
+		currentPubdate = "";
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate(new Runnable() {
 		  
@@ -53,8 +52,8 @@ public class GuidanceSignServiceImpl implements GuidanceSignService {
 		  public void run() { 
 			RestTemplate restTemplate = createRestTemplate();
 			try {								
-					json = restTemplate.getForObject("http://www.trafficlink-online.nl/trafficlinkdata/wegdata/IDPA_GuidanceSign.GeoJSON", FeatureCollection.class);
-				//	saveCollection(json);	 //XXX implement hibernate one to many				
+					json = restTemplate.getForObject("http://www.trafficlink-online.nl/trafficlinkdata/wegdata/IDPA_GuidanceSign.GeoJSON", GeoJsonCollection.class);
+				//	saveCollection(json);	 //XXX implement hibernate one to many
 					customizeJson(json); //Customize Json for frontend.
 				
 			} catch (Exception e) {
@@ -65,10 +64,9 @@ public class GuidanceSignServiceImpl implements GuidanceSignService {
 	}	
 	
 	//This method adds stuff to the inserted json 
-	private FeatureCollection customizeJson(FeatureCollection top) {
+	private GeoJsonCollection<GuidanceSign> customizeJson(GeoJsonCollection<GuidanceSign> top) {
 		try {
-			
-			
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,18 +74,13 @@ public class GuidanceSignServiceImpl implements GuidanceSignService {
 		return top;
 	}
 	
-	public FeatureCollection getProcessedJson() {
+	public GeoJsonCollection<GuidanceSign> getProcessedJson() {
 		return json;
-	}
-		
-	@Override
-	public GuidanceSignLogData save(GuidanceSignLogData guidanceSign) {
-		return guidanceSignRepository.save(guidanceSign);
 	}
 
 	@Override
 	@Transactional
-	public void saveCollection(FeatureCollection fc) {				
+	public void saveCollection(GeoJsonCollection<GuidanceSign> fc) {
 		for(int i=0; i < fc.getFeatures().size(); i++) {		
 				GuidanceSignLogData property = new GuidanceSignLogData(
 						fc.getFeatures().get(i).getProperties().getName(),
@@ -96,8 +89,8 @@ public class GuidanceSignServiceImpl implements GuidanceSignService {
 
 				);				
 				//only store logdata at start of the application or if it has changed.
-				if( latestPubdate.isEmpty() ||  ! latestPubdate.equals( property.getPubDate() )) {				
-		//			save(property); //XXX Implement one (GuidanceSign) to many (Displays) with hibernate..
+				if( latestPubdate.isEmpty() ||  ! latestPubdate.equals( property.getPubDate() )) {
+					guidanceSignRepository.save(property);
 					currentPubdate = property.getPubDate(); //TODO: Checken of currentPubdate voor latestpubdate viel.
 				}
 			}		

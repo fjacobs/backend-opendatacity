@@ -1,6 +1,5 @@
 package com.dynacore.livemap.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -13,14 +12,12 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.web.client.RestTemplate;
-
 import com.dynacore.livemap.entity.hibernate.ParkingLogData;
-import com.dynacore.livemap.entity.jsonrepresentations.parking.FeatureCollection;
 import com.dynacore.livemap.repository.ParkingPlaceRepository;
 
-
+import com.dynacore.livemap.entity.jsonrepresentations.GeoJsonCollection;
+import com.dynacore.livemap.entity.jsonrepresentations.parking.ParkingPlace;
 
 
 //@Component is equivalent to
@@ -49,11 +46,11 @@ import com.dynacore.livemap.repository.ParkingPlaceRepository;
 
 
 @Service("parkingPlaceService")
-public class ParkingPlaceServiceImpl implements ParkingPlaceService {
+public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorService<GeoJsonCollection<ParkingPlace>> {
 	
 	@Autowired 
 	private ParkingPlaceRepository parkingPlaceRepository;
-	private FeatureCollection parkingJson;
+	private GeoJsonCollection<ParkingPlace> parkingJson;
 
 	private String latestPubdate, currentPubdate;
 	private int updateInterval = 60; 
@@ -62,27 +59,27 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	private RestTemplate createRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();			
-		List<MediaType> supportedMediaTypes = new ArrayList<MediaType>(); 
+		List<MediaType> supportedMediaTypes = new ArrayList<>();
 		supportedMediaTypes.add(MediaType.ALL);			
 		jacksonMessageConverter.setSupportedMediaTypes(supportedMediaTypes);			
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>(); 
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
 		messageConverters.add(jacksonMessageConverter);		
 		restTemplate.getMessageConverters().add(jacksonMessageConverter);
 		return restTemplate;
 	}	
 
-	public ParkingPlaceServiceImpl() {		
-		latestPubdate = new String();
-		currentPubdate = new String();
+	public ParkingPlaceCollectorServiceImpl() {
+		latestPubdate = "";
+		currentPubdate = "";
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate(new Runnable() {
 		  
 		  @Override		  
 		  public void run() { 
 			RestTemplate restTemplate = createRestTemplate();
-			try {								
-					parkingJson = restTemplate.getForObject("http://www.trafficlink-online.nl/trafficlinkdata/wegdata/IDPA_ParkingLocation.GeoJSON", FeatureCollection.class);
-					saveCollection(parkingJson);					
+			try {
+				parkingJson = restTemplate.getForObject("http://www.trafficlink-online.nl/trafficlinkdata/wegdata/IDPA_ParkingLocation.GeoJSON", GeoJsonCollection.class);
+					saveCollection(parkingJson);
 					customizeJson(parkingJson); //Customize Json for frontend.
 				
 			} catch (Exception e) {
@@ -93,16 +90,14 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	}	
 	
 	//This method adds stuff to the inserted json (only percentage for now)
-	private FeatureCollection customizeJson(FeatureCollection top) {
+	private GeoJsonCollection<ParkingPlace> customizeJson(GeoJsonCollection<ParkingPlace> top) {
 		try {
-			
 			//Calculate percentage (How full is the parking) and insert into new json format
 			for(int i=0; i < top.getFeatures().size(); i++) {
-		
+
 				int capacity = Integer.parseInt(top.getFeatures().get(i).getProperties().getShortCapacity());
 				int parkedCars = (capacity - Integer.parseInt(top.getFeatures().get(i).getProperties().getFreeSpaceShort()));
 				int percentage = (int) ((float) (parkedCars *100) / capacity);
-				
 				top.getFeatures().get(i).getProperties().setPercentage(percentage);
 			}
 			
@@ -111,19 +106,14 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 		}
 		return top;
 	}
-	
-	public FeatureCollection getProcessedJson() {
+
+	public GeoJsonCollection<ParkingPlace> getProcessedJson() {
 		return parkingJson;
 	}
 		
 	@Override
-	public ParkingLogData save(ParkingLogData parkingPlace) {
-		return parkingPlaceRepository.save(parkingPlace);
-	}
-
-	@Override
 	@Transactional
-	public void saveCollection(FeatureCollection fc) {				
+	public void saveCollection(GeoJsonCollection<ParkingPlace> fc) {
 		for(int i=0; i < fc.getFeatures().size(); i++) {		
 				ParkingLogData property = new ParkingLogData(
 						fc.getFeatures().get(i).getProperties().getName(),
@@ -136,9 +126,9 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 						fc.getFeatures().get(i).getProperties().getLongCapacity()
 				);				
 				//only store logdata at start of the application or if it has changed.
-				if( latestPubdate.isEmpty() ||  ! latestPubdate.equals( property.getPubDate() )) {				
-					save(property);
-					currentPubdate = property.getPubDate(); //TODO: Checken of currentPubdate voor latestpubdate viel.
+				if( latestPubdate.isEmpty() ||  ! latestPubdate.equals( property.getPubDate() )) {
+                    parkingPlaceRepository.save(property);
+                    currentPubdate = property.getPubDate(); //TODO: Checken of currentPubdate voor latestpubdate viel.
 				}
 			}		
 			latestPubdate = currentPubdate;		
