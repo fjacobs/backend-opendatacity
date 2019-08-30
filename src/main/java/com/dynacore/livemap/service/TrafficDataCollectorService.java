@@ -9,12 +9,12 @@ import java.util.Properties;
  */
 
 public interface TrafficDataCollectorService<U> {
-	 static final String dataSourceProperty = "datasources.properties";
+	String dataSourceProperty = "datasources.properties";
 
 	U getProcessedJson();
 	void saveCollection(U processedCollection);
 
-	default String getDataSourceLocation(String key) throws IOException {
+	default String getDataSourceUrl(String key) throws IOException {
 		Properties appProps = new Properties();
 		appProps.load(new FileInputStream(Thread.currentThread().getContextClassLoader().getResource(dataSourceProperty).getPath()));
 		return appProps.getProperty(key);

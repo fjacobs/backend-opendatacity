@@ -6,9 +6,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.dynacore.livemap.entity.jsonrepresentations.parking.ParkingPlace;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,7 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
 	
 	@Autowired 
 	private GuidanceSignRepository guidanceSignRepository;
-	private GeoJsonCollection<GuidanceSign> json;
+	private GeoJsonCollection json;
 
 	private String latestPubdate, currentPubdate;
 	private int updateInterval = 60; 
@@ -36,8 +38,6 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
 		List<MediaType> supportedMediaTypes = new ArrayList<>();
 		supportedMediaTypes.add(MediaType.ALL);			
 		jacksonMessageConverter.setSupportedMediaTypes(supportedMediaTypes);			
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-		messageConverters.add(jacksonMessageConverter);		
 		restTemplate.getMessageConverters().add(jacksonMessageConverter);
 		return restTemplate;
 	}	
@@ -52,8 +52,12 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
 		  public void run() { 
 			RestTemplate restTemplate = createRestTemplate();
 			try {								
-					json = restTemplate.getForObject(getDataSourceLocation(GuidanceSign.class.getSimpleName()), GeoJsonCollection.class);
-				//	saveCollection(json);	 //XXX implement hibernate one to many
+					//json = restTemplate.getForObject( getDataSourceUrl(GuidanceSign.class.getSimpleName()), GeoJsonCollection.class);
+					json = restTemplate.exchange( getDataSourceUrl(GuidanceSign.class.getSimpleName()),
+											   HttpMethod.GET,	null,
+											   new ParameterizedTypeReference<GeoJsonCollection<ParkingPlace>>() {}).getBody();
+
+
 					customizeJson(json); //Customize Json for frontend.
 				
 			} catch (Exception e) {
@@ -65,12 +69,7 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
 	
 	//This method adds stuff to the inserted json 
 	private GeoJsonCollection<GuidanceSign> customizeJson(GeoJsonCollection<GuidanceSign> top) {
-		try {
 
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return top;
 	}
 	
