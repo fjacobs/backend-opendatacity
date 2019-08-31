@@ -24,7 +24,7 @@
 		</property>
 		<property name="jpaPropertyMap">
 			<map>
-				<entry key="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+				<entry key="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
 				<entry key="hibernate.hbm2ddl.auto" value="update"/>
 				<entry key="hibernate.format_sql" value="true"/>							
 			</map>
@@ -39,7 +39,7 @@
 	
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/logdb?autoReconnect=true"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/logdb?autoReconnect=false"/>
 		<property name="username" value="root"/>
 		<property name="password" value="admin"/>
 	</bean>
