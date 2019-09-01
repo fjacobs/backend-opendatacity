@@ -16,8 +16,6 @@ public class GuidanceSignLogData {
 		private String PubDate;
 		private String State;
 		
-		
-		
 		public GuidanceSignLogData(){};
 		
 		public GuidanceSignLogData(String name, String pubDate,	String state) {

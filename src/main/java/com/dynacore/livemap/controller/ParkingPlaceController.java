@@ -14,8 +14,7 @@ public class ParkingPlaceController {
 
 	@Autowired
 	TrafficDataCollectorService< GeoJsonCollection<ParkingPlace>> parkingPlaceService;
-	GeoJsonCollection<ParkingPlace> top;
-	
+
 	public ParkingPlaceController() { }
 	
 	@RequestMapping(value = "getCustomParkingJson")

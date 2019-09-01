@@ -23,9 +23,8 @@ public class ParkingLogData {
 				
 		public ParkingLogData(){};
 		
-		public ParkingLogData(String name, String pubDate, String type,
-				String state, String freeSpaceShort, String freeSpaceLong,
-				String shortCapacity, String longCapacity) {
+		public ParkingLogData(String name, String pubDate, String type,  String state, String freeSpaceShort,
+							  String freeSpaceLong, String shortCapacity, String longCapacity) {
 			Name = name;
 			PubDate = pubDate;
 			Type = type;

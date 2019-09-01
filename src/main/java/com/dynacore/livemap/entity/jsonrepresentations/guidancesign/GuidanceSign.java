@@ -8,7 +8,17 @@ public class GuidanceSign {
 	private String type;
 	private Geometry geometry;
 	private Properties properties;
-	
+
+
+	public String getName() {
+		return properties.Name;
+	}
+	public String getPubDate() {
+		return properties.PubDate;
+	}
+	public String getState() {
+		return properties.State;
+	}
 	public Geometry getGeometry() {
 		return geometry;
 	}
