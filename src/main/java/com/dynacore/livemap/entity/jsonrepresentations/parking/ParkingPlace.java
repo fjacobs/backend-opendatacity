@@ -4,6 +4,7 @@ import com.dynacore.livemap.entity.jsonrepresentations.Geometry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class ParkingPlace {
@@ -23,15 +24,12 @@ public class ParkingPlace {
 	public String getId() {
 		return id;
 	}
-
 	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;
 	}
-
 	public Geometry getGeometry() {
 		return geometry;
 	}
-
 	public void setType(String type) {
 		this.type = type;
 	}
@@ -159,8 +157,8 @@ public class ParkingPlace {
 		return properties.name;
 	}
 	@JsonIgnore
-	public String getPubDate() {
-		return properties.pubDate;
+	public LocalDateTime getPubDate() {
+		return LocalDateTime.parse(properties.pubDate.substring(0, properties.pubDate.length() - 1));
 	}
 	@JsonIgnore
 	public String getPropType() {

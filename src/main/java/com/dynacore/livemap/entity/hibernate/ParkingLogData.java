@@ -1,91 +1,90 @@
 package com.dynacore.livemap.entity.hibernate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+
 
 @Entity
-@Table(name="parkingLogData2")
+@Table(name="parkinglogdata")
 public class ParkingLogData {
 	
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private long id;
-		private String Name;
-		private String PubDate;
-		private String Type;
-		private String State;
-		private int FreeSpaceShort;
-		private int FreeSpaceLong;
-		private int ShortCapacity;
-		private int LongCapacity;
+		private String name;
+		private LocalDateTime pubDate;
+		private String type;
+		private String state;
+		private int freeSpaceShort;
+		private int freeSpaceLong;
+		private int shortCapacity;
+		private int longCapacity;
 				
 		public ParkingLogData(){}
 		
-		public ParkingLogData(String name, String pubDate, String type,  String state, int freeSpaceShort,
+		public ParkingLogData(String name, LocalDateTime pubDate, String type,  String state, int freeSpaceShort,
 							  int freeSpaceLong, int shortCapacity, int longCapacity) {
-			Name = name;
-			PubDate = pubDate;
-			Type = type;
-			State = state;
-			FreeSpaceShort = freeSpaceShort;
-			FreeSpaceLong = freeSpaceLong;
-			ShortCapacity = shortCapacity;
-			LongCapacity = longCapacity;
+			this.name = name;
+			this.pubDate = pubDate;
+			this.type = type;
+			this.state = state;
+			this.freeSpaceShort = freeSpaceShort;
+			this.freeSpaceLong = freeSpaceLong;
+			this.shortCapacity = shortCapacity;
+			this.longCapacity = longCapacity;
 		}
 		
 		public long getId() {
 			return id;
 		}
-
 		public void setId(long id) {
 			this.id = id;
 		}
 
 		public String getName() {
-			return Name;
+			return name;
 		}
 		public void setName(String name) {
-			Name = name;
+			this.name = name;
 		}
-		public String getPubDate() {
-			return PubDate;
+		public LocalDateTime getPubDate() {
+			return pubDate;
 		}
-		public void setPubDate(String pubDate) {
-			PubDate = pubDate;
+		public void setPubDate(LocalDateTime pubDate) {
+			this.pubDate = pubDate;
 		}
 		public String getType() {
-			return Type;
+			return type;
 		}
 		public void setType(String type) {
-			Type = type;
+			this.type = type;
 		}
 		public String getState() {
-			return State;
+			return state;
 		}
 		public void setState(String state) {
-			State = state;
+			this.state = state;
 		}
 		public int getFreeSpaceShort() {
-			return FreeSpaceShort;
+			return freeSpaceShort;
 		}
 		public void setFreeSpaceShort(int freeSpaceShort) {
-			FreeSpaceShort = freeSpaceShort;
+			this.freeSpaceShort = freeSpaceShort;
 		}
 		public int getFreeSpaceLong() {
-			return FreeSpaceLong;
+			return freeSpaceLong;
 		}
 		public void setFreeSpaceLong(int freeSpaceLong) {
-			FreeSpaceLong = freeSpaceLong;
+			this.freeSpaceLong = freeSpaceLong;
 		}
 		public int getShortCapacity() {
-			return ShortCapacity;
+			return shortCapacity;
 		}
 		public void setShortCapacity(int shortCapacity) {
-			ShortCapacity = shortCapacity;
+			this.shortCapacity = shortCapacity;
 		}
 		public int getLongCapacity() {
-			return LongCapacity;
+			return longCapacity;
 		}
-		public void setLongCapacity(int longCapacity) {
-			LongCapacity = longCapacity;
-		}				
+		public void setLongCapacity(int longCapacity) {	this.longCapacity = longCapacity; }
 }
