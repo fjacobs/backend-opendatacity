@@ -1,30 +1,27 @@
 package com.dynacore.livemap.entity.hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="parkingLogData2")
 public class ParkingLogData {
 	
 		@Id
-		@GeneratedValue
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private long id;
 		private String Name;
 		private String PubDate;
 		private String Type;
 		private String State;
-		private String FreeSpaceShort;
-		private String FreeSpaceLong;
-		private String ShortCapacity;
-		private String LongCapacity;
+		private int FreeSpaceShort;
+		private int FreeSpaceLong;
+		private int ShortCapacity;
+		private int LongCapacity;
 				
-		public ParkingLogData(){};
+		public ParkingLogData(){}
 		
-		public ParkingLogData(String name, String pubDate, String type,  String state, String freeSpaceShort,
-							  String freeSpaceLong, String shortCapacity, String longCapacity) {
+		public ParkingLogData(String name, String pubDate, String type,  String state, int freeSpaceShort,
+							  int freeSpaceLong, int shortCapacity, int longCapacity) {
 			Name = name;
 			PubDate = pubDate;
 			Type = type;
@@ -67,28 +64,28 @@ public class ParkingLogData {
 		public void setState(String state) {
 			State = state;
 		}
-		public String getFreeSpaceShort() {
+		public int getFreeSpaceShort() {
 			return FreeSpaceShort;
 		}
-		public void setFreeSpaceShort(String freeSpaceShort) {
+		public void setFreeSpaceShort(int freeSpaceShort) {
 			FreeSpaceShort = freeSpaceShort;
 		}
-		public String getFreeSpaceLong() {
+		public int getFreeSpaceLong() {
 			return FreeSpaceLong;
 		}
-		public void setFreeSpaceLong(String freeSpaceLong) {
+		public void setFreeSpaceLong(int freeSpaceLong) {
 			FreeSpaceLong = freeSpaceLong;
 		}
-		public String getShortCapacity() {
+		public int getShortCapacity() {
 			return ShortCapacity;
 		}
-		public void setShortCapacity(String shortCapacity) {
+		public void setShortCapacity(int shortCapacity) {
 			ShortCapacity = shortCapacity;
 		}
-		public String getLongCapacity() {
+		public int getLongCapacity() {
 			return LongCapacity;
 		}
-		public void setLongCapacity(String longCapacity) {
+		public void setLongCapacity(int longCapacity) {
 			LongCapacity = longCapacity;
 		}				
 }

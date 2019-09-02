@@ -17,7 +17,6 @@ public class ParkingPlace {
 	@JsonProperty("properties")
 	private Properties properties;
 
-
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -49,7 +48,7 @@ public class ParkingPlace {
 		private String freeSpaceLong;
 		private String shortCapacity;
 		private String longCapacity;
-		private int percentage;
+		private int percentage = -1;
 
 		public Properties( String name, String pubDate, String type, String state,
 							String freeSpaceShort, String freeSpaceLong, String shortCapacity,
@@ -172,27 +171,24 @@ public class ParkingPlace {
 		return properties.state;
 	}
 	@JsonIgnore
-	public String getFreeSpaceShort() {
-		return properties.freeSpaceShort;
+	public int getFreeSpaceShort() {
+		return Integer.parseInt("0"+ properties.freeSpaceShort);
 	}
 	@JsonIgnore
-	public String getFreeSpaceLong() {
-		return properties.freeSpaceLong;
+	public int getFreeSpaceLong() {
+		return Integer.parseInt("0"+properties.freeSpaceLong);
 	}
 	@JsonIgnore
-	public String getShortCapacity() {
-		return properties.shortCapacity;
+	public int getShortCapacity() {
+		return Integer.parseInt("0"+properties.shortCapacity);
 	}
 	@JsonIgnore
-	public String getLongCapacity() {
-		return properties.longCapacity;
+	public int getLongCapacity() {
+		return Integer.parseInt("0"+properties.longCapacity);
 	}
-	@JsonIgnore
-	public void setPercentage(int percentage) {
-		properties.percentage = percentage;
-	}
-	@JsonIgnore
-	public int getPercentage() {
-		return properties.percentage;
-	}
+    //Custom:
+    @JsonIgnore
+    public void setPercentage(int percentage) {
+        properties.percentage = percentage;
+    }
 }
