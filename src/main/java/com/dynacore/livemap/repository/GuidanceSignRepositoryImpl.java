@@ -2,24 +2,47 @@ package com.dynacore.livemap.repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dynacore.livemap.entity.hibernate.GuidanceSignLogData;
 
-@Repository("guidanceSignRepository")
-public class GuidanceSignRepositoryImpl implements GuidanceSignRepository {
+import java.util.List;
+import java.util.Optional;
+
+@Repository("guidancesignrepository")
+public class GuidanceSignRepositoryImpl implements JpaRepository<GuidanceSignLogData> {
 
 	@PersistenceContext
-	private EntityManager em;
+	private EntityManager entityManager;
 
 	@Override
 	@Transactional
-	public GuidanceSignLogData save(GuidanceSignLogData guidanceSign) {
-		em.persist(guidanceSign);
-		em.flush();
-		return guidanceSign;
+	public void save(GuidanceSignLogData guidanceSign) {
+		entityManager.persist(guidanceSign);
+		entityManager.flush();
 	}
 
+	@Override
+	public Optional<GuidanceSignLogData> get(long id) {
+		return Optional.ofNullable(entityManager.find(GuidanceSignLogData.class, id));
+	}
+
+	@Override
+	public List<GuidanceSignLogData> getAll() {
+		Query query = entityManager.createQuery("SELECT e FROM GuidanceSign e");
+		return query.getResultList();
+	}
+
+	@Override
+	public void update(GuidanceSignLogData guidanceSignLogData, String[] params) {
+
+	}
+
+	@Override
+	public void delete(GuidanceSignLogData guidanceSignLogData) {
+
+	}
 }

@@ -4,6 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.dynacore.livemap.repository.JpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.dynacore.livemap.entity.hibernate.GuidanceSignLogData;
-import com.dynacore.livemap.repository.GuidanceSignRepository;
 import com.dynacore.livemap.entity.jsonrepresentations.GeoJsonCollection;
 import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.GuidanceSign;
 
@@ -20,10 +20,9 @@ import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.GuidanceSign
 public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorService<GeoJsonCollection<GuidanceSign>> {
 	
 	@Autowired 
-	private GuidanceSignRepository guidanceSignRepository;
+	private JpaRepository<GuidanceSignLogData> guidanceSignRepository;
 
-	private GeoJsonCollection geoJsonCollection;
-	private String latestPubdate, currentPubdate;
+	private GeoJsonCollection<GuidanceSign> geoJsonCollection;
 	private int updateInterval = 60;
 
 	public GuidanceSignCollectorServiceImpl() {
@@ -58,14 +57,10 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
 						fc.getFeatures().get(i).getPubDate(),
 						fc.getFeatures().get(i).getState()
 				);				
-				//only store logdata at start of the application or if it has changed.
-				if( latestPubdate.isEmpty() ||  ! latestPubdate.equals( property.getPubDate() )) {
 					guidanceSignRepository.save(property);
-					latestPubdate = property.getPubDate();
 				}
 			}
-			latestPubdate = currentPubdate;
-		}		
-	}
+		}
+
 
 
