@@ -1,6 +1,6 @@
 package com.dynacore.livemap.service;
 
-import com.dynacore.livemap.entity.jsonrepresentations.GeoJsonCollection;
+import com.dynacore.livemap.entity.jsonrepresentations.FeatureCollection;
 import org.springframework.core.ParameterizedTypeReference;
 
 import org.springframework.core.ResolvableType;
@@ -16,13 +16,12 @@ import java.util.List;
 
 public class RestMapper <T>  {
 
-
-    public <T> GeoJsonCollection marshallFromUrl(String url,  Class<T> clazz) {
+    public <T> FeatureCollection marshallFromUrl(String url, Class<T> clazz) {
         RestTemplate client = createRestClient();
 
-        Type resolvableType = ResolvableType.forClassWithGenerics(GeoJsonCollection.class, clazz).getType();
+        Type resolvableType = ResolvableType.forClassWithGenerics(FeatureCollection.class, clazz).getType();
 
-        ResponseEntity<GeoJsonCollection> geoJson = client.exchange(url,
+        ResponseEntity<FeatureCollection> geoJson = client.exchange(url,
                 HttpMethod.GET,
                 null,
                 ParameterizedTypeReference.forType(resolvableType), clazz);

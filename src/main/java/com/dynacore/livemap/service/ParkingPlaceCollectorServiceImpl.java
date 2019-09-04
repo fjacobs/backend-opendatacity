@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dynacore.livemap.entity.jsonrepresentations.GeoJsonCollection;
+import com.dynacore.livemap.entity.jsonrepresentations.FeatureCollection;
 import com.dynacore.livemap.entity.jsonrepresentations.parking.ParkingPlace;
 
 import java.util.concurrent.Executors;
@@ -17,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Service("parkingPlaceService")
-public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorService<GeoJsonCollection<ParkingPlace>> {
+public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorService<FeatureCollection<ParkingPlace>> {
 	
 	private JpaRepository<ParkingLogData> parkingRepo;
 
@@ -27,14 +27,14 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
 	@Value("${vialis.amsterdam.parkingplace.jsonurl}")
 	private String DATA_SOURCE_URL_KEY;
 
-	private GeoJsonCollection<ParkingPlace> liveData;
+	private FeatureCollection<ParkingPlace> liveData;
 
 	@Autowired
 	public ParkingPlaceCollectorServiceImpl(JpaRepository<ParkingLogData> parkingRepo) {
 		this.parkingRepo = parkingRepo;
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate( () -> {
-			RestMapper<GeoJsonCollection<ParkingPlace>> restMapper = new RestMapper<>();
+			RestMapper<FeatureCollection<ParkingPlace>> restMapper = new RestMapper<>();
 			liveData = restMapper.marshallFromUrl(DATA_SOURCE_URL_KEY, ParkingPlace.class);
 			saveCollection(liveData);
 		}, POLLING_INITIAL_DELAY, POLLING_UPDATE_INTERVAL, TimeUnit.SECONDS);
@@ -43,7 +43,8 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
 
 
 	@Override
-	public GeoJsonCollection<ParkingPlace> getLiveData() {
+	public FeatureCollection<ParkingPlace> getLiveData() {
+
 		liveData.getFeatures().stream().forEach(ParkingPlaceCollectorServiceImpl::setPercentage);
 		return liveData;
 	}
@@ -58,7 +59,7 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
 
 	@Override
 	@Transactional
-	public void saveCollection(GeoJsonCollection<ParkingPlace> fc) {
+	public void saveCollection(FeatureCollection<ParkingPlace> fc) {
         fc.getFeatures().forEach(parking -> parkingRepo.save(new ParkingLogData(parking.getId(),
 																				parking.getName(),
 																				parking.getPubDate(),

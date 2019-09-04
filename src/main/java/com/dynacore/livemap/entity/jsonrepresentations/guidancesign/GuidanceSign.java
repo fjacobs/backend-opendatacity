@@ -1,8 +1,9 @@
 package com.dynacore.livemap.entity.jsonrepresentations.guidancesign;
 
+import com.dynacore.livemap.entity.jsonrepresentations.Feature;
 import com.dynacore.livemap.entity.jsonrepresentations.Geometry;
 
-public class GuidanceSign {
+public class GuidanceSign implements Feature {
 
 	private String Id;
 	private String type;

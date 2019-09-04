@@ -6,7 +6,7 @@ import java.util.List;
     * Member types must be public for population by rest client mapper.
  */
 
-public class GeoJsonCollection<T> {
+public class FeatureCollection<T extends Feature> {
 
     public String type;
     public List<T> features;
@@ -20,7 +20,7 @@ public class GeoJsonCollection<T> {
     public List<T> getFeatures() {
         return features;
     }
-    public void setFeatures(List<T> features) {
+    public void setFeatures(List <T> features) {
         this.features = features;
     }
 }

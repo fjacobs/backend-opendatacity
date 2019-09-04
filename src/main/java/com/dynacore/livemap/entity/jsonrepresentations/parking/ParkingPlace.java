@@ -1,13 +1,15 @@
 package com.dynacore.livemap.entity.jsonrepresentations.parking;
 
+import com.dynacore.livemap.entity.jsonrepresentations.Feature;
 import com.dynacore.livemap.entity.jsonrepresentations.Geometry;
+import com.dynacore.livemap.entity.jsonrepresentations.Properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public class ParkingPlace {
+public class ParkingPlace implements Feature {
 
 	@JsonProperty("Id")
 	private String id;
@@ -16,7 +18,7 @@ public class ParkingPlace {
 	@JsonProperty("geometry")
 	private Geometry geometry;
 	@JsonProperty("properties")
-	private Properties properties;
+	private ParkingPlaceProperties properties;
 
 	public void setId(String id) {
 		this.id = id;
@@ -37,7 +39,7 @@ public class ParkingPlace {
 		return type;
 	}
 
-	static class Properties {
+	static class ParkingPlaceProperties implements Properties {
 		private String name;
 		private String pubDate;
 		private String type;
@@ -48,7 +50,7 @@ public class ParkingPlace {
 		private String longCapacity;
 		private int percentage = -1;
 
-		public Properties( String name, String pubDate, String type, String state,
+		public ParkingPlaceProperties( String name, String pubDate, String type, String state,
 							String freeSpaceShort, String freeSpaceLong, String shortCapacity,
 							String longCapacity) {
 			this.name = name;
@@ -140,7 +142,7 @@ public class ParkingPlace {
 	@JsonProperty("properties")
 	private void unpackNested(Map<String,Object> propertiesPacked) {
 
-		properties = new Properties( (String)propertiesPacked.get("Name"),
+		properties = new ParkingPlaceProperties( (String)propertiesPacked.get("Name"),
 									 (String)propertiesPacked.get("PubDate"),
 								 	 (String)propertiesPacked.get("Type"),
 								 	 (String)propertiesPacked.get("State"),

@@ -1,7 +1,7 @@
 package com.dynacore.livemap.service;
 
 import com.dynacore.livemap.entity.hibernate.GuidanceSignLogData;
-import com.dynacore.livemap.entity.jsonrepresentations.GeoJsonCollection;
+import com.dynacore.livemap.entity.jsonrepresentations.FeatureCollection;
 import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.GuidanceSign;
 import com.dynacore.livemap.repository.JpaRepository;
 
@@ -15,11 +15,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Service("guidanceSignService")
-public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorService<GeoJsonCollection<GuidanceSign>> {
+public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorService<FeatureCollection<GuidanceSign>> {
 
     @Autowired
     private JpaRepository<GuidanceSignLogData> guidanceSignRepository;
-    private GeoJsonCollection<GuidanceSign> geoJsonCollection;
+    private FeatureCollection<GuidanceSign> featureCollection;
 
     private static final int POLLING_INITIAL_DELAY = 0;
     private static final int POLLING_UPDATE_INTERVAL = 60;
@@ -28,25 +28,25 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
     private String DATA_SOURCE_URL_KEY;
 
     public GuidanceSignCollectorServiceImpl() {
-        RestMapper<GeoJsonCollection<GuidanceSign>> restMapper = new RestMapper();
+        RestMapper<FeatureCollection<GuidanceSign>> restMapper = new RestMapper();
 
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(() -> {
             try {
-                geoJsonCollection = restMapper.marshallFromUrl(DATA_SOURCE_URL_KEY, GuidanceSign.class);
+                featureCollection = restMapper.marshallFromUrl(DATA_SOURCE_URL_KEY, GuidanceSign.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }, POLLING_INITIAL_DELAY, POLLING_UPDATE_INTERVAL, TimeUnit.SECONDS);
     }
 
-    public GeoJsonCollection<GuidanceSign> getLiveData() {
-        return geoJsonCollection;
+    public FeatureCollection<GuidanceSign> getLiveData() {
+        return featureCollection;
     }
 
     @Override
     @Transactional
-    public void saveCollection(GeoJsonCollection<GuidanceSign> fc) {
+    public void saveCollection(FeatureCollection<GuidanceSign> fc) {
         for (int i = 0; i < fc.getFeatures().size(); i++) {
             GuidanceSignLogData property = new GuidanceSignLogData(
                     fc.getFeatures().get(i).getName(),
