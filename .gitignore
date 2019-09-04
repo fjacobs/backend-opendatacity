@@ -2,6 +2,10 @@
 /.settings/
 *.class
 
+# Intellij project files
+/.idea/
+livemap.iml
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
