@@ -17,8 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Service("guidanceSignService")
 public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorService<FeatureCollection<GuidanceSign>> {
 
-    @Autowired
-    private JpaRepository<GuidanceSignLogData> guidanceSignRepository;
+    private final JpaRepository<GuidanceSignLogData> guidanceSignRepository;
     private FeatureCollection<GuidanceSign> featureCollection;
 
     private static final int POLLING_INITIAL_DELAY = 0;
@@ -27,7 +26,9 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
     @Value("${vialis.amsterdam.guidancesign.jsonurl}")
     private String DATA_SOURCE_URL_KEY;
 
-    public GuidanceSignCollectorServiceImpl() {
+    public GuidanceSignCollectorServiceImpl(JpaRepository<GuidanceSignLogData> guidanceSignRepository) {
+        this.guidanceSignRepository = guidanceSignRepository;
+
         RestMapper<FeatureCollection<GuidanceSign>> restMapper = new RestMapper();
 
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
