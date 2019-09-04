@@ -20,7 +20,7 @@ public class GuidanceSignController {
 	@RequestMapping(value = "getCustomGuidanceSignJson")
 	@ResponseBody
 	public GeoJsonCollection<GuidanceSign> getCustomJson() {
-		return guidanceSignService.getProcessedJson();
+		return guidanceSignService.getLiveData();
 	}
  
 }

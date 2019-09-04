@@ -20,7 +20,7 @@ public class ParkingPlaceController {
 	@RequestMapping(value = "getCustomParkingJson")
 	@ResponseBody
 	public GeoJsonCollection<ParkingPlace> getCustomParkingJson() {
-		return parkingPlaceService.getProcessedJson();
+		return parkingPlaceService.getLiveData();
 	}
 
 }
