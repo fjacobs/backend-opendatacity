@@ -5,10 +5,12 @@ import org.springframework.core.ParameterizedTypeReference;
 
 import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -20,13 +22,17 @@ public class RestMapper <T>  {
         RestTemplate client = createRestClient();
 
         Type resolvableType = ResolvableType.forClassWithGenerics(FeatureCollection.class, clazz).getType();
+        ResponseEntity<FeatureCollection> responseEntity = null;
+        try{
+              responseEntity = client.exchange(url,
+                    HttpMethod.GET,
+                    null,
+                    ParameterizedTypeReference.forType(resolvableType), clazz);
+        } catch(Exception error) {
+            error.printStackTrace();
+        }
 
-        ResponseEntity<FeatureCollection> geoJson = client.exchange(url,
-                HttpMethod.GET,
-                null,
-                ParameterizedTypeReference.forType(resolvableType), clazz);
-
-        return geoJson.getBody();
+        return  responseEntity.getBody();
     }
 
     private RestTemplate createRestClient() {

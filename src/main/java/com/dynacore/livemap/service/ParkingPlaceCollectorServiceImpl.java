@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dynacore.livemap.entity.jsonrepresentations.FeatureCollection;
 import com.dynacore.livemap.entity.jsonrepresentations.parking.ParkingPlace;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,22 +31,26 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
 	private FeatureCollection<ParkingPlace> liveData;
 
 	@Autowired
-	public ParkingPlaceCollectorServiceImpl(JpaRepository<ParkingLogData> parkingRepo) {
+	public ParkingPlaceCollectorServiceImpl(JpaRepository<ParkingLogData> parkingRepo)  {
 		this.parkingRepo = parkingRepo;
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate( () -> {
 			RestMapper<FeatureCollection<ParkingPlace>> restMapper = new RestMapper<>();
-			liveData = restMapper.marshallFromUrl(DATA_SOURCE_URL_KEY, ParkingPlace.class);
-			saveCollection(liveData);
+			try {
+				liveData = restMapper.marshallFromUrl(DATA_SOURCE_URL_KEY, ParkingPlace.class);
+				saveCollection(liveData);
+			}  catch (ResponseStatusException responseException){
+				liveData.setErrorReport(responseException.getReason());
+			}
 		}, POLLING_INITIAL_DELAY, POLLING_UPDATE_INTERVAL, TimeUnit.SECONDS);
-
 	}
-
 
 	@Override
 	public FeatureCollection<ParkingPlace> getLiveData() {
+		if(liveData!=null) {
+			liveData.getFeatures().stream().forEach(ParkingPlaceCollectorServiceImpl::setPercentage);
+		} else liveData.setErrorReport("Error: Could not get data from " + DATA_SOURCE_URL_KEY);
 
-		liveData.getFeatures().stream().forEach(ParkingPlaceCollectorServiceImpl::setPercentage);
 		return liveData;
 	}
 

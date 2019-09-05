@@ -1,5 +1,7 @@
 package com.dynacore.livemap.entity.jsonrepresentations;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /* This class is a GeoJSON FeatureCollection as described in: https://tools.ietf.org/html/rfc7946
@@ -8,8 +10,10 @@ import java.util.List;
 
 public class FeatureCollection<T extends Feature> {
 
-    public String type;
-    public List<T> features;
+    private String type;
+    private List<T> features;
+    @JsonProperty("dynacoreErrors")
+    private String dynacoreErrors = "none";
 
     public String getType() {
         return type;
@@ -22,5 +26,10 @@ public class FeatureCollection<T extends Feature> {
     }
     public void setFeatures(List <T> features) {
         this.features = features;
+    }
+
+    @JsonIgnore
+    public void setErrorReport(String error) {
+        dynacoreErrors = error;
     }
 }

@@ -26,14 +26,14 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
     @Value("${vialis.amsterdam.guidancesign.jsonurl}")
     private String DATA_SOURCE_URL_KEY;
 
+    @Autowired
     public GuidanceSignCollectorServiceImpl(JpaRepository<GuidanceSignLogData> guidanceSignRepository) {
         this.guidanceSignRepository = guidanceSignRepository;
-
-        RestMapper<FeatureCollection<GuidanceSign>> restMapper = new RestMapper();
 
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(() -> {
             try {
+                RestMapper<FeatureCollection<GuidanceSign>> restMapper = new RestMapper<>();
                 featureCollection = restMapper.marshallFromUrl(DATA_SOURCE_URL_KEY, GuidanceSign.class);
             } catch (Exception e) {
                 e.printStackTrace();

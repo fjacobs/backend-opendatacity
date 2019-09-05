@@ -18,7 +18,58 @@ public class ParkingPlace implements Feature {
 	@JsonProperty("geometry")
 	private Geometry geometry;
 	@JsonProperty("properties")
-	private ParkingPlaceProperties properties;
+	private PropertiesImpl properties;
+
+	class PropertiesImpl implements Properties {
+		@JsonProperty("name")
+		private String name;
+		@JsonProperty("pubDate")
+		private LocalDateTime pubDate;
+		@JsonProperty("type")
+		private String type;
+		@JsonProperty("state")
+		private String state;
+		@JsonProperty("freeSpaceShort")
+		private int freeSpaceShort;
+		@JsonProperty("freeSpaceLong")
+		private int freeSpaceLong;
+		@JsonProperty("shortCapacity")
+		private int shortCapacity;
+		@JsonProperty("longCapacity")
+		private int longCapacity;
+		@JsonProperty("percentage")
+		private int percentage = -1;
+
+		public PropertiesImpl(String name, String pubDate, String type, String state,
+							  String freeSpaceShort, String freeSpaceLong, String shortCapacity,
+							  String longCapacity) {
+
+				this.name = name;
+				this.pubDate = LocalDateTime.parse(pubDate.substring(0, pubDate.length() - 1));
+				this.type = type;
+				this.state = state;
+				this.freeSpaceShort= Integer.parseInt("0"+ freeSpaceShort);
+				this.freeSpaceLong = Integer.parseInt("0"+ freeSpaceLong);
+				this.shortCapacity = Integer.parseInt("0"+ shortCapacity);
+				this.longCapacity  = Integer.parseInt("0"+ longCapacity);
+		}
+    }
+
+	@SuppressWarnings("unchecked")
+	@JsonProperty("properties")
+	private void unpackNested(Map<String,Object> prop) {
+
+		properties = new PropertiesImpl( (String) prop.get("Name"),
+									 	 (String)prop.get("PubDate"),
+								 		 (String)prop.get("Type"),
+								 	  	 (String)prop.get("State"),
+									 	 (String)prop.get("FreeSpaceShort"),
+									 	 (String)prop.get("FreeSpaceLong"),
+									     (String)prop.get("ShortCapacity"),
+									 	 (String)prop.get("LongCapacity")
+								   	   );
+
+	}
 
 	public void setId(String id) {
 		this.id = id;
@@ -39,128 +90,13 @@ public class ParkingPlace implements Feature {
 		return type;
 	}
 
-	static class ParkingPlaceProperties implements Properties {
-		private String name;
-		private String pubDate;
-		private String type;
-		private String state;
-		private String freeSpaceShort;
-		private String freeSpaceLong;
-		private String shortCapacity;
-		private String longCapacity;
-		private int percentage = -1;
-
-		public ParkingPlaceProperties( String name, String pubDate, String type, String state,
-							String freeSpaceShort, String freeSpaceLong, String shortCapacity,
-							String longCapacity) {
-			this.name = name;
-			this.pubDate = pubDate;
-			this.type = type;
-			this.state = state;
-			this.freeSpaceShort = freeSpaceShort;
-			this.freeSpaceLong = freeSpaceLong;
-			this.shortCapacity = shortCapacity;
-			this.longCapacity = longCapacity;
-		}
-
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPubDate() {
-            return pubDate;
-        }
-
-        public void setPubDate(String pubDate) {
-            this.pubDate = pubDate;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-
-        public String getFreeSpaceShort() {
-            return freeSpaceShort;
-        }
-
-        public void setFreeSpaceShort(String freeSpaceShort) {
-            this.freeSpaceShort = freeSpaceShort;
-        }
-
-        public String getFreeSpaceLong() {
-            return freeSpaceLong;
-        }
-
-        public void setFreeSpaceLong(String freeSpaceLong) {
-            this.freeSpaceLong = freeSpaceLong;
-        }
-
-        public String getShortCapacity() {
-            return shortCapacity;
-        }
-
-        public void setShortCapacity(String shortCapacity) {
-            this.shortCapacity = shortCapacity;
-        }
-
-        public String getLongCapacity() {
-            return longCapacity;
-        }
-
-        public void setLongCapacity(String longCapacity) {
-            this.longCapacity = longCapacity;
-        }
-
-        public int getPercentage() {
-            return percentage;
-        }
-
-        public void setPercentage(int percentage) {
-            this.percentage = percentage;
-        }
-    }
-
-
-	@SuppressWarnings("unchecked")
-	@JsonProperty("properties")
-	private void unpackNested(Map<String,Object> propertiesPacked) {
-
-		properties = new ParkingPlaceProperties( (String)propertiesPacked.get("Name"),
-									 (String)propertiesPacked.get("PubDate"),
-								 	 (String)propertiesPacked.get("Type"),
-								 	 (String)propertiesPacked.get("State"),
-									 (String)propertiesPacked.get("FreeSpaceShort"),
-									 (String)propertiesPacked.get("FreeSpaceLong"),
-									 (String)propertiesPacked.get("ShortCapacity"),
-									 (String)propertiesPacked.get("LongCapacity")
-								   );
-
-	}
-
 	@JsonIgnore
 	public String getName() {
 		return properties.name;
 	}
 	@JsonIgnore
 	public LocalDateTime getPubDate() {
-		return LocalDateTime.parse(properties.pubDate.substring(0, properties.pubDate.length() - 1));
+		return properties.pubDate;
 	}
 	@JsonIgnore
 	public String getPropType() {

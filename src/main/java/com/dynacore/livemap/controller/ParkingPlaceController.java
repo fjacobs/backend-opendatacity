@@ -12,10 +12,12 @@ import com.dynacore.livemap.service.TrafficDataCollectorService;
 @Controller
 public class ParkingPlaceController {
 
-	@Autowired
 	TrafficDataCollectorService<FeatureCollection<ParkingPlace>> parkingPlaceService;
 
-	public ParkingPlaceController() { }
+	@Autowired
+	public ParkingPlaceController(TrafficDataCollectorService<FeatureCollection<ParkingPlace>> parkingPlaceService) {
+			this.parkingPlaceService = parkingPlaceService;
+	}
 	
 	@RequestMapping(value = "getCustomParkingJson")
 	@ResponseBody
