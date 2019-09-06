@@ -41,22 +41,10 @@
 			<version>2.1.7.RELEASE</version>
 		</dependency>
 
-	    <!-- Jackson JSON Mapper -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.9.3</version>
-		</dependency>
-
 		<!-- jpa -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
 
 		<!-- test -->

@@ -25,8 +25,7 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
 	private static final int POLLING_INITIAL_DELAY = 0;
 	private static final int POLLING_UPDATE_INTERVAL = 60;
 
-	@Value("${vialis.amsterdam.parkingplace.jsonurl}")
-	private String DATA_SOURCE_URL_KEY;
+	private static final String DATA_SOURCE_URL_KEY = "http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json";
 
 	private FeatureCollection<ParkingPlace> liveData;
 

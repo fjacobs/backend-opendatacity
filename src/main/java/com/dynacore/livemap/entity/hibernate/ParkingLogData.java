@@ -1,12 +1,14 @@
 package com.dynacore.livemap.entity.hibernate;
 
+import org.springframework.data.annotation.Immutable;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-
 @Entity
+@Immutable
 @Table(name = "parkinglogdata")
 public class ParkingLogData implements Serializable {
 
@@ -22,12 +24,8 @@ public class ParkingLogData implements Serializable {
     private int shortCapacity;
     private int longCapacity;
 
-    public ParkingLogData() {
-    }
-
     public ParkingLogData(String id, String name, LocalDateTime pubDate, String type, String state, int freeSpaceShort,
                           int freeSpaceLong, int shortCapacity, int longCapacity) {
-
         this.id = id;
         this.name = name;
         this.pubDate = pubDate;

@@ -1,11 +1,15 @@
 package com.dynacore.livemap.entity.hibernate;
 
+
+import org.hibernate.annotations.Immutable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Immutable
 @Table(name="guidanceSignLogData")
 public class GuidanceSignLogData {
 	

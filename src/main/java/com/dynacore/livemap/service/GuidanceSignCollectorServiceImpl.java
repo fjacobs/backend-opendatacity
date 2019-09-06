@@ -48,14 +48,7 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
     @Override
     @Transactional
     public void saveCollection(FeatureCollection<GuidanceSign> fc) {
-        for (int i = 0; i < fc.getFeatures().size(); i++) {
-            GuidanceSignLogData property = new GuidanceSignLogData(
-                    fc.getFeatures().get(i).getName(),
-                    fc.getFeatures().get(i).getPubDate(),
-                    fc.getFeatures().get(i).getState()
-            );
-            guidanceSignRepository.save(property);
-        }
+
     }
 }
 

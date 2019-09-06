@@ -2,7 +2,6 @@ package com.dynacore.livemap.entity.jsonrepresentations.parking;
 
 import com.dynacore.livemap.entity.jsonrepresentations.Feature;
 import com.dynacore.livemap.entity.jsonrepresentations.Geometry;
-import com.dynacore.livemap.entity.jsonrepresentations.Properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,9 +17,9 @@ public class ParkingPlace implements Feature {
 	@JsonProperty("geometry")
 	private Geometry geometry;
 	@JsonProperty("properties")
-	private PropertiesImpl properties;
+	private Properties properties;
 
-	class PropertiesImpl implements Properties {
+	class Properties {
 		@JsonProperty("name")
 		private String name;
 		@JsonProperty("pubDate")
@@ -40,7 +39,7 @@ public class ParkingPlace implements Feature {
 		@JsonProperty("percentage")
 		private int percentage = -1;
 
-		public PropertiesImpl(String name, String pubDate, String type, String state,
+		public Properties(String name, String pubDate, String type, String state,
 							  String freeSpaceShort, String freeSpaceLong, String shortCapacity,
 							  String longCapacity) {
 
@@ -59,7 +58,7 @@ public class ParkingPlace implements Feature {
 	@JsonProperty("properties")
 	private void unpackNested(Map<String,Object> prop) {
 
-		properties = new PropertiesImpl( (String) prop.get("Name"),
+		properties = new Properties( (String) prop.get("Name"),
 									 	 (String)prop.get("PubDate"),
 								 		 (String)prop.get("Type"),
 								 	  	 (String)prop.get("State"),

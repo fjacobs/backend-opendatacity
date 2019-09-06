@@ -10,7 +10,7 @@ import org.mockito.Mock;
 
 import static org.mockito.MockitoAnnotations.initMocks;
 
-class ParkingPlaceCollectorServiceImplTest {
+public class ParkingPlaceCollectorServiceImplTest {
 
     private ParkingPlaceCollectorServiceImpl subject;
 
