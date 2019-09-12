@@ -39,9 +39,9 @@ public class ParkingModel implements Feature {
 		@JsonProperty("percentage")
 		private int percentage = -1;
 
-		public Properties(String name, String pubDate, String type, String state,
-							  String freeSpaceShort, String freeSpaceLong, String shortCapacity,
-							  String longCapacity) {
+		Properties(String name, String pubDate, String type, String state,
+				   String freeSpaceShort, String freeSpaceLong, String shortCapacity,
+				   String longCapacity) {
 
 				this.name = name;
 				this.pubDate = LocalDateTime.parse(pubDate.substring(0, pubDate.length() - 1));
@@ -73,7 +73,7 @@ public class ParkingModel implements Feature {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getId() {
+	String getId() {
 		return id;
 	}
 	public void setGeometry(Geometry geometry) {
@@ -90,11 +90,11 @@ public class ParkingModel implements Feature {
 	}
 
 	@JsonIgnore
-	public String getName() {
+	String getName() {
 		return properties.name;
 	}
 	@JsonIgnore
-	public LocalDateTime getPubDate() {
+	LocalDateTime getPubDate() {
 		return properties.pubDate;
 	}
 	@JsonIgnore
@@ -102,28 +102,28 @@ public class ParkingModel implements Feature {
 		return properties.type;
 	}
 	@JsonIgnore
-	public String getState() {
+	String getState() {
 		return properties.state;
 	}
 	@JsonIgnore
-	public int getFreeSpaceShort() {
+	int getFreeSpaceShort() {
 		return Integer.parseInt("0"+ properties.freeSpaceShort);
 	}
 	@JsonIgnore
-	public int getFreeSpaceLong() {
+	int getFreeSpaceLong() {
 		return Integer.parseInt("0"+properties.freeSpaceLong);
 	}
 	@JsonIgnore
-	public int getShortCapacity() {
+	int getShortCapacity() {
 		return Integer.parseInt("0"+properties.shortCapacity);
 	}
 	@JsonIgnore
-	public int getLongCapacity() {
+	int getLongCapacity() {
 		return Integer.parseInt("0"+properties.longCapacity);
 	}
     //Custom:
     @JsonIgnore
-    public void setPercentage(int percentage) {
+	void setPercentage(int percentage) {
         properties.percentage = percentage;
     }
 }

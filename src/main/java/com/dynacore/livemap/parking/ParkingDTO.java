@@ -28,8 +28,8 @@ public class ParkingDTO implements Serializable {
     private int shortCapacity;
     private int longCapacity;
 
-    public ParkingDTO(String id, String name, LocalDateTime pubDate, String state, int freeSpaceShort,
-                      int freeSpaceLong, int shortCapacity, int longCapacity) {
+    ParkingDTO(String id, String name, LocalDateTime pubDate, String state, int freeSpaceShort,
+               int freeSpaceLong, int shortCapacity, int longCapacity) {
         this.id = id;
         this.name = name;
         this.pubDate = pubDate;
@@ -54,7 +54,7 @@ public class ParkingDTO implements Serializable {
         return Objects.hash(getId(), getPubDate());
     }
 
-    public String getId() {
+    private String getId() {
         return id;
     }
 
@@ -70,7 +70,7 @@ public class ParkingDTO implements Serializable {
         this.name = name;
     }
 
-    public LocalDateTime getPubDate() {
+    private LocalDateTime getPubDate() {
         return pubDate;
     }
 

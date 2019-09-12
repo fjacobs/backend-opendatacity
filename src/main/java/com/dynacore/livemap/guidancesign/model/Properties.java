@@ -37,7 +37,7 @@ public class Properties {
 	@JsonProperty("ParkingguidanceDisplay")
 	List<ParkingGuidanceDisplay> parkingGuidanceDisplayList;
 
-	public Properties(String name, String pubDate, String type, String state, String removed, List<ParkingGuidanceDisplay> parkingGuidanceDisplayList) {
+	Properties(String name, String pubDate, String type, String state, String removed, List<ParkingGuidanceDisplay> parkingGuidanceDisplayList) {
 		this.name = name;
 		this.pubDate = LocalDateTime.parse(pubDate.substring(0, pubDate.length() - 1));
 		this.type = type;
