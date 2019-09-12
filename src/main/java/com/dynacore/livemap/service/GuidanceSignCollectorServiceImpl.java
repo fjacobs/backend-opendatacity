@@ -23,8 +23,7 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
     private static final int POLLING_INITIAL_DELAY = 0;
     private static final int POLLING_UPDATE_INTERVAL = 60;
 
-    @Value("${vialis.amsterdam.guidancesign.jsonurl}")
-    private String DATA_SOURCE_URL_KEY;
+    private String DATA_SOURCE_URL_KEY =  "http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json";;
 
     @Autowired
     public GuidanceSignCollectorServiceImpl(JpaRepository<GuidanceSignLogData> guidanceSignRepository) {
