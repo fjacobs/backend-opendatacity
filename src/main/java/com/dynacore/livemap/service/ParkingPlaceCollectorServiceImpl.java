@@ -48,7 +48,10 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
 	public FeatureCollection<ParkingPlace> getLiveData() {
 		if(liveData!=null) {
 			liveData.getFeatures().stream().forEach(ParkingPlaceCollectorServiceImpl::setPercentage);
-		} else liveData.setErrorReport("Error: Could not get data from " + DATA_SOURCE_URL_KEY);
+		} else {
+			liveData = new FeatureCollection<ParkingPlace>();
+			liveData.setErrorReport("Error: Could not get data from " + DATA_SOURCE_URL_KEY);
+		}
 
 		return liveData;
 	}
