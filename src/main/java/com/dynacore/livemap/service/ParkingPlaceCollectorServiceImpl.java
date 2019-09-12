@@ -70,7 +70,6 @@ public class ParkingPlaceCollectorServiceImpl implements TrafficDataCollectorSer
         fc.getFeatures().forEach(parking -> parkingRepo.save(new ParkingLogData(parking.getId(),
 																				parking.getName(),
 																				parking.getPubDate(),
-																				parking.getType(),
 																				parking.getState(),
 																				parking.getFreeSpaceShort(),
 																				parking.getFreeSpaceLong(),

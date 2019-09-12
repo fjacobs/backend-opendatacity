@@ -6,7 +6,6 @@ import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.GuidanceSign
 import com.dynacore.livemap.repository.JpaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,7 @@ public class GuidanceSignCollectorServiceImpl implements TrafficDataCollectorSer
     private static final int POLLING_INITIAL_DELAY = 0;
     private static final int POLLING_UPDATE_INTERVAL = 60;
 
-    private String DATA_SOURCE_URL_KEY =  "http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json";;
+    private String DATA_SOURCE_URL_KEY =  "http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json";
 
     @Autowired
     public GuidanceSignCollectorServiceImpl(JpaRepository<GuidanceSignLogData> guidanceSignRepository) {
