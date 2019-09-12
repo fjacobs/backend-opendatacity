@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ParkingController {
 
-    ParkingService parkingPlaceService;
+    private ParkingService parkingPlaceService;
 
     @Autowired
     public ParkingController(ParkingService parkingPlaceService) {
