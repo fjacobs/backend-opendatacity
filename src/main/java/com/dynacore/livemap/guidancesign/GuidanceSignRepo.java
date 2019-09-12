@@ -1,6 +1,6 @@
-package com.dynacore.livemap.repository;
+package com.dynacore.livemap.guidancesign;
 
-import com.dynacore.livemap.entity.hibernate.GuidanceSignLogData;
+import com.dynacore.livemap.common.repo.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,8 +10,8 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
-@Repository("guidancesignrepository")
-public class GuidanceSignRepositoryImpl implements JpaRepository<GuidanceSignLogData> {
+@Repository("guidanceignrepository")
+public class GuidanceSignRepo implements JpaRepository<GuidanceSignLogData> {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,7 +30,7 @@ public class GuidanceSignRepositoryImpl implements JpaRepository<GuidanceSignLog
 
     @Override
     public List<GuidanceSignLogData> getAll() {
-        Query query = entityManager.createQuery("SELECT e FROM GuidanceSign e");
+        Query query = entityManager.createQuery("");
         return query.getResultList();
     }
 

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.entity.jsonrepresentations.guidancesign;
+package com.dynacore.livemap.guidancesign.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

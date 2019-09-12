@@ -1,8 +1,10 @@
-package com.dynacore.livemap.entity.hibernate;
+package com.dynacore.livemap.parking;
 
 import org.springframework.data.annotation.Immutable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -10,12 +12,15 @@ import java.util.Objects;
 @Entity
 @Immutable
 @Table(name = "parkinglogdata")
-public class ParkingLogData implements Serializable {
+public class ParkingDTO implements Serializable {
+
+    public ParkingDTO() {
+    }
 
     @Id
     private String id;
     private String name;
-	@Id
+    @Id
     private LocalDateTime pubDate;
     private String state;
     private int freeSpaceShort;
@@ -23,8 +28,8 @@ public class ParkingLogData implements Serializable {
     private int shortCapacity;
     private int longCapacity;
 
-    public ParkingLogData(String id, String name, LocalDateTime pubDate,  String state, int freeSpaceShort,
-                          int freeSpaceLong, int shortCapacity, int longCapacity) {
+    public ParkingDTO(String id, String name, LocalDateTime pubDate, String state, int freeSpaceShort,
+                      int freeSpaceLong, int shortCapacity, int longCapacity) {
         this.id = id;
         this.name = name;
         this.pubDate = pubDate;
@@ -38,8 +43,8 @@ public class ParkingLogData implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ParkingLogData)) return false;
-        ParkingLogData that = (ParkingLogData) o;
+        if (!(o instanceof ParkingDTO)) return false;
+        ParkingDTO that = (ParkingDTO) o;
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getPubDate(), that.getPubDate());
     }
@@ -109,5 +114,7 @@ public class ParkingLogData implements Serializable {
         return longCapacity;
     }
 
-    public void setLongCapacity(int longCapacity) { this.longCapacity = longCapacity; }
+    public void setLongCapacity(int longCapacity) {
+        this.longCapacity = longCapacity;
+    }
 }

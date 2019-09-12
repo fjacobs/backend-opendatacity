@@ -1,7 +1,7 @@
-package com.dynacore.livemap.entity.jsonrepresentations.guidancesign;
+package com.dynacore.livemap.guidancesign.model;
 
-import com.dynacore.livemap.entity.jsonrepresentations.Feature;
-import com.dynacore.livemap.entity.jsonrepresentations.Geometry;
+import com.dynacore.livemap.common.model.Feature;
+import com.dynacore.livemap.common.model.Geometry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.entity.hibernate;
+package com.dynacore.livemap.guidancesign;
 
 
 import org.hibernate.annotations.Immutable;

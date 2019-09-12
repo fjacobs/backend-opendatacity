@@ -1,8 +1,9 @@
 package com.dynacore.livemap.service;
 
-import com.dynacore.livemap.entity.hibernate.ParkingLogData;
-import com.dynacore.livemap.entity.jsonrepresentations.FeatureCollection;
-import com.dynacore.livemap.repository.JpaRepository;
+import com.dynacore.livemap.common.model.FeatureCollection;
+import com.dynacore.livemap.common.repo.JpaRepository;
+import com.dynacore.livemap.parking.ParkingDTO;
+import com.dynacore.livemap.parking.ParkingService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,12 +11,12 @@ import org.mockito.Mock;
 
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ParkingPlaceCollectorServiceImplTest {
+public class ParkingPlaceModelCollectorServiceImplTest {
 
-    private ParkingPlaceCollectorServiceImpl subject;
+    private ParkingService subject;
 
     @Mock
-    private JpaRepository<ParkingLogData> parkingRepo;
+    private JpaRepository<ParkingDTO> parkingRepo;
 
     @Mock
     private FeatureCollection liveData;
@@ -23,7 +24,7 @@ public class ParkingPlaceCollectorServiceImplTest {
     @BeforeEach
     void setUp() {
         initMocks(this);
-        subject = new ParkingPlaceCollectorServiceImpl(parkingRepo);
+        subject = new ParkingService(parkingRepo);
         liveData = new FeatureCollection();
         liveData.setType("FeatureCollection");
     }

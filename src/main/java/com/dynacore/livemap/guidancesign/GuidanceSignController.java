@@ -1,8 +1,7 @@
-package com.dynacore.livemap.controller;
+package com.dynacore.livemap.guidancesign;
 
-import com.dynacore.livemap.entity.jsonrepresentations.FeatureCollection;
-import com.dynacore.livemap.entity.jsonrepresentations.guidancesign.GuidanceSign;
-import com.dynacore.livemap.service.TrafficDataCollectorService;
+import com.dynacore.livemap.common.model.FeatureCollection;
+import com.dynacore.livemap.guidancesign.model.GuidanceSign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class GuidanceSignController {
 
-    @Autowired
-    TrafficDataCollectorService<FeatureCollection<GuidanceSign>> guidanceSignService;
+    final GuidanceSignService guidanceSignService;
 
-    public GuidanceSignController() {
+    @Autowired
+    public GuidanceSignController(GuidanceSignService guidanceSignService) {
+        this.guidanceSignService = guidanceSignService;
     }
 
     @RequestMapping(value = "getCustomGuidanceSignJson")

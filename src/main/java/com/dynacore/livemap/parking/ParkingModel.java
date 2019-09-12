@@ -1,14 +1,14 @@
-package com.dynacore.livemap.entity.jsonrepresentations.parking;
+package com.dynacore.livemap.parking;
 
-import com.dynacore.livemap.entity.jsonrepresentations.Feature;
-import com.dynacore.livemap.entity.jsonrepresentations.Geometry;
+import com.dynacore.livemap.common.model.Feature;
+import com.dynacore.livemap.common.model.Geometry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public class ParkingPlace implements Feature {
+public class ParkingModel implements Feature {
 
 	@JsonProperty("Id")
 	private String id;

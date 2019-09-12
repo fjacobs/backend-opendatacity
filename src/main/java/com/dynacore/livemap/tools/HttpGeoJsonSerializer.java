@@ -1,22 +1,19 @@
-package com.dynacore.livemap.service;
+package com.dynacore.livemap.tools;
 
-import com.dynacore.livemap.entity.jsonrepresentations.FeatureCollection;
+import com.dynacore.livemap.common.model.FeatureCollection;
 import org.springframework.core.ParameterizedTypeReference;
-
 import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestMapper <T>  {
+public class HttpGeoJsonSerializer<T>  {
 
     public <T> FeatureCollection marshallFromUrl(String url, Class<T> clazz) {
         RestTemplate client = createRestClient();

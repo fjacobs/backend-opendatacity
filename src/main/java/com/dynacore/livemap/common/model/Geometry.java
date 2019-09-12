@@ -1,4 +1,4 @@
-package com.dynacore.livemap.entity.jsonrepresentations;
+package com.dynacore.livemap.common.model;
 
 import java.util.List;
 

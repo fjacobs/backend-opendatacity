@@ -1,10 +1,10 @@
-package com.dynacore.livemap.service;
+package com.dynacore.livemap.common.service;
 
 /**
  * @param <U> Processed Endpoint JSON representation
  */
 
-public interface TrafficDataCollectorService<U> {
+public interface TrafficObject<U> {
 
 	U getLiveData();
 	
