@@ -4,7 +4,7 @@ package com.dynacore.livemap.common.service;
  * @param <U> Processed Endpoint JSON representation
  */
 
-public interface TrafficObject<U> {
+public interface GeoJsonRequester<U> {
 
 	U getLiveData();
 	

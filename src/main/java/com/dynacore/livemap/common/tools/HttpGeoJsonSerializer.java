@@ -1,4 +1,4 @@
-package com.dynacore.livemap.tools;
+package com.dynacore.livemap.common.tools;
 
 import com.dynacore.livemap.common.model.FeatureCollection;
 import org.springframework.core.ParameterizedTypeReference;

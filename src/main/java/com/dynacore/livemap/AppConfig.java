@@ -1,4 +1,4 @@
-package com.dynacore.livemap.config;
+package com.dynacore.livemap;
 
 import com.dynacore.livemap.common.repo.JpaRepository;
 import com.dynacore.livemap.guidancesign.GuidanceSignRepo;
