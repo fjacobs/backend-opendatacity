@@ -1,4 +1,6 @@
 
+debug: false
+
 # Spring Configuration
 
 spring:
@@ -17,7 +19,7 @@ spring:
             invert: true
             
             
-#  Embbeded server configuration
+#  Embedded server configuration
 
 server:
     port: 9090

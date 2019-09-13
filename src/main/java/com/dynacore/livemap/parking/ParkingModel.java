@@ -54,7 +54,7 @@ public class ParkingModel implements Feature {
 		}
     }
 
-	@SuppressWarnings("unchecked")
+
 	@JsonProperty("properties")
 	private void unpackNested(Map<String,Object> prop) {
 
