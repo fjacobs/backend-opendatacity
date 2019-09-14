@@ -10,10 +10,12 @@ spring:
         password: admin
         driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
+        open-in-view: true
+        show-sql: false
+        generate-ddl: true
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-        open-in-view: true
     banner:
         image:
             invert: true
