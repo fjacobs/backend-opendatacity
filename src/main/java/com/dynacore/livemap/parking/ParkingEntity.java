@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Immutable
-@Table(name = "parkinglogdata")
+@Table(name = "PARKING")
 @Getter @Setter
-@EqualsAndHashCode(of = {"Id", "PubDate"} )
-public class ParkingDTO implements Serializable {
+@EqualsAndHashCode(of = {"id", "pubDate"} )
+public class ParkingEntity implements Serializable {
 
     @Id
     private String id;
@@ -29,8 +29,11 @@ public class ParkingDTO implements Serializable {
     private int shortCapacity;
     private int longCapacity;
 
-    ParkingDTO(String id, String name, LocalDateTime pubDate, String state, int freeSpaceShort,
-               int freeSpaceLong, int shortCapacity, int longCapacity) {
+    ParkingEntity() {
+    }
+
+    ParkingEntity(String id, String name, LocalDateTime pubDate, String state, int freeSpaceShort,
+                  int freeSpaceLong, int shortCapacity, int longCapacity) {
         this.id = id;
         this.name = name;
         this.pubDate = pubDate;

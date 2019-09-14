@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit;
 @Service("parkingPlaceService")
 public class ParkingService implements GeoJsonRequester<FeatureCollection<ParkingModel>> {
 
-    private JpaRepository<ParkingDTO> parkingRepo;
+    private JpaRepository<ParkingEntity> parkingRepo;
     private FeatureCollection<ParkingModel> getLastUpdate;
     private ParkingConfiguration config;
 
-    public ParkingService(JpaRepository<ParkingDTO> parkingRepo, ParkingConfiguration config) {
+    public ParkingService(JpaRepository<ParkingEntity> parkingRepo, ParkingConfiguration config) {
         this.parkingRepo = parkingRepo;
         this.config = config;
         pollRequest();
@@ -32,7 +32,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
             HttpGeoJsonSerializer<FeatureCollection<ParkingModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
             try {
                 getLastUpdate = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), ParkingModel.class);
-            //    saveCollection((getLastUpdate));
+                saveCollection((getLastUpdate));
             } catch (ResponseStatusException responseException) {
                 getLastUpdate.setErrorReport(responseException.getReason());
             }
@@ -41,7 +41,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
 
     @Transactional
     public void saveCollection(FeatureCollection<ParkingModel> features) {
-            features.getFeatures().forEach(parking -> parkingRepo.save(new ParkingDTO( parking.getId(),
+            features.getFeatures().forEach(parking -> parkingRepo.save(new ParkingEntity( parking.getId(),
 			                                                                           parking.getName(),
 																					   parking.getPubDate(),
 																					   parking.getState(),
