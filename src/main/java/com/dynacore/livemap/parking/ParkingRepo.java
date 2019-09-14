@@ -18,8 +18,8 @@ public class ParkingRepo implements JpaRepository<ParkingDTO> {
 
     @Override
     @Transactional
-    public void save(ParkingDTO ParkingDTO) {
-        entityManager.persist(ParkingDTO);
+    public void save(ParkingDTO parkingDTO) {
+        entityManager.persist(parkingDTO);
         entityManager.flush();
     }
 

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-public class GuidanceSign implements Feature {
+public class GuidanceSignModel implements Feature {
 
 	@JsonProperty("Id")
 	private String id;
