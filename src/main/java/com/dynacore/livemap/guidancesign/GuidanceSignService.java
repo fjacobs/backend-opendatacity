@@ -4,6 +4,7 @@ import com.dynacore.livemap.common.model.FeatureCollection;
 import com.dynacore.livemap.common.repo.JpaRepository;
 import com.dynacore.livemap.common.service.GeoJsonRequester;
 import com.dynacore.livemap.common.tools.HttpGeoJsonSerializer;
+import com.dynacore.livemap.guidancesign.dto.GuidanceSignLogData;
 import com.dynacore.livemap.guidancesign.model.GuidanceSign;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
                 HttpGeoJsonSerializer<FeatureCollection<GuidanceSign>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
                 featureCollection = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), GuidanceSign.class);
             } catch (Exception e) {
-                e.printStackTrace();
+               throw new RuntimeException("Can't serialize: " + config.getUrl());
             }
         }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
     }

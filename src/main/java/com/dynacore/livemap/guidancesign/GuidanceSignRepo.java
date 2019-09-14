@@ -1,6 +1,7 @@
 package com.dynacore.livemap.guidancesign;
 
 import com.dynacore.livemap.common.repo.JpaRepository;
+import com.dynacore.livemap.guidancesign.dto.GuidanceSignLogData;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

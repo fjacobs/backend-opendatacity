@@ -32,7 +32,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
             HttpGeoJsonSerializer<FeatureCollection<ParkingModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
             try {
                 getLastUpdate = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), ParkingModel.class);
-                saveCollection((getLastUpdate));
+            //    saveCollection((getLastUpdate));
             } catch (ResponseStatusException responseException) {
                 getLastUpdate.setErrorReport(responseException.getReason());
             }
