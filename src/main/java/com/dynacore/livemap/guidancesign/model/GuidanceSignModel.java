@@ -4,7 +4,8 @@ import com.dynacore.livemap.common.model.Feature;
 import com.dynacore.livemap.common.model.Geometry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
-@ToString
+@Getter @Setter
 public class GuidanceSignModel implements Feature {
 
     @JsonProperty("Id")
@@ -37,51 +38,16 @@ public class GuidanceSignModel implements Feature {
                 .build())
                 .collect(toList());
 
-
         String temp = (String) prop.get("PubDate");
-        String pubDate = temp.substring(0, temp.length() - 1);
 
         properties = new Properties.Builder()
                 .name((String) prop.get("Name"))
-                .pubDate(LocalDateTime.parse(pubDate))
+                .pubDate(LocalDateTime.parse(temp.substring(0, temp.length() - 1)))
                 .type((String) prop.get("Type"))
                 .removed((String) prop.get("Removed"))
                 .state((String) prop.get("State"))
                 .innerDisplayModelList(innerList)
                 .build();
-    }
-
-
-    public Geometry getGeometry() {
-        return geometry;
-    }
-
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Properties getProperties() {
-        return properties;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(Properties properties) {
-        this.properties = properties;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @JsonIgnore

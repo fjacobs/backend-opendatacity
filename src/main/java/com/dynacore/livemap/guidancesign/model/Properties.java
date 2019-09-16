@@ -1,6 +1,8 @@
 package com.dynacore.livemap.guidancesign.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.List;
 //       }
 //    ]
 
-
+@Getter @Setter
 public class Properties {
 
     @JsonProperty("Name")
@@ -45,50 +47,6 @@ public class Properties {
         state = builder.state;
         removed = builder.removed;
         innerDisplayModelList = builder.innerDisplayModelList;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDateTime getPubDate() {
-        return pubDate;
-    }
-
-    public void setPubDate(LocalDateTime pubDate) {
-        this.pubDate = pubDate;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getRemoved() {
-        return removed;
-    }
-
-    public void setRemoved(String removed) {
-        this.removed = removed;
-    }
-
-    public List<InnerDisplayModel> getInnerDisplayModelList() {
-        return innerDisplayModelList;
     }
 
     public void setInnerDisplayModelList(ArrayList<InnerDisplayModel> innerDisplayModelList) {
