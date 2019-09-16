@@ -59,11 +59,6 @@ public class GuidanceSignModel implements Feature {
     }
 
     @JsonIgnore
-    public String getPropType() {
-        return properties.type;
-    }
-
-    @JsonIgnore
     public String getRemoved() {
         return properties.removed;
     }
