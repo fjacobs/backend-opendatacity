@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
 @Repository("guidanceSignRepository")
 public class GuidanceSignRepo implements JpaRepository<GuidanceSignEntity> {
-    Logger logger = LoggerFactory.getLogger(GuidanceSignRepo.class);
+    private Logger logger = LoggerFactory.getLogger(GuidanceSignRepo.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -28,8 +29,8 @@ public class GuidanceSignRepo implements JpaRepository<GuidanceSignEntity> {
             guidanceSignEntity.getInnerDisplays().stream().forEach(display -> entityManager.persist(display));
             entityManager.flush();
         }
-        catch(Exception error ){
-            logger.error( "error: " + error);
+        catch(PersistenceException error ){
+            logger.error( "Error, could not write to DB: " + error);
         }
     }
 

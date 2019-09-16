@@ -7,31 +7,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @Entity
 @Table(name = "GUIDANCE_SIGN")
-@Getter
-@Setter
-public class GuidanceSignEntity {
+@Getter @Setter
+public class GuidanceSignEntity implements Serializable {
 
     @Transient
     Logger logger = LoggerFactory.getLogger(GuidanceSignEntity.class);
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "guidancesign_id")
-    private long id;
+    @Column(name = "ID", nullable = false, updatable = false)
+    private UUID guidanceSignId;
 
     //Flatted from model.properties:
     private String name;
+    @Id
+    @Column(name = "PUB_DATE")
     private LocalDateTime pubDate;
     private String state;
 
-    @OneToMany(mappedBy = "guidanceSignEntity")
+    @OneToMany(mappedBy = "parentRef", fetch = FetchType.LAZY)
     private Set<InnerDisplayEntity> innerDisplays;
 
     public GuidanceSignEntity() {
@@ -39,11 +42,13 @@ public class GuidanceSignEntity {
 
     public GuidanceSignEntity(GuidanceSignModel model) {
         try {
+            guidanceSignId = model.getId();
             name = model.getName();
             pubDate = model.getPubDate();
             state = model.getState();
             innerDisplays = model.getProperties().getInnerDisplayModelList().stream()
                     .map(inner -> new InnerDisplayEntity.Builder()
+                            .innerDisplayId(inner.getId())
                             .outputDescription(inner.getOutputDescription())
                             .output(inner.getOutput())
                             .type(inner.getType())
@@ -56,58 +61,20 @@ public class GuidanceSignEntity {
         }
     }
 
-    public GuidanceSignEntity(String name, LocalDateTime pubDate, String state, Set<InnerDisplayEntity> innerDisplays) {
-        this.name = name;
-        this.pubDate = pubDate;
-        this.state = state;
-        this.innerDisplays = innerDisplays;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GuidanceSignEntity)) return false;
+        GuidanceSignEntity that = (GuidanceSignEntity) o;
+        return guidanceSignId.equals(that.guidanceSignId) &&
+                name.equals(that.name) &&
+                pubDate.equals(that.pubDate) &&
+                state.equals(that.state) &&
+                innerDisplays.equals(that.innerDisplays);
     }
 
-    private GuidanceSignEntity(Builder builder) {
-        setId(builder.id);
-        setName(builder.name);
-        setPubDate(builder.pubDate);
-        setState(builder.state);
-        setInnerDisplays(builder.innerDisplays);
-    }
-
-    public static final class Builder {
-        private long id;
-        private String name;
-        private LocalDateTime pubDate;
-        private String state;
-        private Set<InnerDisplayEntity> innerDisplays;
-
-        public Builder() {
-        }
-
-        public Builder id(long val) {
-            id = val;
-            return this;
-        }
-
-        public Builder name(String val) {
-            name = val;
-            return this;
-        }
-
-        public Builder pubDate(LocalDateTime val) {
-            pubDate = val;
-            return this;
-        }
-
-        public Builder state(String val) {
-            state = val;
-            return this;
-        }
-
-        public Builder innerDisplays(Set<InnerDisplayEntity> val) {
-            innerDisplays = val;
-            return this;
-        }
-
-        public GuidanceSignEntity build() {
-            return new GuidanceSignEntity(this);
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(guidanceSignId, name, pubDate, state, innerDisplays);
     }
 }

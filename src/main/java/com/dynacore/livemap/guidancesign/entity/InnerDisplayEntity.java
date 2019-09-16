@@ -1,52 +1,45 @@
 package com.dynacore.livemap.guidancesign.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 
 @Entity
 @Table(name = "GUIDANCE_DISPLAY")
-@Getter @Setter
+@NoArgsConstructor @Getter @Setter
 public class InnerDisplayEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "ID", nullable = false, updatable = false)
+    private UUID innerDisplayId;
 
     @ManyToOne
-    @JoinColumn(name = "guidancesign_id", nullable = false)
-    private GuidanceSignEntity guidanceSignEntity;
-
+    @JoinColumns({
+            @JoinColumn(name = "GUIDANCESIGN_ID", referencedColumnName = "ID"),
+            @JoinColumn(name = "PUB_DATE", referencedColumnName = "PUB_DATE")
+    })
+    private GuidanceSignEntity parentRef;
     private String outputDescription;
     private String description;
     private String type;
     private String output;
 
-    public InnerDisplayEntity() {}
-
-    public InnerDisplayEntity(GuidanceSignEntity guidanceSignEntity, String outputDescription, String description, String type, String output) {
-        this.guidanceSignEntity = guidanceSignEntity;
-        this.outputDescription = outputDescription;
-        this.description = description;
-        this.type = type;
-        this.output = output;
-    }
-
     private InnerDisplayEntity(Builder builder) {
-        setId(builder.id);
-        setGuidanceSignEntity(builder.guidanceSignEntity);
+        setInnerDisplayId(builder.innerDisplayId);
+        setParentRef(builder.parentRef);
         setOutputDescription(builder.outputDescription);
         setDescription(builder.description);
         setType(builder.type);
         setOutput(builder.output);
     }
 
-    public static final class Builder {
-        private long id;
-        private GuidanceSignEntity guidanceSignEntity;
+    static final class Builder {
+        private GuidanceSignEntity parentRef;
+        private UUID innerDisplayId;
         private String outputDescription;
         private String description;
         private String type;
@@ -55,13 +48,13 @@ public class InnerDisplayEntity {
         Builder() {
         }
 
-        public Builder id(long val) {
-            id = val;
+        Builder innerDisplayId(UUID val) {
+            innerDisplayId = val;
             return this;
         }
 
         Builder guidanceSignEntity(GuidanceSignEntity val) {
-            guidanceSignEntity = val;
+            parentRef = val;
             return this;
         }
 

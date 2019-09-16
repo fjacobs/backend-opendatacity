@@ -1,14 +1,13 @@
-
 debug: false
 
 # Spring Configuration
 
 spring:
     datasource:
-        url: jdbc:mysql://localhost:3306/logdb?autoReconnect=false&serverTimezone=Europe/Amsterdam
-        username: root
+        url: jdbc:postgresql://localhost:5432/trafficdata
+        username: postgres
         password: admin
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: org.postgresql.Driver
     jpa:
         open-in-view: true
         show-sql: true
@@ -16,16 +15,19 @@ spring:
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                jdbc:
+                    lob:
+                       non_contextual_creation: true
     banner:
         image:
             invert: true
-            
-            
+
 #  Embedded server configuration
 
 server:
     port: 9090
-
 
 # Traffic Data Configuration
 
