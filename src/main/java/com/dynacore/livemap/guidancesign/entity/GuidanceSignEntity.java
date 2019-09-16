@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
 @Entity
 @Table(name = "GUIDANCE_SIGN")
-@Getter @Setter
+@Getter
+@Setter
 public class GuidanceSignEntity {
 
     @Transient
@@ -27,9 +27,9 @@ public class GuidanceSignEntity {
     private long id;
 
     //Flatted from model.properties:
-    private String Name;
-    private LocalDateTime PubDate;
-    private String State;
+    private String name;
+    private LocalDateTime pubDate;
+    private String state;
 
     @OneToMany(mappedBy = "guidanceSignEntity")
     private Set<InnerDisplayEntity> innerDisplays;
@@ -39,15 +39,15 @@ public class GuidanceSignEntity {
 
     public GuidanceSignEntity(GuidanceSignModel model) {
         try {
-            Name = model.getName();
-            PubDate = model.getPubDate();
-            State = model.getState();
+            name = model.getName();
+            pubDate = model.getPubDate();
+            state = model.getState();
             innerDisplays = model.getProperties().getInnerDisplayModelList().stream()
                     .map(inner -> new InnerDisplayEntity.Builder()
-                            .OutputDescription(inner.getOutputDescription())
-                            .Output(inner.getOutput())
-                            .Type(inner.getType())
-                            .Description(inner.getDescription())
+                            .outputDescription(inner.getOutputDescription())
+                            .output(inner.getOutput())
+                            .type(inner.getType())
+                            .description(inner.getDescription())
                             .guidanceSignEntity(this)
                             .build())
                     .collect(Collectors.toSet());
@@ -56,26 +56,26 @@ public class GuidanceSignEntity {
         }
     }
 
-    public GuidanceSignEntity(String name, LocalDateTime pubDate, String state, HashSet<InnerDisplayEntity> innerDisplays) {
-        Name = name;
-        PubDate = pubDate;
-        State = state;
+    public GuidanceSignEntity(String name, LocalDateTime pubDate, String state, Set<InnerDisplayEntity> innerDisplays) {
+        this.name = name;
+        this.pubDate = pubDate;
+        this.state = state;
         this.innerDisplays = innerDisplays;
     }
 
     private GuidanceSignEntity(Builder builder) {
         setId(builder.id);
-        setName(builder.Name);
-        setPubDate(builder.PubDate);
-        setState(builder.State);
+        setName(builder.name);
+        setPubDate(builder.pubDate);
+        setState(builder.state);
         setInnerDisplays(builder.innerDisplays);
     }
 
     public static final class Builder {
         private long id;
-        private String Name;
-        private LocalDateTime PubDate;
-        private String State;
+        private String name;
+        private LocalDateTime pubDate;
+        private String state;
         private Set<InnerDisplayEntity> innerDisplays;
 
         public Builder() {
@@ -86,18 +86,18 @@ public class GuidanceSignEntity {
             return this;
         }
 
-        public Builder Name(String val) {
-            Name = val;
+        public Builder name(String val) {
+            name = val;
             return this;
         }
 
-        public Builder PubDate(LocalDateTime val) {
-            PubDate = val;
+        public Builder pubDate(LocalDateTime val) {
+            pubDate = val;
             return this;
         }
 
-        public Builder State(String val) {
-            State = val;
+        public Builder state(String val) {
+            state = val;
             return this;
         }
 

@@ -20,39 +20,39 @@ public class InnerDisplayEntity {
     @JoinColumn(name = "guidancesign_id", nullable = false)
     private GuidanceSignEntity guidanceSignEntity;
 
-    private String OutputDescription;
-    private String Description;
-    private String Type;
-    private String Output;
+    private String outputDescription;
+    private String description;
+    private String type;
+    private String output;
 
     public InnerDisplayEntity() {}
 
     public InnerDisplayEntity(GuidanceSignEntity guidanceSignEntity, String outputDescription, String description, String type, String output) {
         this.guidanceSignEntity = guidanceSignEntity;
-        OutputDescription = outputDescription;
-        Description = description;
-        Type = type;
-        Output = output;
+        this.outputDescription = outputDescription;
+        this.description = description;
+        this.type = type;
+        this.output = output;
     }
 
     private InnerDisplayEntity(Builder builder) {
         setId(builder.id);
         setGuidanceSignEntity(builder.guidanceSignEntity);
-        setOutputDescription(builder.OutputDescription);
-        setDescription(builder.Description);
-        setType(builder.Type);
-        setOutput(builder.Output);
+        setOutputDescription(builder.outputDescription);
+        setDescription(builder.description);
+        setType(builder.type);
+        setOutput(builder.output);
     }
 
     public static final class Builder {
         private long id;
         private GuidanceSignEntity guidanceSignEntity;
-        private String OutputDescription;
-        private String Description;
-        private String Type;
-        private String Output;
+        private String outputDescription;
+        private String description;
+        private String type;
+        private String output;
 
-        public Builder() {
+        Builder() {
         }
 
         public Builder id(long val) {
@@ -60,32 +60,32 @@ public class InnerDisplayEntity {
             return this;
         }
 
-        public Builder guidanceSignEntity(GuidanceSignEntity val) {
+        Builder guidanceSignEntity(GuidanceSignEntity val) {
             guidanceSignEntity = val;
             return this;
         }
 
-        public Builder OutputDescription(String val) {
-            OutputDescription = val;
+        Builder outputDescription(String val) {
+            outputDescription = val;
             return this;
         }
 
-        public Builder Description(String val) {
-            Description = val;
+        Builder description(String val) {
+            description = val;
             return this;
         }
 
-        public Builder Type(String val) {
-            Type = val;
+        Builder type(String val) {
+            type = val;
             return this;
         }
 
-        public Builder Output(String val) {
-            Output = val;
+        Builder output(String val) {
+            output = val;
             return this;
         }
 
-        public InnerDisplayEntity build() {
+        InnerDisplayEntity build() {
             return new InnerDisplayEntity(this);
         }
     }

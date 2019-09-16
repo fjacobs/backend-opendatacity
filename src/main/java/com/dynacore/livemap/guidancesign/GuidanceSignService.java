@@ -43,7 +43,7 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
     public void saveCollection(FeatureCollection<GuidanceSignModel> featureColl) {
         featureColl.getFeatures()
                 .stream()
-                .map(feature -> new GuidanceSignEntity(feature))
+                .map(GuidanceSignEntity::new)
                 .forEach(guidanceSignDTO -> guidanceSignRepository.save(guidanceSignDTO));
     }
 }

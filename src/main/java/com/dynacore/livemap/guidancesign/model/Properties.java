@@ -5,26 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-//input
-//    "Name":"A1006_A010_23,550-Re-1_P+R Bos en Lommer",
-//    "PubDate":"2015-05-15T15:08:21.000Z",
-//    "Removed":"false",
-//    "Type":"guidancesign",
-//    "State":"ok",
-//    "ParkingguidanceDisplay":[
-//       {
-//          "Id":"000001094",
-//          "OutputDescription":"VOL",
-//          "Description":"A1006_VVX_P+R Bos en Lommer",
-//          "Type":"VVX",
-//          "Output":"VOL"
-//       }
-//    ]
-
-@Getter @Setter
+@Getter
+@Setter
 public class Properties {
 
     @JsonProperty("Name")
@@ -49,11 +33,11 @@ public class Properties {
         innerDisplayModelList = builder.innerDisplayModelList;
     }
 
-    public void setInnerDisplayModelList(ArrayList<InnerDisplayModel> innerDisplayModelList) {
+    public void setInnerDisplayModelList(List<InnerDisplayModel> innerDisplayModelList) {
         this.innerDisplayModelList = innerDisplayModelList;
     }
 
-    public static final class Builder {
+    static final class Builder {
         private String name;
         private LocalDateTime pubDate;
         private String type;
@@ -61,40 +45,40 @@ public class Properties {
         private String removed;
         private List<InnerDisplayModel> innerDisplayModelList;
 
-        public Builder() {
+        Builder() {
         }
 
-        public Builder name(String val) {
+        Builder name(String val) {
             name = val;
             return this;
         }
 
-        public Builder pubDate(LocalDateTime val) {
+        Builder pubDate(LocalDateTime val) {
             pubDate = val;
             return this;
         }
 
-        public Builder type(String val) {
+        Builder type(String val) {
             type = val;
             return this;
         }
 
-        public Builder state(String val) {
+        Builder state(String val) {
             state = val;
             return this;
         }
 
-        public Builder removed(String val) {
+        Builder removed(String val) {
             removed = val;
             return this;
         }
 
-        public Builder innerDisplayModelList(List<InnerDisplayModel> val) {
+        Builder innerDisplayModelList(List<InnerDisplayModel> val) {
             innerDisplayModelList = val;
             return this;
         }
 
-        public Properties build() {
+        Properties build() {
             return new Properties(this);
         }
     }
