@@ -4,9 +4,10 @@ package com.dynacore.livemap.guidancesign.model;
 //For a full description see: https://open.data.amsterdam.nl/uploads/actuele_beschikbaarheid_parkeergarages/Beschrijving%20Dataset%20-%20Actuele%20beschikbaarheid%20Parkeergarages%20v2.pdf
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
-@ToString
+@Getter @Setter
 public class InnerDisplayModel {
 
 //    "ParkingguidanceDisplay":[  
@@ -43,52 +44,12 @@ public class InnerDisplayModel {
 	public InnerDisplayModel() {
 	}
 
-	public InnerDisplayModel(String id, String description, String type, String output, String outputDescription) {
-		this.id = id;
-		this.description = description;
-		this.type = type;
-		this.output = output;
-		this.outputDescription = outputDescription;
-	}
-
 	private InnerDisplayModel(Builder builder) {
 		setId(builder.id);
 		setDescription(builder.description);
 		setType(builder.type);
 		setOutput(builder.output);
 		setOutputDescription(builder.outputDescription);
-	}
-
-	public String getId() {
-		return id;
-	}
-	public String getOutputDescription() {
-		return outputDescription;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public String getType() {
-		return type;
-	}
-	public String getOutput() {
-		return output;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public void setOutput(String output) {
-		this.output = output;
-	}
-	public void setOutputDescription(String outputDescription) {
-		this.outputDescription = outputDescription;
 	}
 
 	public static final class Builder {
