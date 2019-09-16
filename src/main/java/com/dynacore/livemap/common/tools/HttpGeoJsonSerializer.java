@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpGeoJsonSerializer<T>  {
-    Logger logger = LoggerFactory.getLogger(HttpGeoJsonSerializer.class);
+    private Logger logger = LoggerFactory.getLogger(HttpGeoJsonSerializer.class);
 
     public <T> FeatureCollection marshallFromUrl(String url, Class<T> clazz) {
         RestTemplate client = createRestClient();
@@ -30,10 +30,17 @@ public class HttpGeoJsonSerializer<T>  {
                     HttpMethod.GET,
                     null,
                     ParameterizedTypeReference.forType(resolvableType), clazz);
+
         } catch(RestClientException error) {
-            logger.error("Could not get data from: " + url + "error: " + error);
+            logger.error("Could not get data from: " + url + " error: " + error);
         } catch(HttpMessageConversionException error) {
             logger.error("Can't unmarshall check model.... ", error);
+        } catch(NullPointerException error) {
+            throw new NullPointerException();
+        }
+
+        if(responseEntity==null) {
+            throw new NullPointerException("Could not unmarshall from: " + url);
         }
         return  responseEntity.getBody();
     }

@@ -35,11 +35,11 @@ public class ParkingRepo implements JpaRepository<ParkingEntity> {
     }
 
     @Override
-    public void update(ParkingEntity ParkingEntity, String[] params) {
+    public void update(ParkingEntity parkingEntity, String[] params) {
     }
 
     @Override
-    public void delete(ParkingEntity ParkingEntity) {
+    public void delete(ParkingEntity parkingEntity) {
 
     }
 }
