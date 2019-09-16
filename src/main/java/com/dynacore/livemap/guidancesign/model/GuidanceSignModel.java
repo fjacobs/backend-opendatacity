@@ -8,10 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -19,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 public class GuidanceSignModel implements Feature {
 
     @JsonProperty("Id")
-    private String id;
+    private UUID id;
     @JsonProperty("type")
     private String type;
     @JsonProperty("geometry")
@@ -30,12 +27,13 @@ public class GuidanceSignModel implements Feature {
     @JsonProperty("properties")
     private void unpackNested(Map<String, Object> prop) {
         List<InnerDisplayModel> innerList = ((ArrayList<LinkedHashMap<String, String>>) prop.get("ParkingguidanceDisplay")).stream()
-                .map(dispMap -> new InnerDisplayModel.Builder().id(dispMap.get("Id"))
-                .description(dispMap.get("Description"))
-                .output(dispMap.get("Output"))
-                .outputDescription(dispMap.get("OutputDescription"))
-                .type(dispMap.get("Type"))
-                .build())
+                .map(dispMap -> new InnerDisplayModel.Builder()
+                        .id(UUID.fromString( dispMap.get("Id") ) )
+                        .description(dispMap.get("Description"))
+                        .output(dispMap.get("Output"))
+                        .outputDescription(dispMap.get("OutputDescription"))
+                        .type(dispMap.get("Type"))
+                        .build())
                 .collect(toList());
 
         String temp = (String) prop.get("PubDate");
@@ -58,11 +56,6 @@ public class GuidanceSignModel implements Feature {
     @JsonIgnore
     public LocalDateTime getPubDate() {
         return properties.pubDate;
-    }
-
-    @JsonIgnore
-    public String getPropType() {
-        return properties.type;
     }
 
     @JsonIgnore
