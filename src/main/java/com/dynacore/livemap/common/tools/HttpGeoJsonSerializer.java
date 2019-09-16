@@ -1,12 +1,16 @@
 package com.dynacore.livemap.common.tools;
 
 import com.dynacore.livemap.common.model.FeatureCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
@@ -14,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpGeoJsonSerializer<T>  {
+    Logger logger = LoggerFactory.getLogger(HttpGeoJsonSerializer.class);
 
     public <T> FeatureCollection marshallFromUrl(String url, Class<T> clazz) {
         RestTemplate client = createRestClient();
@@ -25,10 +30,11 @@ public class HttpGeoJsonSerializer<T>  {
                     HttpMethod.GET,
                     null,
                     ParameterizedTypeReference.forType(resolvableType), clazz);
-        } catch(Exception error) {
-            error.printStackTrace();
+        } catch(RestClientException error) {
+            logger.error("Could not get data from: " + url + "error: " + error);
+        } catch(HttpMessageConversionException error) {
+            logger.error("Can't unmarshall check model.... ", error);
         }
-
         return  responseEntity.getBody();
     }
 

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.guidancesign.dto;
+package com.dynacore.livemap.guidancesign.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "GUIDANCE_DISPLAY")
 @Getter @Setter
-public class InnerDisplayDTO {
+public class InnerDisplayEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,16 +18,26 @@ public class InnerDisplayDTO {
 
     @ManyToOne
     @JoinColumn(name = "guidancesign_id", nullable = false)
-    private GuidanceSignDTO guidanceSignDTO;
+    private GuidanceSignEntity guidanceSignEntity;
 
     private String OutputDescription;
     private String Description;
     private String Type;
     private String Output;
 
-    private InnerDisplayDTO(Builder builder) {
+    public InnerDisplayEntity() {}
+
+    public InnerDisplayEntity(GuidanceSignEntity guidanceSignEntity, String outputDescription, String description, String type, String output) {
+        this.guidanceSignEntity = guidanceSignEntity;
+        OutputDescription = outputDescription;
+        Description = description;
+        Type = type;
+        Output = output;
+    }
+
+    private InnerDisplayEntity(Builder builder) {
         setId(builder.id);
-        setGuidanceSignDTO(builder.guidanceSignDTO);
+        setGuidanceSignEntity(builder.guidanceSignEntity);
         setOutputDescription(builder.OutputDescription);
         setDescription(builder.Description);
         setType(builder.Type);
@@ -36,7 +46,7 @@ public class InnerDisplayDTO {
 
     public static final class Builder {
         private long id;
-        private GuidanceSignDTO guidanceSignDTO;
+        private GuidanceSignEntity guidanceSignEntity;
         private String OutputDescription;
         private String Description;
         private String Type;
@@ -50,8 +60,8 @@ public class InnerDisplayDTO {
             return this;
         }
 
-        public Builder guidanceSignDTO(GuidanceSignDTO val) {
-            guidanceSignDTO = val;
+        public Builder guidanceSignEntity(GuidanceSignEntity val) {
+            guidanceSignEntity = val;
             return this;
         }
 
@@ -75,8 +85,8 @@ public class InnerDisplayDTO {
             return this;
         }
 
-        public InnerDisplayDTO build() {
-            return new InnerDisplayDTO(this);
+        public InnerDisplayEntity build() {
+            return new InnerDisplayEntity(this);
         }
     }
 }

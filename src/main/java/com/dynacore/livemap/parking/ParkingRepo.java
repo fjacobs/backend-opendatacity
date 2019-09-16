@@ -11,35 +11,35 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository("parkingPlaceRepository")
-public class ParkingRepo implements JpaRepository<ParkingDTO> {
+public class ParkingRepo implements JpaRepository<ParkingEntity> {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     @Transactional
-    public void save(ParkingDTO parkingDTO) {
-        entityManager.persist(parkingDTO);
+    public void save(ParkingEntity parkingEntity) {
+        entityManager.persist(parkingEntity);
         entityManager.flush();
     }
 
     @Override
-    public Optional<ParkingDTO> get(long id) {
-        return Optional.ofNullable(entityManager.find(ParkingDTO.class, id));
+    public Optional<ParkingEntity> get(long id) {
+        return Optional.ofNullable(entityManager.find(ParkingEntity.class, id));
     }
 
     @Override
-    public List<ParkingDTO> getAll() {
+    public List<ParkingEntity> getAll() {
         Query query = entityManager.createQuery("");
         return query.getResultList();
     }
 
     @Override
-    public void update(ParkingDTO ParkingDTO, String[] params) {
+    public void update(ParkingEntity ParkingEntity, String[] params) {
     }
 
     @Override
-    public void delete(ParkingDTO ParkingDTO) {
+    public void delete(ParkingEntity ParkingEntity) {
 
     }
 }
