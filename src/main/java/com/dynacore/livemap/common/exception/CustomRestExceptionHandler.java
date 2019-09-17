@@ -40,10 +40,10 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
 
-        DynaCoreError dynaCoreError =
-                new DynaCoreError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        DynaCoreException dynaCoreException =
+                new DynaCoreException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
         return handleExceptionInternal(
-                ex, dynaCoreError, headers, dynaCoreError.getStatus(), request);
+                ex, dynaCoreException, headers, dynaCoreException.getStatus(), request);
     }
 
     @Override
@@ -52,8 +52,8 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatus status, WebRequest request) {
         String error = ex.getParameterName() + " parameter is missing";
 
-        DynaCoreError apiError =
-                new DynaCoreError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        DynaCoreException apiError =
+                new DynaCoreException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
         return new ResponseEntity<Object>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
@@ -67,10 +67,10 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                     violation.getPropertyPath() + ": " + violation.getMessage());
         }
 
-        DynaCoreError dynaCoreError =
-                new DynaCoreError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        DynaCoreException dynaCoreException =
+                new DynaCoreException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
         return new ResponseEntity<Object>(
-                dynaCoreError, new HttpHeaders(), dynaCoreError.getStatus());
+                dynaCoreException, new HttpHeaders(), dynaCoreException.getStatus());
     }
 
     @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
@@ -79,8 +79,8 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         String error =
                 ex.getName() + " should be of type " + ex.getRequiredType().getName();
 
-        DynaCoreError apiError =
-                new DynaCoreError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        DynaCoreException apiError =
+                new DynaCoreException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
         return new ResponseEntity<Object>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
