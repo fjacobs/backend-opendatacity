@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -31,10 +33,6 @@ public class Properties {
         state = builder.state;
         removed = builder.removed;
         innerDisplayModelList = builder.innerDisplayModelList;
-    }
-
-    public void setInnerDisplayModelList(List<InnerDisplayModel> innerDisplayModelList) {
-        this.innerDisplayModelList = innerDisplayModelList;
     }
 
     static final class Builder {
@@ -79,6 +77,10 @@ public class Properties {
         }
 
         Properties build() {
+            Stream.of(name, pubDate, removed, type, state, removed, innerDisplayModelList)
+                    .filter(Objects::isNull)
+                    .findAny()
+                    .ifPresent(nullMember -> {throw new IllegalStateException("Error: Could not initialize:  " + name + " " +  nullMember.getClass().getSimpleName() + " was not initialized." ); });
             return new Properties(this);
         }
     }

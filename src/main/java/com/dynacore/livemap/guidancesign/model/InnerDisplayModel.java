@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -96,7 +98,11 @@ public class InnerDisplayModel {
 			return this;
 		}
 
-		public InnerDisplayModel build() {
+		public InnerDisplayModel build() throws IllegalStateException {
+             Stream.of(id, description, removed, type, output, outputDescription)
+                      .filter(Objects::isNull)
+                      .findAny()
+                      .ifPresent(nullMember -> {throw new IllegalStateException("Error: Could not initialize:  " + id + " " +  nullMember.getClass().getSimpleName() + " was not initialized." ); });
 			return new InnerDisplayModel(this);
 		}
 	}

@@ -3,12 +3,14 @@ package com.dynacore.livemap.guidancesign.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Immutable;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 
 @Entity
+@Immutable
 @Table(name = "GUIDANCE_DISPLAY")
 @NoArgsConstructor @Getter @Setter
 public class InnerDisplayEntity {
