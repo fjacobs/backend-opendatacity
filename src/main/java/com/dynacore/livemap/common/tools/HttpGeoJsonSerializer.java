@@ -30,13 +30,10 @@ public class HttpGeoJsonSerializer<T>  {
                     HttpMethod.GET,
                     null,
                     ParameterizedTypeReference.forType(resolvableType), clazz);
-
         } catch(RestClientException error) {
             logger.error("Could not get data from: " + url + " error: " + error);
-        } catch(HttpMessageConversionException error) {
+        } catch(HttpMessageConversionException | IllegalStateException error) {
             logger.error("Can't unmarshall check model.... ", error);
-        } catch(NullPointerException error) {
-            throw new NullPointerException();
         }
 
         if(responseEntity==null) {
