@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository("guidanceSignRepository")
 public class GuidanceSignRepo implements JpaRepository<GuidanceSignEntity> {
-    private Logger logger = LoggerFactory.getLogger(GuidanceSignRepo.class);
+    private final Logger logger = LoggerFactory.getLogger(GuidanceSignRepo.class);
 
     @PersistenceContext
     private EntityManager entityManager;

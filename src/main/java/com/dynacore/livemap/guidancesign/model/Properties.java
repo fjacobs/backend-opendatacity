@@ -20,7 +20,7 @@ public class Properties {
     @JsonProperty("State")
     String state;
     @JsonProperty("Removed")
-    String removed;
+    boolean removed;
     @JsonProperty("ParkingguidanceDisplay")
     List<InnerDisplayModel> innerDisplayModelList;
 
@@ -42,7 +42,7 @@ public class Properties {
         private LocalDateTime pubDate;
         private String type;
         private String state;
-        private String removed;
+        private boolean removed;
         private List<InnerDisplayModel> innerDisplayModelList;
 
         Builder() {
@@ -68,7 +68,7 @@ public class Properties {
             return this;
         }
 
-        Builder removed(String val) {
+        Builder removed(boolean val) {
             removed = val;
             return this;
         }
