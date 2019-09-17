@@ -27,12 +27,13 @@ public class GuidanceSignEntity implements Serializable {
     @Column(name = "ID", nullable = false, updatable = false)
     private UUID guidanceSignId;
 
-    //Flatted from model.properties:
-    private String name;
+
+    private String name;            //Flatted member from model.properties
     @Id
     @Column(name = "PUB_DATE")
-    private LocalDateTime pubDate;
-    private String state;
+    private LocalDateTime pubDate; //Flatted member from model.properties
+    private boolean removed;       //Flatted member from model.properties
+    private String state;          //Flatted member from model.properties
 
     @OneToMany(mappedBy = "parentRef", fetch = FetchType.LAZY)
     private Set<InnerDisplayEntity> innerDisplays;

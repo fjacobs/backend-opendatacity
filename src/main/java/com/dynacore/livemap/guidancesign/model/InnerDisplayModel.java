@@ -5,10 +5,12 @@ package com.dynacore.livemap.guidancesign.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter @Setter
 public class InnerDisplayModel {
 
@@ -25,6 +27,8 @@ public class InnerDisplayModel {
 	private UUID id;
 	@JsonProperty("Description")
 	private String description;
+	@JsonProperty("Removed")
+	private boolean removed;
 
 	//Display type.
 	//Can be one of following three types:
@@ -43,12 +47,10 @@ public class InnerDisplayModel {
 	@JsonProperty("OutputDescription")
 	private String outputDescription;
 
-	public InnerDisplayModel() {
-	}
-
 	private InnerDisplayModel(Builder builder) {
 		setId(builder.id);
 		setDescription(builder.description);
+		setRemoved(builder.removed);
 		setType(builder.type);
 		setOutput(builder.output);
 		setOutputDescription(builder.outputDescription);
@@ -57,6 +59,7 @@ public class InnerDisplayModel {
 	public static final class Builder {
 		private UUID id;
 		private String description;
+		private boolean removed;
 		private String type;
 		private String output;
 		private String outputDescription;
@@ -66,6 +69,10 @@ public class InnerDisplayModel {
 
 		public Builder id(UUID val) {
 			id = val;
+			return this;
+		}
+		public Builder removed(boolean val) {
+			removed = val;
 			return this;
 		}
 

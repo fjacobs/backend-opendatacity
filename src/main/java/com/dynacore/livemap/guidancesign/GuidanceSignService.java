@@ -6,8 +6,6 @@ import com.dynacore.livemap.common.service.GeoJsonRequester;
 import com.dynacore.livemap.common.tools.HttpGeoJsonSerializer;
 import com.dynacore.livemap.guidancesign.entity.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.model.GuidanceSignModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,6 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
     private JpaRepository<GuidanceSignEntity> guidanceSignRepository;
     private FeatureCollection<GuidanceSignModel> featureCollection;
     private GuidanceSignConfiguration config;
-    Logger logger = LoggerFactory.getLogger(GuidanceSignService.class);
 
     @Autowired
     public GuidanceSignService(GuidanceSignRepo guidanceSignRepository, GuidanceSignConfiguration config) {
@@ -29,9 +26,9 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
         this.config = config;
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(() -> {
-                HttpGeoJsonSerializer<FeatureCollection<GuidanceSignModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
-                featureCollection = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), GuidanceSignModel.class);
-                saveCollection(featureCollection);
+            HttpGeoJsonSerializer<FeatureCollection<GuidanceSignModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
+            featureCollection = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), GuidanceSignModel.class);
+            saveCollection(featureCollection);
         }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
     }
 

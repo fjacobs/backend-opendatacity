@@ -42,7 +42,7 @@ public class GuidanceSignModel implements Feature {
                 .name((String) prop.get("Name"))
                 .pubDate(LocalDateTime.parse(temp.substring(0, temp.length() - 1)))
                 .type((String) prop.get("Type"))
-                .removed((String) prop.get("Removed"))
+                .removed(Boolean.valueOf((String)prop.get("Removed")))
                 .state((String) prop.get("State"))
                 .innerDisplayModelList(innerList)
                 .build();
@@ -59,7 +59,7 @@ public class GuidanceSignModel implements Feature {
     }
 
     @JsonIgnore
-    public String getRemoved() {
+    public boolean getRemoved() {
         return properties.removed;
     }
 
