@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.Immutable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 
 
 @Entity
+@Immutable
 @Table(name = "GUIDANCE_SIGN")
 @NoArgsConstructor
 @Getter @Setter
