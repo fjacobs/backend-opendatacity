@@ -17,7 +17,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 @Entity
 @Immutable
 @Table(name = "GUIDANCE_SIGN")
