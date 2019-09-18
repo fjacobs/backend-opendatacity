@@ -1,4 +1,4 @@
-debug: true
+debug: false
 
 # Spring Configuration
 
@@ -40,3 +40,6 @@ guidancesign:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
     initialdelay: 0
     requestinterval: 60
+#
+#        52.37063538130748, 4.899999460629829*
+#        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6SSvjmmzWA9zOVHhh4IsBbp3qqY25qas&callback=initMap">
