@@ -1,0 +1,1 @@
+//	topArray = restTemplate.getForObject("http://www.amsterdamopendata.nl/files/ivv/parkeren/locaties.json", ParkeerLocaties.class);

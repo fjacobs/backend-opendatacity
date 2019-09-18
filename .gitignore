@@ -2,6 +2,7 @@
 /.settings/
 *.class
 
+
 # Intellij project files
 /.idea/
 livemap.iml
