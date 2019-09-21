@@ -8,20 +8,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter @Setter
-public class DynaCoreException {
+public class DynaCoreError {
 
     private HttpStatus status;
     private String message;
     private List<String> errors;
 
-    public DynaCoreException(HttpStatus status, String message, List<String> errors) {
+    public DynaCoreError(HttpStatus status, String message, List<String> errors) {
         super();
         this.status = status;
         this.message = message;
         this.errors = errors;
     }
 
-    public DynaCoreException(HttpStatus status, String message, String error) {
+    public DynaCoreError(HttpStatus status, String message, String error) {
         super();
         this.status = status;
         this.message = message;
