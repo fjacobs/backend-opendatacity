@@ -1,26 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
     <title>Open Data</title>
     <meta charset="UTF-8">
-    <style>
-        /* Always set the map height explicitly to define the size of the div
-         * element that contains the map. */
-        #map {
-            height: 100%;
-        }
-
-        /* Optional: Makes the sample page fill the window. */
-        html, body {
-            height: 90%;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+    <link rel="static/stylesheet" href="styles.css">
     <script src="static/config.js"></script>
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <link id="themecss" rel="stylesheet" type="text/css" href="static/notificationtable.css"/>
-    <script type="text/javascript" src="static/shieldui-all.min.js"></script>
+    <script type="text/javascript" src="static/lib/shieldui-all.min.js"></script>
 
 </head>
 <body>
@@ -29,15 +16,18 @@
     let map;
 
     function initMap() {
-
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: new google.maps.LatLng(52.37063538130748, 4.899999460629829),
             mapTypeId: 'terrain',
             styles: mapstyle
         });
-
         map.data.loadGeoJson(parkingUrl);
+
+       document.getElementById('id').innerHTML = 'no errors';
+
+
+
         map.data.addListener('click', function (event) {
             let infowindow = new google.maps.InfoWindow();
 
@@ -51,15 +41,30 @@
             infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
             infowindow.open(map);
         })
+
         map.data.setStyle(function (feature) {
             return {icon: "images/parking.png"};
         });
     }
 </script>
+
+
 <script async defer
-        src=https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap>
+        src=https://maps.googleapis.com/maps/api/js?key=AIzaSyB6SSvjmmzWA9zOVHhh4IsBbp3qqY25qas&callback=initMap>
 </script>
 <!--or https://demos.shieldui.com/web/grid-general/basic-usage-->
+
+
+
+
+<!--JavaScript Area:-->
+<!--document.getElementById('name').innerHTML = 'rai parking';-->
+<!--HTML Area:-->
+<!--<td id="name">Day</td>-->
+
+
+
+
 <div id="grid"></div>
 <table id="dataTable">
     <thead>
@@ -74,7 +79,7 @@
     </thead>
     <tbody>
     <tr>
-        <td>1</td>
+        <td id="id">id 1</td>
         <td>Item 1</td>
         <td>3</td>
         <td>2013/11/1</td>
@@ -92,6 +97,8 @@
     </tr>
     </tbody>
 </table>
+
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("#grid").shieldGrid({
@@ -121,11 +128,6 @@
         });
     });
 </script>
-<style>
-    #dataTable {
-        display: none;
-    }
-</style>
 
 
 </body>
