@@ -30,7 +30,7 @@ public class GuidanceSignRepo implements JpaRepository<GuidanceSignEntity> {
             entityManager.flush();
         }
         catch(PersistenceException error ){
-      //      logger.error( "Error, could not write to DB: " + error);
+           logger.error( "Error, could not write to DB: " + error);
         }
     }
 

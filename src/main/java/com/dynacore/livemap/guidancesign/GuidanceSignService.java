@@ -28,7 +28,7 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
         exec.scheduleAtFixedRate(() -> {
             HttpGeoJsonSerializer<FeatureCollection<GuidanceSignModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
             featureCollection = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), GuidanceSignModel.class);
-//            saveCollection(featureCollection);
+            saveCollection(featureCollection);
         }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
     }
 
