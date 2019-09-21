@@ -25,7 +25,7 @@ public class ParkingController {
     @GetMapping(value = "getCustomParkingJson")
     @ResponseBody
     public FeatureCollection<ParkingModel> getCustomParkingJson() {
-        return parkingPlaceService.getLiveData();
+        return parkingPlaceService.getLastUpdate();
     }
 
 }

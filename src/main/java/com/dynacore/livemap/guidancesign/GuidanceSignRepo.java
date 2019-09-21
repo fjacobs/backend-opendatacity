@@ -25,12 +25,17 @@ public class GuidanceSignRepo implements JpaRepository<GuidanceSignEntity> {
     @Transactional
     public void save(GuidanceSignEntity guidanceSignEntity) {
         try {
-            entityManager.persist(guidanceSignEntity);
-            guidanceSignEntity.getInnerDisplays().stream().forEach(display -> entityManager.persist(display));
-            entityManager.flush();
-        }
-        catch(PersistenceException error ){
-           logger.error( "Error, could not write to DB: " + error);
+
+            if (!entityManager.contains(guidanceSignEntity)) {
+                entityManager.persist(guidanceSignEntity);
+                guidanceSignEntity.getInnerDisplays().stream().forEach(display -> entityManager.persist(display));
+                entityManager.flush();
+            } else {
+                logger.info(guidanceSignEntity.getName() + "already written to db. The date and time we retrieved it from provider: " + guidanceSignEntity.getRetrievedFromThirdParty() + " \n DateTime when it was published to the provider: " + guidanceSignEntity.getPubDate());
+            }
+
+        } catch (PersistenceException error) {
+            logger.error("Error, could not write to DB: " + error);
         }
     }
 

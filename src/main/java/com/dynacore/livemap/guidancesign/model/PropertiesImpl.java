@@ -1,5 +1,6 @@
 package com.dynacore.livemap.guidancesign.model;
 
+import com.dynacore.livemap.common.model.Properties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,14 +12,8 @@ import java.util.stream.Stream;
 
 @Getter
 @Setter
-public class Properties {
+public class PropertiesImpl extends Properties {
 
-    @JsonProperty("Name")
-    String name;
-    @JsonProperty("PubDate")
-    LocalDateTime pubDate;
-    @JsonProperty("Type")
-    String type;
     @JsonProperty("State")
     String state;
     @JsonProperty("Removed")
@@ -26,7 +21,7 @@ public class Properties {
     @JsonProperty("ParkingguidanceDisplay")
     List<InnerDisplayModel> innerDisplayModelList;
 
-    private Properties(Builder builder) {
+    private PropertiesImpl(Builder builder) {
         name = builder.name;
         pubDate = builder.pubDate;
         type = builder.type;
@@ -76,12 +71,12 @@ public class Properties {
             return this;
         }
 
-        Properties build() {
+        PropertiesImpl build() {
             Stream.of(name, pubDate, removed, type, state, removed, innerDisplayModelList)
                     .filter(Objects::isNull)
                     .findAny()
                     .ifPresent(nullMember -> {throw new IllegalStateException("Error: Could not initialize:  " + name + " " +  nullMember.getClass().getSimpleName() + " was not initialized." ); });
-            return new Properties(this);
+            return new PropertiesImpl(this);
         }
     }
 }

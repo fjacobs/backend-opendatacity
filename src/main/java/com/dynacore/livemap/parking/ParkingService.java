@@ -32,6 +32,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
             HttpGeoJsonSerializer<FeatureCollection<ParkingModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
             try {
                 getLastUpdate = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), ParkingModel.class);
+                getLastUpdate.setTimeOfRetrievalNow();
                 saveCollection((getLastUpdate));
             } catch (ResponseStatusException responseException) {
                 getLastUpdate.setErrorReport(responseException.getReason());
@@ -44,6 +45,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
             features.getFeatures().forEach(parking -> parkingRepo.save(new ParkingEntity( parking.getId(),
 			                                                                           parking.getName(),
 																					   parking.getPubDate(),
+																					   parking.getProperties().getRetrievedFromThirdParty(),
 																					   parking.getState(),
 																					   parking.getFreeSpaceShort(),
 																					   parking.getFreeSpaceLong(),
@@ -61,7 +63,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
 	}
 
 	@Override
-    public FeatureCollection<ParkingModel> getLiveData() {
+    public FeatureCollection<ParkingModel> getLastUpdate() {
         if (getLastUpdate != null) {
             getLastUpdate.getFeatures().stream().forEach(ParkingService::setPercentage);
         } else {

@@ -3,6 +3,7 @@ package com.dynacore.livemap.common.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /* This class is a GeoJSON FeatureCollection as described in: https://tools.ietf.org/html/rfc7946
@@ -15,7 +16,8 @@ public class FeatureCollection<T extends Feature> {
     private List<T> features;
     @JsonProperty("dynacoreErrors")
     private String dynacoreErrors = "none";
-
+    @JsonProperty("retrievedFromThirdParty")
+    private LocalDateTime retrievedFromThirdParty;
     public String getType() {
         return type;
     }
@@ -33,4 +35,13 @@ public class FeatureCollection<T extends Feature> {
     public void setErrorReport(String error) {
         dynacoreErrors = error;
     }
+    @JsonIgnore
+    public LocalDateTime getRetrievedFromThirdParty(){  return retrievedFromThirdParty; };
+
+    public void setTimeOfRetrievalNow() {
+        retrievedFromThirdParty = LocalDateTime.now();
+        features.stream().forEach(feature->feature.getProperties().setTimeOfRetrievalNow());
+    }
+
+
 }
