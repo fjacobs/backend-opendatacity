@@ -34,18 +34,20 @@
     function loadParking() {
         map.data.loadGeoJson(parkingUrl);
         document.getElementById('id').innerHTML = 'no errors';
-
         map.data.addListener('click', function (event) {
-            let infowindow = new google.maps.InfoWindow();
-            var myHTML = "<strong>Parking:</strong>" +
-                event.feature.getProperty("name") +
-                "<br><strong>Beschikbare plekken:</strong> " +
-                event.feature.getProperty("freeSpaceShort");
 
-            infowindow.setContent("<div>" + myHTML + "</div>");
-            infowindow.setPosition(event.feature.getGeometry().get());
-            infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
-            infowindow.open(map);
+            if (String(event.feature.getProperty("type")) === "parkinglocation") {
+                let infowindow = new google.maps.InfoWindow();
+                var myHTML = "<strong>Parking:</strong>" +
+                    event.feature.getProperty("name") +
+                    "<br><strong>Beschikbare plekken:</strong> " +
+                    event.feature.getProperty("freeSpaceShort");
+
+                infowindow.setContent("<div>" + myHTML + "</div>");
+                infowindow.setPosition(event.feature.getGeometry().get());
+                infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+                infowindow.open(map);
+            }
         });
 
         map.data.setStyle(function (feature) {
@@ -60,7 +62,7 @@
     var data, features;
 
     function speedToColor(type, speed) {
-        if (type === "H") {
+        if (type == "H") {
             //Snelweg
             var speedColors = {
                 0: "#D0D0D0",
@@ -90,42 +92,36 @@
         return currentColor;
     }
 
-    function createRoadPopup(line, pos) {
+    function showFeature(line) {
         var i = line.localID;
         line.setOptions({strokeWeight: 6});
-        var html = "<div>Naam:"+ features[i].properties.Name + "</div>";
-        html += "<div>ID : "+ features[i].properties.Id +"</div>";
-        html += "<div>Lengte:  "+ features[i].properties.Length +" meter</div>";
-        html += "<div>Snelheid: "+ features[i].properties.Velocity +" km/u</div>";
-        html += "<div>Huidige reistijd: "+ Math.floor(features[i].properties.Traveltime / 60) +":"+ ("0"+features[i].properties.Traveltime % 60).slice(-2) +"</div>";
-        html += "<div>Timestamp: "+ features[i].properties.Timestamp +"</div>";
+        var html = "<H1>" + features[i].properties.Name + "</H1><dl>";
+        html += "<dt>ID</dt> <dd>" + features[i].properties.Id + "</dd>";
+        html += "<dt>Lengte</dt> <dd>" + features[i].properties.Length + " meter</dd>";
+        html += "<dt>Snelheid</dt> <dd>" + features[i].properties.Velocity + " km/u</dd>";
+        html += "<dt>Huidige reistijd</dt> <dd>" + Math.floor(features[i].properties.Traveltime / 60) + ":" + ("0" + features[i].properties.Traveltime % 60).slice(-2) + "</dd></dl>";
+        html += "<dt>Timestamp</dt> <dd>" + features[i].properties.Timestamp + "</dd>";
+        $("#info").html(html);
 
-
-        let infowindow = new google.maps.InfoWindow();
-
-        infowindow.setContent("<div>" + html + "</div>");
-        infowindow.setPosition(pos);
-        infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
-        infowindow.open(map);
-
-        for(j in features){
-            if(j != i){
+        for (j in features) {
+            if (j != i) {
                 features[j].line.setOptions({strokeWeight: features[j].line.originalWeight});
             }
         }
     }
 
     function loadTravelTime() {
-        var url = traveltimeUrl;
+        var url = "http://localhost:9090/getTravelTime";
         $.getJSON(url, function (result) {
-            features = result.features;
+            data = result;
+            features = data.features;
             for (i in features) {
-                let f = features[i];
-                let color = speedToColor(f.properties.Type, f.properties.Velocity);
-                let points = f.geometry.coordinates;
-                let path = [];
+                var f = features[i];
+                var color = speedToColor(f.properties.Type, f.properties.Velocity);
+                var points = f.geometry.coordinates;
+                var path = new Array();
 
-                for (let j in points) {
+                for (var j in points) {
                     if (!isNaN(points[j][1])) {
                         path.push(new google.maps.LatLng(points[j][1], points[j][0]));
                     }
@@ -146,8 +142,10 @@
                     localID: i,
                     originalWeight: weight
                 });
-                google.maps.event.addListener(f.line, 'click', function (event) {
-                    createRoadPopup(this, event.latLng)
+
+
+                google.maps.event.addListener(f.line, 'click', function () {
+                    showFeature(this)
                 });
             }
         });
