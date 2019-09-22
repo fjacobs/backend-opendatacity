@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class ParkingService implements GeoJsonRequester<FeatureCollection<ParkingModel>> {
 
     private JpaRepository<ParkingEntity> parkingRepo;
-    private FeatureCollection<ParkingModel> getLastUpdate;
+    private FeatureCollection<ParkingModel> lastUpdate;
     private ParkingConfiguration config;
 
     public ParkingService(JpaRepository<ParkingEntity> parkingRepo, ParkingConfiguration config) {
@@ -31,11 +31,11 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
         exec.scheduleAtFixedRate( () -> {
             HttpGeoJsonSerializer<FeatureCollection<ParkingModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
             try {
-                getLastUpdate = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), ParkingModel.class);
-                getLastUpdate.setTimeOfRetrievalNow();
-                saveCollection((getLastUpdate));
+                lastUpdate = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), ParkingModel.class);
+                lastUpdate.setTimeOfRetrievalNow();
+                //saveCollection((lastUpdate));
             } catch (ResponseStatusException responseException) {
-                getLastUpdate.setErrorReport(responseException.getReason());
+                lastUpdate.setErrorReport(responseException.getReason());
             }
         }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
     }
@@ -64,14 +64,14 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
 
 	@Override
     public FeatureCollection<ParkingModel> getLastUpdate() {
-        if (getLastUpdate != null) {
-            getLastUpdate.getFeatures().stream().forEach(ParkingService::setPercentage);
+        if (lastUpdate != null) {
+            lastUpdate.getFeatures().stream().forEach(ParkingService::setPercentage);
         } else {
-            getLastUpdate = new FeatureCollection<>();
-            getLastUpdate.setErrorReport("Error: Could not get data from " + config.getUrl());
+            lastUpdate = new FeatureCollection<>();
+            lastUpdate.setErrorReport("Error: Could not get data from " + config.getUrl());
         }
 
-        return getLastUpdate;
+        return lastUpdate;
     }
 
 }

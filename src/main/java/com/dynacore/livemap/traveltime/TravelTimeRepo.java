@@ -1,6 +1,8 @@
 package com.dynacore.livemap.traveltime;
 
 import com.dynacore.livemap.common.repo.JpaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 @Repository("travelTimeRepository")
 public class TravelTimeRepo implements JpaRepository<TravelTimeEntity> {
+    private Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -19,8 +22,13 @@ public class TravelTimeRepo implements JpaRepository<TravelTimeEntity> {
     @Override
     @Transactional
     public void save(TravelTimeEntity travelTimeEntity) {
-        entityManager.persist(travelTimeEntity);
-        entityManager.flush();
+        logger.info("SAVE VALLED");
+        try {
+            entityManager.persist(travelTimeEntity);
+            entityManager.flush();
+        } catch (Exception error) {
+            logger.error(error.toString());
+        }
     }
 
     @Override

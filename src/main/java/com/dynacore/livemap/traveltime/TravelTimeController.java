@@ -1,6 +1,6 @@
 package com.dynacore.livemap.traveltime;
 
-import com.dynacore.livemap.common.model.FeatureCollection;
+import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:63342")
     @GetMapping(value = "getTravelTime")
     @ResponseBody
-    public FeatureCollection<TravelTimeModel> getCustomParkingJson() {
+    public FeatureCollection getCustomParkingJson() {
         return travelTimeService.getLastUpdate();
     }
 

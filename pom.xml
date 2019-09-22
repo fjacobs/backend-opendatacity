@@ -58,6 +58,12 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>de.grundid.opendatalab</groupId>
+			<artifactId>geojson-jackson</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+
 	</dependencies>
 
     <build>

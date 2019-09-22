@@ -8,58 +8,161 @@
     <link id="tablecss" rel="stylesheet" type="text/css" href="static/notificationtable.css"/>
     <link id="styles" rel="stylesheet" type="text/css" href="static/styles.css"/>
     <script type="text/javascript" src="static/lib/shieldui-all.min.js"></script>
-
 </head>
-<body>
-<div id="map"></div>
+
 <script>
+
     let map;
+
+    function main() {
+        initMap();
+        loadParking();
+        loadTravelTime();
+    }
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: new google.maps.LatLng(52.37063538130748, 4.899999460629829),
-            mapTypeId: 'terrain',
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
             styles: mapstyle
         });
+    }
+
+    // ---------- Parking
+
+    function loadParking() {
         map.data.loadGeoJson(parkingUrl);
-
-       document.getElementById('id').innerHTML = 'no errors';
-
+        document.getElementById('id').innerHTML = 'no errors';
         map.data.addListener('click', function (event) {
-            let infowindow = new google.maps.InfoWindow();
 
-            var myHTML = "<strong>Parking:</strong>" +
-                event.feature.getProperty("name") +
-                "<br><strong>Beschikbare plekken:</strong> " +
-                event.feature.getProperty("freeSpaceShort");
+            if (String(event.feature.getProperty("type")) === "parkinglocation") {
+                let infowindow = new google.maps.InfoWindow();
+                var myHTML = "<strong>Parking:</strong>" +
+                    event.feature.getProperty("name") +
+                    "<br><strong>Beschikbare plekken:</strong> " +
+                    event.feature.getProperty("freeSpaceShort");
 
-            infowindow.setContent("<div>" + myHTML + "</div>");
-            infowindow.setPosition(event.feature.getGeometry().get());
-            infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
-            infowindow.open(map);
-        })
+                infowindow.setContent("<div>" + myHTML + "</div>");
+                infowindow.setPosition(event.feature.getGeometry().get());
+                infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+                infowindow.open(map);
+            }
+        });
 
         map.data.setStyle(function (feature) {
             return {icon: "images/parking.png"};
         });
     }
+
+    // ----------- TravelTime --------------------------
+
+    var data, features;
+
+    function speedToColor(type, speed) {
+        if (type == "H") {
+            //Snelweg
+            var speedColors = {
+                0: "#D0D0D0",
+                1: "#BE0000",
+                30: "#FF0000",
+                50: "#FF9E00",
+                70: "#FFFF00",
+                90: "#AAFF00",
+                120: "#00B22D"
+            };
+        } else {
+            //Overige wegen
+            var speedColors = {
+                0: "#D0D0D0",
+                1: "#BE0000",
+                10: "#FF0000",
+                20: "#FF9E00",
+                30: "#FFFF00",
+                40: "#AAFF00",
+                70: "#00B22D"
+            };
+        }
+        var currentColor = "#D0D0D0";
+        for (var i in speedColors) {
+            if (speed >= i) currentColor = speedColors[i];
+        }
+        return currentColor;
+    }
+
+    function showFeature(line) {
+        var i = line.localID;
+        line.setOptions({strokeWeight: 6});
+        var html = "<H1>" + features[i].properties.Name + "</H1><dl>";
+        html += "<dt>ID</dt> <dd>" + features[i].properties.Id + "</dd>";
+        html += "<dt>Lengte</dt> <dd>" + features[i].properties.Length + " meter</dd>";
+        html += "<dt>Snelheid</dt> <dd>" + features[i].properties.Velocity + " km/u</dd>";
+        html += "<dt>Huidige reistijd</dt> <dd>" + Math.floor(features[i].properties.Traveltime / 60) + ":" + ("0" + features[i].properties.Traveltime % 60).slice(-2) + "</dd></dl>";
+        html += "<dt>Timestamp</dt> <dd>" + features[i].properties.Timestamp + "</dd>";
+        $("#info").html(html);
+
+        for (j in features) {
+            if (j != i) {
+                features[j].line.setOptions({strokeWeight: features[j].line.originalWeight});
+            }
+        }
+    }
+
+    function loadTravelTime() {
+        var url = "http://localhost:9090/getTravelTime";
+        $.getJSON(url, function (result) {
+            data = result;
+            features = data.features;
+            for (i in features) {
+                var f = features[i];
+                var color = speedToColor(f.properties.Type, f.properties.Velocity);
+                var points = f.geometry.coordinates;
+                var path = new Array();
+
+                for (var j in points) {
+                    if (!isNaN(points[j][1])) {
+                        path.push(new google.maps.LatLng(points[j][1], points[j][0]));
+                    }
+                }
+
+                if (f.properties.Velocity > 0) {
+                    var weight = 3;
+                } else {
+                    var weight = 1;
+                }
+                f.line = new google.maps.Polyline({
+                    map: map,
+                    path: path,
+                    strokeColor: color,
+                    strokeOpacity: 1.0,
+                    strokeWeight: weight,
+                    title: f.properties.Name,
+                    localID: i,
+                    originalWeight: weight
+                });
+
+
+                google.maps.event.addListener(f.line, 'click', function () {
+                    showFeature(this)
+                });
+            }
+        });
+    }
+
 </script>
+
 <script async defer
         src=https://maps.googleapis.com/maps/api/js?key=AIzaSyB6SSvjmmzWA9zOVHhh4IsBbp3qqY25qas&callback=initMap>
 </script>
 <!--or https://demos.shieldui.com/web/grid-general/basic-usage-->
 
 
-
-
 <!--JavaScript Area:-->
 <!--document.getElementById('name').innerHTML = 'rai parking';-->
 <!--HTML Area:-->
 <!--<td id="name">Day</td>-->
-
-
-
+<body onLoad='main()'>
+<div id="map"></div>
 
 <div id="grid"></div>
 <table id="dataTable">

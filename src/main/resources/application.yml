@@ -1,4 +1,4 @@
-debug: false
+debug: true
 
 # Spring Configuration
 
@@ -36,17 +36,27 @@ server:
 parking:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
     initialdelay: 0
-    requestinterval: 60
+    requestinterval: 1000
 
 guidancesign:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
     initialdelay: 0
-    requestinterval: 60
+    requestinterval: 1000
 
 traveltime:
     #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
     url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
     initialdelay: 0
-    requestinterval: 5
+    requestinterval: 1000
+    
+#    -- properties --
+#    Timestamp:    Timestamp voor het moment waarop reistijd bepaalt is
+#    Velocity:    Huidige snelheid (km/u) op traject
+#    Length:        Lengte van traject (in meters)
+#    Traveltime:    De huidige reistijd op het traject
+#
+#    -- geometry --
+#    coordinates:    De coördinaten van het traject, in Rijksdriehoekscoördinaten en in de volgorde van de rijrichting
+
 #-----------------------
 
