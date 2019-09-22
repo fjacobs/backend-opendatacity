@@ -1,7 +1,6 @@
 package com.dynacore.livemap.guidancesign.model;
 
 import com.dynacore.livemap.common.model.Feature;
-import com.dynacore.livemap.common.model.Geometry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -13,16 +12,29 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 
 @Getter @Setter
-public class GuidanceSignModel implements Feature {
+public class GuidanceSignModel extends Feature {
 
-    @JsonProperty("Id")
-    private UUID id;
-    @JsonProperty("type")
-    private String type;
-    @JsonProperty("geometry")
-    private Geometry geometry;
-    private Properties properties;
+    @JsonIgnore
+    public String getName() {
+        return properties.getName();
+    }
 
+    @JsonIgnore
+    public LocalDateTime getPubDate() {
+        return properties.getPubDate();
+    }
+
+    @JsonIgnore
+    public boolean getRemoved() {
+        return properties.removed;
+    }
+
+    @JsonIgnore
+    public String getState() {
+        return properties.state;
+    }
+
+    private PropertiesImpl properties;
     @JsonProperty("properties")
     private void unpackNested(Map<String, Object> prop) throws IllegalStateException {
         List<InnerDisplayModel> childDisplays = ((ArrayList<LinkedHashMap<String, String>>) prop.get("ParkingguidanceDisplay")).stream()
@@ -37,7 +49,7 @@ public class GuidanceSignModel implements Feature {
 
         String temp = (String) prop.get("PubDate");
 
-        properties = new Properties.Builder()
+        properties = new PropertiesImpl.Builder()
                 .name((String) prop.get("Name"))
                 .pubDate(LocalDateTime.parse(temp.substring(0, temp.length() - 1)))
                 .type((String) prop.get("Type"))
@@ -45,26 +57,6 @@ public class GuidanceSignModel implements Feature {
                 .state((String) prop.get("State"))
                 .innerDisplayModelList(childDisplays)
                 .build();
-    }
-
-    @JsonIgnore
-    public String getName() {
-        return properties.name;
-    }
-
-    @JsonIgnore
-    public LocalDateTime getPubDate() {
-        return properties.pubDate;
-    }
-
-    @JsonIgnore
-    public boolean getRemoved() {
-        return properties.removed;
-    }
-
-    @JsonIgnore
-    public String getState() {
-        return properties.state;
     }
 
 }

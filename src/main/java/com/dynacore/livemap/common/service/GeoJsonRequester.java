@@ -1,14 +1,16 @@
 package com.dynacore.livemap.common.service;
 
+import com.dynacore.livemap.common.model.Feature;
+import com.dynacore.livemap.common.model.FeatureCollection;
+
 /**
- * @param <U> Processed Endpoint JSON representation
+ * @param <T> Processed Endpoint JSON representation
  */
+public interface GeoJsonRequester<T extends FeatureCollection<? extends Feature>> {
 
-public interface GeoJsonRequester<U> {
+	T getLastUpdate();
 
-	U getLiveData();
-	
-	void saveCollection(U processedCollection);
+	void saveCollection(T processedCollection);
 
 }
 

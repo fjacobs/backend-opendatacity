@@ -31,12 +31,15 @@ public class GuidanceSignEntity implements Serializable {
     @Column(name = "ID", nullable = false, updatable = false)
     private UUID guidanceSignId;
 
-    private String name;            //Flatted member from model.properties
+    private String name; //Flatted member from model.properties
     @Id
     @Column(name = "PUB_DATE")
-    private LocalDateTime pubDate; //Flatted member from model.properties
-    private boolean removed;       //Flatted member from model.properties
-    private String state;          //Flatted member from model.properties
+    private LocalDateTime pubDate;
+    private boolean removed;
+    private String state;
+
+    //The time this system retrieved the data from the external provider
+    private LocalDateTime retrievedFromThirdParty;
 
     @OneToMany(mappedBy = "parentRef", fetch = FetchType.LAZY)
     private Set<InnerDisplayEntity> innerDisplays;
@@ -47,6 +50,7 @@ public class GuidanceSignEntity implements Serializable {
             pubDate = model.getPubDate();
             removed = model.getRemoved();
             state = model.getState();
+            retrievedFromThirdParty = model.getProperties().getRetrievedFromThirdParty();
             innerDisplays = model.getProperties().getInnerDisplayModelList().stream()
                     .map(inner -> new InnerDisplayEntity.Builder()
                             .innerDisplayId(inner.getId())

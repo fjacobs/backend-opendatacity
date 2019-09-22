@@ -20,6 +20,6 @@ public class GuidanceSignController {
     @GetMapping(value = "getCustomGuidanceSignJson")
     @ResponseBody
     public FeatureCollection<GuidanceSignModel> getCustomJson() {
-        return guidanceSignService.getLiveData();
+        return guidanceSignService.getLastUpdate();
     }
 }
