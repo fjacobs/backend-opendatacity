@@ -22,7 +22,17 @@ import java.util.concurrent.TimeUnit;
 @Service("travelTimeService")
 public class TravelTimeService {
 
-    FeatureCollection lastUpdate;
+    private static final String ID = "Id";
+    private static final String NAME = "Name";
+    private static final String TYPE = "Type";
+    private static final String TRAVEL_TIME = "Traveltime";
+    private static final String LENGTH = "Length";
+    private static final String VELOCITY = "Velocity";
+    private static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
+    private static final String THEIR_RETRIEVAL = "Timestamp";
+    private static final String DYNACORE_ERRORS = "dynacoreErrors";
+
+    private FeatureCollection lastUpdate;
     private JpaRepository<TravelTimeEntity> travelTimeRepo;
     private TravelTimeConfiguration config;
     private Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
@@ -38,59 +48,58 @@ public class TravelTimeService {
         RestTemplate restTemplate = createRestClient();
 
         exec.scheduleAtFixedRate(() -> {
-            ResponseEntity<FeatureCollection> response
-                    = restTemplate.getForEntity(config.getUrl(), FeatureCollection.class);
-            lastUpdate = response.getBody();
+            ResponseEntity<FeatureCollection> response = restTemplate.getForEntity(config.getUrl(), FeatureCollection.class);
+            synchronized(this) {
+                lastUpdate = response.getBody();
+            }
             processCollection(lastUpdate);
             saveCollection(lastUpdate);
+
         }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
     }
 
-    private void processCollection(FeatureCollection travelTime) {
-        int travelTimeVal;
-        LocalDateTime timeStamp = LocalDateTime.now();
-        lastUpdate.getFeatures().stream().forEach(
+    private synchronized void processCollection(FeatureCollection travelTimeFc) {
+        LocalDateTime retrieved = LocalDateTime.now();
+        travelTimeFc.getFeatures().forEach(
                 feature -> {
-                    feature.getProperties().put("retrievedFromThirdParty", timeStamp);
-
-                    if (!feature.getProperties().containsKey("Traveltime")) {
-                        feature.getProperties().put("Traveltime", -1);
-                    }
-                    if (!feature.getProperties().containsKey("Velocity")) {
-                        feature.getProperties().put("Velocity", -1);
-                    }
-                    if (!feature.getProperties().containsKey("Length")) {
-                        feature.getProperties().put("Length", -1);
-                    }
+                        feature.getProperties().put(DYNACORE_ERRORS, "none");
+                        feature.getProperties().put(OUR_RETRIEVAL, retrieved);
+                        if (!feature.getProperties().containsKey(TRAVEL_TIME)) {
+                            feature.getProperties().put(TRAVEL_TIME, -1);
+                        }
+                        if (!feature.getProperties().containsKey(VELOCITY)) {
+                            feature.getProperties().put(VELOCITY, -1);
+                        }
+                        if (!feature.getProperties().containsKey(LENGTH)) {
+                            feature.getProperties().put(LENGTH, -1);
+                        }
                 }
         );
     }
 
 
     @Transactional
-    public void saveCollection(FeatureCollection travelTimeFc) {
-        logger.info("saveCollection VALLED");
+    public synchronized void saveCollection(FeatureCollection travelTimeFc) {
         try {
-            travelTimeFc.getFeatures().forEach(travelTime ->
-                        travelTimeRepo.save(
-                                new TravelTimeEntity.Builder()
-                                        .id((String) travelTime.getProperties().get("Id"))
-                                        .name((String) travelTime.getProperties().get("Name"))
-                                        .pubDate((String) travelTime.getProperties().get("Timestamp"))
-                                        .retrievedFromThirdParty((LocalDateTime) travelTime.getProperties().get("retrievedFromThirdParty"))
-                                        .type((String) travelTime.getProperties().get("Type"))
-                                        .travelTime((int) travelTime.getProperties().get("Traveltime"))
-                                        .velocity((int) travelTime.getProperties().get("Velocity"))
-                                        .length((int) travelTime.getProperties().get("Length"))
-                                        .build()));
+            travelTimeFc.getFeatures().forEach(travelTime -> travelTimeRepo.save(
+                    new TravelTimeEntity.Builder()
+                            .id((String) travelTime.getProperties().get(ID))
+                            .name((String) travelTime.getProperties().get(NAME))
+                            .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
+                            .retrievedFromThirdParty((LocalDateTime) travelTime.getProperties().get(OUR_RETRIEVAL))
+                            .type((String) travelTime.getProperties().get(TYPE))
+                            .travelTime((int) travelTime.getProperties().get(TRAVEL_TIME))
+                            .velocity((int) travelTime.getProperties().get(VELOCITY))
+                            .length((int) travelTime.getProperties().get(LENGTH))
+                            .build()));
         } catch (Exception error) {
-            error.printStackTrace();
+            logger.error("Can't save road information to DB: " + error.toString());
         }
     }
 
 
-    FeatureCollection getLastUpdate() {
-        return lastUpdate;
+    synchronized FeatureCollection getLastUpdate() {
+            return lastUpdate;
     }
 
     private RestTemplate createRestClient() {

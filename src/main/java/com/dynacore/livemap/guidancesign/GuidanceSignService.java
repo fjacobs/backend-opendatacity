@@ -27,18 +27,20 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(() -> {
             HttpGeoJsonSerializer<FeatureCollection<GuidanceSignModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
-            featureCollection = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), GuidanceSignModel.class);
-            featureCollection.setTimeOfRetrievalNow();
+            synchronized (this) {
+                featureCollection =  httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), GuidanceSignModel.class);
+                featureCollection.setTimeOfRetrievalNow();
+            }
             saveCollection(featureCollection);
         }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
     }
 
-    public FeatureCollection<GuidanceSignModel> getLastUpdate() {
+    public synchronized FeatureCollection<GuidanceSignModel> getLastUpdate() {
         return featureCollection;
     }
 
     @Override
-    public void saveCollection(FeatureCollection<GuidanceSignModel> featureColl) {
+    public synchronized void saveCollection(FeatureCollection<GuidanceSignModel> featureColl) {
             featureColl.getFeatures()
                     .stream()
                     .map(GuidanceSignEntity::new)

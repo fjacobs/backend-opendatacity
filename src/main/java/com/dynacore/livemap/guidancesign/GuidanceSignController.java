@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class GuidanceSignController {
 
-    final GuidanceSignService guidanceSignService;
+    private final GuidanceSignService guidanceSignService;
 
     @Autowired
     public GuidanceSignController(GuidanceSignService guidanceSignService) {

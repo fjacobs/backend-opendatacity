@@ -28,12 +28,14 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
 
     private void pollRequest() {
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-        exec.scheduleAtFixedRate( () -> {
+        exec.scheduleAtFixedRate(() -> {
             HttpGeoJsonSerializer<FeatureCollection<ParkingModel>> httpGeoJsonSerializer = new HttpGeoJsonSerializer<>();
             try {
-                lastUpdate = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), ParkingModel.class);
-                lastUpdate.setTimeOfRetrievalNow();
-                //saveCollection((lastUpdate));
+                synchronized (this) {
+                    lastUpdate = httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), ParkingModel.class);
+                    lastUpdate.setTimeOfRetrievalNow();
+                }
+                saveCollection((lastUpdate));
             } catch (ResponseStatusException responseException) {
                 lastUpdate.setErrorReport(responseException.getReason());
             }
@@ -41,31 +43,23 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
     }
 
     @Transactional
-    public void saveCollection(FeatureCollection<ParkingModel> features) {
-            features.getFeatures().forEach(parking -> parkingRepo.save(new ParkingEntity( parking.getId(),
-			                                                                           parking.getName(),
-																					   parking.getPubDate(),
-																					   parking.getProperties().getRetrievedFromThirdParty(),
-																					   parking.getState(),
-																					   parking.getFreeSpaceShort(),
-																					   parking.getFreeSpaceLong(),
-																					   parking.getShortCapacity(),
-																					   parking.getLongCapacity()))
+    public synchronized void saveCollection(FeatureCollection<ParkingModel> features) {
+        features.getFeatures().forEach(parking -> parkingRepo.save(new ParkingEntity(parking.getId(),
+                parking.getName(),
+                parking.getPubDate(),
+                parking.getProperties().getRetrievedFromThirdParty(),
+                parking.getState(),
+                parking.getFreeSpaceShort(),
+                parking.getFreeSpaceLong(),
+                parking.getShortCapacity(),
+                parking.getLongCapacity()))
         );
     }
 
-	private static void setPercentage(ParkingModel parking) {
-		try {
-			parking.setPercentage(((parking.getShortCapacity() - parking.getFreeSpaceShort()) * 100) / parking.getShortCapacity());
-		} catch (ArithmeticException divideByZero) {
-			parking.setPercentage(-1);
-		}
-	}
-
-	@Override
-    public FeatureCollection<ParkingModel> getLastUpdate() {
+    @Override
+    public synchronized FeatureCollection<ParkingModel> getLastUpdate() {
         if (lastUpdate != null) {
-            lastUpdate.getFeatures().stream().forEach(ParkingService::setPercentage);
+            lastUpdate.getFeatures().forEach(ParkingService::setPercentage);
         } else {
             lastUpdate = new FeatureCollection<>();
             lastUpdate.setErrorReport("Error: Could not get data from " + config.getUrl());
@@ -74,4 +68,11 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
         return lastUpdate;
     }
 
+    private static void setPercentage(ParkingModel parking) {
+        try {
+            parking.setPercentage(((parking.getShortCapacity() - parking.getFreeSpaceShort()) * 100) / parking.getShortCapacity());
+        } catch (ArithmeticException divideByZero) {
+            parking.setPercentage(-1);
+        }
+    }
 }
