@@ -13,7 +13,6 @@
 <script>
 
     let map;
-
     function main() {
         initMap();
         loadParking();
@@ -27,6 +26,14 @@
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             styles: mapstyle
         });
+    }
+
+
+
+    if (!!window.EventSource) {
+        var source = new EventSource('localhost:9090/stream-sse');
+    } else {
+        // Result to xhr polling :(
     }
 
     // ---------- Parking

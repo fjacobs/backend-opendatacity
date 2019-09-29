@@ -3,6 +3,7 @@ package com.dynacore.livemap.traveltime;
 import com.dynacore.livemap.common.repo.JpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
+@Profile("traveltime")
 @Repository("travelTimeRepository")
 public class TravelTimeRepo implements JpaRepository<TravelTimeEntity> {
     private Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);

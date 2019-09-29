@@ -1,6 +1,7 @@
 package com.dynacore.livemap.parking;
 
 import com.dynacore.livemap.common.repo.JpaRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,7 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
+@Profile("parking")
 @Repository("parkingPlaceRepository")
 public class ParkingRepo implements JpaRepository<ParkingEntity> {
 

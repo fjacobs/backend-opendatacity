@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>server side events</title>
+</head>
+
+<body>
+    <script>
+        if (!!window.EventSource) {
+            var source = new EventSource('http://localhost:9090//fc');
+        } else {
+            // Result to xhr polling :(
+        }
+        source.addEventListener('roadEvent', function(e) {
+            console.log(e);
+            console.log(e.data);
+        }, false);
+
+        source.addEventListener('open', function(e) {
+            console.log("connection was opened");
+        }, false);
+
+        source.addEventListener('error', function(e) {
+            if (e.readyState == EventSource.CLOSED) {
+                console.log("connection was closed");
+            }
+        }, false);
+    </script>
+</body>
+</html>

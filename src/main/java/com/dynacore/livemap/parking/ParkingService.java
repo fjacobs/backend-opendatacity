@@ -4,6 +4,7 @@ import com.dynacore.livemap.common.model.FeatureCollection;
 import com.dynacore.livemap.common.repo.JpaRepository;
 import com.dynacore.livemap.common.service.GeoJsonRequester;
 import com.dynacore.livemap.common.tools.HttpGeoJsonSerializer;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,7 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+@Profile("parking")
 @Service("parkingPlaceService")
 public class ParkingService implements GeoJsonRequester<FeatureCollection<ParkingModel>> {
 

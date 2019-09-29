@@ -8,18 +8,42 @@
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 
+	<repositories>
+		<!-- for spring milestone -->
+		<repository>
+			<id>spring.milestone</id>
+			<url>http://repo.spring.io/milestone</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<!-- for spring milestone -->
+		<pluginRepository>
+			<id>spring.milestone</id>
+			<url>http://repo.spring.io/milestone</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.8.RELEASE</version>
+		<version>2.2.0.M6</version>
 	</parent>
 
 	<dependencies>
+
 		<!-- Spring MVC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+
 
 		<!-- Embedded Tomcat -->
 		<dependency>
@@ -63,8 +87,7 @@
 			<artifactId>geojson-jackson</artifactId>
 			<version>1.8.1</version>
 		</dependency>
-
-	</dependencies>
+    </dependencies>
 
     <build>
         <plugins>
@@ -75,8 +98,6 @@
 					<source>12</source>
 					<target>12</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
 
@@ -94,7 +115,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
     </build>
 </project>

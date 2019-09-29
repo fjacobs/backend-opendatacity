@@ -1,4 +1,5 @@
-debug: true
+debug: false
+
 
 # Spring Configuration
 
@@ -24,6 +25,9 @@ spring:
         image:
             invert: true
 
+    profiles:
+        include: traveltime
+
 #  Embedded server configuration
 
 server:
@@ -32,7 +36,7 @@ server:
 # Traffic Data Configuration
 
 
-# Eigenaar: Gemeente Amsterdam, Verkeer en Openbare Ruimte ---
+# Eigenaar dataset: Gemeente Amsterdam, Verkeer en Openbare Ruimte ---
 parking:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
     initialdelay: 0
@@ -49,14 +53,15 @@ traveltime:
     initialdelay: 0
     requestinterval: 1000
     
-#    -- properties --
-#    Timestamp:    Timestamp voor het moment waarop reistijd bepaalt is
+#    -- traveltime properties --
+#    Timestamp:    Timestamp van het moment waarop de reistijd bepaalt is
 #    Velocity:    Huidige snelheid (km/u) op traject
-#    Length:        Lengte van traject (in meters)
-#    Traveltime:    De huidige reistijd op het traject
+#    Length:      Lengte van traject (in meters)
+#    Traveltime:  De huidige reistijd op het traject
 #
 #    -- geometry --
 #    coordinates:    De coördinaten van het traject, in Rijksdriehoekscoördinaten en in de volgorde van de rijrichting
 
 #-----------------------
 
+# https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-Index-Statisch-en-Dynamisch/f6v7-gjpa

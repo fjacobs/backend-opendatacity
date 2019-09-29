@@ -7,12 +7,14 @@ import com.dynacore.livemap.common.tools.HttpGeoJsonSerializer;
 import com.dynacore.livemap.guidancesign.entity.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.model.GuidanceSignModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Profile("guidancesign")
 @Service("guidanceSignService")
 public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<GuidanceSignModel>> {
 
