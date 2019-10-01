@@ -14,13 +14,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import reactor.util.function.Tuple2;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.Optional;
 
 @Profile("traveltime")
 @Service("travelTimeService")
@@ -35,105 +34,77 @@ public class TravelTimeService {
     private static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
     private static final String THEIR_RETRIEVAL = "Timestamp";
     private static final String DYNACORE_ERRORS = "dynacoreErrors";
+    private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
+    private static final String SOURCEURL = "http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson";
+    private static final int INTERVAL = 60;
 
-    private Mono<FeatureCollection> fluxFeatureColl;
     private JpaRepository<TravelTimeEntity> travelTimeRepo;
     private TravelTimeConfiguration config;
-    private WebClient webClient = WebClient.create();
-    private Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
 
     @Autowired
     public TravelTimeService(JpaRepository<TravelTimeEntity> travelTimeRepo, TravelTimeConfiguration config) {
         this.travelTimeRepo = travelTimeRepo;
         this.config = config;
-//        try{
-//            pollRequest();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
-
-    private Mono<FeatureCollection> getMonoFromGeojsonUrl(String url) {
-        WebClient webClient = WebClient.create();
-        return webClient.get()
-                .uri(config.getUrl())
-                .retrieve()
-                .bodyToMono(byte[].class) // Data source doesn't include a content-type header,
-                                             // so we need to convert the json from byte stream
-                .map(bytes -> {
-                    FeatureCollection fc = null;
-                    try {
-                        fc = new ObjectMapper().readValue(bytes, FeatureCollection.class);
-                    } catch (IOException e) {
-                        System.err.println("error: " + e);
-                    }
-                    System.out.println("FC1 size: " + fc.getFeatures().size()) ;
+    Flux<FeatureCollection> scheduleExchange() {
+        Mono<FeatureCollection> monoFc = processFeatures(getData())
+                .collectList()
+                .map(features -> {
+                    FeatureCollection fc = new FeatureCollection();
+                    fc.setFeatures(features);
                     return fc;
-                });
+                }).log();
+                                                                // need a flux for scheduling
+        Flux<FeatureCollection> scheduleReady = Flux.concat(monoFc); // create flux with one element
+        Flux<Long> interval = Flux.interval(Duration.ofSeconds(INTERVAL));
+
+        return Flux.zip(interval, scheduleReady)
+                   .map(Tuple2::getT2);
     }
 
-    Flux<Feature> getFeatureFlux(String url) {
-        return getMonoFromGeojsonUrl(url)
+    Flux<Feature> processFeatures(Mono<FeatureCollection> sourceColl) {
+        return sourceColl
                 .flatMapIterable(FeatureCollection::getFeatures)
-                .cache()
-                .parallel(8)
+                .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
                 .doOnNext(this::processFeature)
-                .sequential()
-                .doOnComplete(() -> System.out.println("Completed: getFluxFromMonoGeoJson"))
-                .doOnError(e -> logger.error("Error processing roads to flux:" + e));
+                .sequential();
     }
 
-    //List<Feature> -> FeatureCollection
-    FeatureCollection getFc() {
-        FeatureCollection fc = new FeatureCollection();
-        fc.setFeatures(getFeatureList(config.getUrl()));
-        return fc;
-    }
-
-
-    // Flux<Feature>  ->  List<Feature>
-    List<Feature> getFeatureList(String url) {
-        Flux flux = getFeatureFlux(url);
-        List<Feature> returnColl = (ArrayList<Feature>) flux.collectList().block();
-        return returnColl;
-    }
-
-
-
-
-
-
-
-
-    private void pollRequest() {
-        ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-        fluxFeatureColl = webClient
-                .get()
-                .uri(config.getUrl())
+    //OUD
+    Mono<FeatureCollection> getData() {
+        WebClient webClient = WebClient.create();
+        return webClient.get()
+                .uri(SOURCEURL)
                 .retrieve()
-                .bodyToMono(byte[].class) //Since the provider didn't add a header..
+                .bodyToMono(byte[].class) // Data source doesn't include a content-type header: convert from bytes to json
+                .doOnSuccess(x -> logger.info("Serialized Mono<FeatureCollection> from datasource"))
                 .map(bytes -> {
                     FeatureCollection fc = null;
                     try {
-                        fc = new ObjectMapper().readValue(bytes, FeatureCollection.class);
+                        fc = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
+                                .orElseThrow();
                     } catch (IOException e) {
-                        System.err.println("Error converting bytestream to JSON: " + e);
+                        logger.error("Error: " + e);
+                        fc = new FeatureCollection();
                     }
                     return fc;
                 });
     }
 
-    Mono<FeatureCollection> getFluxFeatureColl() {
-        return fluxFeatureColl;
+    /**
+     * Publishes changed properties to subscribers.
+     * To keep the class stateless, we use the last stored DB entry to store the data
+     */
+    public Flux<Feature> updateFlux() {
+        Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
+        return Flux.zip(interval, processFeatures(getData())).map(Tuple2::getT2);
     }
 
-
     private Feature processFeature(Feature feature) {
-        String  retrieved = LocalDateTime.now().toString();
-
-        feature.getProperties().put(DYNACORE_ERRORS, "none");
+        String retrieved = LocalDateTime.now().toString();
+        feature.getProperties().put(DYNACORE_ERRORS, "none"); //TODO: (3) Implement error handling
         feature.getProperties().put(OUR_RETRIEVAL, retrieved);
         if (!feature.getProperties().containsKey(TRAVEL_TIME)) {
             feature.getProperties().put(TRAVEL_TIME, -1);
@@ -147,9 +118,8 @@ public class TravelTimeService {
         return feature;
     }
 
-
     @Transactional
-    public synchronized void saveCollection(FeatureCollection travelTimeFc) {
+    public synchronized void saveCollection(FeatureCollection travelTimeFc) { // TODO: (1) Implement async database
         try {
             travelTimeFc.getFeatures().forEach(travelTime -> travelTimeRepo.save(
                     new TravelTimeEntity.Builder()
@@ -166,6 +136,4 @@ public class TravelTimeService {
             logger.error("Can't save road information to DB: " + error.toString());
         }
     }
-
-
 }

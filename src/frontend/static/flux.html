@@ -7,25 +7,27 @@
 
 <body>
     <script>
-        if (!!window.EventSource) {
-            var source = new EventSource('http://localhost:9090//fc');
-        } else {
-            // Result to xhr polling :(
-        }
-        source.addEventListener('roadEvent', function(e) {
-            console.log(e);
-            console.log(e.data);
-        }, false);
-
-        source.addEventListener('open', function(e) {
-            console.log("connection was opened");
-        }, false);
-
-        source.addEventListener('error', function(e) {
-            if (e.readyState == EventSource.CLOSED) {
-                console.log("connection was closed");
+            var source;
+            if (!!window.EventSource) {
+                source = new EventSource('http://localhost:9090//standardSubscription');
+            } else {
+                // Result to xhr polling :(
             }
-        }, false);
+            let i = 0;
+            source.addEventListener('event', function (e) {
+                console.log("Receiving event ......." + i++)
+                console.log(e.data);
+            }, false);
+
+            source.addEventListener('open', function (e) {
+                console.log("connection was opened");
+            }, false);
+
+            source.addEventListener('error', function (e) {
+                if (e.readyState === EventSource.CLOSED) {
+                    console.log("Received 'error even't: connection was closed");
+                }
+            }, false);
     </script>
 </body>
 </html>
