@@ -51,7 +51,7 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:63342")
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
-        return travelTimeService.doWork( travelTimeService.getDataFromSource() )
+        return travelTimeService.doWork( travelTimeService.sourcePublisher() )
                 .delayElements(Duration.ofMillis(5))
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
                 .doOnComplete(()-> logger.info("Completed Road SSE.."))

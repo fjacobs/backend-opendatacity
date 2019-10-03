@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -40,72 +41,18 @@ public class TravelTimeService {
     private JpaRepository<TravelTimeEntity> travelTimeRepo;
     private TravelTimeConfiguration config;
     private RoadAsyncRepo roadAsyncRepo;
+    private DatabaseClient databaseClient;
 
     @Autowired
-    public TravelTimeService(RoadAsyncRepo roadAsyncRepo, TravelTimeConfiguration config) {
+    public TravelTimeService(DatabaseClient databaseClient, TravelTimeConfiguration config) {
         System.out.println("Called TravelTimeService");
         this.roadAsyncRepo = roadAsyncRepo;
+        this.databaseClient = databaseClient;
         this.config = config;
+        scheduleExchange().publish();
     }
 
-
-
-
-
-    public Flux<FeatureCollection> scheduleExchange() {
-        Mono<FeatureCollection> monoFc = doWork(getDataFromSource())
-                .collectList()
-                .map(features -> {
-                    FeatureCollection fc = new FeatureCollection();
-                    fc.setFeatures(features);
-                    return fc;
-                });
-
-        Flux<FeatureCollection> scheduleReady = Flux.concat(monoFc); // create flux with one element
-        Flux<Long> interval = Flux.interval(Duration.ofSeconds(INTERVAL));
-
-        return Flux.zip(interval, scheduleReady)
-                .map(Tuple2::getT2);
-    }
-
-    public Flux<Feature> doWork(Mono<FeatureCollection> sourceColl) {
-         return sourceColl
-                .flatMapIterable(FeatureCollection::getFeatures)
-                .parallel(8)
-                .runOn(Schedulers.parallel())
-                .doOnNext(this::processFeature)
-                .sequential()
-                .take(1)
-                .then(roadAsyncRepo.testSelectX().last())
-                .doOnNext(System.out::println)
-                .flatMapMany(x-> Flux.just(new Feature())
-                                // .doOnNext(this::save)
-                .doOnComplete(()->logger.info("doWork is complete...") )
-                .doOnError(error -> logger.info("doWork is error..." + error)) );
-
-    }
-
-    @Transactional
-    public void save(Feature travelTime) {
-        try {
-               roadAsyncRepo.save( new TravelTimeEntity.Builder()
-                            .id((String) travelTime.getProperties().get(ID))
-                            .name((String) travelTime.getProperties().get(NAME))
-                            .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
-                            .retrievedFromThirdParty((String) travelTime.getProperties().get(OUR_RETRIEVAL))
-                            .type((String) travelTime.getProperties().get(TYPE))
-                            .travelTime((int) travelTime.getProperties().get(TRAVEL_TIME))
-                            .velocity((int) travelTime.getProperties().get(VELOCITY))
-                            .length((int) travelTime.getProperties().get(LENGTH))
-                            .build());
-        } catch (Exception error) {
-            logger.error("Can't save road information to DB: " + error.toString());
-        }
-    }
-
-
-    //OUD
-    public Mono<FeatureCollection> getDataFromSource() {
+    public Flux<Feature> sourcePublisher() {
         WebClient webClient = WebClient.create();
         return webClient.get()
                 .uri(SOURCEURL)
@@ -122,8 +69,64 @@ public class TravelTimeService {
                         fc = new FeatureCollection();
                     }
                     return fc;
-                });
+                })
+                .flatMapIterable(FeatureCollection::getFeatures);
     }
+
+    public Flux<FeatureCollection> scheduleExchange() {
+        Mono<FeatureCollection> monoFc = doWork(sourcePublisher())
+                .collectList()
+                .map(features -> {
+                    FeatureCollection fc = new FeatureCollection();
+                    fc.setFeatures(features);
+                    return fc;
+                });
+
+        Flux<FeatureCollection> scheduleReady = Flux.concat(monoFc); // create flux with one element
+        Flux<Long> interval = Flux.interval(Duration.ofSeconds(INTERVAL));
+        return Flux.zip(interval, scheduleReady)
+                .map(Tuple2::getT2)
+                .cache(Duration.ofSeconds(INTERVAL -1));
+    }
+
+    public Flux<Feature> doWork(Flux<Feature> sourceColl) {
+        return sourceColl
+                .take(100)
+                .parallel(8)
+                .runOn(Schedulers.parallel())
+                .doOnNext(this::processFeature)
+                .doOnNext(this::save)
+                .sequential()
+                .doOnComplete(()->logger.info("doWork is complete...") )
+                .doOnError(error -> logger.info("doWork is error..." + error));
+    }
+
+
+    @Transactional
+    public void save(Feature travelTime) {
+        try {
+            databaseClient.insert()
+                    .into(TravelTimeEntity.class)
+                    .using( new TravelTimeEntity.Builder()
+                            .id((String) travelTime.getProperties().get(ID))
+                            .name((String) travelTime.getProperties().get(NAME))
+                            .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
+                            .retrievedFromThirdParty((String) travelTime.getProperties().get(OUR_RETRIEVAL))
+                            .type((String) travelTime.getProperties().get(TYPE))
+                            .travelTime((int) travelTime.getProperties().get(TRAVEL_TIME))
+                            .velocity((int) travelTime.getProperties().get(VELOCITY))
+                            .length((int) travelTime.getProperties().get(LENGTH))
+                            .build())
+                    .then();
+
+
+        } catch (Exception error) {
+            logger.error("Can't save road information to DB: " + error.toString());
+        }
+    }
+
+
+
 
     /**
      * Publishes changed properties to subscribers.
@@ -131,7 +134,7 @@ public class TravelTimeService {
      */
     private Flux<Feature> updateFlux() {
         Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
-        return Flux.zip(interval, doWork(getDataFromSource())).map(Tuple2::getT2);
+        return Flux.zip(interval, doWork(sourcePublisher())).map(Tuple2::getT2);
     }
 
 
