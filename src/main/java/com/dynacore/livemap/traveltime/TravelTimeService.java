@@ -34,46 +34,78 @@ public class TravelTimeService {
     private static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
     private static final String THEIR_RETRIEVAL = "Timestamp";
     private static final String DYNACORE_ERRORS = "dynacoreErrors";
-    private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
     private static final String SOURCEURL = "http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson";
     private static final int INTERVAL = 60;
-
+    private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
     private JpaRepository<TravelTimeEntity> travelTimeRepo;
     private TravelTimeConfiguration config;
+    private RoadAsyncRepo roadAsyncRepo;
 
     @Autowired
-    public TravelTimeService(JpaRepository<TravelTimeEntity> travelTimeRepo, TravelTimeConfiguration config) {
-        this.travelTimeRepo = travelTimeRepo;
+    public TravelTimeService(RoadAsyncRepo roadAsyncRepo, TravelTimeConfiguration config) {
+        System.out.println("Called TravelTimeService");
+        this.roadAsyncRepo = roadAsyncRepo;
         this.config = config;
     }
 
-    Flux<FeatureCollection> scheduleExchange() {
-        Mono<FeatureCollection> monoFc = processFeatures(getData())
+
+
+
+
+    public Flux<FeatureCollection> scheduleExchange() {
+        Mono<FeatureCollection> monoFc = doWork(getDataFromSource())
                 .collectList()
                 .map(features -> {
                     FeatureCollection fc = new FeatureCollection();
                     fc.setFeatures(features);
                     return fc;
-                }).log();
-                                                                // need a flux for scheduling
+                });
+
         Flux<FeatureCollection> scheduleReady = Flux.concat(monoFc); // create flux with one element
         Flux<Long> interval = Flux.interval(Duration.ofSeconds(INTERVAL));
 
         return Flux.zip(interval, scheduleReady)
-                   .map(Tuple2::getT2);
+                .map(Tuple2::getT2);
     }
 
-    Flux<Feature> processFeatures(Mono<FeatureCollection> sourceColl) {
-        return sourceColl
+    public Flux<Feature> doWork(Mono<FeatureCollection> sourceColl) {
+         return sourceColl
                 .flatMapIterable(FeatureCollection::getFeatures)
-                .parallel(Runtime.getRuntime().availableProcessors())
+                .parallel(8)
                 .runOn(Schedulers.parallel())
                 .doOnNext(this::processFeature)
-                .sequential();
+                .sequential()
+                .take(1)
+                .then(roadAsyncRepo.testSelectX().last())
+                .doOnNext(System.out::println)
+                .flatMapMany(x-> Flux.just(new Feature())
+                                // .doOnNext(this::save)
+                .doOnComplete(()->logger.info("doWork is complete...") )
+                .doOnError(error -> logger.info("doWork is error..." + error)) );
+
     }
 
+    @Transactional
+    public void save(Feature travelTime) {
+        try {
+               roadAsyncRepo.save( new TravelTimeEntity.Builder()
+                            .id((String) travelTime.getProperties().get(ID))
+                            .name((String) travelTime.getProperties().get(NAME))
+                            .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
+                            .retrievedFromThirdParty((String) travelTime.getProperties().get(OUR_RETRIEVAL))
+                            .type((String) travelTime.getProperties().get(TYPE))
+                            .travelTime((int) travelTime.getProperties().get(TRAVEL_TIME))
+                            .velocity((int) travelTime.getProperties().get(VELOCITY))
+                            .length((int) travelTime.getProperties().get(LENGTH))
+                            .build());
+        } catch (Exception error) {
+            logger.error("Can't save road information to DB: " + error.toString());
+        }
+    }
+
+
     //OUD
-    Mono<FeatureCollection> getData() {
+    public Mono<FeatureCollection> getDataFromSource() {
         WebClient webClient = WebClient.create();
         return webClient.get()
                 .uri(SOURCEURL)
@@ -97,10 +129,12 @@ public class TravelTimeService {
      * Publishes changed properties to subscribers.
      * To keep the class stateless, we use the last stored DB entry to store the data
      */
-    public Flux<Feature> updateFlux() {
+    private Flux<Feature> updateFlux() {
         Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
-        return Flux.zip(interval, processFeatures(getData())).map(Tuple2::getT2);
+        return Flux.zip(interval, doWork(getDataFromSource())).map(Tuple2::getT2);
     }
+
+
 
     private Feature processFeature(Feature feature) {
         String retrieved = LocalDateTime.now().toString();
@@ -118,22 +152,4 @@ public class TravelTimeService {
         return feature;
     }
 
-    @Transactional
-    public synchronized void saveCollection(FeatureCollection travelTimeFc) { // TODO: (1) Implement async database
-        try {
-            travelTimeFc.getFeatures().forEach(travelTime -> travelTimeRepo.save(
-                    new TravelTimeEntity.Builder()
-                            .id((String) travelTime.getProperties().get(ID))
-                            .name((String) travelTime.getProperties().get(NAME))
-                            .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
-                            .retrievedFromThirdParty((LocalDateTime) travelTime.getProperties().get(OUR_RETRIEVAL))
-                            .type((String) travelTime.getProperties().get(TYPE))
-                            .travelTime((int) travelTime.getProperties().get(TRAVEL_TIME))
-                            .velocity((int) travelTime.getProperties().get(VELOCITY))
-                            .length((int) travelTime.getProperties().get(LENGTH))
-                            .build()));
-        } catch (Exception error) {
-            logger.error("Can't save road information to DB: " + error.toString());
-        }
-    }
 }

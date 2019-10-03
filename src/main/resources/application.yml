@@ -1,7 +1,13 @@
 debug: false
 
-
 # Spring Configuration
+
+logging:
+    level:
+        org:
+            springframework:
+                data:
+                    r2dbc: off
 
 spring:
     datasource:
@@ -21,6 +27,7 @@ spring:
                 jdbc:
                     lob:
                        non_contextual_creation: true
+                       
     banner:
         image:
             invert: true

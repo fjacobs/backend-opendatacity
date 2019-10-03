@@ -1,45 +1,39 @@
 package com.dynacore.livemap.traveltime;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Immutable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
-@Entity
-@Immutable
-@Table(name = "TRAVEL_TIME")
-@Getter @Setter
-@EqualsAndHashCode(of = {"id", "pubDate"} )
-class TravelTimeEntity implements Serializable {
+@Getter
+@Setter
+@Table(name = "traveltime")
+class TravelTimeEntity {
 
-    @Id
     private String id;
     private String name;
 
-    @Id
-    private LocalDateTime pubDate;
-    private LocalDateTime retrievedFromThirdParty;
+    private LocalDateTime pub_date;
+    private LocalDateTime retrieved_from_third_party;
 
     private String type;
     private int length;
-    private int travelTime;
+    private int travel_time;
     private int velocity;
+
+    public TravelTimeEntity() {
+    }
 
     private TravelTimeEntity(Builder builder) {
         setId(builder.id);
         setName(builder.name);
-        setPubDate(builder.pubDate);
-        setRetrievedFromThirdParty(builder.retrievedFromThirdParty);
+        setPub_date(builder.pubDate);
+        setRetrieved_from_third_party(builder.retrievedFromThirdParty);
         setType(builder.type);
         setLength(builder.length);
-        setTravelTime(builder.travelTime);
+        setTravel_time(builder.travelTime);
         setVelocity(builder.velocity);
     }
 
@@ -68,13 +62,14 @@ class TravelTimeEntity implements Serializable {
         }
 
         public Builder pubDate(String val) {
-             LocalDateTime timeStamp = LocalDateTime.parse(val.substring(0, val.length() - 1));
+            LocalDateTime timeStamp = LocalDateTime.parse(val.substring(0, val.length() - 1));
             pubDate = timeStamp;
             return this;
         }
 
-        public Builder retrievedFromThirdParty(LocalDateTime val) {
-            retrievedFromThirdParty = val;
+        public Builder retrievedFromThirdParty(String val) {
+            LocalDateTime timeStamp = LocalDateTime.parse(val.substring(0, val.length() - 1));
+            retrievedFromThirdParty = timeStamp;
             return this;
         }
 

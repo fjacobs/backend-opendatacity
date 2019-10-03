@@ -24,7 +24,7 @@ public class TravelTimeRepo implements JpaRepository<TravelTimeEntity> {
     @Override
     @Transactional
     public void save(TravelTimeEntity travelTimeEntity) {
-        logger.info("SAVE VALLED");
+        logger.info("SAVE CALLED");
         try {
             entityManager.persist(travelTimeEntity);
             entityManager.flush();
