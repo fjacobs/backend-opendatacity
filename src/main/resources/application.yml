@@ -1,4 +1,4 @@
-debug: false
+debug: true
 
 # Spring Configuration
 
@@ -10,6 +10,7 @@ logging:
                     r2dbc: off
 
 spring:
+
     datasource:
         url: jdbc:postgresql://localhost:5432/trafficdata
         username: postgres
@@ -31,6 +32,8 @@ spring:
     banner:
         image:
             invert: true
+    output:
+        ansi: true
 
     profiles:
         include: traveltime

@@ -34,7 +34,10 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:63342")
     @GetMapping("/standardSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
-        return travelTimeService.scheduleExchange()
+        Flux<Feature> collection = travelTimeService.getPublisher();
+        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.convertToFeatureCollection(collection));
+
+        return featureColl
                 .doOnComplete(()-> logger.info("Completed Road FeatureCollection SSE.."))
                 .doOnError(e ->  logger.error("SSE Error: " + e))
                 .map(sequence -> ServerSentEvent.<FeatureCollection>builder()
@@ -51,7 +54,7 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:63342")
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
-        return travelTimeService.doWork( travelTimeService.sourcePublisher() )
+        return travelTimeService.getPublisher()
                 .delayElements(Duration.ofMillis(5))
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
                 .doOnComplete(()-> logger.info("Completed Road SSE.."))
