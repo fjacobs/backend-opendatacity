@@ -40,7 +40,7 @@ public class HttpClientFactory {
         HttpClient client = null;
         switch(capability) {
             case DEFAULT: client = defaultClient(URL);  break;
-            case ETAG: client = etagClient(URL); break;
+            case ETAG: client = defaultClient(URL);  break;// etagClient(URL); break;
             default:
                 throw new IllegalStateException("Unexpected value: " + capability);
         }
@@ -95,8 +95,8 @@ public class HttpClientFactory {
                 })
                 .doOnResponse((req, conn) -> {
                     conn.addHandler("dynacore.right.outboundhandler", etagOutboundHandler);
-            //        conn.addHandlerLast("netty.left.httpobjectaggregator", new HttpObjectAggregator(1048576));
-                     conn.addHandlerLast("dynacore.left.inboundhandler", etagInboundHandler);
+                    conn.addHandlerLast("netty.left.httpobjectaggregator", new HttpObjectAggregator(1048576));
+                    conn.addHandlerLast("dynacore.left.inboundhandler", etagInboundHandler);
                 });
 
     }

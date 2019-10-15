@@ -31,7 +31,7 @@ public class TravelTimeController {
      * The first event will send the complete collection, the events that follow
      *  only contain property data that has been changed compared to the previous event.
      */
-    @CrossOrigin(origins = "http://localhost:63342")
+    @CrossOrigin(origins = "http://localhost:8000")
     @GetMapping("/standardSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
         Flux<Feature> collection = travelTimeService.getPublisher();
@@ -51,7 +51,7 @@ public class TravelTimeController {
      * @return Returns a subscription for specific features
      * The events only contain data that has changed
      */
-    @CrossOrigin(origins = "http://localhost:63342")
+    @CrossOrigin(origins = "http://localhost:8000")
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
         return travelTimeService.getPublisher()

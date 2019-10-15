@@ -26,10 +26,7 @@ public class EtagOutboundHandler extends ChannelOutboundHandlerAdapter {
         log.info("Send message");
 
         HttpMessage m = (HttpMessage) msg;
-
-        Optional.ofNullable(ctx.pipeline().context("dynacore.left.inboundhandler")).ifPresentOrElse(
-                (context) -> log.info("Is ETAG THERE---> "+ context.channel().attr(ChannelAttrKey.ETAG).get() + " in channel " + context.channel().id()),
-                () -> log.error("inhoundHandler context not found"));
+        log.info("Is ETAG THERE---> "+ ctx.channel().attr(ChannelAttrKey.ETAG).get() + " in channel " + ctx.channel().id());
 
         Optional.ofNullable(ctx.channel().attr(ChannelAttrKey.ETAG).get())
                 .ifPresentOrElse(eTag -> m.headers().set(HttpHeaderNames.IF_NONE_MATCH, eTag),
