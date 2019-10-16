@@ -54,7 +54,9 @@ public class TravelTimeService {
         webClient = WebClient.builder().clientConnector(httpConnector)
                 .build();
 
-        sharedFlux = retrieveProcessedFeatures().publish();
+        sharedFlux = retrieveProcessedFeatures().share()
+                                                .cache(Duration.ofSeconds(INTERVAL))
+                                                .publish();
 
         var saveFlux = Flux.from(sharedFlux)
                 .parallel(Runtime.getRuntime().availableProcessors())
@@ -116,7 +118,7 @@ public class TravelTimeService {
     }
 
     Flux<Feature> getPublisher() {
-        return sharedFlux;
+        return Flux.from(sharedFlux);
     }
 
     private Flux<Feature> retrieveProcessedFeatures() {
@@ -149,7 +151,6 @@ public class TravelTimeService {
                 .share()
                 .doOnSubscribe(s -> logger.info("Subscribed to processed features source"))
                 .doOnComplete(() -> logger.info("Completed processing features"));
-
     }
 
     Mono<FeatureCollection> convertToFeatureCollection(Flux<Feature> featureFlux) {
@@ -167,10 +168,6 @@ public class TravelTimeService {
      * Publishes changed properties to subscribers.
      * To keep the class stateless, we use the last stored DB entry to store the data
      */
-//    private Flux<Feature> updateFlux() {
-//        Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
-//        return Flux.zip(interval, doWork(unprocessedFeatures())).map(Tuple2::getT2);
-//    }
     private Feature processFeature(Feature feature) {
         String retrieved = OffsetDateTime.now().toString();
         feature.getProperties().put(DYNACORE_ERRORS, "none");
