@@ -3,6 +3,7 @@ package com.dynacore.livemap.common.http;
 import com.dynacore.livemap.common.http.handlers.EtagInboundHandler;
 import com.dynacore.livemap.common.http.handlers.EtagOutboundHandler;
 import com.dynacore.livemap.common.http.observer.ETagObserver;
+import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -28,15 +29,13 @@ public class HttpClientFactory {
         HTTP2  // HTTP2 is not yet supported by Reactor-Netty 0.9
     }
 
-    public HttpClientFactory() {
-    }
+    public HttpClientFactory() { }
 
     //Sends HTTP Head and determines server capabilities based on response
     public HttpClient autoConfigHttpClient(String URL) { //Todo: move inside ChannelHandlers and dynamically switch on runtime...
         ServerCapability capability = getServerCapability(URL);
         log.info("Found capability: " + capability);
         HttpClient client = null;
-        capability= ServerCapability.DEFAULT;
         switch(capability) {
             case DEFAULT: client = defaultClient(URL);  break;
             case ETAG: client = etagClient(URL); break; // etagClient(URL);  break;
@@ -82,7 +81,6 @@ public class HttpClientFactory {
     public HttpClient etagClient(String URL) {
         EtagOutboundHandler etagOutboundHandler = new EtagOutboundHandler();
         EtagInboundHandler  etagInboundHandler = new EtagInboundHandler();
-  //      ForceJsonContentTypeHandler forceContentType = new ForceJsonContentTypeHandler();
 
         return HttpClient.create()
                 .baseUrl(URL)
@@ -90,17 +88,15 @@ public class HttpClientFactory {
                 .observe(new ETagObserver())
                 .doOnRequest((req, conn) -> {
                     conn.addHandler("dynacore.right.outboundhandler", etagOutboundHandler);
+                    conn.addHandlerLast("netty.left.decompressor",  new HttpContentDecompressor());
                     conn.addHandlerLast("netty.left.httpobjectaggregator", new HttpObjectAggregator(1048576));
                     conn.addHandlerLast("dynacore.left.inboundhandler", etagInboundHandler);
-                  //  conn.addHandlerLast("dynacore.left.forceContentType", forceContentType);
-
                 })
                 .doOnResponse((req, conn) -> {
                     conn.addHandler("dynacore.right.outboundhandler", etagOutboundHandler);
+                    conn.addHandlerLast("netty.left.decompressor",  new HttpContentDecompressor());
                     conn.addHandlerLast("netty.left.httpobjectaggregator", new HttpObjectAggregator(1048576));
                     conn.addHandlerLast("dynacore.left.inboundhandler", etagInboundHandler);
-            //        conn.addHandlerLast("dynacore.left.forceContentType", forceContentType);
-
                 });
 
     }
