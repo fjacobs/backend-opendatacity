@@ -23,15 +23,32 @@ public class EtagOutboundHandler extends ChannelOutboundHandlerAdapter {
 
         HttpMessage m = (HttpMessage) msg;
         log.info("Read Etag from channel ---> "+ ctx.channel().attr(ChannelAttrKey.ETAG).get() + " in channel " + ctx.channel().id());
+        log.info("Read Last-Modified from channel ---> "+ ctx.channel().attr(ChannelAttrKey.LAST_MODIFIED).get() + " in channel " + ctx.channel().id());
 
-        Optional.ofNullable(ctx.channel().attr(ChannelAttrKey.ETAG).get())
-                .ifPresentOrElse(eTag -> m.headers().set(HttpHeaderNames.IF_NONE_MATCH, eTag),
-                        () -> log.info("Did not set key in headers because there is no ETAG Attribute in context....."));
+        Optional<String>  etag =Optional.ofNullable(ctx.channel().attr(ChannelAttrKey.ETAG).get());
+        Optional<String>  lastModified =Optional.ofNullable(ctx.channel().attr(ChannelAttrKey.LAST_MODIFIED).get());
+
+        /* Don't set Etag if gzip is used.
+            Use Last-Modified instead. (Last modified is ignored when both are set)
+         */
+
+        if(etag.isPresent()) {
+            if( ! etag.get().contains("gzip")) {
+                m.headers().set(HttpHeaderNames.IF_NONE_MATCH, etag.get());
+            }
+        } else {
+            log.info("Did not find ETAG Attribute in channel context.");
+        }
+        if(lastModified.isPresent()) {
+            m.headers().set(HttpHeaderNames.IF_MODIFIED_SINCE, lastModified.get().stripTrailing());
+        } else {
+            log.info("Did not find IF_MODIFIED_SINCE Attribute in channel context");
+        }
 
         m.headers().add(HttpHeaders.ACCEPT_ENCODING, "gzip, deflate");
 
         log.info("Sending message with headers: ");
-        // m.headers().forEach(header -> log.info(header.getKey() + " value:" + header.getValue()));
+         m.headers().forEach(header -> log.info(header.getKey() + " value:" + header.getValue()));
         super.write(ctx, msg, promise);
     }
 }

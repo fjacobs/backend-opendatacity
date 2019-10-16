@@ -1,6 +1,5 @@
 package com.dynacore.livemap.common.http.handlers;
 
-import com.dynacore.livemap.common.model.FeatureCollection;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -20,7 +19,9 @@ public class EtagInboundHandler extends SimpleChannelInboundHandler<HttpObject> 
 
             if (!response.headers().isEmpty()) {
                 ctx.channel().attr(ChannelAttrKey.ETAG).set(response.headers().get(HttpHeaders.ETAG));
-                log.debug("Inserted key in attr: " + ctx.channel().attr(ChannelAttrKey.ETAG).get() + " in channel: " + ctx.channel().id());
+                log.debug("Inserted Etag in channel context: " + ctx.channel().attr(ChannelAttrKey.ETAG).get());
+                ctx.channel().attr(ChannelAttrKey.LAST_MODIFIED).set(response.headers().get(HttpHeaders.LAST_MODIFIED));
+                log.debug("Inserted Last-Modified in attr: " + ctx.channel().attr(ChannelAttrKey.LAST_MODIFIED).get() + " in channel: " + ctx.channel().id());
             }
         }
         if (msg instanceof HttpContent) {

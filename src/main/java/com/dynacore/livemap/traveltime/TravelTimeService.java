@@ -61,12 +61,11 @@ public class TravelTimeService {
                 .runOn(Schedulers.parallel())
                 .map(this::convertToEntity)
                 .doOnNext(this::save)
-                .sequential()
-                .doOnComplete(() -> logger.info("Saved road features to db"));
+                .sequential();
 
         Flux.interval(Duration.ofSeconds(INTERVAL))
                 .map(tick -> {
-                    saveFlux.subscribe(x -> System.out.println("SaveFlux subscribed"));
+                    saveFlux.subscribe(); //x -> System.out.println("SaveFlux subscribed")
                     sharedFlux.connect();
                     logger.info("Interval count: " + tick);
                     return tick;
@@ -81,8 +80,7 @@ public class TravelTimeService {
                         .is(entity.getPub_date()))
                 .fetch()
                 .first()
-                .hasElement()
-                .log();
+                .hasElement();
     }
 
     private TravelTimeEntity convertToEntity(Feature travelTime) {
@@ -101,19 +99,15 @@ public class TravelTimeService {
     @Transactional
     public void save(TravelTimeEntity entity) {
         try {
-            logger.info("check: " + entity.toString());
             selectFeature(entity)
                     .subscribe(foundInDb -> {
                         if (!foundInDb) {
-                            logger.error("---------------------------- Does NOT exist:  ");
                             databaseClient.insert()
                                     .into(TravelTimeEntity.class)
                                     .using(entity)
                                     .then()
                                     .doOnError(e -> logger.error("Error already exists:  ", e))
                                     .subscribe();
-                        } else {
-                            logger.error("---------------------------- SKIP ALREADY exists:  ");
                         }
                     });
         } catch (Exception error) {
@@ -148,7 +142,6 @@ public class TravelTimeService {
 
     private Flux<Feature> processFeatures(FeatureCollection fc) {
         return Flux.fromIterable(fc)
-                .take(10)
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
                 .doOnNext(this::processFeature)
@@ -191,7 +184,6 @@ public class TravelTimeService {
         if (!feature.getProperties().containsKey(LENGTH)) {
             feature.getProperties().put(LENGTH, -1);
         }
-        logger.info("processed feature");
         return feature;
     }
 

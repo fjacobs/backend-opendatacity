@@ -55,7 +55,7 @@ public class HttpClientFactory {
                 .head()
                 .uri("http://web.redant.net/")
                 .responseSingle((HttpClientResponse metaResp, ByteBufMono ignoredContents) -> {
-                    ServerCapability capability = ServerCapability.DEFAULT;
+                    ServerCapability capability = null;
                     if (metaResp.status() == HttpResponseStatus.OK) {
                         //Configure handler pipeline
                         if (metaResp.responseHeaders().contains(HttpHeaderNames.ETAG)) {
