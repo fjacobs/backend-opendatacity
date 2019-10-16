@@ -16,14 +16,16 @@ spring:
         username: postgres
         password: admin
         driver-class-name: org.postgresql.Driver
+
+
     jpa:
         open-in-view: true
-        show-sql: false
+        show-sql: true
         generate-ddl: true
         hibernate:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-        properties:
+
             hibernate:
                 jdbc:
                     lob:

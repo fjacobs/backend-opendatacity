@@ -9,25 +9,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.data.r2dbc.query.Criteria.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.Disposable;
 import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import reactor.netty.ConnectionObserver;
 
-import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static org.springframework.data.r2dbc.query.Criteria.where;
+import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 
 @Profile("traveltime")
 @Service("travelTimeService")
@@ -46,35 +42,47 @@ public class TravelTimeService {
     private static final int INTERVAL = 5;
     private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
     private DatabaseClient databaseClient;
-    private Flux<Feature> saveSubscription;
-    //    private final TravelTimeConfiguration config;
-    private ConnectableFlux<Feature> featurePublisher;
-    WebClient webClient;
+    private ConnectableFlux<Feature> sharedFlux;
+    private WebClient webClient;
 
 
     @Autowired
-    public TravelTimeService(DatabaseClient databaseClient, HttpClientFactory httpClientFactory, TravelTimeConfiguration config) {
+    public TravelTimeService(DatabaseClient databaseClient, HttpClientFactory httpClientFactory) {
         this.databaseClient = databaseClient;
 
         ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(httpClientFactory.autoConfigHttpClient(SOURCEURL));
         webClient = WebClient.builder().clientConnector(httpConnector)
                 .build();
 
-        Flux<Feature> fluxFeature = processFeatures()
-                .doOnSubscribe(s -> logger.info("Subscribed to source"));
+        sharedFlux = retrieveProcessedFeatures().publish();
 
-        sharedFlux = fluxFeature.publish();
+        var saveFlux = Flux.from(sharedFlux)
+                .parallel(Runtime.getRuntime().availableProcessors())
+                .runOn(Schedulers.parallel())
+                .map(this::convertToEntity)
+                .doOnNext(this::save)
+                .sequential()
+                .doOnComplete(() -> logger.info("Saved road features to db"));
 
-        Flux.interval(Duration.ofSeconds(10))
+        Flux.interval(Duration.ofSeconds(INTERVAL))
                 .map(tick -> {
-                    sharedFlux.parallel(Runtime.getRuntime().availableProcessors())
-                            .map(this::convertToEntity)
-                            .subscribe(this::save);
+                    saveFlux.subscribe(x -> System.out.println("SaveFlux subscribed"));
                     sharedFlux.connect();
-                    System.out.println("tick" + tick);
+                    logger.info("Interval count: " + tick);
                     return tick;
                 }).subscribe();
+    }
 
+    private Mono<Boolean> selectFeature(TravelTimeEntity entity) {
+        return databaseClient.select().from(TravelTimeEntity.class)
+                .matching(where("id")
+                        .is(entity.getId())
+                        .and("pub_date")
+                        .is(entity.getPub_date()))
+                .fetch()
+                .first()
+                .hasElement()
+                .log();
     }
 
     private TravelTimeEntity convertToEntity(Feature travelTime) {
@@ -93,63 +101,62 @@ public class TravelTimeService {
     @Transactional
     public void save(TravelTimeEntity entity) {
         try {
-            databaseClient.insert()
-                    .into(TravelTimeEntity.class)
-                    .using(entity)
-                    .then()
-                    .doOnError(e -> logger.error("already exists"))
-                    .doOnSuccess((x) -> logger.info("Saved to db..")).subscribe();
+            logger.info("check: " + entity.toString());
+            selectFeature(entity)
+                    .subscribe(foundInDb -> {
+                        if (!foundInDb) {
+                            logger.error("---------------------------- Does NOT exist:  ");
+                            databaseClient.insert()
+                                    .into(TravelTimeEntity.class)
+                                    .using(entity)
+                                    .then()
+                                    .doOnError(e -> logger.error("Error already exists:  ", e))
+                                    .subscribe();
+                        } else {
+                            logger.error("---------------------------- SKIP ALREADY exists:  ");
+                        }
+                    });
         } catch (Exception error) {
             logger.error("Can't save road information to DB: " + error.toString());
         }
     }
 
-//    Flux<Feature> getPublisher() {
-//        return null;
-//    }
-
     Flux<Feature> getPublisher() {
         return sharedFlux;
     }
 
-    private Flux<Feature> processFeatures() {
-        return dataSourceSubscription()
-                .flux()
-                .take(1)
-                .flatMap(Flux::fromIterable)
+    private Flux<Feature> retrieveProcessedFeatures() {
+        return webClient.get()
+                .uri(SOURCEURL)
+                .exchange()
+                .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
+                .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
+                .map(bytes -> {
+                            FeatureCollection featureColl = null;
+                            try {
+                                featureColl = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
+                                        .orElseThrow(IllegalStateException::new);
+                            } catch (Exception e) {
+                                return Mono.error(IllegalStateException::new);
+                            }
+                            return featureColl;
+                        }
+                )
+                .cast(FeatureCollection.class)
+                .flatMapMany(this::processFeatures);
+    }
+
+    private Flux<Feature> processFeatures(FeatureCollection fc) {
+        return Flux.fromIterable(fc)
                 .take(10)
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
                 .doOnNext(this::processFeature)
                 .sequential()
-                .doOnComplete(() -> logger.info("processed features"));
-    }
+                .share()
+                .doOnSubscribe(s -> logger.info("Subscribed to processed features source"))
+                .doOnComplete(() -> logger.info("Completed processing features"));
 
-    private Mono<FeatureCollection> dataSourceSubscription() {
-        return webClient.get()
-                .uri(SOURCEURL)
-                .retrieve()
-                .bodyToMono(byte[].class)
-                .defaultIfEmpty(new FeatureCollection().toString().getBytes())
-                .delayElement(Duration.ofSeconds(5))
-                // Data source doesn't include a content-type header: convert from bytes to json
-                .map(bytes -> {
-                    FeatureCollection featureColl = null;
-                    try {
-                        featureColl = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
-                                .orElseThrow();
-                        if (featureColl.getFeatures().size() == 0) {
-                            var feature = new Feature();
-                            feature.setId("Unmodified");
-                        }
-                    } catch (IOException e) {
-                        //logger.error("Error serializing fc: " + e);
-                        featureColl = new FeatureCollection();
-                    }
-                    return featureColl;
-                })
-                .doOnSuccess(x -> logger.info("Serialized Mono<FeatureCollection> from datasource"))
-                .doOnError((e) -> logger.error("Error dataSourceSubscription"));
     }
 
     Mono<FeatureCollection> convertToFeatureCollection(Flux<Feature> featureFlux) {
@@ -172,9 +179,8 @@ public class TravelTimeService {
 //        return Flux.zip(interval, doWork(unprocessedFeatures())).map(Tuple2::getT2);
 //    }
     private Feature processFeature(Feature feature) {
-        logger.info("--------------------------------- processFeature");
-        String retrieved = LocalDateTime.now().toString();
-        feature.getProperties().put(DYNACORE_ERRORS, "none"); //TODO: (3) Implement error handling
+        String retrieved = OffsetDateTime.now().toString();
+        feature.getProperties().put(DYNACORE_ERRORS, "none");
         feature.getProperties().put(OUR_RETRIEVAL, retrieved);
         if (!feature.getProperties().containsKey(TRAVEL_TIME)) {
             feature.getProperties().put(TRAVEL_TIME, -1);
@@ -185,6 +191,7 @@ public class TravelTimeService {
         if (!feature.getProperties().containsKey(LENGTH)) {
             feature.getProperties().put(LENGTH, -1);
         }
+        logger.info("processed feature");
         return feature;
     }
 

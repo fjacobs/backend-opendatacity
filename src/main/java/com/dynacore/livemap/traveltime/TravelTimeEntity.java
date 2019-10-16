@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Table;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 
@@ -15,8 +18,8 @@ class TravelTimeEntity {
     private String id;
     private String name;
 
-    private LocalDateTime pub_date;
-    private LocalDateTime retrieved_from_third_party;
+    private Timestamp pub_date;
+    private Timestamp retrieved_from_third_party;
 
     private String type;
     private int length;
@@ -41,8 +44,8 @@ class TravelTimeEntity {
     public static final class Builder {
         private String id;
         private String name;
-        private LocalDateTime pubDate;
-        private LocalDateTime retrievedFromThirdParty;
+        private Timestamp pubDate;
+        private Timestamp retrievedFromThirdParty;
         private String type;
         private int length;
         private int travelTime;
@@ -62,14 +65,12 @@ class TravelTimeEntity {
         }
 
         public Builder pubDate(String val) {
-            LocalDateTime timeStamp = LocalDateTime.parse(val.substring(0, val.length() - 1));
-            pubDate = timeStamp;
+            pubDate= Timestamp.from(OffsetDateTime.parse(val, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant());
             return this;
         }
 
         public Builder retrievedFromThirdParty(String val) {
-            LocalDateTime timeStamp = LocalDateTime.parse(val.substring(0, val.length() - 1));
-            retrievedFromThirdParty = timeStamp;
+            retrievedFromThirdParty= Timestamp.from(OffsetDateTime.parse(val, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant());
             return this;
         }
 
@@ -114,19 +115,19 @@ class TravelTimeEntity {
         this.name = name;
     }
 
-    public LocalDateTime getPub_date() {
+    public Timestamp getPub_date() {
         return pub_date;
     }
 
-    public void setPub_date(LocalDateTime pub_date) {
+    public void setPub_date(Timestamp pub_date) {
         this.pub_date = pub_date;
     }
 
-    public LocalDateTime getRetrieved_from_third_party() {
+    public Timestamp getRetrieved_from_third_party() {
         return retrieved_from_third_party;
     }
 
-    public void setRetrieved_from_third_party(LocalDateTime retrieved_from_third_party) {
+    public void setRetrieved_from_third_party(Timestamp retrieved_from_third_party) {
         this.retrieved_from_third_party = retrieved_from_third_party;
     }
 

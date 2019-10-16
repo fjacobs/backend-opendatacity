@@ -31,14 +31,18 @@ public class TravelTimeController {
      * The first event will send the complete collection, the events that follow
      *  only contain property data that has been changed compared to the previous event.
      */
-    @CrossOrigin(origins = "http://localhost:8000")
+
+//    2019-10-15 16:36:59.167 DEBUG 18844 --- [ctor-http-nio-3] a.w.r.e.AbstractErrorWebExceptionHandler : [4731bc5c] Resolved [ResponseStatusException: 404 NOT_FOUND] for HTTP GET //standardSubscription
+    //@CrossOrigin(origins = "http://localhost:8000/static/flux.html")
+
+    @CrossOrigin
     @GetMapping("/standardSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
         Flux<Feature> collection = travelTimeService.getPublisher();
         Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.convertToFeatureCollection(collection));
 
         return featureColl
-                .doOnComplete(()-> logger.info("Completed Road FeatureCollection SSE.."))
+                .doOnComplete(()-> logger.info("Completed Road FeatureCollection standardSubscription.."))
                 .doOnError(e ->  logger.error("SSE Error: " + e))
                 .map(sequence -> ServerSentEvent.<FeatureCollection>builder()
                         .id("Roads")

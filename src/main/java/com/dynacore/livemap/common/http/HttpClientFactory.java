@@ -3,8 +3,6 @@ package com.dynacore.livemap.common.http;
 import com.dynacore.livemap.common.http.handlers.EtagInboundHandler;
 import com.dynacore.livemap.common.http.handlers.EtagOutboundHandler;
 import com.dynacore.livemap.common.http.observer.ETagObserver;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -38,9 +36,10 @@ public class HttpClientFactory {
         ServerCapability capability = getServerCapability(URL);
         log.info("Found capability: " + capability);
         HttpClient client = null;
+        capability= ServerCapability.DEFAULT;
         switch(capability) {
             case DEFAULT: client = defaultClient(URL);  break;
-            case ETAG: client = defaultClient(URL);  break;// etagClient(URL); break;
+            case ETAG: client = etagClient(URL); break; // etagClient(URL);  break;
             default:
                 throw new IllegalStateException("Unexpected value: " + capability);
         }
@@ -83,6 +82,7 @@ public class HttpClientFactory {
     public HttpClient etagClient(String URL) {
         EtagOutboundHandler etagOutboundHandler = new EtagOutboundHandler();
         EtagInboundHandler  etagInboundHandler = new EtagInboundHandler();
+  //      ForceJsonContentTypeHandler forceContentType = new ForceJsonContentTypeHandler();
 
         return HttpClient.create()
                 .baseUrl(URL)
@@ -92,11 +92,15 @@ public class HttpClientFactory {
                     conn.addHandler("dynacore.right.outboundhandler", etagOutboundHandler);
                     conn.addHandlerLast("netty.left.httpobjectaggregator", new HttpObjectAggregator(1048576));
                     conn.addHandlerLast("dynacore.left.inboundhandler", etagInboundHandler);
+                  //  conn.addHandlerLast("dynacore.left.forceContentType", forceContentType);
+
                 })
                 .doOnResponse((req, conn) -> {
                     conn.addHandler("dynacore.right.outboundhandler", etagOutboundHandler);
                     conn.addHandlerLast("netty.left.httpobjectaggregator", new HttpObjectAggregator(1048576));
                     conn.addHandlerLast("dynacore.left.inboundhandler", etagInboundHandler);
+            //        conn.addHandlerLast("dynacore.left.forceContentType", forceContentType);
+
                 });
 
     }
