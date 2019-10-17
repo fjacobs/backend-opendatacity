@@ -38,7 +38,7 @@ spring:
         ansi: true
 
     profiles:
-        include: traveltime
+        include: test
 
 #  Embedded server configuration
 

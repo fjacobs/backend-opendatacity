@@ -1,6 +1,7 @@
 package com.dynacore.livemap.traveltime;
 
 import com.dynacore.livemap.common.http.HttpClientFactory;
+import com.dynacore.livemap.common.tools.FcTester;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
@@ -163,11 +164,6 @@ public class TravelTimeService {
         return mono;
     }
 
-
-    /**
-     * Publishes changed properties to subscribers.
-     * To keep the class stateless, we use the last stored DB entry to store the data
-     */
     private Feature processFeature(Feature feature) {
         String retrieved = OffsetDateTime.now().toString();
         feature.getProperties().put(DYNACORE_ERRORS, "none");

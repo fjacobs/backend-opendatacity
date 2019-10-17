@@ -31,9 +31,8 @@ public class TravelTimeController {
      * The first event will send the complete collection, the events that follow
      *  only contain property data that has been changed compared to the previous event.
      */
-
     @CrossOrigin
-    @GetMapping("/standardSubscription")
+    @GetMapping("/roadSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
         Flux<Feature> collection = travelTimeService.getPublisher();
         Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.convertToFeatureCollection(collection));

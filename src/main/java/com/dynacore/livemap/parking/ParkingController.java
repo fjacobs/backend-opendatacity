@@ -23,7 +23,7 @@ public class ParkingController {
         this.parkingPlaceService = parkingPlaceService;
     }
 
-    @CrossOrigin(origins = "http://localhost:63342")
+    @CrossOrigin
     @GetMapping(value = "getCustomParkingJson")
     @ResponseBody
     public FeatureCollection<ParkingModel> getCustomParkingJson() {
