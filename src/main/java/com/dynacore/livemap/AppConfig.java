@@ -20,8 +20,8 @@ public class AppConfig {
         return new GuidanceSignRepo();
     }
 
-    @Bean
-    public JpaRepository travelTimeRepo() {
-        return new TravelTimeRepo();
-    }
+//    @Bean
+//    public JpaRepository travelTimeRepo() {
+//        return new TravelTimeRepo();
+//    }
 }

@@ -140,6 +140,7 @@
                     <target>11</target>
 <!--                    <compilerArguments>-->
                         <compilerArgument>-Xlint:all</compilerArgument>
+
 <!--                        <compilerArgument>&#45;&#45;Xms512M</compilerArgument>-->
 <!--                        <compilerArgument>&#45;&#45;Xmx3G</compilerArgument>-->
 <!--                    </compilerArguments>-->

@@ -19,11 +19,11 @@ import java.time.Duration;
 public class TravelTimeController {
 
     private final Logger logger = LoggerFactory.getLogger(TravelTimeController.class);
-    private TravelTimeService travelTimeService;
+    private TravelTimeServiceImpl travelTimeServiceImpl;
 
     @Autowired
-    public TravelTimeController(TravelTimeService travelTimeService) {
-        this.travelTimeService = travelTimeService;
+    public TravelTimeController(TravelTimeServiceImpl travelTimeServiceImpl) {
+        this.travelTimeServiceImpl = travelTimeServiceImpl;
     }
 
     /**
@@ -34,8 +34,8 @@ public class TravelTimeController {
     @CrossOrigin
     @GetMapping("/roadSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
-        Flux<Feature> collection = travelTimeService.getPublisher();
-        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.convertToFeatureCollection(collection));
+        Flux<Feature> collection = travelTimeServiceImpl.getPublisher();
+        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeServiceImpl.convertToFeatureCollection(collection));
 
         return featureColl
                 .doOnComplete(()-> logger.info("Completed Road FeatureCollection standardSubscription.."))
@@ -54,7 +54,7 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:8000")
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
-        return travelTimeService.getPublisher()
+        return travelTimeServiceImpl.getPublisher()
                 .delayElements(Duration.ofMillis(5))
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
                 .doOnComplete(()-> logger.info("Completed Road SSE.."))

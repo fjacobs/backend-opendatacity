@@ -1,55 +1,96 @@
 package com.dynacore.livemap.traveltime;
 
-import com.dynacore.livemap.common.repo.JpaRepository;
+
+import org.geojson.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.List;
-import java.util.Optional;
+import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
-public class TravelTimeRepo implements JpaRepository<TravelTimeEntity> {
-    private Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
 
-    @PersistenceContext
-    private EntityManager entityManager;
+public class TravelTimeRepo {
 
-    @Override
+    private DatabaseClient databaseClient;
+    private final static Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
+
+    @Autowired
+    TravelTimeRepo(DatabaseClient databaseClient) {
+        this.databaseClient = databaseClient;
+    }
+
+    Mono<Boolean> isPubDateUnique(TravelTimeEntity entity) {
+        return databaseClient.select().from(TravelTimeEntity.class)
+                .matching(where("id")
+                        .is(entity.getId())
+                        .and("pub_date")
+                        .is(entity.getPub_date()))
+                .fetch()
+                .first()
+                .hasElement();
+    }
+
     @Transactional
-    public void save(TravelTimeEntity travelTimeEntity) {
-        logger.info("SAVE CALLED");
+    void save(TravelTimeEntity entity) {
         try {
-            entityManager.persist(travelTimeEntity);
-            entityManager.flush();
+            isPubDateUnique(entity)
+                    .subscribe(foundInDb -> {
+                        if (!foundInDb) {
+                            databaseClient.insert()
+                                    .into(TravelTimeEntity.class)
+                                    .using(entity)
+                                    .then()
+                                    .doOnError(e -> logger.error("Error already exists:  ", e))
+                                    .subscribe();
+                        }
+                    });
         } catch (Exception error) {
-            logger.error(error.toString());
+            logger.error("Can't save road information to DB: " + error.toString());
         }
     }
 
-    @Override
-    public Optional<TravelTimeEntity> get(long id) {
-        return Optional.ofNullable(entityManager.find(TravelTimeEntity.class, id));
+    Mono<TravelTimeEntity> getLastStored(TravelTimeEntity entity) {
+        return databaseClient.execute(
+                "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n" +
+                        "     FROM public.travel_time_entity\n" +
+                        "\t   WHERE pub_date=(\n" +
+                        "                SELECT MAX(pub_date) FROM public.travel_time_entity WHERE id='" + entity.getId() + "');")
+                .as(TravelTimeEntity.class)
+                .fetch()
+                .first();
     }
 
-    @Override
-    public List<TravelTimeEntity> getAll() {
-        Query query = entityManager.createQuery("");
-        return  query.getResultList();
+     Mono<Boolean> didPropertiesChange(TravelTimeEntity entity) {
+        return getLastStored(entity)
+                .map(storedEntity -> {
+                    boolean changed = false;
+                    if (storedEntity.getLength() != entity.getLength()) {
+                        changed = true;
+                        logger.trace("--Length changed");
+                        logger.trace("----old: " + storedEntity.getLength());
+                        logger.trace("----new: " + entity.getLength());
+                    }
+                    if (storedEntity.getTravel_time() != entity.getTravel_time()) {
+                        changed = true;
+                        logger.trace("--Traveltime changed");
+                        logger.trace("----old: " + storedEntity.getTravel_time());
+                        logger.trace("----new: " + entity.getTravel_time());
+                    }
+                    if (storedEntity.getVelocity() != entity.getVelocity()) {
+                        changed = true;
+                        logger.trace("--Velocity changed: ");
+                        logger.trace("----old: " + storedEntity.getVelocity());
+                        logger.trace("----new: " + entity.getVelocity());
+                    }
+                    return changed;
+                });
     }
 
-    @Override
-    public void update(TravelTimeEntity travelTimeEntity, String[] params) {
-    }
-
-    @Override
-    public void delete(TravelTimeEntity travelTimeEntity) {
-
-    }
 }
