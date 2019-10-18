@@ -126,28 +126,24 @@
     function loadTravelTime() {
         let source;
         if (!!window.EventSource) {
-            source = new EventSource('http://localhost:9090/roadSubscriptionTest');
+            source = new EventSource('http://localhost:9090/roadSubscription');
         } else {
             // Result to xhr polling :(
         }
 
         let i = 0;
         source.addEventListener('event', function (e) {
-            console.log("Receiving event ......." + i++)
-
+            console.log("Receiving event number: " + i++)
             let result = jQuery.parseJSON(e.data);
             features = result.features;
 
-            //   map.data.addGeoJson(fc);
             console.log(features.length);
 
             i=0;
             for (i in  features) {
                 let f = features[i];
-              //  console.log(f);
 
                 let color = speedToColor(f.properties.Type, f.properties.Velocity);
-                //       console.log(color);
                 let points = f.geometry.coordinates;
                 let path = [];
 

@@ -13,20 +13,30 @@ import java.util.Objects;
 
 
 @Table(name = "traveltime")
-class TravelTimeEntity {
+public class TravelTimeEntity {
 
     private String id;
     private String name;
-
     private Timestamp pub_date;
     private Timestamp retrieved_from_third_party;
-
     private String type;
+
     private int length;
     private int travel_time;
     private int velocity;
 
     public TravelTimeEntity() {
+    }
+
+    public TravelTimeEntity(String id, String name, Timestamp pub_date, Timestamp retrieved_from_third_party, String type, int length, int travel_time, int velocity) {
+        this.id = id;
+        this.name = name;
+        this.pub_date = pub_date;
+        this.retrieved_from_third_party = retrieved_from_third_party;
+        this.type = type;
+        this.length = length;
+        this.travel_time = travel_time;
+        this.velocity = velocity;
     }
 
     private TravelTimeEntity(Builder builder) {
@@ -162,7 +172,6 @@ class TravelTimeEntity {
     public void setVelocity(int velocity) {
         this.velocity = velocity;
     }
-
 
     @Override
     public boolean equals(Object o) {

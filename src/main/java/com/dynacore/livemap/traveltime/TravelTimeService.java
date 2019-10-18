@@ -1,7 +1,6 @@
 package com.dynacore.livemap.traveltime;
 
 import com.dynacore.livemap.common.http.HttpClientFactory;
-import com.dynacore.livemap.common.tools.FcTester;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
@@ -19,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -41,11 +41,10 @@ public class TravelTimeService {
     private static final String DYNACORE_ERRORS = "dynacoreErrors";
     private static final String SOURCEURL = "http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson";
     private static final int INTERVAL = 5;
-    private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
+    private final static Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
     private DatabaseClient databaseClient;
     private ConnectableFlux<Feature> sharedFlux;
     private WebClient webClient;
-
 
     @Autowired
     public TravelTimeService(DatabaseClient databaseClient, HttpClientFactory httpClientFactory) {
@@ -53,9 +52,10 @@ public class TravelTimeService {
 
         ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(httpClientFactory.autoConfigHttpClient(SOURCEURL));
         webClient = WebClient.builder().clientConnector(httpConnector)
-                .build();
+                                       .build();
 
-        sharedFlux = retrieveProcessedFeatures().share()
+        sharedFlux = retrieveProcessedFeatures().filterWhen(feature -> didPropertiesChange(convertToEntity(feature)))
+                                                .share()
                                                 .cache(Duration.ofSeconds(INTERVAL))
                                                 .publish();
 
@@ -68,15 +68,15 @@ public class TravelTimeService {
 
         Flux.interval(Duration.ofSeconds(INTERVAL))
                 .map(tick -> {
-                    saveFlux.subscribe(); //x -> System.out.println("SaveFlux subscribed")
+                    saveFlux.subscribe();
                     sharedFlux.connect();
                     logger.info("Interval count: " + tick);
                     return tick;
                 }).subscribe();
     }
 
-    private Mono<Boolean> selectFeature(TravelTimeEntity entity) {
-        return databaseClient.select().from(TravelTimeEntity.class)
+    private Mono<Boolean> isPubDateUnique(TravelTimeEntity entity) {
+         return databaseClient.select().from(TravelTimeEntity.class)
                 .matching(where("id")
                         .is(entity.getId())
                         .and("pub_date")
@@ -87,7 +87,7 @@ public class TravelTimeService {
     }
 
     private TravelTimeEntity convertToEntity(Feature travelTime) {
-        TravelTimeEntity entity = new TravelTimeEntity.Builder()
+        return new TravelTimeEntity.Builder()
                 .id((String) travelTime.getProperties().get(ID))
                 .name((String) travelTime.getProperties().get(NAME))
                 .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
@@ -96,13 +96,12 @@ public class TravelTimeService {
                 .travelTime((int) travelTime.getProperties().get(TRAVEL_TIME))
                 .velocity((int) travelTime.getProperties().get(VELOCITY))
                 .length((int) travelTime.getProperties().get(LENGTH)).build();
-        return entity;
     }
 
     @Transactional
-    public void save(TravelTimeEntity entity) {
+    private void save(TravelTimeEntity entity) {
         try {
-            selectFeature(entity)
+            isPubDateUnique(entity)
                     .subscribe(foundInDb -> {
                         if (!foundInDb) {
                             databaseClient.insert()
@@ -118,14 +117,11 @@ public class TravelTimeService {
         }
     }
 
-    Flux<Feature> getPublisher() {
-        return Flux.from(sharedFlux);
-    }
-
     private Flux<Feature> retrieveProcessedFeatures() {
         return webClient.get()
                 .uri(SOURCEURL)
                 .exchange()
+                .doOnNext(clientResponse -> logger.info( "Server responded: " + clientResponse.statusCode().toString()) )
                 .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
                 .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
                 .map(bytes -> {
@@ -140,14 +136,57 @@ public class TravelTimeService {
                         }
                 )
                 .cast(FeatureCollection.class)
-                .flatMapMany(this::processFeatures);
+                .doOnNext(req-> logger.info("Serialized " + req.getFeatures().size() + " of features"))
+                .flatMapMany(TravelTimeService::processFeatures);
+
     }
 
-    private Flux<Feature> processFeatures(FeatureCollection fc) {
+    Flux<Feature> getPublisher() {
+        return Flux.from(sharedFlux);
+    }
+
+    private Mono<Boolean> didPropertiesChange(TravelTimeEntity entity) {
+        return getLastStored(entity)
+                .map(storedEntity-> {
+                    boolean changed = false;
+                    if(storedEntity.getLength() != entity.getLength()) {
+                        changed = true;
+                        logger.trace("--Length changed");
+                        logger.trace("----old: " + storedEntity.getLength());
+                        logger.trace("----new: " + entity.getLength());
+                    }
+                    if(storedEntity.getTravel_time() != entity.getTravel_time()) {
+                        changed = true;
+                        logger.trace("--Traveltime changed");
+                        logger.trace("----old: " + storedEntity.getTravel_time());
+                        logger.trace("----new: " + entity.getTravel_time());
+                    }
+                    if(storedEntity.getVelocity() != entity.getVelocity()) {
+                        changed = true;
+                        logger.trace("--Velocity changed: ");
+                        logger.trace("----old: " + storedEntity.getVelocity() );
+                        logger.trace("----new: " + entity.getVelocity() );
+                    }
+                    return changed;
+                });
+    }
+
+    private Mono<TravelTimeEntity> getLastStored(TravelTimeEntity entity) {
+        return databaseClient.execute(
+                "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n" +
+                        "     FROM public.travel_time_entity\n" +
+                        "\t   WHERE pub_date=(\n" +
+                        "                SELECT MAX(pub_date) FROM public.travel_time_entity WHERE id='" + entity.getId() + "');")
+                .as(TravelTimeEntity.class)
+                .fetch()
+                .first();
+    }
+
+    private static Flux<Feature> processFeatures(FeatureCollection fc) {
         return Flux.fromIterable(fc)
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
-                .doOnNext(this::processFeature)
+                .map(TravelTimeService::processFeature)
                 .sequential()
                 .share()
                 .doOnSubscribe(s -> logger.info("Subscribed to processed features source"))
@@ -164,10 +203,10 @@ public class TravelTimeService {
         return mono;
     }
 
-    private Feature processFeature(Feature feature) {
-        String retrieved = OffsetDateTime.now().toString();
+    private static Feature processFeature(Feature feature) {
+        OffsetDateTime retrieved = OffsetDateTime.now(Clock.systemUTC());
         feature.getProperties().put(DYNACORE_ERRORS, "none");
-        feature.getProperties().put(OUR_RETRIEVAL, retrieved);
+        feature.getProperties().put(OUR_RETRIEVAL, retrieved.toString());
         if (!feature.getProperties().containsKey(TRAVEL_TIME)) {
             feature.getProperties().put(TRAVEL_TIME, -1);
         }

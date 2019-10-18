@@ -1,4 +1,4 @@
-debug: true
+debug: false
 
 # Spring Configuration
 
@@ -37,8 +37,9 @@ spring:
     output:
         ansi: true
 
+    #test, traveltime, parking,
     profiles:
-        include: test
+        include: traveltime
 
 #  Embedded server configuration
 
