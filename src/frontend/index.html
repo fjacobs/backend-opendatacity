@@ -66,6 +66,51 @@
 
     // ----------- TravelTime --------------------------
 
+
+
+
+
+    function createRoadPopup(feature, pos) {
+
+        let html = "<div>Naam:" + feature.getProperty("Name") + "</div>";
+        html += "<div>ID : " + feature.getId()+ "</div>";
+        html += "<div>Lengte:  " + feature.getProperty("Length") + " meter</div>";
+        html += "<div>Snelheid: " + feature.getProperty("Velocity") + " km/u</div>";
+        html += "<div>Huidige reistijd: " + Math.floor(feature.getProperty("Traveltime") / 60) + ":" + ("0" + eventFeatures[i].properties.Traveltime % 60).slice(-2) + "</div>";
+        html += "<div>Timestamp: " + feature.getProperty("Timestamp") + "</div>";
+
+        let infowindow = new google.maps.InfoWindow();
+
+        infowindow.setContent("<div>" + html + "</div>");
+        infowindow.setPosition(pos);
+        infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+        infowindow.open(map);
+
+        map.data.setStyle( function (feature) {
+            return {
+                strokeColor: color,
+                strokeOpacity: 1.0,
+                strokeWeight: weight,
+                title: feature.getProperty("Name"),
+                localID: i,
+                originalWeight: weight
+            };
+        });
+
+        // let i = line.localID;
+        // line.setOptions({strokeWeight: 6});
+        // for (j in eventFeatures) {
+        //     if (j !== i) {
+        //         eventFeatures[j].line.setOptions({strokeWeight: eventFeatures[j].line.originalWeight});
+        //     }
+        // }
+    }
+
+
+
+
+
+
     let data, eventFeatures, i;
     let clickListener = [];
     let loadedFeatures;
@@ -93,11 +138,14 @@
                     loadedFeatures = map.data.addGeoJson(result);
 
                     map.data.addListener('click', function(event) {
-                        let infowindow = new google.maps.InfoWindow();
-                        infowindow.setContent("hellooooooooooooo: " + event.feature.getId());
-                        infowindow.setPosition(event.latLng);
-                        infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-                        infowindow.open(map);
+
+                        createRoadPopup(event, event.latLng);
+
+                        // let infowindow = new google.maps.InfoWindow();
+                        // infowindow.setContent("hellooooooooooooo: " + event.feature.getId());
+                        // infowindow.setPosition(event.latLng);
+                        // infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+                        // infowindow.open(map);
                     });
                 }
 
@@ -117,26 +165,21 @@
                     }
                     /////////////////////////////////////////////////////////
 
-
                     let temp = map.data.getFeatureById(f.id);
-
-
                     temp.forEachProperty(function (value, key) {
                         if (temp.getProperty(key) !== undefined) {
                             temp.setProperty(eventFeatures[i].properties[key], eventFeatures[i].properties[value]);
                         }
                     });
 
-
                     // f.line = new google.maps.Polyline({map: map, path: path, strokeColor: color, strokeOpacity: 1.0,strokeWeight: weight, title: f.properties.Name, localID: i, originalWeight: weight});
                     // google.maps.event.addListener(temp, 'click', function(){ showFeature(this) });
-
 
                     // let listener = google.maps.event.addListener(temp.geometry.latLng,'mouseover',  function (event) {
                     //     createRoadPopup(this, event);
                     // });
 
-                    map.data.setStyle(function (temp) {
+                    map.data.setStyle( function (temp) {
                         return {
                             strokeColor: color,
                             strokeOpacity: 1.0,
@@ -146,14 +189,9 @@
                             originalWeight: weight
                         };
                     });
-
                 }
                 eventNumber++;
-
-            }
-            ,
-            false
-        );
+            }, false);
 
         sse.addEventListener('open', function (e) {
             console.log("connection was opened");
@@ -207,7 +245,6 @@
                 clickListener[i] = feature.line.addListener('click', function (event) {
                     createRoadPopup(this, event.latLng);
                 });
-
             }
         });
     }
@@ -237,9 +274,10 @@
     }
 
     function speedToColor(type, speed) {
+        let speedColors;
         if (type === "H") {
             //Snelweg
-            var speedColors = {
+            speedColors = {
                 0: "#D0D0D0",
                 1: "#BE0000",
                 30: "#FF0000",
@@ -250,7 +288,7 @@
             };
         } else {
             //Overige wegen
-            var speedColors = {
+             speedColors = {
                 0: "#D0D0D0",
                 1: "#BE0000",
                 10: "#FF0000",
