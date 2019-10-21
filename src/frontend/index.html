@@ -84,13 +84,23 @@
                 console.log("Receiving event number: " + eventNumber);
                 let result = jQuery.parseJSON(e.data);
                 eventFeatures = result.features;
-
                 console.log("Received: " + eventFeatures.length);
                 console.log(eventFeatures[50].properties.Velocity);
                 if (eventNumber === 0) {
-                    loadedFeatures = map.data.addGeoJson(result);
+                    // loadedFeatures = map.data.addGeoJson(result);
                     console.log("Should only be called once");
+
+                    loadedFeatures = map.data.addGeoJson(result);
+
+                    map.data.addListener('click', function(event) {
+                        let infowindow = new google.maps.InfoWindow();
+                        infowindow.setContent("hellooooooooooooo: " + event.feature.getId());
+                        infowindow.setPosition(event.latLng);
+                        infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+                        infowindow.open(map);
+                    });
                 }
+
 
                 i = 0;
                 for (i in eventFeatures) {
@@ -110,6 +120,22 @@
 
                     let temp = map.data.getFeatureById(f.id);
 
+
+                    temp.forEachProperty(function (value, key) {
+                        if (temp.getProperty(key) !== undefined) {
+                            temp.setProperty(eventFeatures[i].properties[key], eventFeatures[i].properties[value]);
+                        }
+                    });
+
+
+                    // f.line = new google.maps.Polyline({map: map, path: path, strokeColor: color, strokeOpacity: 1.0,strokeWeight: weight, title: f.properties.Name, localID: i, originalWeight: weight});
+                    // google.maps.event.addListener(temp, 'click', function(){ showFeature(this) });
+
+
+                    // let listener = google.maps.event.addListener(temp.geometry.latLng,'mouseover',  function (event) {
+                    //     createRoadPopup(this, event);
+                    // });
+
                     map.data.setStyle(function (temp) {
                         return {
                             strokeColor: color,
@@ -124,7 +150,10 @@
                 }
                 eventNumber++;
 
-            },false);
+            }
+            ,
+            false
+        );
 
         sse.addEventListener('open', function (e) {
             console.log("connection was opened");
@@ -136,7 +165,6 @@
             }
         }, false);
     }
-
 
     function loadTravelTimePoll() {
         let url = traveltimeUrl;
@@ -176,9 +204,6 @@
                     originalWeight: weight
                 });
 
-                if (clickListener.length !== 0) {
-                    google.maps.event.removeListener(clickListener[i]);
-                }
                 clickListener[i] = feature.line.addListener('click', function (event) {
                     createRoadPopup(this, event.latLng);
                 });

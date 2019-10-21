@@ -9,5 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Google Maps API" level="project" />
+    <orderEntry type="module" module-name="untitled1" />
   </component>
 </module>
