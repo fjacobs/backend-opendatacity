@@ -29,11 +29,9 @@ class TravelTimeServiceImpl implements TravelTimeService {
     private final Logger logger = LoggerFactory.getLogger(TravelTimeServiceImpl.class);
     private ConnectableFlux<Feature> sharedFlux;
     private WebClient webClient;
-    private TravelTimeRepo repo;
 
     @Autowired
     TravelTimeServiceImpl(TravelTimeRepo repo, HttpClientFactory httpClientFactory) {
-        this.repo = repo;
 
         ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(httpClientFactory.autoConfigHttpClient(SOURCEURL));
         webClient = WebClient.builder().clientConnector(httpConnector)
@@ -52,7 +50,6 @@ class TravelTimeServiceImpl implements TravelTimeService {
                 .doOnNext(repo::save)
                 .sequential();
 
-
         Flux.interval(Duration.ofSeconds(INTERVAL))
                 .map(tick -> {
                     saveFlux.subscribe();
@@ -66,7 +63,7 @@ class TravelTimeServiceImpl implements TravelTimeService {
         return Flux.from(sharedFlux);
     }
 
-    private Flux<Feature> requestFeatures() {
+     Flux<Feature> requestFeatures() {
         return webClient.get()
                 .uri(SOURCEURL)
                 .exchange()

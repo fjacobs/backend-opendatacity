@@ -16,9 +16,11 @@
 
     function main() {
         initMap();
-        //      loadParking();
-        loadTravelTime();
-        //loadTravelTimePoll();
+        //    loadParking();
+        //    loadTravelTimePoll();
+            roadEventListener();
+
+     //   googleMapsTest();
     }
 
     function initMap() {
@@ -64,7 +66,177 @@
 
     // ----------- TravelTime --------------------------
 
-    let data, features;
+    let data, eventFeatures, i;
+    let clickListener = [];
+    let loadedFeatures;
+    function roadEventListener() {
+        let sse;
+        if (!!window.EventSource) {
+            sse = new EventSource('http://localhost:9090/roadSubscription');
+        } else {
+            // Resort to xhr polling
+        }
+
+        let eventNumber=0;
+        let polyLines = [];
+        sse.addEventListener('event', function (e) {
+            console.log("Receiving event number: " + eventNumber);
+            let result = jQuery.parseJSON(e.data);
+            eventFeatures = result.features;
+
+            console.log("Received: " + eventFeatures.length);
+            console.log(eventFeatures[50].properties.Velocity);
+
+            i = 0;
+            for (i in eventFeatures) {
+                let f;
+
+                if (eventNumber === 0) {
+                    loadedFeatures = map.data.addGeoJson(result);
+                }
+                f = eventFeatures[i];
+
+//////////////////////////////////////////////////////////////////////////////
+                let color = speedToColor(f.properties.Type, f.properties.Velocity);
+                // let points = f.coordinates;
+                // let path = [];
+                //
+                // for (let j in points) {
+                //     if (!isNaN(points[j][1])) {
+                //         path.push(new google.maps.LatLng(points[j][1], points[j][0]));
+                //     }
+                // }
+
+                if (f.properties.Velocity > 0) {
+                    var weight = 3;
+                } else {
+                    var weight = 1;
+                }
+                /////////////////////////////////////////////////////////
+
+                if (eventNumber > 0) {
+                    // feature.polyLine.setMap(null);
+                    // feature.polyLine = null;
+                    // loadedFeatures.delete(f.id)
+                }
+                if(i < 1) {
+                    map.data.revertStyle();
+                    console.log("huh: " + color);
+                    map.data.setStyle({
+                            strokeColor: color,
+                            strokeOpacity: 1.0,
+                            strokeWeight: weight,
+                            //title: f.getProperty("Name"),
+                            //localID: i,
+                            originalWeight: weight
+                    });
+                }
+
+
+                // f.setStyle({
+                //     strokeColor: color,
+                //     strokeOpacity: 1.0,
+                //     strokeWeight: weight,
+                //     title: f.getProperty("Name"),
+                //     localID: i,
+                //     originalWeight: weight
+                // });
+
+                //  f.polyLineListener = f.polyLine.addListener('click', function (event) {
+                //      createRoadPopup(this, event.latLng);
+                //  });
+                // loadedFeatures.set(f.id,  f);
+
+            }
+            eventNumber++;
+
+        }, false);
+
+        sse.addEventListener('open', function (e) {
+            console.log("connection was opened");
+        }, false);
+
+        sse.addEventListener('error', function (e) {
+            if (e.readyState === EventSource.CLOSED) {
+                console.log("Received 'error event: connection was closed");
+            }
+        }, false);
+    }
+
+
+
+    function loadTravelTimePoll() {
+        let url = traveltimeUrl;
+        console.log("Initialize");
+
+        $.getJSON('http://localhost:9090/roadfullcollection', function (result) {
+            eventFeatures = result.features;
+
+            console.log(eventFeatures.length);
+
+            for (i in eventFeatures) {
+                let feature = eventFeatures[i];
+                let color = speedToColor("H", feature.properties.Velocity);
+                let points = feature.geometry.coordinates;
+                let latLng = [];
+
+                for (let j in points) {
+                    if (!isNaN(points[j][1])) {
+                        latLng.push(new google.maps.LatLng(points[j][1], points[j][0]));
+                    }
+                }
+
+                if (feature.properties.Velocity > 0) {
+                    var weight = 3;
+                } else {
+                    var weight = 1;
+                }
+
+                feature.line = new google.maps.Polyline({
+                    map: map,
+                    path: latLng,
+                    strokeColor: color,
+                    strokeOpacity: 1.0,
+                    strokeWeight: weight,
+                    title: feature.properties.Name,
+                    localID: i,
+                    originalWeight: weight
+                });
+
+                if (clickListener.length !== 0) {
+                    google.maps.event.removeListener(clickListener[i]);
+                }
+                clickListener[i] =  feature.line.addListener('click', function (event) {
+                    createRoadPopup(this, event.latLng);
+                });
+
+            }
+        });
+    }
+
+    function createRoadPopup(line, pos) {
+        let i = line.localID;
+        line.setOptions({strokeWeight: 6});
+        let html = "<div>Naam:" + eventFeatures[i].properties.Name + "</div>";
+        html += "<div>ID : " + eventFeatures[i].id + "</div>";
+        html += "<div>Lengte:  " + eventFeatures[i].properties.Length + " meter</div>";
+        html += "<div>Snelheid: " + eventFeatures[i].properties.Velocity + " km/u</div>";
+        html += "<div>Huidige reistijd: " + Math.floor(eventFeatures[i].properties.Traveltime / 60) + ":" + ("0" + eventFeatures[i].properties.Traveltime % 60).slice(-2) + "</div>";
+        html += "<div>Timestamp: " + eventFeatures[i].properties.Timestamp + "</div>";
+
+        let infowindow = new google.maps.InfoWindow();
+
+        infowindow.setContent("<div>" + html + "</div>");
+        infowindow.setPosition(pos);
+        infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+        infowindow.open(map);
+
+        for (j in eventFeatures) {
+            if (j !== i) {
+                eventFeatures[j].line.setOptions({strokeWeight: eventFeatures[j].line.originalWeight});
+            }
+        }
+    }
 
     function speedToColor(type, speed) {
         if (type === "H") {
@@ -78,7 +250,9 @@
                 90: "#AAFF00",
                 120: "#00B22D"
             };
-        } else {
+        }
+
+        else {
             //Overige wegen
             var speedColors = {
                 0: "#D0D0D0",
@@ -96,138 +270,6 @@
         }
         return currentColor;
     }
-
-    function createRoadPopup(line, pos) {
-        let i = line.localID;
-        line.setOptions({strokeWeight: 6});
-        let html = "<div>Naam:" + features[i].properties.Name + "</div>";
-        html += "<div>ID : " + features[i].properties.Id + "</div>";
-        html += "<div>Lengte:  " + features[i].properties.Length + " meter</div>";
-        html += "<div>Snelheid: " + features[i].properties.Velocity + " km/u</div>";
-        html += "<div>Huidige reistijd: " + Math.floor(features[i].properties.Traveltime / 60) + ":" + ("0" + features[i].properties.Traveltime % 60).slice(-2) + "</div>";
-        html += "<div>Timestamp: " + features[i].properties.Timestamp + "</div>";
-
-
-        let infowindow = new google.maps.InfoWindow();
-
-        infowindow.setContent("<div>" + html + "</div>");
-        infowindow.setPosition(pos);
-        infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
-        infowindow.open(map);
-
-        for (j in features) {
-            if (j !== i) {
-                features[j].line.setOptions({strokeWeight: features[j].line.originalWeight});
-            }
-        }
-    }
-
-
-    function loadTravelTime() {
-        let source;
-        if (!!window.EventSource) {
-            source = new EventSource('http://localhost:9090/roadSubscription');
-        } else {
-            // Result to xhr polling :(
-        }
-
-        let i = 0;
-        source.addEventListener('event', function (e) {
-            console.log("Receiving event number: " + i++)
-            let result = jQuery.parseJSON(e.data);
-            features = result.features;
-
-            console.log(features.length);
-
-            i=0;
-            for (i in  features) {
-                let f = features[i];
-
-                let color = speedToColor(f.properties.Type, f.properties.Velocity);
-                let points = f.geometry.coordinates;
-                let path = [];
-
-                for (let j in points) {
-                    if (!isNaN(points[j][1])) {
-                        path.push(new google.maps.LatLng(points[j][1], points[j][0]));
-                    }
-                }
-
-                if (f.properties.Velocity > 0) {
-                    var weight = 3;
-                } else {
-                    var weight = 1;
-                }
-                f.line = new google.maps.Polyline({
-                    map: map,
-                    path: path,
-                    strokeColor: color,
-                    strokeOpacity: 1.0,
-                    strokeWeight: weight,
-                    title: f.properties.Name,
-                    localID: i,
-                    originalWeight: weight
-                });
-                google.maps.event.addListener(f.line, 'click', function (event) {
-                    createRoadPopup(this, event.latLng)
-                });
-            }
-
-        }, false);
-
-        source.addEventListener('open', function (e) {
-            console.log("connection was opened");
-        }, false);
-
-        source.addEventListener('error', function (e) {
-            if (e.readyState === EventSource.CLOSED) {
-                console.log("Received 'error event: connection was closed");
-            }
-        }, false);
-    }
-
-    function loadTravelTimePoll() {
-        var url = traveltimeUrl;
-        console.log("Enter loadTravelTimePoll");
-
-        $.getJSON('http://localhost:9090/getRoadSingle', function (result) {
-            features = result.features;
-            console.log(features.length);
-
-            for (i in features) {
-                let f = features[i];
-                let color = speedToColor(f.properties.Type, f.properties.Velocity);
-                let points = f.geometry.coordinates;
-                let path = [];
-
-                for (let j in points) {
-                    if (!isNaN(points[j][1])) {
-                        path.push(new google.maps.LatLng(points[j][1], points[j][0]));
-                    }
-                }
-
-                if (f.properties.Velocity > 0) {
-                    var weight = 3;
-                } else {
-                    var weight = 1;
-                }
-                f.line = new google.maps.Polyline({
-                    map: map,
-                    path: path,
-                    strokeColor: color,
-                    strokeOpacity: 1.0,
-                    strokeWeight: weight,
-                    title: f.properties.Name,
-                    localID: i,
-                    originalWeight: weight
-                });
-                google.maps.event.addListener(f.line, 'click', function (event) {
-                    createRoadPopup(this, event.latLng)
-                });
-            }
-        });
-    }
-
 
 </script>
 
@@ -258,21 +300,12 @@
     </thead>
     <tbody>
     <tr>
-        <td id="id">id 1</td>
-        <td>Item 1</td>
-        <td>3</td>
-        <td>2013/11/1</td>
-        <td>true</td>
-        <td>3</td>
-
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Item 2</td>
-        <td>1</td>
-        <td>2013/10/31 22:30</td>
-        <td>false</td>
-        <td>1</td>
+        <td id="id">no errors</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
     </tbody>
 </table>
