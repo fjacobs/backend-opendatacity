@@ -18,9 +18,9 @@
         initMap();
         //    loadParking();
         //    loadTravelTimePoll();
-            roadEventListener();
+        roadEventListener();
 
-     //   googleMapsTest();
+        //   googleMapsTest();
     }
 
     function initMap() {
@@ -69,88 +69,62 @@
     let data, eventFeatures, i;
     let clickListener = [];
     let loadedFeatures;
+
     function roadEventListener() {
         let sse;
         if (!!window.EventSource) {
             sse = new EventSource('http://localhost:9090/roadSubscription');
         } else {
-            // Resort to xhr polling
+            // Error, resorting to xhr polling
         }
 
-        let eventNumber=0;
+        let eventNumber = 0;
         let polyLines = [];
         sse.addEventListener('event', function (e) {
-            console.log("Receiving event number: " + eventNumber);
-            let result = jQuery.parseJSON(e.data);
-            eventFeatures = result.features;
+                console.log("Receiving event number: " + eventNumber);
+                let result = jQuery.parseJSON(e.data);
+                eventFeatures = result.features;
 
-            console.log("Received: " + eventFeatures.length);
-            console.log(eventFeatures[50].properties.Velocity);
-
-            i = 0;
-            for (i in eventFeatures) {
-                let f;
-
+                console.log("Received: " + eventFeatures.length);
+                console.log(eventFeatures[50].properties.Velocity);
                 if (eventNumber === 0) {
                     loadedFeatures = map.data.addGeoJson(result);
+                    console.log("Should only be called once");
                 }
-                f = eventFeatures[i];
 
-//////////////////////////////////////////////////////////////////////////////
-                let color = speedToColor(f.properties.Type, f.properties.Velocity);
-                // let points = f.coordinates;
-                // let path = [];
-                //
-                // for (let j in points) {
-                //     if (!isNaN(points[j][1])) {
-                //         path.push(new google.maps.LatLng(points[j][1], points[j][0]));
-                //     }
-                // }
+                i = 0;
+                for (i in eventFeatures) {
+                    let f;
+                    f = eventFeatures[i];
 
-                if (f.properties.Velocity > 0) {
-                    var weight = 3;
-                } else {
-                    var weight = 1;
-                }
-                /////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////
+                    let color = speedToColor(f.properties.Type, f.properties.Velocity);
 
-                if (eventNumber > 0) {
-                    // feature.polyLine.setMap(null);
-                    // feature.polyLine = null;
-                    // loadedFeatures.delete(f.id)
-                }
-                if(i < 1) {
-                    map.data.revertStyle();
-                    console.log("huh: " + color);
-                    map.data.setStyle({
+                    if (f.properties.Velocity > 0) {
+                        var weight = 3;
+                    } else {
+                        var weight = 1;
+                    }
+                    /////////////////////////////////////////////////////////
+
+
+                    let temp = map.data.getFeatureById(f.id);
+
+                    map.data.setStyle(function (temp) {
+                        return {
                             strokeColor: color,
                             strokeOpacity: 1.0,
                             strokeWeight: weight,
-                            //title: f.getProperty("Name"),
-                            //localID: i,
+                            title: temp.getProperty("Name"),
+                            localID: i,
                             originalWeight: weight
+                        };
                     });
+
                 }
+                eventNumber++;
 
-
-                // f.setStyle({
-                //     strokeColor: color,
-                //     strokeOpacity: 1.0,
-                //     strokeWeight: weight,
-                //     title: f.getProperty("Name"),
-                //     localID: i,
-                //     originalWeight: weight
-                // });
-
-                //  f.polyLineListener = f.polyLine.addListener('click', function (event) {
-                //      createRoadPopup(this, event.latLng);
-                //  });
-                // loadedFeatures.set(f.id,  f);
-
-            }
-            eventNumber++;
-
-        }, false);
+            },false);
 
         sse.addEventListener('open', function (e) {
             console.log("connection was opened");
@@ -162,7 +136,6 @@
             }
         }, false);
     }
-
 
 
     function loadTravelTimePoll() {
@@ -206,7 +179,7 @@
                 if (clickListener.length !== 0) {
                     google.maps.event.removeListener(clickListener[i]);
                 }
-                clickListener[i] =  feature.line.addListener('click', function (event) {
+                clickListener[i] = feature.line.addListener('click', function (event) {
                     createRoadPopup(this, event.latLng);
                 });
 
@@ -250,9 +223,7 @@
                 90: "#AAFF00",
                 120: "#00B22D"
             };
-        }
-
-        else {
+        } else {
             //Overige wegen
             var speedColors = {
                 0: "#D0D0D0",
