@@ -26,7 +26,7 @@ public class HttpClientFactory {
         DEFAULT,
         ETAG,
         LAST_MODIFIED,
-        HTTP2  // HTTP2 is not yet supported by Reactor-Netty 0.9
+        HTTP2  // HTTP2 is not yet supported by Reactor-Netty 0.9........
     }
 
     public HttpClientFactory() { }
@@ -45,7 +45,7 @@ public class HttpClientFactory {
         return client;
     }
 
-    //Sends HTTP Head and determines server capabilities based on response
+    //Sends HTTP Head and determine server capabilities based on response
     public ServerCapability getServerCapability(String URL) { //Todo: move inside ChannelHandlers and dynamically switch on runtime...
         log.debug("enter getServerCapability");
         return HttpClient.create()

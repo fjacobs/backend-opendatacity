@@ -32,7 +32,6 @@
         });
     }
 
-
     // if (!!window.EventSource) {
     //     var source = new EventSource('localhost:9090/stream-sse');
     // } else {
@@ -65,10 +64,6 @@
     }
 
     // ----------- TravelTime --------------------------
-
-
-
-
 
     function createRoadPopup(feature, pos) {
 
@@ -106,11 +101,6 @@
         // }
     }
 
-
-
-
-
-
     let data, eventFeatures, i;
     let clickListener = [];
     let loadedFeatures;
@@ -134,27 +124,22 @@
                 if (eventNumber === 0) {
                     // loadedFeatures = map.data.addGeoJson(result);
                     console.log("Should only be called once");
-
                     loadedFeatures = map.data.addGeoJson(result);
-
                     map.data.addListener('click', function(event) {
+                    createRoadPopup(event, event.latLng);
 
-                        createRoadPopup(event, event.latLng);
-
-                        // let infowindow = new google.maps.InfoWindow();
-                        // infowindow.setContent("hellooooooooooooo: " + event.feature.getId());
-                        // infowindow.setPosition(event.latLng);
-                        // infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-                        // infowindow.open(map);
+                    // let infowindow = new google.maps.InfoWindow();
+                    // infowindow.setContent("hellooooooooooooo: " + event.feature.getId());
+                    // infowindow.setPosition(event.latLng);
+                    // infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+                    // infowindow.open(map);
                     });
                 }
-
 
                 i = 0;
                 for (i in eventFeatures) {
                     let f;
                     f = eventFeatures[i];
-
                     ///////////////////////////////////////////////////////////
                     let color = speedToColor(f.properties.Type, f.properties.Velocity);
 
@@ -164,7 +149,6 @@
                         var weight = 1;
                     }
                     /////////////////////////////////////////////////////////
-
                     let temp = map.data.getFeatureById(f.id);
                     temp.forEachProperty(function (value, key) {
                         if (temp.getProperty(key) !== undefined) {
@@ -319,7 +303,6 @@
 <!--<td id="name">Day</td>-->
 <body onLoad='main()'>
 <div id="map"></div>
-
 <div id="grid"></div>
 <table id="dataTable">
     <thead>
@@ -343,7 +326,6 @@
     </tr>
     </tbody>
 </table>
-
 
 <script type="text/javascript">
     $(document).ready(function () {

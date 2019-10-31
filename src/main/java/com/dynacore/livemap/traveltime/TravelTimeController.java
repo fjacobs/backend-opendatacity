@@ -51,9 +51,10 @@ public class TravelTimeController {
     @CrossOrigin
     @GetMapping("/roadfullcollection")
     public Mono<FeatureCollection> getFullCollection() {
-        return travelTimeServiceImpl
-                .convertToFeatureCollection(travelTimeServiceImpl.requestFeatures())
-;
+        return new FrontendTester()
+                .fileFeatureCollection();
+
+             //   .convertToFeatureCollection(travelTimeServiceImpl.requestFeatures());
     }
 
     /**

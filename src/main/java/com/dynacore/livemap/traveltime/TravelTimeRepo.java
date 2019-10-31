@@ -27,14 +27,20 @@ public class TravelTimeRepo {
     }
 
     Mono<Boolean> isPubDateUnique(TravelTimeEntity entity) {
-        return databaseClient.select().from(TravelTimeEntity.class)
-                .matching(where("id")
-                        .is(entity.getId())
-                        .and("pub_date")
-                        .is(entity.getPub_date()))
-                .fetch()
-                .first()
-                .hasElement();
+        Mono<Boolean> result = null;
+        try {
+            result = databaseClient.select().from(TravelTimeEntity.class)
+                    .matching(where("id")
+                            .is(entity.getId())
+                            .and("pub_date")
+                            .is(entity.getPub_date()))
+                    .fetch()
+                    .first()
+                    .hasElement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Transactional

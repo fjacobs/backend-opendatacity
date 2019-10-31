@@ -28,7 +28,7 @@ public class TravelTimeEntity {
     public TravelTimeEntity() {
     }
 
-    public TravelTimeEntity(String id, String name, Timestamp pub_date, Timestamp retrieved_from_third_party, String type, int length, int travel_time, int velocity) {
+    public TravelTimeEntity(String id, String name, Timestamp pub_date, Timestamp retrieved_from_third_party, String type, int length, int travel_time, int velocity) { //TODO @nonnull
         this.id = id;
         this.name = name;
         this.pub_date = pub_date;

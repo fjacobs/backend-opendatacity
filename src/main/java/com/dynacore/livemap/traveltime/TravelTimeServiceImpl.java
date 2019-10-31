@@ -2,13 +2,15 @@ package com.dynacore.livemap.traveltime;
 
 import com.dynacore.livemap.common.http.HttpClientFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -33,12 +35,12 @@ class TravelTimeServiceImpl implements TravelTimeService {
     @Autowired
     TravelTimeServiceImpl(TravelTimeRepo repo, HttpClientFactory httpClientFactory) {
 
-        ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(httpClientFactory.autoConfigHttpClient(SOURCEURL));
-        webClient = WebClient.builder().clientConnector(httpConnector)
-                .build();
+//        ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(httpClientFactory.autoConfigHttpClient(SOURCEURL));
+//        webClient = WebClient.builder().clientConnector(httpConnector)
+//                .build();
 
-        sharedFlux = requestFeatures()
-                // .filterWhen(v -> repo.didPropertiesChange(convertToEntity(v)))
+        sharedFlux = requestFeaturesFile()
+                 // .filterWhen(v -> repo.didPropertiesChange(convertToEntity(v)))
                 .share()
                 .cache(Duration.ofSeconds(INTERVAL))
                 .publish();
@@ -47,8 +49,8 @@ class TravelTimeServiceImpl implements TravelTimeService {
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
                 .map(this::convertToEntity)
-                .doOnNext(repo::save)
                 .sequential();
+        //       .doOnNext(repo::save);
 
         Flux.interval(Duration.ofSeconds(INTERVAL))
                 .map(tick -> {
@@ -63,27 +65,36 @@ class TravelTimeServiceImpl implements TravelTimeService {
         return Flux.from(sharedFlux);
     }
 
-     Flux<Feature> requestFeatures() {
+    Flux<Feature> requestFeaturesHttp() {
+        return httpRequest()
+                .doOnNext(req -> logger.info("Serialized " + req.getFeatures().size() + " of features"))
+                .flatMapMany(this::processFeatures);
+    }
+
+    Mono<FeatureCollection> httpRequest() {
         return webClient.get()
                 .uri(SOURCEURL)
                 .exchange()
-                .doOnNext(clientResponse -> logger.info("Server responded: " + clientResponse.statusCode().toString()))
-                .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
-                .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
+                .doOnNext(response -> logger.info("Server responded: " + response.statusCode().toString()))
+                .filter(response -> (response.statusCode() != NOT_MODIFIED))
+                .flatMap(response -> response.bodyToMono(byte[].class))
                 .map(bytes -> {
                             FeatureCollection featureColl = null;
                             try {
-                                featureColl = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
-                                        .orElseThrow(IllegalStateException::new);
+                                featureColl = Optional.of( new ObjectMapper().readValue(bytes, FeatureCollection.class) )
+                                                      .orElseThrow(IllegalStateException::new);
                             } catch (Exception e) {
                                 return Mono.error(IllegalStateException::new);
                             }
                             return featureColl;
                         }
                 )
-                .cast(FeatureCollection.class)
-                .doOnNext(req -> logger.info("Serialized " + req.getFeatures().size() + " of features"))
-                .flatMapMany(this::processFeatures);
+                .cast(FeatureCollection.class);
     }
+    // Test methods
+    Flux<Feature> requestFeaturesFile() {
+        return new FrontendTester().fileFeatureCollection()
+                .flatMapMany(this::processFeatures);
 
+    }
 }

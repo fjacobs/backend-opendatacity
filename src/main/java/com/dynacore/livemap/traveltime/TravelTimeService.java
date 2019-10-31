@@ -1,24 +1,15 @@
 package com.dynacore.livemap.traveltime;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
-import java.util.Optional;
-
-import static org.springframework.data.r2dbc.query.Criteria.where;
-import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 
 public interface TravelTimeService {
     String ID = "Id";
@@ -31,7 +22,7 @@ public interface TravelTimeService {
     String THEIR_RETRIEVAL = "Timestamp";
     String DYNACORE_ERRORS = "dynacoreErrors";
     String SOURCEURL = "http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson";
-    int INTERVAL = 20;
+    int INTERVAL = 5;
     Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
 
     default Flux<Feature> processFeatures(FeatureCollection fc) {
@@ -54,26 +45,35 @@ public interface TravelTimeService {
                 });
     }
 
-    default Feature processFeature(Feature feature) {
-        OffsetDateTime retrieved = OffsetDateTime.now(Clock.systemUTC());
-        feature.getProperties().put(DYNACORE_ERRORS, "none");
-        feature.getProperties().put(OUR_RETRIEVAL, retrieved.toString());
-        if (!feature.getProperties().containsKey(TRAVEL_TIME)) {
-            feature.getProperties().put(TRAVEL_TIME, -1);
-        }
-        if (!feature.getProperties().containsKey(VELOCITY)) {
-            feature.getProperties().put(VELOCITY, -1);
-        }
-        if (!feature.getProperties().containsKey(LENGTH)) {
-            feature.getProperties().put(LENGTH, -1);
-        }
-        return feature;
-    }
 
+
+    default Feature processFeature(Feature feature) {
+         try {
+              OffsetDateTime retrieved = OffsetDateTime.now(Clock.systemUTC());
+              feature.getProperties().put(DYNACORE_ERRORS, "none");
+              feature.getProperties().put(OUR_RETRIEVAL, retrieved.toString());
+              if (!feature.getProperties().containsKey(TRAVEL_TIME)) {
+                  feature.getProperties().put(TRAVEL_TIME, -1);
+              }
+              if (!feature.getProperties().containsKey(VELOCITY)) {
+                  feature.getProperties().put(VELOCITY, -1);
+              }
+              if (!feature.getProperties().containsKey(LENGTH)) {
+                  feature.getProperties().put(LENGTH, -1);
+              }
+              if (feature.getProperties().containsKey(ID)) {
+                  feature.setId((String) feature.getProperties().get(ID));  // See RFC: id SHOULD be included as a member of the Feature
+                  feature.getProperties().remove(ID);                  // if it is used (it shouldn't be in properties)
+              }
+         } catch (Exception e) {
+              e.printStackTrace();
+         }
+         return feature;
+    }
 
     default TravelTimeEntity convertToEntity(Feature travelTime) {
         return new TravelTimeEntity.Builder()
-                .id((String) travelTime.getProperties().get(ID))
+                .id(travelTime.getId())
                 .name((String) travelTime.getProperties().get(NAME))
                 .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
                 .retrievedFromThirdParty((String) travelTime.getProperties().get(OUR_RETRIEVAL))
