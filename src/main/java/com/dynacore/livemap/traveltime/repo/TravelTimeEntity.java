@@ -1,12 +1,7 @@
-package com.dynacore.livemap.traveltime;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+package com.dynacore.livemap.traveltime.repo;
 
 import javax.persistence.Table;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;

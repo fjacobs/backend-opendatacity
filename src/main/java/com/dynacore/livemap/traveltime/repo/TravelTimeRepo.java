@@ -1,7 +1,6 @@
-package com.dynacore.livemap.traveltime;
+package com.dynacore.livemap.traveltime.repo;
 
 
-import org.geojson.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

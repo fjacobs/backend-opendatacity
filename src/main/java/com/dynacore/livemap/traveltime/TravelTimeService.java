@@ -1,5 +1,6 @@
 package com.dynacore.livemap.traveltime;
 
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
@@ -62,8 +63,8 @@ public interface TravelTimeService {
                   feature.getProperties().put(LENGTH, -1);
               }
               if (feature.getProperties().containsKey(ID)) {
-                  feature.setId((String) feature.getProperties().get(ID));  // See RFC: id SHOULD be included as a member of the Feature
-                  feature.getProperties().remove(ID);                  // if it is used (it shouldn't be in properties)
+                  feature.setId((String) feature.getProperties().get(ID));  // See RFC: If used then id SHOULD be included as a member of the Feature
+                  feature.getProperties().remove(ID);                      // (ie. not as a member of properties)
               }
          } catch (Exception e) {
               e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.traveltime;
+package com.dynacore.livemap.traveltime.repo;
 
 import io.r2dbc.client.R2dbc;
 import io.r2dbc.pool.ConnectionPool;

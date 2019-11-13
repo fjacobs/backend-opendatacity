@@ -1,6 +1,7 @@
 package com.dynacore.livemap.traveltime;
 
 import com.dynacore.livemap.common.http.HttpClientFactory;
+import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import org.geojson.Feature;

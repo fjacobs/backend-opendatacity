@@ -1,5 +1,6 @@
-package com.dynacore.livemap.traveltime;
+package com.dynacore.livemap.traveltime.repo;
 
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import org.geojson.Feature;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.Query;

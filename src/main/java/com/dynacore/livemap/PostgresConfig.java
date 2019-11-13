@@ -19,20 +19,6 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 @EnableR2dbcRepositories
 public class PostgresConfig extends AbstractR2dbcConfiguration {
 
-   @Bean("postgresStandardFactory")
-    public PostgresqlConnectionFactory connectionFactory2() {
-
-       PostgresqlConnectionConfiguration configuration =  PostgresqlConnectionConfiguration.builder()
-               .host("localhost")
-               .port(5432)
-               .username("postgres")
-               .password("admin")
-               .database("trafficdata")
-               .build();
-
-        return new PostgresqlConnectionFactory(configuration);
-    }
-
     @Bean("postgresPoolFactory")
     public ConnectionFactory connectionFactory() {
 
