@@ -46,8 +46,6 @@ public interface TravelTimeService {
                 });
     }
 
-
-
     default Feature processFeature(Feature feature) {
          try {
               OffsetDateTime retrieved = OffsetDateTime.now(Clock.systemUTC());
@@ -83,6 +81,5 @@ public interface TravelTimeService {
                 .velocity((int) travelTime.getProperties().get(VELOCITY))
                 .length((int) travelTime.getProperties().get(LENGTH)).build();
     }
-
 
 }

@@ -7,16 +7,23 @@ logging:
         org:
             springframework:
                 data:
-                    r2dbc: off
+                    r2dbc: debug
 
 spring:
+
+    application:
+        name: OpenCity
+
+    #test, traveltime, parking,
+    profiles:
+        include: traveltime, dev
+
 
     datasource:
         url: jdbc:postgresql://localhost:5432/trafficdata
         username: postgres
         password: admin
         driver-class-name: org.postgresql.Driver
-
 
     jpa:
         open-in-view: true
@@ -26,20 +33,14 @@ spring:
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
-            hibernate:
-                jdbc:
-                    lob:
-                       non_contextual_creation: true
-                       
     banner:
         image:
             invert: true
     output:
-        ansi: true
+        ansi:
+            enabled: always
 
-    #test, traveltime, parking,
-    profiles:
-        include: traveltime
+
 
 #  Embedded server configuration
 
