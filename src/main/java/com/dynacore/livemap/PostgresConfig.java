@@ -48,36 +48,4 @@ public class PostgresConfig extends AbstractR2dbcConfiguration {
 
     }
 
-//    @Bean
-//    @Override
-//    public R2dbcCustomConversions r2dbcCustomConversions() {
-//
-//        List<Converter<?, ?>> converterList = new ArrayList<Converter<?, ?>>();
-//        converterList.add(new org.springframework.data.r2dbc.test.PersonReadConverter());
-//        converterList.add(new org.springframework.data.r2dbc.test.PersonWriteConverter());
-//        return new R2dbcCustomConversions(getStoreConversions(), converterList);
-//    }
-
-
-//    @ReadingConverter
-//    public class PersonReadConverter implements Converter<Row, Person> {
-//
-//        public Person convert(Row source) {
-//            Person p = new Person(source.get("id", String.class),source.get("name", String.class));
-//            p.setAge(source.get("age", Integer.class));
-//            return p;
-//        }
-//    }
-
-//    @WritingConverter
-//    public class PersonWriteConverter implements Converter<Person, OutboundRow> {
-//
-//        public OutboundRow convert(Person source) {
-//            OutboundRow row = new OutboundRow();
-//            row.put("id", SettableValue.from(source.getId()));
-//            row.put("name", SettableValue.from(source.getFirstName()));
-//            row.put("age", SettableValue.from(source.getAge()));
-//            return row;
-//        }
-//    }
 }
