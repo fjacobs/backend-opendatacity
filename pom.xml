@@ -67,7 +67,19 @@
             <artifactId>reactor-extra</artifactId>
         </dependency>
 
-<!--    DB drivers -->
+        <dependency>
+            <groupId>de.grundid.opendatalab</groupId>
+            <artifactId>geojson-jackson</artifactId>
+            <version>${geojson-jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--    DB drivers -->
 
         <dependency>
             <groupId>io.r2dbc</groupId>
@@ -119,15 +131,16 @@
         </dependency>
 
         <dependency>
-            <groupId>de.grundid.opendatalab</groupId>
-            <artifactId>geojson-jackson</artifactId>
-            <version>${geojson-jackson.version}</version>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

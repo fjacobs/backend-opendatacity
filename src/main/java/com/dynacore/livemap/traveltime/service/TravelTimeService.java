@@ -1,4 +1,4 @@
-package com.dynacore.livemap.traveltime;
+package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 
@@ -25,8 +25,8 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 
 /*
-    This service will periodically retrieve and store  traveltime info from a public open data service upon starting.
-    Additionally the data can be subscribed to with getPublisher().
+    This service will periodically retrieve and store road traffic information from a public open data service.
+    Additionally, a reactive subscription is available for the GeoJson.
  */
 
 @Profile("traveltime")
@@ -62,7 +62,7 @@ public class TravelTimeService {
 
     private void pollProcessor() {
 
-        sharedFlux = retrieveProcessedFeatures().share()
+        sharedFlux = httpRequestFeatures().share()
                 .cache(Duration.ofSeconds(config.getRequestInterval()))
                 .publish();
 
@@ -100,7 +100,7 @@ public class TravelTimeService {
 
     private TravelTimeEntity convertToEntity(Feature travelTime) {
 
-        TravelTimeEntity entity = new TravelTimeEntity.Builder()
+        return new TravelTimeEntity.Builder()
                 .id((String) travelTime.getProperties().get(ID))
                 .name((String) travelTime.getProperties().get(NAME))
                 .pubDate((String) travelTime.getProperties().get(THEIR_RETRIEVAL))
@@ -109,10 +109,9 @@ public class TravelTimeService {
                 .travelTime((int) travelTime.getProperties().get(TRAVEL_TIME))
                 .velocity((int) travelTime.getProperties().get(VELOCITY))
                 .length((int) travelTime.getProperties().get(LENGTH)).build();
-        return entity;
     }
 
-    private Flux<Feature> retrieveProcessedFeatures() {
+    private Flux<Feature> httpRequestFeatures() {
 
         return webClient
                 .get()
@@ -125,7 +124,7 @@ public class TravelTimeService {
                                 featureColl = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
                                         .orElseThrow(IllegalStateException::new);
                             } catch (Exception e) {
-                                return Mono.error(IllegalStateException::new);
+                                return Mono.error(new IllegalArgumentException("Could not serialize GeoJson."));
                             }
                             return featureColl;
                         }

@@ -16,9 +16,9 @@ import org.junit.Test;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.core.FetchSpec;
 
-import com.dynacore.livemap.testing.AbstractDatabaseClientIntegrationTests;
-import com.dynacore.livemap.testing.ExternalDatabase;
-import com.dynacore.livemap.testing.PostgresTestSupport;
+import com.dynacore.livemap.testing.database.AbstractDatabaseClientIntegrationTests;
+import com.dynacore.livemap.testing.database.ExternalDatabase;
+import com.dynacore.livemap.testing.database.PostgresTestSupport;
 
 import io.r2dbc.spi.ConnectionFactory;
 import reactor.core.publisher.Mono;

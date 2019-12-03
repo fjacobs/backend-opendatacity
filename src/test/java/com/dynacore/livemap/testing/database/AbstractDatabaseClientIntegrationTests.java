@@ -1,22 +1,9 @@
-package com.dynacore.livemap.testing;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.data.domain.Sort.Order.*;
-import static org.springframework.data.r2dbc.query.Criteria.*;
+package com.dynacore.livemap.testing.database;
 
 import io.r2dbc.spi.ConnectionFactory;
-import lombok.Data;
-import org.junit.Assert;
 import org.springframework.data.r2dbc.core.DatabaseClient;
-import reactor.test.StepVerifier;
 
 import javax.sql.DataSource;
-
-import org.assertj.core.api.Condition;
-import org.junit.Before;
-import org.junit.Test;
-
-import org.springframework.dao.DataAccessException;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 

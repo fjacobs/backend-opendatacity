@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dynacore.livemap.testing;
+package com.dynacore.livemap.testing.database;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.testing;
+package com.dynacore.livemap.testing.database;
 
 import io.r2dbc.h2.H2ConnectionConfiguration;
 import io.r2dbc.h2.H2ConnectionFactory;

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.testing;
+package com.dynacore.livemap.testing.database;
 
 /*
  * Copyright 2019 the original author or authors.

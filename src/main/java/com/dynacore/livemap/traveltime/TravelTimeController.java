@@ -1,5 +1,6 @@
 package com.dynacore.livemap.traveltime;
 
+import com.dynacore.livemap.traveltime.service.TravelTimeService;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;

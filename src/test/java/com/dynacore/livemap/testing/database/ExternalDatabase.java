@@ -1,4 +1,4 @@
-package com.dynacore.livemap.testing;
+package com.dynacore.livemap.testing.database;
 
 /*
  * Copyright 2018-2019 the original author or authors.
@@ -23,7 +23,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
-import lombok.ToString;
 import org.junit.AssumptionViolatedException;
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;

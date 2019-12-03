@@ -1,4 +1,4 @@
-package com.dynacore.livemap.traveltime;
+package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.common.service.GeoJsonRequestConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;

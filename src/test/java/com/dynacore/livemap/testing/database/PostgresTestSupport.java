@@ -1,4 +1,4 @@
-package com.dynacore.livemap.testing;
+package com.dynacore.livemap.testing.database;
 
 
 import io.r2dbc.spi.ConnectionFactory;
@@ -6,7 +6,7 @@ import io.r2dbc.spi.ConnectionFactory;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import com.dynacore.livemap.testing.ExternalDatabase.ProvidedDatabase;
+import com.dynacore.livemap.testing.database.ExternalDatabase.ProvidedDatabase;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.postgresql.ds.PGSimpleDataSource;
 
