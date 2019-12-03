@@ -19,12 +19,11 @@ public class TravelTimeRepo {
     private DatabaseClient databaseClient;
     private final static Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
 
-    @Autowired
     TravelTimeRepo(DatabaseClient databaseClient) {
         this.databaseClient = databaseClient;
     }
 
-    Mono<Boolean> isPubDateSame(TravelTimeEntity entity) {
+    public Mono<Boolean> isPubDateSame(TravelTimeEntity entity) {
         Mono<Boolean> result = null;
         try {
             result = databaseClient.select().from(TravelTimeEntity.class)
@@ -42,7 +41,7 @@ public class TravelTimeRepo {
     }
 
     @Transactional
-    void save(TravelTimeEntity entity) {
+    public void save(TravelTimeEntity entity) {
         try {
             databaseClient.insert()
                     .into(TravelTimeEntity.class)
@@ -52,13 +51,12 @@ public class TravelTimeRepo {
                     .single()
                     .doOnError(e -> logger.error("Error writing to db:  ", e))
                     .subscribe(msg->logger.info("Success"));
-
         } catch (Exception error) {
             logger.error("Can't save road information to DB: " + error.toString());
         }
     }
 
-    Mono<TravelTimeEntity> getLastStored(TravelTimeEntity entity) {
+    public Mono<TravelTimeEntity> getLastStored(TravelTimeEntity entity) {
         return databaseClient.execute(
                 "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n" +
                         "     FROM public.travel_time_entity\n" +
@@ -69,7 +67,7 @@ public class TravelTimeRepo {
                 .first();
     }
 
-    Mono<Boolean> didPropertiesChange(TravelTimeEntity entity) {
+    public Mono<Boolean> didPropertiesChange(TravelTimeEntity entity) {
         return getLastStored(entity)
                 .map(storedEntity -> {
                     boolean changed = false;

@@ -63,6 +63,7 @@ traveltime:
     url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
     initialdelay: 0
     requestinterval: 1000
+
     
 #    -- traveltime properties --
 #    Timestamp:    Timestamp van het moment waarop de reistijd bepaalt is

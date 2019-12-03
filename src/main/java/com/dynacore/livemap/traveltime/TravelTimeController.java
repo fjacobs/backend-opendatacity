@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
@@ -35,8 +34,8 @@ public class TravelTimeController {
     @CrossOrigin
     @GetMapping("/roadSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
-        Flux<Feature> collection = travelTimeService.getPublisher();
-        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.convertToFeatureCollection(collection));
+        Flux<Feature> collection = travelTimeService.getFeatures();
+        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.getFeatureCollection(collection));
 
         return featureColl
                 .doOnComplete(()-> logger.info("Completed Road FeatureCollection standardSubscription.."))
@@ -55,7 +54,7 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:8000")
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
-        return travelTimeService.getPublisher()
+        return travelTimeService.getFeatures()
                 .delayElements(Duration.ofMillis(5))
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
                 .doOnComplete(()-> logger.info("Completed Road SSE.."))

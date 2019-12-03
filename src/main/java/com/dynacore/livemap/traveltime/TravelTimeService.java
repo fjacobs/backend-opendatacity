@@ -1,8 +1,8 @@
 package com.dynacore.livemap.traveltime;
 
-import com.dynacore.livemap.common.http.HttpClientFactory;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 
+import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
@@ -10,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
@@ -25,8 +22,12 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import static org.springframework.data.r2dbc.query.Criteria.where;
 import static org.springframework.http.HttpStatus.NOT_MODIFIED;
+
+/*
+    This service will periodically retrieve and store  traveltime info from a public open data service upon starting.
+    Additionally the data can be subscribed to with getPublisher().
+ */
 
 @Profile("traveltime")
 @Service("travelTimeService")
@@ -41,59 +42,64 @@ public class TravelTimeService {
     private static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
     private static final String THEIR_RETRIEVAL = "Timestamp";
     private static final String DYNACORE_ERRORS = "dynacoreErrors";
-    private static final String SOURCEURL = "http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson";
-    private static final int INTERVAL = 5;
-    private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
-    private DatabaseClient databaseClient;
-    private ConnectableFlux<Feature> sharedFlux;
-    private WebClient webClient;
 
+    //-------
+
+    private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
+    private ConnectableFlux<Feature> sharedFlux;
+    private final WebClient webClient;
+    private final TravelTimeRepo repo;
+    private final ServiceConfig config;
 
     @Autowired
-    public TravelTimeService(DatabaseClient databaseClient, HttpClientFactory httpClientFactory) {
-        this.databaseClient = databaseClient;
+    public TravelTimeService(TravelTimeRepo repo, WebClient webClient, ServiceConfig config) {
 
-        ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(httpClientFactory.autoConfigHttpClient(SOURCEURL));
-        webClient = WebClient.builder().clientConnector(httpConnector)
-                .build();
+        this.webClient = webClient;
+        this.repo = repo;
+        this.config = config;
+        pollProcessor();
+    }
+
+    private void pollProcessor() {
 
         sharedFlux = retrieveProcessedFeatures().share()
-                .cache(Duration.ofSeconds(INTERVAL))
+                .cache(Duration.ofSeconds(config.getRequestInterval()))
                 .publish();
 
         var saveFlux = Flux.from(sharedFlux)
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
-                .map(this::convertToEntity)
-                .doOnNext(this::save)
+                .map(feature-> {
+                    repo.save(convertToEntity(feature));
+                    return feature;
+                })
                 .sequential();
 
-        Flux.interval(Duration.ofSeconds(INTERVAL))
+        Flux.interval(Duration.ofSeconds(config.getRequestInterval()))
                 .map(tick -> {
-                    saveFlux.subscribe(); //x -> System.out.println("SaveFlux subscribed")
+                    saveFlux.subscribe();
                     sharedFlux.connect();
                     logger.info("Interval count: " + tick);
                     return tick;
                 }).subscribe();
     }
 
-    Flux<Feature> getPublisher() {
+    public Flux<Feature> getFeatures() {
         return Flux.from(sharedFlux);
     }
 
+    public Mono<FeatureCollection> getFeatureCollection(Flux<Feature> featureFlux) {
 
-    private Mono<Boolean> selectFeature(TravelTimeEntity entity) {
-        return databaseClient.select().from(TravelTimeEntity.class)
-                .matching(where("id")
-                        .is(entity.getId())
-                        .and("pub_date")
-                        .is(entity.getPubDate()))
-                .fetch()
-                .first()
-                .hasElement();
+        return featureFlux.collectList()
+                .map(features -> {
+                    FeatureCollection fc = new FeatureCollection();
+                    fc.setFeatures(features);
+                    return fc;
+                });
     }
 
     private TravelTimeEntity convertToEntity(Feature travelTime) {
+
         TravelTimeEntity entity = new TravelTimeEntity.Builder()
                 .id((String) travelTime.getProperties().get(ID))
                 .name((String) travelTime.getProperties().get(NAME))
@@ -106,29 +112,10 @@ public class TravelTimeService {
         return entity;
     }
 
-
-    @Transactional
-    public void save(TravelTimeEntity entity) {
-        try {
-            selectFeature(entity)
-                    .subscribe(foundInDb -> {
-                        if (!foundInDb) {
-                            databaseClient.insert()
-                                    .into(TravelTimeEntity.class)
-                                    .using(entity)
-                                    .then()
-                                    .doOnError(e -> logger.error("Error already exists:  ", e))
-                                    .subscribe();
-                        }
-                    });
-        } catch (Exception error) {
-            logger.error("Can't save road information to DB: " + error.toString());
-        }
-    }
-
     private Flux<Feature> retrieveProcessedFeatures() {
-        return webClient.get()
-                .uri(SOURCEURL)
+
+        return webClient
+                .get()
                 .exchange()
                 .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
                 .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
@@ -148,27 +135,19 @@ public class TravelTimeService {
     }
 
     private Flux<Feature> processFeatures(FeatureCollection fc) {
+
         return Flux.fromIterable(fc)
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
-                .doOnNext(this::processFeature)
+                .map(this::processFeature)
                 .sequential()
                 .share()
                 .doOnSubscribe(s -> logger.info("Subscribed to processed features source"))
                 .doOnComplete(() -> logger.info("Completed processing features"));
     }
 
-    Mono<FeatureCollection> convertToFeatureCollection(Flux<Feature> featureFlux) {
-        Mono<FeatureCollection> mono = featureFlux.collectList()
-                .map(features -> {
-                    FeatureCollection fc = new FeatureCollection();
-                    fc.setFeatures(features);
-                    return fc;
-                });
-        return mono;
-    }
+    private Feature processFeature(Feature feature) {
 
-    public Feature processFeature(Feature feature) {
          try {
               OffsetDateTime retrieved = OffsetDateTime.now(Clock.systemUTC());
               feature.getProperties().put(DYNACORE_ERRORS, "none");
@@ -191,7 +170,4 @@ public class TravelTimeService {
          }
          return feature;
     }
-
-
-
 }
