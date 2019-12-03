@@ -7,35 +7,32 @@ logging:
         org:
             springframework:
                 data:
-                    r2dbc: debug
-
+                    r2dbc: info
 spring:
+    h2:
+        console:
+            enabled: on
+    main:
+        lazy-initialization: off
 
     application:
         name: OpenCity
 
     #test, traveltime, parking,
     profiles:
-        include: traveltime, dev
-
-
-    datasource:
-        url: jdbc:postgresql://localhost:5432/trafficdata
-        username: postgres
-        password: admin
-        driver-class-name: org.postgresql.Driver
+        include: traveltime, prod
 
     jpa:
-        open-in-view: true
-        show-sql: true
-        generate-ddl: true
+        open-in-view: on
+        show-sql: off
+        generate-ddl: off
+
         hibernate:
-            naming:
-                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+            ddl-auto: none
 
     banner:
         image:
-            invert: true
+            invert: on
     output:
         ansi:
             enabled: always

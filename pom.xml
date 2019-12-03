@@ -9,9 +9,9 @@
 
     <repositories>
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
+            <id>spring-libs-milestone</id>
+            <name>Spring Snapshot Repository</name>
+            <url>https://repo.spring.io/libs-milestone</url>
         </repository>
         <repository>
             <id>spring-libs-snapshot</id>
@@ -22,9 +22,14 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>spring-milestones</id>
+            <id>spring-libs-milestone</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/libs-milestone</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-libs-snapshot</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/libs-snapshot</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -34,12 +39,8 @@
         <version>2.2.1.RELEASE</version>
     </parent>
 
-
     <properties>
-        <spring-boot-data-r2dbc.version>0.1.0.M2</spring-boot-data-r2dbc.version>
-        <r2dbc-h2.version>0.8.0.BUILD-SNAPSHOT</r2dbc-h2.version>
-        <r2dbc-postgres.version>0.8.0.BUILD-SNAPSHOT</r2dbc-postgres.version>
-        <geojson-jackson.version>1.8.1</geojson-jackson.version>
+        <geojson-jackson.version>1.12</geojson-jackson.version>
     </properties>
 
     <dependencies>
@@ -50,52 +51,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot.experimental</groupId>
-            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-            <version>${spring-boot-data-r2dbc.version}</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-r2dbc</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <version>${r2dbc-h2.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot.experimental</groupId>
-            <artifactId>spring-boot-test-autoconfigure-r2dbc</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-postgresql</artifactId>
-            <version>${r2dbc-postgres.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-pool</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-spi</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -103,9 +66,44 @@
             <artifactId>reactor-extra</artifactId>
         </dependency>
 
+<!--    DB drivers -->
+
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-pool</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+<!-- Testing -->
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -116,26 +114,19 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <dependency>
             <groupId>de.grundid.opendatalab</groupId>
             <artifactId>geojson-jackson</artifactId>
             <version>${geojson-jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
@@ -145,6 +136,13 @@
                 <groupId>org.springframework.boot.experimental</groupId>
                 <artifactId>spring-boot-bom-r2dbc</artifactId>
                 <version>0.1.0.BUILD-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>1.12.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -174,7 +172,6 @@
                     <argLine>--enable-preview</argLine>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

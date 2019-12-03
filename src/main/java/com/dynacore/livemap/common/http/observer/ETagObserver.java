@@ -10,8 +10,8 @@ import reactor.netty.http.client.HttpClientState;
 public class ETagObserver implements ConnectionObserver {
 
     private final Logger log = LoggerFactory.getLogger(ETagObserver.class);
-    private String eTag = "";           ////Channel doesn't remember state in 0.9 for now remember ChannelHandler context here.
-    private String lastModified = "";       // so for now we remember the ChannelHandler context here....
+    private String eTag = "";           //Channel doesn't remember state in 0.9 for now remember ChannelHandler context here.
+    private String lastModified = "";
 
     public ETagObserver() {
         log.trace("EtagObserver created ");

@@ -8,4 +8,4 @@ import org.springframework.context.annotation.Profile;
 @Profile("traveltime")
 @Configuration
 @ConfigurationProperties("traveltime")
-public class TravelTimeConfiguration extends GeoJsonRequestConfiguration {}
+public class TravelTimeServiceConfig extends GeoJsonRequestConfiguration {}

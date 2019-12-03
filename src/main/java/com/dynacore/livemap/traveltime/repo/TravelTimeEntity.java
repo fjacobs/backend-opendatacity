@@ -1,44 +1,42 @@
 package com.dynacore.livemap.traveltime.repo;
 
-import javax.persistence.Table;
-import java.sql.Timestamp;
+import lombok.*;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Immutable;
+import org.springframework.data.relational.core.mapping.Table;
+
+import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 
-@Table(name = "traveltime")
+@Table
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TravelTimeEntity {
+
+    @Id
+    private Integer pkey;
 
     private String id;
     private String name;
-    private Timestamp pub_date;
-    private Timestamp retrieved_from_third_party;
+
+    private OffsetDateTime pubDate;
+    private OffsetDateTime retrievedFromThirdParty;
     private String type;
 
     private int length;
     private int travel_time;
     private int velocity;
 
-    public TravelTimeEntity() {
-    }
-
-    public TravelTimeEntity(String id, String name, Timestamp pub_date, Timestamp retrieved_from_third_party, String type, int length, int travel_time, int velocity) { //TODO @nonnull
-        this.id = id;
-        this.name = name;
-        this.pub_date = pub_date;
-        this.retrieved_from_third_party = retrieved_from_third_party;
-        this.type = type;
-        this.length = length;
-        this.travel_time = travel_time;
-        this.velocity = velocity;
-    }
-
     private TravelTimeEntity(Builder builder) {
+        setPkey(null);
         setId(builder.id);
         setName(builder.name);
-        setPub_date(builder.pubDate);
-        setRetrieved_from_third_party(builder.retrievedFromThirdParty);
+        setPubDate(builder.pubDate);
+        setRetrievedFromThirdParty(builder.retrievedFromThirdParty);
         setType(builder.type);
         setLength(builder.length);
         setTravel_time(builder.travelTime);
@@ -49,8 +47,8 @@ public class TravelTimeEntity {
     public static final class Builder {
         private String id;
         private String name;
-        private Timestamp pubDate;
-        private Timestamp retrievedFromThirdParty;
+        private OffsetDateTime pubDate;
+        private OffsetDateTime retrievedFromThirdParty;
         private String type;
         private int length;
         private int travelTime;
@@ -70,12 +68,12 @@ public class TravelTimeEntity {
         }
 
         public Builder pubDate(String val) {
-            pubDate= Timestamp.from(OffsetDateTime.parse(val, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant());
+            pubDate= OffsetDateTime.parse(val);
             return this;
         }
 
         public Builder retrievedFromThirdParty(String val) {
-            retrievedFromThirdParty= Timestamp.from(OffsetDateTime.parse(val, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant());
+            retrievedFromThirdParty= OffsetDateTime.parse(val);
             return this;
         }
 
@@ -104,88 +102,77 @@ public class TravelTimeEntity {
         }
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Timestamp getPub_date() {
-        return pub_date;
-    }
-
-    public void setPub_date(Timestamp pub_date) {
-        this.pub_date = pub_date;
-    }
-
-    public Timestamp getRetrieved_from_third_party() {
-        return retrieved_from_third_party;
-    }
-
-    public void setRetrieved_from_third_party(Timestamp retrieved_from_third_party) {
-        this.retrieved_from_third_party = retrieved_from_third_party;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public int getTravel_time() {
-        return travel_time;
-    }
-
-    public void setTravel_time(int travel_time) {
-        this.travel_time = travel_time;
-    }
-
-    public int getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(int velocity) {
-        this.velocity = velocity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TravelTimeEntity that = (TravelTimeEntity) o;
-        return getLength() == that.getLength() &&
-                getTravel_time() == that.getTravel_time() &&
-                getVelocity() == that.getVelocity() &&
-                Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getName(), that.getName()) &&
-                Objects.equals(getPub_date(), that.getPub_date()) &&
-                Objects.equals(getRetrieved_from_third_party(), that.getRetrieved_from_third_party()) &&
-                Objects.equals(getType(), that.getType());
+        return length == that.length &&
+                travel_time == that.travel_time &&
+                velocity == that.velocity &&
+                Objects.equals(pkey, that.pkey) &&
+                id.equals(that.id) &&
+                Objects.equals(name, that.name) &&
+                pubDate.equals(that.pubDate) &&
+                Objects.equals(retrievedFromThirdParty, that.retrievedFromThirdParty) &&
+                Objects.equals(type, that.type);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getPub_date(), getRetrieved_from_third_party(), getType(), getLength(), getTravel_time(), getVelocity());
+    public Integer getPkey() {
+        return pkey;
     }
+    public void setPkey(Integer pkey) {
+        this.pkey = pkey;
+    }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public OffsetDateTime getPubDate() { return pubDate; }
+    public void setPubDate(OffsetDateTime pubDate) {
+        this.pubDate = pubDate;
+    }
+    public OffsetDateTime getRetrievedFromThirdParty() {
+        return retrievedFromThirdParty;
+    }
+    public void setRetrievedFromThirdParty(OffsetDateTime retrievedFromThirdParty) {
+        this.retrievedFromThirdParty = retrievedFromThirdParty;
+    }
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public int getLength() {
+        return length;
+    }
+    public void setLength(int length) {
+        this.length = length;
+    }
+    public int getTravel_time() {
+        return travel_time;
+    }
+    public void setTravel_time(int travel_time) {
+        this.travel_time = travel_time;
+    }
+    public int getVelocity() {
+        return velocity;
+    }
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
+
+
 }
 

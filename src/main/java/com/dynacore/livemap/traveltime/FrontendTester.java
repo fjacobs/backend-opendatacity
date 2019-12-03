@@ -33,7 +33,6 @@ public class FrontendTester implements TravelTimeService {
                 .build();
     }
 
-
     public Mono<FeatureCollection> fileFeatureCollection() {
 
         return Flux.just(1)
@@ -72,7 +71,7 @@ public class FrontendTester implements TravelTimeService {
     public FeatureCollection loadFromFile() {
 //      Mono<FeatureCollection> test = Mono.empty();
         timer++;
-        if ((timer == 0) || (timer > 3)) {
+        if ((timer == 0) || (timer > 2)) {
             timer = 1;
         }
 

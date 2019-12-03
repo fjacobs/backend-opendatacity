@@ -14,7 +14,6 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
-
 public class TravelTimeRepo {
 
     private DatabaseClient databaseClient;
@@ -25,19 +24,19 @@ public class TravelTimeRepo {
         this.databaseClient = databaseClient;
     }
 
-    Mono<Boolean> isPubDateUnique(TravelTimeEntity entity) {
+    Mono<Boolean> isPubDateSame(TravelTimeEntity entity) {
         Mono<Boolean> result = null;
         try {
             result = databaseClient.select().from(TravelTimeEntity.class)
                     .matching(where("id")
                             .is(entity.getId())
                             .and("pub_date")
-                            .is(entity.getPub_date()))
+                            .is(entity.getPubDate()))
                     .fetch()
                     .first()
                     .hasElement();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Can't save road information to DB: " + e.toString());
         }
         return result;
     }
@@ -45,17 +44,15 @@ public class TravelTimeRepo {
     @Transactional
     void save(TravelTimeEntity entity) {
         try {
-            isPubDateUnique(entity)
-                    .subscribe(foundInDb -> {
-                        if (!foundInDb) {
-                            databaseClient.insert()
-                                    .into(TravelTimeEntity.class)
-                                    .using(entity)
-                                    .then()
-                                    .doOnError(e -> logger.error("Error already exists:  ", e))
-                                    .subscribe();
-                        }
-                    });
+            databaseClient.insert()
+                    .into(TravelTimeEntity.class)
+                    .using(entity)
+                    .fetch()
+                    .one()
+                    .single()
+                    .doOnError(e -> logger.error("Error writing to db:  ", e))
+                    .subscribe(msg->logger.info("Success"));
+
         } catch (Exception error) {
             logger.error("Can't save road information to DB: " + error.toString());
         }
@@ -72,7 +69,7 @@ public class TravelTimeRepo {
                 .first();
     }
 
-     Mono<Boolean> didPropertiesChange(TravelTimeEntity entity) {
+    Mono<Boolean> didPropertiesChange(TravelTimeEntity entity) {
         return getLastStored(entity)
                 .map(storedEntity -> {
                     boolean changed = false;
