@@ -20,11 +20,11 @@ import java.time.Duration;
 public class TravelTimeController {
 
     private final Logger logger = LoggerFactory.getLogger(TravelTimeController.class);
-    private TravelTimeServiceImpl travelTimeServiceImpl;
+    private TravelTimeService travelTimeService;
 
     @Autowired
-    public TravelTimeController(TravelTimeServiceImpl travelTimeServiceImpl) {
-        this.travelTimeServiceImpl = travelTimeServiceImpl;
+    public TravelTimeController(TravelTimeService TravelTimeService) {
+        this.travelTimeService = TravelTimeService;
     }
 
     /**
@@ -35,8 +35,8 @@ public class TravelTimeController {
     @CrossOrigin
     @GetMapping("/roadSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
-        Flux<Feature> collection = travelTimeServiceImpl.getPublisher();
-        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeServiceImpl.convertToFeatureCollection(collection));
+        Flux<Feature> collection = travelTimeService.getPublisher();
+        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.convertToFeatureCollection(collection));
 
         return featureColl
                 .doOnComplete(()-> logger.info("Completed Road FeatureCollection standardSubscription.."))
@@ -48,15 +48,6 @@ public class TravelTimeController {
                         .build());
     }
 
-    @CrossOrigin
-    @GetMapping("/roadfullcollection")
-    public Mono<FeatureCollection> getFullCollection() {
-        return new FrontendTester()
-            .fileFeatureCollection();
-
-             //   .convertToFeatureCollection(travelTimeServiceImpl.requestFeatures());
-    }
-
     /**
      * @return Returns a subscription for specific features
      * The events only contain data that has changed
@@ -64,7 +55,7 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:8000")
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
-        return travelTimeServiceImpl.getPublisher()
+        return travelTimeService.getPublisher()
                 .delayElements(Duration.ofMillis(5))
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
                 .doOnComplete(()-> logger.info("Completed Road SSE.."))
