@@ -1,3 +1,18 @@
+/*
+ * Copyright 2002-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
@@ -42,7 +57,6 @@ class TravelTimeServiceTest {
 
     static String notAjson = "gjhkg^&#fsa@^&@*( ";
 
-
     static MockWebServer server;
     static HttpUrl baseUrl;
     static TravelTimeService service;
@@ -65,19 +79,21 @@ class TravelTimeServiceTest {
     }
 
     @Test
-    void getCorrectJsonThenBrokenJson() throws InterruptedException {
-        Hooks.onOperatorDebug();
+    void expectThreeFeatures() throws InterruptedException {
+
         server.enqueue(
                 new MockResponse()
-                    .setResponseCode(200)
-                    .setBody(jsonCorrect));
+                        .setResponseCode(200)
+                        .setBody(jsonCorrect));
 
         service.getFeatures()
                 .as(StepVerifier::create)
                 .expectNextCount(3)
                 .verifyComplete();
+    }
 
-        server.takeRequest().getHeaders();
+    @Test
+    void expectClassCastException() {
 
         server.enqueue(
                 new MockResponse()
@@ -87,12 +103,13 @@ class TravelTimeServiceTest {
         service.getFeatures()
                 .delaySubscription(Duration.ofSeconds(serviceConfig.getRequestInterval()+1))
                 .as(StepVerifier::create)
-                .expectErrorMatches(throwable -> throwable instanceof ClassCastException &&
-                        throwable.getMessage().equals("Cannot cast reactor.core.publisher.MonoCallableOnAssembly to org.geojson.FeatureCollection")
-                )
+                .expectErrorMatches(throwable -> throwable instanceof ClassCastException)
                 .verify();
     }
 
+    @Test
+    void expectOnlyChangedFeaturesOnSecondEmission() {
+    }
 
     //Same as getFeatures but just converts to FeatureCollection
     @Test
