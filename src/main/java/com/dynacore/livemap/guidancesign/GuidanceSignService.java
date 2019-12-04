@@ -1,9 +1,9 @@
 package com.dynacore.livemap.guidancesign;
 
-import com.dynacore.livemap.common.model.FeatureCollection;
-import com.dynacore.livemap.common.repo.JpaRepository;
-import com.dynacore.livemap.common.service.GeoJsonRequester;
-import com.dynacore.livemap.common.tools.HttpGeoJsonSerializer;
+import com.dynacore.livemap.core.model.FeatureCollection;
+import com.dynacore.livemap.core.repo.JpaRepository;
+import com.dynacore.livemap.core.service.GeoJsonRequester;
+import com.dynacore.livemap.core.tools.HttpGeoJsonSerializer;
 import com.dynacore.livemap.guidancesign.entity.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.model.GuidanceSignModel;
 import org.springframework.beans.factory.annotation.Autowired;

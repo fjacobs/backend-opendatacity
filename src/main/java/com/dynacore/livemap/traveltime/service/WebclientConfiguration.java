@@ -1,7 +1,7 @@
 package com.dynacore.livemap.traveltime.service;
 
 
-import com.dynacore.livemap.common.http.HttpClientFactory;
+import com.dynacore.livemap.core.http.HttpClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;

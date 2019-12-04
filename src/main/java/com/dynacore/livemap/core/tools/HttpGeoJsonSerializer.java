@@ -1,6 +1,6 @@
-package com.dynacore.livemap.common.tools;
+package com.dynacore.livemap.core.tools;
 
-import com.dynacore.livemap.common.model.FeatureCollection;
+import com.dynacore.livemap.core.model.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;

@@ -1,6 +1,6 @@
-package com.dynacore.livemap.common.http.observer;
+package com.dynacore.livemap.core.http.observer;
 
-import com.dynacore.livemap.common.http.handlers.ChannelAttrKey;
+import com.dynacore.livemap.core.http.handlers.ChannelAttrKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.Connection;

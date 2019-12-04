@@ -1,6 +1,6 @@
 package com.dynacore.livemap.parking;
 
-import com.dynacore.livemap.common.repo.JpaRepository;
+import com.dynacore.livemap.core.repo.JpaRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

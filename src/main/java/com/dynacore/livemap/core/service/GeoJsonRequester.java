@@ -1,7 +1,7 @@
-package com.dynacore.livemap.common.service;
+package com.dynacore.livemap.core.service;
 
-import com.dynacore.livemap.common.model.Feature;
-import com.dynacore.livemap.common.model.FeatureCollection;
+import com.dynacore.livemap.core.model.Feature;
+import com.dynacore.livemap.core.model.FeatureCollection;
 
 /**
  * @param <T> Processed Endpoint JSON representation

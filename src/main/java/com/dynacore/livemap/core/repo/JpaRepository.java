@@ -1,4 +1,4 @@
-package com.dynacore.livemap.common.repo;
+package com.dynacore.livemap.core.repo;
 
 import java.util.List;
 import java.util.Optional;

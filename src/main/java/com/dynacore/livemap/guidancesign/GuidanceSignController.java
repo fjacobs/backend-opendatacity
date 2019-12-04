@@ -1,6 +1,6 @@
 package com.dynacore.livemap.guidancesign;
 
-import com.dynacore.livemap.common.model.FeatureCollection;
+import com.dynacore.livemap.core.model.FeatureCollection;
 import com.dynacore.livemap.guidancesign.model.GuidanceSignModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;

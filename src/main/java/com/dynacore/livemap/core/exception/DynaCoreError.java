@@ -1,4 +1,4 @@
-package com.dynacore.livemap.common.exception;
+package com.dynacore.livemap.core.exception;
 
 import lombok.Getter;
 import lombok.Setter;

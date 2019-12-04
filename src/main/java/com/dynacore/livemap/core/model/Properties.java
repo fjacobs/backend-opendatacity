@@ -1,4 +1,4 @@
-package com.dynacore.livemap.common.model;
+package com.dynacore.livemap.core.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.common.service;
+package com.dynacore.livemap.core.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

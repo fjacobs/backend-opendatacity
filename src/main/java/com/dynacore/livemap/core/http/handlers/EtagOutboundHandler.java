@@ -1,4 +1,4 @@
-package com.dynacore.livemap.common.http.handlers;
+package com.dynacore.livemap.core.http.handlers;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

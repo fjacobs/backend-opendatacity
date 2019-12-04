@@ -1,6 +1,6 @@
 package com.dynacore.livemap.guidancesign;
 
-import com.dynacore.livemap.common.service.GeoJsonRequestConfiguration;
+import com.dynacore.livemap.core.service.GeoJsonRequestConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 

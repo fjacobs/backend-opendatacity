@@ -1,7 +1,7 @@
 package com.dynacore.livemap.parking;
 
-import com.dynacore.livemap.common.model.Feature;
-import com.dynacore.livemap.common.model.Properties;
+import com.dynacore.livemap.core.model.Feature;
+import com.dynacore.livemap.core.model.Properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
