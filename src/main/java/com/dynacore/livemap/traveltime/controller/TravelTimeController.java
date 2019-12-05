@@ -1,23 +1,28 @@
-package com.dynacore.livemap.traveltime;
+package com.dynacore.livemap.traveltime.controller;
 
-import com.dynacore.livemap.traveltime.service.TravelTimeService;
+import java.time.Duration;
+
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import reactor.core.publisher.Flux;
 
-import java.time.Duration;
+import com.dynacore.livemap.core.ReactiveGeoJsonController;
+import com.dynacore.livemap.traveltime.service.TravelTimeService;
 
 @Profile("traveltime")
 @RestController
-public class TravelTimeController {
+public class TravelTimeController implements ReactiveGeoJsonController {
 
     private final Logger logger = LoggerFactory.getLogger(TravelTimeController.class);
     private TravelTimeService travelTimeService;
@@ -35,10 +40,8 @@ public class TravelTimeController {
     @CrossOrigin
     @GetMapping("/roadSubscription")
     public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
-        Flux<Feature> collection = travelTimeService.getFeatures();
-        Flux<FeatureCollection> featureColl = Flux.concat(travelTimeService.getFeatureCollection(collection));
 
-        return featureColl
+        return  Flux.concat(travelTimeService.getFeatureCollection())
                 .doOnComplete(()-> logger.info("Completed Road FeatureCollection standardSubscription.."))
                 .doOnError(e ->  logger.error("SSE Error: " + e))
                 .map(sequence -> ServerSentEvent.<FeatureCollection>builder()
@@ -55,6 +58,7 @@ public class TravelTimeController {
     @CrossOrigin(origins = "http://localhost:8000")
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
+
         return travelTimeService.getFeatures()
                 .delayElements(Duration.ofMillis(5))
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
@@ -66,6 +70,4 @@ public class TravelTimeController {
                         .data(sequence)
                         .build());
     }
-
-
 }

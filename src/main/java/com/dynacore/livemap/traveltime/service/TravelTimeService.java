@@ -103,13 +103,12 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
     }
 
     public Flux<Feature> getFeatures() {
-
         return Flux.from(sharedFlux);
     }
 
-    public Mono<FeatureCollection> getFeatureCollection(Flux<Feature> featureFlux) {
+    public Mono<FeatureCollection> getFeatureCollection() {
 
-        return featureFlux.collectList()
+        return Flux.from(sharedFlux).collectList()
                 .map(features -> {
                     FeatureCollection fc = new FeatureCollection();
                     fc.setFeatures(features);

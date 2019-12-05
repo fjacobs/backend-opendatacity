@@ -15,28 +15,22 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import org.geojson.Feature;
-import org.geojson.FeatureCollection;
+import static org.mockito.Mockito.mock;
 
-import org.junit.Assert;
+import java.io.IOException;
+import java.time.Duration;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Hooks;
-import reactor.core.publisher.Mono;
+
+import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
+
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import reactor.test.StepVerifier;
-
-import java.io.*;
-import java.time.Duration;
-
-import static org.mockito.Mockito.mock;
 
 class TravelTimeServiceTest {
 
@@ -63,14 +57,14 @@ class TravelTimeServiceTest {
     static ServiceConfig serviceConfig;
 
     @BeforeAll
-    static void setUp() throws IOException {
+    static void setUp() {
 
         server = new MockWebServer();
         baseUrl = server.url("/v1/chat/");
         TravelTimeRepo repo = mock(TravelTimeRepo.class);
         WebClient webClient = WebClient.create(baseUrl.url().toString());
 
-        serviceConfig = new ServiceConfig();;
+        serviceConfig = new ServiceConfig();
         serviceConfig.setInitialDelay(0);
         serviceConfig.setRequestInterval(1);
         serviceConfig.setUrl(baseUrl.url().toString());
@@ -79,7 +73,7 @@ class TravelTimeServiceTest {
     }
 
     @Test
-    void expectThreeFeatures() throws InterruptedException {
+    void expectThreeFeatures() {
 
         server.enqueue(
                 new MockResponse()
@@ -108,30 +102,16 @@ class TravelTimeServiceTest {
     }
 
     @Test
-    void expectOnlyChangedFeaturesOnSecondEmission() {
-    }
-
-    //Same as getFeatures but just converts to FeatureCollection
-    @Test
     void getFeatureCollection() {
 
-        Feature feature1 = new Feature();
-        feature1.setId("Feature1");
-        feature1.setProperty("prop1", "value1");
-        feature1.setProperty("prop2", 2);
-        Feature feature2 = new Feature();
-        feature2.setId("Feature2");
-        feature2.setProperty("prop2_1", "value2");
-        feature2.setProperty("prop2_2", 3);
+        server.enqueue(
+                new MockResponse()
+                        .setResponseCode(200)
+                        .setBody(jsonCorrect));
 
-        Mono<FeatureCollection> fcMono =service.getFeatureCollection(Flux.just(feature1,feature2));
-
-        fcMono.as(StepVerifier::create)
-                .assertNext(fc-> {
-                    Assert.assertEquals("Feature2", fc.getFeatures().get(1).getId());
-                    Assert.assertEquals(3, fc.getFeatures().get(1).getProperties().get("prop2_2"));
-
-                })
+        service.getFeatureCollection()
+                .as(StepVerifier::create)
+                .expectNextCount(1)
                 .verifyComplete();
     }
 
@@ -139,6 +119,5 @@ class TravelTimeServiceTest {
     static void tearDown() throws IOException {
         server.shutdown();
     }
-
 
 }
