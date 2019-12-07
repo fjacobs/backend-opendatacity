@@ -4,10 +4,11 @@ package com.dynacore.livemap.traveltime.service;
 import com.dynacore.livemap.core.http.HttpClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
+@Profile("dev")
 @Configuration
 public class WebclientConfiguration {
 

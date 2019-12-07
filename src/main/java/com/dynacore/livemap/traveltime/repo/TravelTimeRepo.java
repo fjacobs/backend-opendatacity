@@ -19,7 +19,7 @@ public class TravelTimeRepo {
     private DatabaseClient databaseClient;
     private final static Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
 
-    TravelTimeRepo(DatabaseClient databaseClient) {
+    public TravelTimeRepo(DatabaseClient databaseClient) {
         this.databaseClient = databaseClient;
     }
 
