@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Profile("dev")
@@ -20,6 +21,9 @@ public class WebclientConfiguration {
         ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(httpClientFactory.autoConfigHttpClient(SOURCEURL));
         return WebClient.builder()
                 .clientConnector(httpConnector)
+                .exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 10))
+                        .build())
                 .baseUrl(SOURCEURL)
                 .build();
     }
