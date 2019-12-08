@@ -3,7 +3,6 @@ package com.dynacore.livemap.traveltime.repo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;

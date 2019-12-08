@@ -33,7 +33,27 @@ public class TravelTimeController implements ReactiveGeoJsonController {
     }
 
     /**
-     * @return Returns a SSE subscription for the complete FeatureCollection.
+     * @return Returns a subscription for individual features
+     * The first event contain all features, the events that follow only contains changed data
+     */
+    @CrossOrigin(origins = "http://localhost:8000")
+    @GetMapping("/featureSubscription")
+    public Flux<ServerSentEvent<Feature>> streamFeatures() {
+
+        return travelTimeService.getFeatures()
+                .take(500)
+                .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
+                .doOnComplete(()-> logger.info("Completed Road SSE.."))
+                .doOnError(e ->  logger.error("SSE Error: " + e))
+                .map(sequence -> ServerSentEvent.<Feature>builder()
+                        .id("Roads")
+                        .event("event")
+                        .data(sequence)
+                        .build());
+    }
+
+    /**
+     * @return Returns a SSE subscription for a FeatureCollection GeoJson object.
      * The first event will send the complete collection, the events that follow
      *  only contain property data that has been changed compared to the previous event.
      */
@@ -51,23 +71,4 @@ public class TravelTimeController implements ReactiveGeoJsonController {
                         .build());
     }
 
-    /**
-     * @return Returns a subscription for specific features
-     * The events only contain data that has changed
-     */
-    @CrossOrigin(origins = "http://localhost:8000")
-    @GetMapping("/featureSubscription")
-    public Flux<ServerSentEvent<Feature>> streamFeatures() {
-
-        return travelTimeService.getFeatures()
-                .delayElements(Duration.ofMillis(5))
-                .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
-                .doOnComplete(()-> logger.info("Completed Road SSE.."))
-                .doOnError(e ->  logger.error("SSE Error: " + e))
-                .map(sequence -> ServerSentEvent.<Feature>builder()
-                        .id("Roads")
-                        .event("event")
-                        .data(sequence)
-                        .build());
-    }
 }

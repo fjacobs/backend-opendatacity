@@ -1,7 +1,6 @@
 package com.dynacore.livemap.traveltime;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 
+import com.dynacore.livemap.configuration.PostgresConfig;
 import com.dynacore.livemap.core.http.HttpClientFactory;
 import org.geojson.Feature;
 import org.junit.Assert;
@@ -27,6 +27,7 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
 
 import okhttp3.mockwebserver.MockResponse;
@@ -48,26 +49,35 @@ class IntegrationTest {
 
     static TravelTimeController controller;
     static MockWebServer server;
+    static DatabaseClient databaseClient;
 
     @BeforeAll
     static void setUp() {
 
         server = new MockWebServer();
+
         HttpUrl baseUrl = server.url("/v1/chat/");
 
         ServiceConfig serviceConfig = new ServiceConfig();
         serviceConfig.setInitialDelay(0);
         serviceConfig.setRequestInterval(1);
         serviceConfig.setUrl(baseUrl.url().toString());
-        DatabaseClient client = DatabaseClient.create(H2TestSupport.createConnectionFactory());
 
-        client.execute(H2TestSupport.CREATE_TABLE_TRAVEL_TIME)
+        //  databaseClient = DatabaseClient.create(PostgresTestSupport.createConnectionFactory(PostgresTestSupport.database()));
+        databaseClient = DatabaseClient.create(new PostgresConfig().connectionFactory());
+
+        databaseClient.execute("DROP TABLE IF EXISTS travel_time_entity;")
+                .then()
+                .block();
+
+        databaseClient.execute(H2TestSupport.CREATE_TABLE_TRAVEL_TIME)
               .then()
               .block();
 
-        TravelTimeRepo repo = new TravelTimeRepo(client);
+        TravelTimeRepo repo = new TravelTimeRepo(databaseClient);
 
         ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(new HttpClientFactory().autoConfigHttpClient(baseUrl.toString()));
+
         WebClient webClient = WebClient.builder()
                 .clientConnector(httpConnector)
                 .exchangeStrategies(ExchangeStrategies.builder()
@@ -79,10 +89,6 @@ class IntegrationTest {
 
         TravelTimeService service = new TravelTimeService(repo, webClient, serviceConfig);
         controller = new TravelTimeController(service);
-    }
-
-    @Test
-    public void fileReadTest() throws FileNotFoundException {
     }
 
     private String getString(String fileName)  {
@@ -106,7 +112,8 @@ class IntegrationTest {
     }
 
     @Test
-    void expectFullCollectionOnFirstRequest() {
+    void expectFullCollectionOnFirstRequest() throws InterruptedException {
+        Hooks.onOperatorDebug();
 
         json1 = getString("fc1.geojson");
         json2 = getString("fc2.geojson");
@@ -120,20 +127,29 @@ class IntegrationTest {
         WebTestClient client = WebTestClient.bindToController(controller).build();
 
         ParameterizedTypeReference<ServerSentEvent<Feature>> typeRef = new ParameterizedTypeReference<>() {};
-        var featureEvent = client.get()
+
+        Flux<ServerSentEvent<Feature>> featureEvent = client.get()
                 .uri("/featureSubscription")
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .expectStatus().isOk()
-                .returnResult(typeRef);
+                .returnResult(typeRef)
+                .getResponseBody();
 
-        Flux<ServerSentEvent<Feature>> eventFlux = featureEvent.getResponseBody();
-
-        StepVerifier.create(eventFlux)
-                .thenAwait(Duration.ofSeconds(1))
-                .expectNextCount(128)
-                .expectComplete()
+        StepVerifier.create(featureEvent) //
+                .thenAwait(Duration.ofSeconds(3))
+                .thenCancel()
                 .verify();
+
+        Thread.sleep(5);
+
+        var y =  databaseClient.execute("SELECT * FROM travel_time_entity;") //
+                .fetch()
+                .all()
+                .count()
+                .block();
+
+        System.out.println(y);
     }
 
     @AfterAll

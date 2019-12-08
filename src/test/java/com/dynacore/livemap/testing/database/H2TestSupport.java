@@ -9,8 +9,8 @@ public class H2TestSupport {
     public static final String CREATE_TABLE_TRAVEL_TIME =  "CREATE TABLE travel_time_entity\n" +
             "(\n" +
             "    pkey SERIAL PRIMARY KEY,\n" +
-            "    id                         VARCHAR(50),\n" +
-            "    name                       VARCHAR(50),\n" +
+            "    id                         VARCHAR(200),\n" +
+            "    name                       VARCHAR(200),\n" +
             "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
             "    retrieved_from_third_party TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
             "    type                       VARCHAR(50),\n" +
@@ -22,7 +22,7 @@ public class H2TestSupport {
 
     public static ConnectionFactory createConnectionFactory() {
         return new H2ConnectionFactory(H2ConnectionConfiguration.builder() //
-                .inMemory("r2dbc") //
+                .file("~/r2dbc") //
                 .username("sa") //
                 .password("") //
                 .option("DB_CLOSE_DELAY=-1").build());

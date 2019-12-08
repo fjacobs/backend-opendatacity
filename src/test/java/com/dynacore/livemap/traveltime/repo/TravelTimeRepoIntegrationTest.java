@@ -32,6 +32,8 @@ public class TravelTimeRepoIntegrationTest extends AbstractDatabaseClientIntegra
 
     public static final ExternalDatabase database = PostgresTestSupport.database();
 
+    TravelTimeEntity entityOne, entitySameAsOne, entitySameAsOneWithNewPubDate, entitySameAsOneChangedProperties, entityTwo;
+
     @Override
     protected DataSource createDataSource() {
         return PostgresTestSupport.createDataSource(database);
@@ -41,7 +43,6 @@ public class TravelTimeRepoIntegrationTest extends AbstractDatabaseClientIntegra
     protected ConnectionFactory createConnectionFactory() {
         return PostgresTestSupport.createConnectionFactory(database);
     }
-    TravelTimeEntity entityOne, entitySameAsOne, entitySameAsOneWithNewPubDate, entitySameAsOneChangedProperties, entityTwo;
 
     @Before
     public void setup() {
