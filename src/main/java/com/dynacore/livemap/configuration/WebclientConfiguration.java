@@ -1,4 +1,4 @@
-package com.dynacore.livemap.traveltime.service;
+package com.dynacore.livemap.configuration;
 
 
 import com.dynacore.livemap.core.http.HttpClientFactory;

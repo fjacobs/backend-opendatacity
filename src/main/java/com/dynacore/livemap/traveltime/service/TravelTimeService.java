@@ -15,10 +15,12 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
+import com.dynacore.livemap.configuration.WebclientConfiguration;
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
@@ -29,13 +31,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -80,7 +91,9 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
 
     private void pollProcessor() {
 
-        sharedFlux = httpRequestFeatures().share()
+        sharedFlux = httpRequestFeatures()
+                .map(this::processFeature)
+                .share()
                 .cache(Duration.ofSeconds(config.getRequestInterval()))
                 .publish();
 

@@ -1,4 +1,8 @@
-debug: false
+local:
+  server:
+    port: 9090
+
+debug: true
 
 # Spring Configuration
 
@@ -9,6 +13,7 @@ logging:
                 data:
                     r2dbc: info
 spring:
+
     h2:
         console:
             enabled: on
@@ -37,15 +42,16 @@ spring:
         ansi:
             enabled: always
 
+    rsocket:
+        server:
+            mapping-path: /tweetsocket
+            transport: websocket
 
 
-#  Embedded server configuration
 
-server:
-    port: 9090
+
 
 # Traffic Data Configuration
-
 
 # Eigenaar dataset: Gemeente Amsterdam, Verkeer en Openbare Ruimte ---
 parking:
@@ -62,7 +68,7 @@ traveltime:
     #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
     url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
     initialdelay: 0
-    requestinterval: 1000
+    requestinterval: 4
 
     
 #    -- traveltime properties --

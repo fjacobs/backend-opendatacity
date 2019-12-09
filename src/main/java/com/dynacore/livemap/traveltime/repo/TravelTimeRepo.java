@@ -48,8 +48,7 @@ public class TravelTimeRepo {
                     .fetch()
                     .one()
                     .single()
-                    .doOnError(e -> logger.error("Error writing to db:  ", e))
-                    .subscribe(msg->logger.info("Success"));
+                    .doOnError(e -> logger.error("Error writing to db:  ", e));
         } catch (Exception error) {
             logger.error("Can't save road information to DB: " + error.toString());
         }
