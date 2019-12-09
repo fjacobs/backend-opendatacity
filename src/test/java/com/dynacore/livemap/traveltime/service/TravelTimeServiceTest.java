@@ -69,7 +69,7 @@ class TravelTimeServiceTest {
         serviceConfig.setRequestInterval(1);
         serviceConfig.setUrl(baseUrl.url().toString());
 
-        service = new TravelTimeService(repo,webClient,serviceConfig);
+        service = new TravelTimeService(repo, webClient, serviceConfig);
     }
 
     @Test
