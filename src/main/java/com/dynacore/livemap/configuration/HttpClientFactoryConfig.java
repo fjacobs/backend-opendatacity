@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.http;
+package com.dynacore.livemap.configuration;
 
 import com.dynacore.livemap.core.http.handlers.EtagInboundHandler;
 import com.dynacore.livemap.core.http.handlers.EtagOutboundHandler;
@@ -17,10 +17,10 @@ import reactor.netty.http.client.HttpClientResponse;
 
 
 @Component("httpClientFactory")
-public class HttpClientFactory {
+public class HttpClientFactoryConfig {
 
     private final String URL = "http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson";
-    private final Logger log = LoggerFactory.getLogger(HttpClientFactory.class);
+    private final Logger log = LoggerFactory.getLogger(HttpClientFactoryConfig.class);
 
     public enum ServerCapability {
         DEFAULT,
@@ -29,7 +29,7 @@ public class HttpClientFactory {
         HTTP2  // HTTP2 is not yet supported by Reactor-Netty 0.9........
     }
 
-    public HttpClientFactory() { }
+    public HttpClientFactoryConfig() { }
 
     //Sends HTTP Head and determines server capabilities based on response
     public HttpClient autoConfigHttpClient(String URL) { //Todo: move inside ChannelHandlers and dynamically switch on runtime...

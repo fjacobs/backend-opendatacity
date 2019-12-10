@@ -1,6 +1,10 @@
-local:
-  server:
-    port: 9090
+#local:
+#  server:
+#    port: 9090
+
+enable:
+    database:
+        populater:false
 
 debug: true
 
@@ -18,7 +22,7 @@ spring:
         console:
             enabled: on
     main:
-        lazy-initialization: off
+        lazy-initialization: on
 
     application:
         name: OpenCity
@@ -44,12 +48,9 @@ spring:
 
     rsocket:
         server:
-            mapping-path: /tweetsocket
+            mapping-path: /traveltime-message
             transport: websocket
-
-
-
-
+            port: 8888
 
 # Traffic Data Configuration
 

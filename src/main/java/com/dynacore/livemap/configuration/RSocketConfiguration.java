@@ -1,5 +1,6 @@
 package com.dynacore.livemap.configuration;
 
+import org.springframework.boot.rsocket.context.LocalRSocketServerPort;
 import reactor.core.publisher.Mono;
 
 import org.springframework.boot.autoconfigure.rsocket.RSocketProperties;
@@ -14,25 +15,31 @@ import java.net.URI;
 
 @Configuration
 public class RSocketConfiguration {
+//    rsocket:
+//    server:
+//    mapping-path: /traveltime-message
+//    transport: websocket
+//    port: 8888
+//
+//    @LocalServerPort
+//    private int port;
 
-    @LocalServerPort
-    private int port;
 
-    @Bean
-    public Mono<RSocketRequester> rSocketRequester(
-            RSocketStrategies rSocketStrategies,
-            RSocketProperties rSocketProps,
-            ServerProperties serverProps) {
-        return RSocketRequester.builder()
-                .rsocketStrategies(rSocketStrategies)
-                .connectWebSocket(getURI(rSocketProps, serverProps));
-    }
-
-    private URI getURI(RSocketProperties rSocketProps, ServerProperties serverProps) {
-        String protocol = serverProps.getSsl() != null ? "wss" : "ws";
-
-        return URI.create(String.format("%s://localhost:%d%s", protocol,
-                port, rSocketProps.getServer().getMappingPath()));
-    }
+//    @Bean
+//    public Mono<RSocketRequester> rSocketRequester(
+//            RSocketStrategies rSocketStrategies,
+//            RSocketProperties rSocketProps,
+//            ServerProperties serverProps) {
+//        return RSocketRequester.builder()
+//                .rsocketStrategies(rSocketStrategies)
+//                .connectWebSocket(getURI(rSocketProps, serverProps));
+//    }
+//
+//    private URI getURI(RSocketProperties rSocketProps, ServerProperties serverProps) {
+//        String protocol = serverProps.getSsl() != null ? "wss" : "ws";
+//
+//        return URI.create(String.format("%s://localhost:%d%s", protocol,
+//                8888, rSocketProps.getServer().getMappingPath()));
+//    }
 
 }

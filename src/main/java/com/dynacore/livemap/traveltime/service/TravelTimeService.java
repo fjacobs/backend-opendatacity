@@ -15,32 +15,6 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.configuration.WebclientConfiguration;
-import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
-import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.geojson.Feature;
-import org.geojson.FeatureCollection;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import reactor.core.publisher.ConnectableFlux;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Hooks;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -50,14 +24,36 @@ import java.nio.file.Path;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.Optional;
+import java.time.ZoneOffset;
 
-import static org.springframework.http.HttpStatus.NOT_MODIFIED;
+import org.geojson.Feature;
+import org.geojson.FeatureCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import reactor.core.publisher.ConnectableFlux;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  *  Periodically requests a Geojson from Amsterdam's open data server and converts it to a
  *  reactive streams publisher while storing it in a database.
  */
+@Lazy(false)
 @Profile("traveltime")
 @Service("travelTimeService")
 public class TravelTimeService implements ReactiveGeoJsonPublisher {
@@ -142,28 +138,70 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
                 .length((int) travelTime.getProperties().get(LENGTH)).build();
     }
 
-    private Flux<Feature> httpRequestFeatures() {
+//    private Flux<Feature> httpRequestFeatures() {
+//
+//        return webClient
+//                .get()
+//                .exchange()
+//                .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
+//                .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
+//                .map(bytes -> {
+//                            FeatureCollection featureColl = null;
+//                            try {
+//                                featureColl = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
+//                                        .orElseThrow(IllegalStateException::new);
+//                            } catch (Exception e) {
+//                                return Mono.error(new IllegalArgumentException("Could not serialize GeoJson."));
+//                            }
+//                            return featureColl;
+//                        }
+//                )
+//                .cast(FeatureCollection.class)
+//                .flatMapMany(this::processFeatures);
+//    }
+    public Flux<Feature> httpRequestFeatures() {
 
-        return webClient
-                .get()
-                .exchange()
-                .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
-                .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
-                .map(bytes -> {
-                            FeatureCollection featureColl = null;
-                            try {
-                                featureColl = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
-                                        .orElseThrow(IllegalStateException::new);
-                            } catch (Exception e) {
-                                return Mono.error(new IllegalArgumentException("Could not serialize GeoJson."));
-                            }
-                            return featureColl;
-                        }
-                )
+        String json1 = getString("fc1.geojson");
+        String json2 = getString("fc2.geojson");
+        String json3 = getString("fc3.geojson");
+
+        return Flux.just(json1, json2, json3)
+                .map(jsonString -> {
+                    FeatureCollection fc1 = null;
+                    try {
+                        fc1 = new ObjectMapper().readValue(jsonString, FeatureCollection.class);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                    return fc1;
+                })
                 .cast(FeatureCollection.class)
-                .flatMapMany(this::processFeatures);
+                .flatMapIterable(FeatureCollection::getFeatures);
     }
 
+    private String getString(String fileName) {
+        String featureCollection = "";
+        try {
+            Path path = ResourceUtils.getFile(this.getClass().getResource("/" + fileName)).toPath();
+            try {
+                Charset charset = StandardCharsets.UTF_8;
+                try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+                    String tempLine;
+                    while ((tempLine = reader.readLine()) != null) {
+                        featureCollection = "" + tempLine;
+                    }
+                } catch (IOException x) {
+                    throw x;
+                }
+            } catch (Exception e) {
+                throw e;
+            }
+        } catch (Exception error) {
+            error.printStackTrace();
+            Assert.state(false, "Error reading test geojson file '" + fileName + "'  in test/resources: " + error.toString());
+        }
+        return featureCollection;
+    }
     private Flux<Feature> processFeatures(FeatureCollection fc) {
 
         return Flux.fromIterable(fc)
@@ -179,7 +217,8 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
     private Feature processFeature(Feature feature) {
 
          try {
-              OffsetDateTime retrieved = OffsetDateTime.now(Clock.systemUTC());
+              OffsetDateTime retrieved = OffsetDateTime.now(ZoneOffset.UTC);
+
               feature.getProperties().put(DYNACORE_ERRORS, "none");
               feature.getProperties().put(OUR_RETRIEVAL, retrieved.toString());
               if (!feature.getProperties().containsKey(TRAVEL_TIME)) {

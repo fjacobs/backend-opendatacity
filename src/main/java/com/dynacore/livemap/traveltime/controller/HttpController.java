@@ -1,7 +1,5 @@
 package com.dynacore.livemap.traveltime.controller;
 
-import java.time.Duration;
-
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 
@@ -20,15 +18,20 @@ import reactor.core.publisher.Flux;
 import com.dynacore.livemap.core.ReactiveGeoJsonController;
 import com.dynacore.livemap.traveltime.service.TravelTimeService;
 
+
+/*
+    Deprecated in favour of RSocket protocol
+ */
+
 @Profile("traveltime")
 @RestController
-public class TravelTimeController implements ReactiveGeoJsonController {
+public class HttpController implements ReactiveGeoJsonController {
 
-    private final Logger logger = LoggerFactory.getLogger(TravelTimeController.class);
+    private final Logger logger = LoggerFactory.getLogger(HttpController.class);
     private TravelTimeService travelTimeService;
 
     @Autowired
-    public TravelTimeController(TravelTimeService TravelTimeService) {
+    public HttpController(TravelTimeService TravelTimeService) {
         this.travelTimeService = TravelTimeService;
     }
 
@@ -41,7 +44,6 @@ public class TravelTimeController implements ReactiveGeoJsonController {
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
 
         return travelTimeService.getFeatures()
-                .take(500)
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
                 .doOnComplete(()-> logger.info("Completed Road SSE.."))
                 .doOnError(e ->  logger.error("SSE Error: " + e))

@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-public class TravelTimeControllerTest {
+public class HttpControllerTest {
 
     @Test
     public void testFeatureSubscription() {
@@ -34,24 +34,23 @@ public class TravelTimeControllerTest {
 
         TravelTimeService service = Mockito.mock(TravelTimeService.class);
         Mockito.when(service.getFeatures()).thenReturn(Flux.just(feature1,feature2));
-        WebTestClient client = WebTestClient.bindToController(new TravelTimeController(service)).build();
 
         ParameterizedTypeReference<ServerSentEvent<Feature>> typeRef = new ParameterizedTypeReference<>() {};
-
-        var featureEvent = client.get()
+        WebTestClient.bindToController(new HttpController(service))
+                .build()
+                .get()
                 .uri("/featureSubscription")
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .expectStatus().isOk()
-                .returnResult(typeRef);
+                .returnResult(typeRef)
+                .getResponseBody()
 
-        Flux<ServerSentEvent<Feature>> eventFlux = featureEvent.getResponseBody();
-
-        StepVerifier.create(eventFlux)
-                .thenAwait(Duration.ofSeconds(1))
-                .expectNextCount(2)
+                .as(StepVerifier::create)
+                .thenAwait(Duration.ofSeconds(3))
                 .thenCancel()
                 .verify();
+
     }
 
     @Test
@@ -69,7 +68,7 @@ public class TravelTimeControllerTest {
         fc.setFeatures(Arrays.asList(feature1,feature2));
 
         TravelTimeService service = Mockito.mock(TravelTimeService.class);
-        WebTestClient client = WebTestClient.bindToController(new TravelTimeController(service)).build();
+        WebTestClient client = WebTestClient.bindToController(new HttpController(service)).build();
         ParameterizedTypeReference<ServerSentEvent<FeatureCollection>> typeRef = new ParameterizedTypeReference<>() {};
 
         Mockito.when(service.getFeatureCollection()).thenReturn(Mono.just(fc));

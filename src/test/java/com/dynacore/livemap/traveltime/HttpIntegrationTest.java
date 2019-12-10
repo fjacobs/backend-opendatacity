@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 
 import com.dynacore.livemap.configuration.PostgresConfig;
-import com.dynacore.livemap.core.http.HttpClientFactory;
+import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
 import org.geojson.Feature;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
@@ -35,19 +35,19 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.HttpUrl;
 
 import com.dynacore.livemap.testing.database.H2TestSupport;
-import com.dynacore.livemap.traveltime.controller.TravelTimeController;
+import com.dynacore.livemap.traveltime.controller.HttpController;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.dynacore.livemap.traveltime.service.ServiceConfig;
 import com.dynacore.livemap.traveltime.service.TravelTimeService;
 
-class IntegrationTest {
+class HttpIntegrationTest {
 
     static String json1;
     static String json2;
     static String json3;
     static String notAjson = "this is not a json";
 
-    static TravelTimeController controller;
+    static HttpController controller;
     static MockWebServer server;
     static DatabaseClient databaseClient;
 
@@ -63,7 +63,6 @@ class IntegrationTest {
         serviceConfig.setRequestInterval(1);
         serviceConfig.setUrl(baseUrl.url().toString());
 
-        //  databaseClient = DatabaseClient.create(PostgresTestSupport.createConnectionFactory(PostgresTestSupport.database()));
         databaseClient = DatabaseClient.create(new PostgresConfig().connectionFactory());
 
         databaseClient.execute("DROP TABLE IF EXISTS travel_time_entity;")
@@ -76,7 +75,7 @@ class IntegrationTest {
 
         TravelTimeRepo repo = new TravelTimeRepo(databaseClient);
 
-        ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(new HttpClientFactory().autoConfigHttpClient(baseUrl.toString()));
+        ReactorClientHttpConnector httpConnector = new ReactorClientHttpConnector(new HttpClientFactoryConfig().autoConfigHttpClient(baseUrl.toString()));
 
         WebClient webClient = WebClient.builder()
                 .clientConnector(httpConnector)
@@ -88,7 +87,7 @@ class IntegrationTest {
 
 
         TravelTimeService service = new TravelTimeService(repo, webClient, serviceConfig);
-        controller = new TravelTimeController(service);
+        controller = new HttpController(service);
     }
 
     private String getString(String fileName)  {
@@ -110,6 +109,7 @@ class IntegrationTest {
         }
         return featureCollection;
     }
+
 
     @Test
     void expectFullCollectionOnFirstRequest() throws InterruptedException {

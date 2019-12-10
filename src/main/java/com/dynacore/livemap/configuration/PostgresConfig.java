@@ -22,12 +22,6 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 @EnableR2dbcRepositories
 public class PostgresConfig extends AbstractR2dbcConfiguration {
 
-    private boolean enablePopulator = false;
-
-    public void enablePopulator(boolean enablePopulator){
-        this.enablePopulator=enablePopulator;
-    }
-
     @Bean("postgresPoolConnFactory")
     public ConnectionFactory connectionFactory() {
 
@@ -40,19 +34,5 @@ public class PostgresConfig extends AbstractR2dbcConfiguration {
                 .option(PASSWORD, "admin")
                 .option(DATABASE, "trafficdata")
                 .build());
-    }
-
-    @Bean
-    public ConnectionFactoryInitializer prodInitializer(@Qualifier("postgresPoolConnFactory") ConnectionFactory connectionFactory) {
-
-        ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
-        initializer.setConnectionFactory(connectionFactory);
-
-        CompositeDatabasePopulator populator = new CompositeDatabasePopulator();
-        populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("schema.sql")));
-        initializer.setDatabasePopulator(populator);
-        initializer.setEnabled(enablePopulator);
-
-        return initializer;
     }
 }
