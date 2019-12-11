@@ -10,6 +10,8 @@ import java.time.Duration;
 
 import com.dynacore.livemap.configuration.PostgresConfig;
 import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
+import com.dynacore.livemap.traveltime.service.FileRetriever;
+import com.dynacore.livemap.traveltime.service.HttpRetriever;
 import org.geojson.Feature;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
@@ -51,7 +53,6 @@ class HttpIntegrationTest {
     static MockWebServer server;
     static DatabaseClient databaseClient;
 
-    @BeforeAll
     static void setUp() {
 
         server = new MockWebServer();
@@ -86,7 +87,7 @@ class HttpIntegrationTest {
                 .build();
 
 
-        TravelTimeService service = new TravelTimeService(repo, webClient, serviceConfig);
+        TravelTimeService service = new TravelTimeService(repo, new HttpRetriever(), serviceConfig);
         controller = new HttpController(service);
     }
 
@@ -111,7 +112,6 @@ class HttpIntegrationTest {
     }
 
 
-    @Test
     void expectFullCollectionOnFirstRequest() throws InterruptedException {
         Hooks.onOperatorDebug();
 
@@ -152,7 +152,6 @@ class HttpIntegrationTest {
         System.out.println(y);
     }
 
-    @AfterAll
     static void tearDown() throws IOException {
         server.shutdown();
     }

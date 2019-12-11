@@ -14,13 +14,12 @@ import org.springframework.data.r2dbc.connectionfactory.init.ConnectionFactoryIn
 import org.springframework.data.r2dbc.connectionfactory.init.ResourceDatabasePopulator;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
-@Profile("dev")
+@Profile("dev2")
 @Configuration
 @EnableR2dbcRepositories(basePackages = "com.dynacore.livemap.traveltime.repo")
-
 public class H2Config extends AbstractR2dbcConfiguration {
 
-    private boolean enablePopulator = false;
+    private boolean enablePopulator = true;
 
     public void enablePopulator(boolean enablePopulator){
         this.enablePopulator=enablePopulator;

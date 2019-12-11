@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import com.dynacore.livemap.configuration.PostgresConfig;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,14 +26,14 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 
-public class TravelTimeRepoIntegrationTest extends AbstractDatabaseClientIntegrationTests {
+public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
 
     private DatabaseClient client = DatabaseClient.create(createConnectionFactory());
     private TravelTimeRepo repo= new TravelTimeRepo(client);
 
-    public static final ExternalDatabase database = PostgresTestSupport.database();
-
     TravelTimeEntity entityOne, entitySameAsOne, entitySameAsOneWithNewPubDate, entitySameAsOneChangedProperties, entityTwo;
+
+    public static final ExternalDatabase database = PostgresTestSupport.database();
 
     @Override
     protected DataSource createDataSource() {
@@ -41,7 +42,7 @@ public class TravelTimeRepoIntegrationTest extends AbstractDatabaseClientIntegra
 
     @Override
     protected ConnectionFactory createConnectionFactory() {
-        return PostgresTestSupport.createConnectionFactory(database);
+        return new PostgresConfig().connectionFactory();
     }
 
     @Before
@@ -76,11 +77,11 @@ public class TravelTimeRepoIntegrationTest extends AbstractDatabaseClientIntegra
 
         List<String> statements = Arrays.asList(//
                 "DROP TABLE IF EXISTS travel_time_entity;",
-                "CREATE TABLE travel_time_entity\n" +
+                "CREATE TABLE TRAVEL_TIME_ENTITY\n" +
                         "(\n" +
                         "    pkey SERIAL PRIMARY KEY,\n" +
-                        "    id                         VARCHAR(50),\n" +
-                        "    name                       VARCHAR(50),\n" +
+                        "    id                         VARCHAR(200),\n" +
+                        "    name                       VARCHAR(200),\n" +
                         "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
                         "    retrieved_from_third_party TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
                         "    type                       VARCHAR(50),\n" +
@@ -113,37 +114,43 @@ public class TravelTimeRepoIntegrationTest extends AbstractDatabaseClientIntegra
     }
 
     @Test
-    public void isPubDateUnique() {
+    public void isUnique() {
 
         dropCreate(client);
-        insertEntityOne();
 
-        Boolean isSame = Optional.ofNullable(repo.isPubDateSame(entitySameAsOne).block())
-                .orElseThrow(NoSuchElementException::new);
-        Assert.assertTrue(isSame);
+        String pubDate = "2019-10-16T15:52:00Z";
+        String retDate = "2019-10-16T16:00:00Z";
 
-        isSame = Optional.ofNullable(repo.isPubDateSame(entitySameAsOneWithNewPubDate).block())
-                .orElseThrow(NoSuchElementException::new);
+        entityOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        entitySameAsOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
 
-        Assert.assertFalse(isSame);
-    }
-
-    //Passes the test
-    @Test
-    public void save() {
-
-        dropCreate(client);
-       // repo.save(entityOne);
-        Mono<String> selectStatement = Mono.just("SELECT pkey, id, name, pub_date, retrieved_from_third_party, type, length, velocity, travel_time FROM travel_time_entity;");
-
-        Integer x = client.insert()
+        client.insert()
                 .into(TravelTimeEntity.class)
                 .using(entityOne)
                 .fetch()
                 .rowsUpdated()
-                .block();
+                .as(StepVerifier::create)
+                .expectNext(1)
+                .verifyComplete();
 
-        System.out.println("RowsUpdated result: " + x);
+        Boolean isUnique = Optional.ofNullable(repo.isUnique(entitySameAsOne).block())
+                .orElseThrow(NoSuchElementException::new);
+        Assert.assertFalse(isUnique);
+
+        String newPubDate = "2019-10-16T15:53:00Z";
+        entitySameAsOneWithNewPubDate = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(newPubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+
+        isUnique = Optional.ofNullable(repo.isUnique(entitySameAsOneWithNewPubDate).block())
+                .orElseThrow(NoSuchElementException::new);
+
+        Assert.assertTrue(isUnique);
+    }
+
+    @Test
+    public void save() {
+
+        dropCreate(client);
+        repo.save(entityOne).subscribe();
 
        FetchSpec<TravelTimeEntity> entity = client.execute("SELECT pkey, id, name, pub_date, retrieved_from_third_party, type, length, velocity, travel_time FROM travel_time_entity;")
                         .as(TravelTimeEntity.class)

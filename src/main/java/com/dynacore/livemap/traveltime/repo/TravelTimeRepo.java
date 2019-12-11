@@ -3,13 +3,14 @@ package com.dynacore.livemap.traveltime.repo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
-
 import static org.springframework.data.r2dbc.query.Criteria.where;
+
+import reactor.bool.BooleanUtils;
+import reactor.core.publisher.Mono;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
@@ -22,36 +23,32 @@ public class TravelTimeRepo {
         this.databaseClient = databaseClient;
     }
 
-    public Mono<Boolean> isPubDateSame(TravelTimeEntity entity) {
+    public Mono<Boolean> isUnique(TravelTimeEntity entity) {
         Mono<Boolean> result = null;
         try {
             result = databaseClient.select().from(TravelTimeEntity.class)
                     .matching(where("id")
                             .is(entity.getId())
-                            .and("pub_date")
+                            .and("pubDate")
                             .is(entity.getPubDate()))
                     .fetch()
                     .first()
                     .hasElement();
         } catch (Exception e) {
             logger.error("Can't save road information to DB: " + e.toString());
+            return Mono.error(new Exception());
         }
-        return result;
+        return  BooleanUtils.not(result);
     }
 
-    @Transactional
-    public void save(TravelTimeEntity entity) {
-        try {
-            databaseClient.insert()
+    public Mono<Integer> save(TravelTimeEntity entity) {
+
+            return databaseClient.insert()
                     .into(TravelTimeEntity.class)
                     .using(entity)
                     .fetch()
-                    .one()
-                    .single()
+                    .rowsUpdated()
                     .doOnError(e -> logger.error("Error writing to db:  ", e));
-        } catch (Exception error) {
-            logger.error("Can't save road information to DB: " + error.toString());
-        }
     }
 
     public Mono<TravelTimeEntity> getLastStored(TravelTimeEntity entity) {

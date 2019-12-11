@@ -17,7 +17,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
-@Profile("prod")
+@Profile("dev")
 @Configuration
 @EnableR2dbcRepositories
 public class PostgresConfig extends AbstractR2dbcConfiguration {

@@ -28,11 +28,11 @@ public class PostgresTestSupport {
     public static final String CREATE_TABLE_TRAVEL_TIME =  "CREATE TABLE travel_time_entity\n" +
             "(\n" +
             "    pkey SERIAL PRIMARY KEY,\n" +
-            "    id                         VARCHAR(50),\n" +
-            "    name                       VARCHAR(50),\n" +
+            "    id                         VARCHAR(200),\n" +
+            "    name                       VARCHAR(200),\n" +
             "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
             "    retrieved_from_third_party TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
-            "    type                       VARCHAR(50),\n" +
+            "    type                       VARCHAR(200),\n" +
             "    length                     SMALLINT CHECK (length >= -1),\n" +
             "    velocity                   SMALLINT CHECK (velocity >= -1),\n" +
             "    travel_time                SMALLINT CHECK (travel_time >= -1),\n" +
