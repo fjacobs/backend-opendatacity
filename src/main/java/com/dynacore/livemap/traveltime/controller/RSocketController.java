@@ -1,12 +1,10 @@
 package com.dynacore.livemap.traveltime.controller;
 
-import java.time.Duration;
 
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 

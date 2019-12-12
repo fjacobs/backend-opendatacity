@@ -1,0 +1,13 @@
+#dataTable
+{
+    display: none;
+}
+ #map {
+     height: 100%;
+ }
+html, body {
+    height: 90%;
+    margin: 0;
+    padding: 0;
+}
+

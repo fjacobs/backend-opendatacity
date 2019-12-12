@@ -16,7 +16,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.*;
 public class HomeConfiguration {
 
     @Bean
-    public RouterFunction<ServerResponse> indexRouter(@Value("classpath:/public/features.html") final Resource indexHtml) {
+    public RouterFunction<ServerResponse> indexRouter(@Value("classpath:/static/index.html") final Resource indexHtml) {
         return route(GET("/"), request -> ok().contentType(MediaType.TEXT_HTML).bodyValue(indexHtml));
     }
 

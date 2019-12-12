@@ -15,15 +15,16 @@
     let map;
 
     function main() {
-        initMap();
-        //    loadParking();
-        //    loadTravelTimePoll();
-        roadEventListener();
 
+        initMap();
+        loadParking();
+        loadTravelTimePoll();
+        roadEventListener();
         //   googleMapsTest();
     }
 
     function initMap() {
+
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: new google.maps.LatLng(52.37063538130748, 4.899999460629829),
@@ -41,6 +42,7 @@
     // ---------- Parking
 
     function loadParking() {
+
         map.data.loadGeoJson(parkingUrl);
         document.getElementById('id').innerHTML = 'no errors';
         map.data.addListener('click', function (event) {
@@ -82,6 +84,7 @@
         infowindow.open(map);
 
         map.data.setStyle( function (feature) {
+
             return {
                 strokeColor: color,
                 strokeOpacity: 1.0,
@@ -106,6 +109,7 @@
     let loadedFeatures;
 
     function roadEventListener() {
+
         let sse;
         if (!!window.EventSource) {
             sse = new EventSource('http://localhost:9090/roadSubscription');
