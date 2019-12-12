@@ -23,30 +23,24 @@ import java.time.Duration;
 @Component
 public class FileRetriever implements OpenDataRetriever {
 
-    public Flux<FeatureCollection> requestFeatures() {
+    public Flux<FeatureCollection> requestFeatures() throws JsonProcessingException {
 
-        String json1 = getString("fc1.geojson");
-        String json2 = getString("fc2.geojson");
-        String json3 = getString("fc3.geojson");
+        FeatureCollection fc1 = new ObjectMapper().readValue(getString("fc1.geojson"), FeatureCollection.class);
+        FeatureCollection fc2 = new ObjectMapper().readValue(getString("fc2.geojson"), FeatureCollection.class);
+        FeatureCollection fc3 = new ObjectMapper().readValue(getString("fc3.geojson"), FeatureCollection.class);
 
-        return Flux.just(json1, json2, json3)
-                        .delayElements(Duration.ofSeconds(15))
-                        .map(jsonString -> {
-                            FeatureCollection fc1 = null;
-                            try {
-                                fc1 = new ObjectMapper().readValue(jsonString, FeatureCollection.class);
-                            } catch (JsonProcessingException e) {
-                                e.printStackTrace();
-                            }
-                            return fc1;
-                        })
-                        .cast(FeatureCollection.class);
+        Assert.notNull(fc1, "error read");
+
+        Flux<FeatureCollection> fcFlux =  Flux.just(fc1, fc2, fc3);
+        return fcFlux.repeat();
+//        return Flux.interval(Duration.ofSeconds(5))
+//                .concatMap(x-> fcFlux);
     }
 
     private String getString(String fileName) {
         String featureCollection = "";
         try {
-            Path path = ResourceUtils.getFile(this.getClass().getResource("/" + fileName)).toPath();
+            Path path = ResourceUtils.getFile(this.getClass().getResource("/traveltimedata/" + fileName)).toPath();
             try {
                 Charset charset = StandardCharsets.UTF_8;
                 try (BufferedReader reader = Files.newBufferedReader(path, charset)) {

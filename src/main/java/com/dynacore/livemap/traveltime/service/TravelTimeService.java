@@ -19,6 +19,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
@@ -59,38 +60,37 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
     //-------
 
     private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
-    private ConnectableFlux<Feature> sharedFlux;
+    private Flux<Feature> sharedFlux;
     private final OpenDataRetriever retriever;
     private final TravelTimeRepo repo;
     private final ServiceConfig config;
 
     @Autowired
-    public TravelTimeService(TravelTimeRepo repo, OpenDataRetriever retriever, ServiceConfig config) {
+    public TravelTimeService(TravelTimeRepo repo, OpenDataRetriever retriever, ServiceConfig config) throws JsonProcessingException {
         this.retriever = retriever;
         this.repo = repo;
         this.config = config;
         pollProcessor();
     }
 
-    private void pollProcessor() {
+    private void pollProcessor() throws JsonProcessingException {
 
         sharedFlux = retriever.requestFeatures()
+                .delayElements(Duration.ofSeconds(5))
+                .doOnNext(x-> System.out.println("Retrieved new featurecollection.."))
                 .flatMapIterable(FeatureCollection::getFeatures)
                 .map(this::processFeature)
-                .share()
-                .cache(Duration.ofSeconds(config.getRequestInterval()))
-                .publish();
+                .cache();
 
-        Flux.from(sharedFlux)
+        var saveFlux =  Flux.from(sharedFlux)
                 .map(this::convertToEntity)
                 .filterWhen(repo::isUnique)
                 .delayElements(Duration.ofMillis(3))
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
-                .flatMap(repo::save)
-                .subscribe();
+                .flatMap(repo::save);
 
-        sharedFlux.connect();
+        saveFlux.subscribe(x->System.out.println("save flux subscribed"));
     }
 
     public Flux<Feature> getFeatures() {

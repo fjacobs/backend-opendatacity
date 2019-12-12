@@ -20,6 +20,7 @@ import static org.mockito.Mockito.mock;
 import java.io.IOException;
 import java.time.Duration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -31,9 +32,11 @@ import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-@ActiveProfiles("dev")
+//@ActiveProfiles("dev")
 class TravelTimeServiceTest {
 
     static String jsonCorrect = "{\"type\":\"FeatureCollection\",\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"urn:ogc:def:crs:OGC:1.3:CRS84\"}}," +
@@ -59,19 +62,24 @@ class TravelTimeServiceTest {
     static ServiceConfig serviceConfig;
 
     @BeforeAll
-    static void setUp() {
+    static void setUp() throws JsonProcessingException {
 
-        server = new MockWebServer();
-        baseUrl = server.url("/v1/chat/");
-        TravelTimeRepo repo = mock(TravelTimeRepo.class);
-        WebClient webClient = WebClient.create(baseUrl.url().toString());
+//    @Test
+//    public void receilveStream() {
+//        Flux.interval(Duration.ofMillis(1))
+//                .log()
+//                .concatMap(x -> Mono.delay(Duration.ofMillis(100)))
+//                .blockLast();
+//
+//    }
+    }
+    @Test
+    public void receilveStream() {
+        Flux.interval(Duration.ofMillis(1))
+                .log()
+                .concatMap(x -> Mono.delay(Duration.ofMillis(100)))
+                .blockLast();
 
-        serviceConfig = new ServiceConfig();
-        serviceConfig.setInitialDelay(0);
-        serviceConfig.setRequestInterval(1);
-        serviceConfig.setUrl(baseUrl.url().toString());
-
-        service = new TravelTimeService(repo, new FileRetriever(), serviceConfig);
     }
 
    // @Test

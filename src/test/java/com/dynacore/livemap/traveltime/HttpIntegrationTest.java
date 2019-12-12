@@ -12,6 +12,7 @@ import com.dynacore.livemap.configuration.PostgresConfig;
 import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
 import com.dynacore.livemap.traveltime.service.FileRetriever;
 import com.dynacore.livemap.traveltime.service.HttpRetriever;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
@@ -53,7 +54,7 @@ class HttpIntegrationTest {
     static MockWebServer server;
     static DatabaseClient databaseClient;
 
-    static void setUp() {
+    static void setUp() throws JsonProcessingException {
 
         server = new MockWebServer();
 

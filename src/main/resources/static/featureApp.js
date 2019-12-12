@@ -1,3 +1,4 @@
+
 const {
   RSocketClient,
   JsonSerializer,
@@ -7,10 +8,10 @@ const RSocketWebSocketClient = require('rsocket-websocket-client').default;
 var client = undefined;
 
 function addErrorMessage(prefix, error) {
-  var ul = document.getElementById("messages");
-  var li = document.createElement("li");
-  li.appendChild(document.createTextNode(prefix + error));
-  ul.appendChild(li);
+  // var ul = document.getElementById("messages");
+  // var li = document.createElement("li");
+  // li.appendChild(document.createTextNode(prefix + error));
+  // ul.appendChild(li);
 }
 
 function reloadMessages(message) {
@@ -31,7 +32,7 @@ function reloadMessages(message) {
 function main() {
   if (client !== undefined) {
     client.close();
-    document.getElementById("messages").innerHTML = "";
+ //   document.getElementById("messages").innerHTML = "";
   }
 
   // Create an instance of a client
@@ -51,20 +52,20 @@ function main() {
       metadataMimeType: 'message/x.rsocket.routing.v0',
     },
     transport: new RSocketWebSocketClient({
-      url: 'ws://localhost:8080/traveltime-message'
+      url: 'ws://localhost:8888/traveltime-message'
     }),
   });
 
+
   // Open the connection
-  client.connect().subscribe({
-    onComplete: socket => {
+  client.connect().subscribe({    onComplete: socket => {
       // socket provides the rsocket interactions fire/forget, request/response,
       // request/stream, etc as well as methods to close the socket.
       socket.requestStream({
         data: {
-          'author': document.getElementById("author-filter").value
+          //   'author': document.getElementById("author-filter").value
         },
-        metadata: String.fromCharCode('tweets.by.author'.length) + 'tweets.by.author',
+        metadata: String.fromCharCode('traveltime-message'.length) + 'traveltime-message',
       }).subscribe({
         onComplete: () => console.log('complete'),
         onError: error => {
@@ -73,7 +74,7 @@ function main() {
         },
         onNext: payload => {
           console.log(payload.data);
-          reloadMessages(payload.data);
+         // reloadMessages(payload.data);
         },
         onSubscribe: subscription => {
           subscription.request(2147483647);
@@ -91,4 +92,4 @@ function main() {
 }
 
 document.addEventListener('DOMContentLoaded', main);
-document.getElementById('author-filter').addEventListener('change', main);
+//document.getElementById('author-filter').addEventListener('change', main);
