@@ -3,6 +3,8 @@ debug: true
 
 # Spring Configuration
 
+local.server.port: 7777
+
 logging:
     level:
         org:
