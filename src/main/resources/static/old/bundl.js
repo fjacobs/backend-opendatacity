@@ -30,7 +30,7 @@ function reloadMessages(message) {
   ul.appendChild(li);
 }
 
-function main() {
+export function rsocketStreamConnection() {
   if (client !== undefined) {
     client.close();
  //   document.getElementById("messages").innerHTML = "";

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <title>Open Data</title>
+    <meta charset="UTF-8">
+    <script src="static/config.js"></script>
+    <script src="bundl.js" type="module"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <link id="tablecss" rel="stylesheet" type="text/css" href="static/notificationtable.css"/>
+    <link id="styles" rel="stylesheet" type="text/css" href="static/styles.css"/>
+    <script type="text/javascript" src="static/lib/shieldui-all.min.js"></script>
+</head>
+
+<script>
+
+    let map;
+
+    function main() {
+
+        initMap();
+        // loadParking();
+        // loadTravelTimePoll();
+        // roadEventListener();
+        //   googleMapsTest();
+    }
+
+    function initMap() {
+
+        map = new google.maps.Map( document.getElementById('map'), {
+            zoom: 13,
+            center: new google.maps.LatLng(52.37063538130748, 4.899999460629829),
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            styles: mapstyle
+        });
+    }
+
+    // if (!!window.EventSource) {
+    //     var source = new EventSource('localhost:9090/stream-sse');
+    // } else {
+    //     // Result to xhr polling :(
+    // }
+
+    // ---------- Parking
+
+    function loadParking() {
+
+        map.data.loadGeoJson(parkingUrl);
+        document.getElementById('id').innerHTML = 'no errors';
+        map.data.addListener('click', function (event) {
+            let infowindow = new google.maps.InfoWindow();
+            var myHTML = "<strong>Parking:</strong>" +
+                event.feature.getProperty("name") +
+                "<br><strong>Beschikbare plekken:</strong> " +
+                event.feature.getProperty("freeSpaceShort");
+
+            infowindow.setContent("<div>" + myHTML + "</div>");
+            infowindow.setPosition(event.feature.getGeometry().get());
+            infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+            infowindow.open(map);
+        });
+
+        map.data.setStyle(function (feature) {
+            if (String(feature.getProperty("type")) === "parkinglocation") {
+                return {icon: "images/parking.png"};
+            }
+        });
+    }
+
+    // ----------- TravelTime --------------------------
+
+    function createRoadPopup(feature, pos) {
+
+        let html = "<div>Naam:" + feature.getProperty("Name") + "</div>";
+        html += "<div>ID : " + feature.getId()+ "</div>";
+        html += "<div>Lengte:  " + feature.getProperty("Length") + " meter</div>";
+        html += "<div>Snelheid: " + feature.getProperty("Velocity") + " km/u</div>";
+        html += "<div>Huidige reistijd: " + Math.floor(feature.getProperty("Traveltime") / 60) + ":" + ("0" + eventFeatures[i].properties.Traveltime % 60).slice(-2) + "</div>";
+        html += "<div>Timestamp: " + feature.getProperty("Timestamp") + "</div>";
+
+        let infowindow = new google.maps.InfoWindow();
+
+        infowindow.setContent("<div>" + html + "</div>");
+        infowindow.setPosition(pos);
+        infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+        infowindow.open(map);
+
+        map.data.setStyle( function (feature) {
+
+            return {
+                strokeColor: color,
+                strokeOpacity: 1.0,
+                strokeWeight: weight,
+                title: feature.getProperty("Name"),
+                localID: i,
+                originalWeight: weight
+            };
+        });
+
+        // let i = line.localID;
+        // line.setOptions({strokeWeight: 6});
+        // for (j in eventFeatures) {
+        //     if (j !== i) {
+        //         eventFeatures[j].line.setOptions({strokeWeight: eventFeatures[j].line.originalWeight});
+        //     }
+        // }
+    }
+
+    let data, eventFeatures, i;
+    let clickListener = [];
+    let loadedFeatures;
+
+    function roadEventListener() {
+
+        let sse;
+        if (!!window.EventSource) {
+            sse = new EventSource('http://localhost:9090/roadSubscription');
+        } else {
+            // Error, resorting to xhr polling
+        }
+
+        let eventNumber = 0;
+        let polyLines = [];
+        sse.addEventListener('event', function (e) {
+                console.log("Receiving event number: " + eventNumber);
+                let result = jQuery.parseJSON(e.data);
+                eventFeatures = result.features;
+                console.log("Received: " + eventFeatures.length);
+                console.log(eventFeatures[50].properties.Velocity);
+                if (eventNumber === 0) {
+                    // loadedFeatures = map.data.addGeoJson(result);
+                    console.log("Should only be called once");
+                    loadedFeatures = map.data.addGeoJson(result);
+                    map.data.addListener('click', function(event) {
+                    createRoadPopup(event, event.latLng);
+
+                    // let infowindow = new google.maps.InfoWindow();
+                    // infowindow.setContent("hellooooooooooooo: " + event.feature.getId());
+                    // infowindow.setPosition(event.latLng);
+                    // infowindow.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+                    // infowindow.open(map);
+                    });
+                }
+
+                i = 0;
+                for (i in eventFeatures) {
+                    let f;
+                    f = eventFeatures[i];
+                    ///////////////////////////////////////////////////////////
+                    let color = speedToColor(f.properties.Type, f.properties.Velocity);
+
+                    if (f.properties.Velocity > 0) {
+                        var weight = 3;
+                    } else {
+                        var weight = 1;
+                    }
+                    /////////////////////////////////////////////////////////
+                    let temp = map.data.getFeatureById(f.id);
+                    temp.forEachProperty(function (value, key) {
+                        if (temp.getProperty(key) !== undefined) {
+                            temp.setProperty(eventFeatures[i].properties[key], eventFeatures[i].properties[value]);
+                        }
+                    });
+
+                    // f.line = new google.maps.Polyline({map: map, path: path, strokeColor: color, strokeOpacity: 1.0,strokeWeight: weight, title: f.properties.Name, localID: i, originalWeight: weight});
+                    // google.maps.event.addListener(temp, 'click', function(){ showFeature(this) });
+
+                    // let listener = google.maps.event.addListener(temp.geometry.latLng,'mouseover',  function (event) {
+                    //     createRoadPopup(this, event);
+                    // });
+
+                    map.data.setStyle( function (temp) {
+                        return {
+                            strokeColor: color,
+                            strokeOpacity: 1.0,
+                            strokeWeight: weight,
+                            title: temp.getProperty("Name"),
+                            localID: i,
+                            originalWeight: weight
+                        };
+                    });
+                }
+                eventNumber++;
+            }, false);
+
+        sse.addEventListener('open', function (e) {
+            console.log("connection was opened");
+        }, false);
+
+        sse.addEventListener('error', function (e) {
+            if (e.readyState === EventSource.CLOSED) {
+                console.log("Received 'error event: connection was closed");
+            }
+        }, false);
+    }
+
+    function loadTravelTimePoll() {
+        let url = traveltimeUrl;
+        console.log("Initialize");
+
+        $.getJSON('http://localhost:9090/roadfullcollection', function (result) {
+            eventFeatures = result.features;
+
+            console.log(eventFeatures.length);
+
+            for (i in eventFeatures) {
+                let feature = eventFeatures[i];
+                let color = speedToColor("H", feature.properties.Velocity);
+                let points = feature.geometry.coordinates;
+                let latLng = [];
+
+                for (let j in points) {
+                    if (!isNaN(points[j][1])) {
+                        latLng.push(new google.maps.LatLng(points[j][1], points[j][0]));
+                    }
+                }
+
+                if (feature.properties.Velocity > 0) {
+                    var weight = 3;
+                } else {
+                    var weight = 1;
+                }
+
+                feature.line = new google.maps.Polyline({
+                    map: map,
+                    path: latLng,
+                    strokeColor: color,
+                    strokeOpacity: 1.0,
+                    strokeWeight: weight,
+                    title: feature.properties.Name,
+                    localID: i,
+                    originalWeight: weight
+                });
+
+                clickListener[i] = feature.line.addListener('click', function (event) {
+                    createRoadPopup(this, event.latLng);
+                });
+            }
+        });
+    }
+
+    function createRoadPopup(line, pos) {
+        let i = line.localID;
+        line.setOptions({strokeWeight: 6});
+        let html = "<div>Naam:" + eventFeatures[i].properties.Name + "</div>";
+        html += "<div>ID : " + eventFeatures[i].id + "</div>";
+        html += "<div>Lengte:  " + eventFeatures[i].properties.Length + " meter</div>";
+        html += "<div>Snelheid: " + eventFeatures[i].properties.Velocity + " km/u</div>";
+        html += "<div>Huidige reistijd: " + Math.floor(eventFeatures[i].properties.Traveltime / 60) + ":" + ("0" + eventFeatures[i].properties.Traveltime % 60).slice(-2) + "</div>";
+        html += "<div>Timestamp: " + eventFeatures[i].properties.Timestamp + "</div>";
+
+        let infowindow = new google.maps.InfoWindow();
+
+        infowindow.setContent("<div>" + html + "</div>");
+        infowindow.setPosition(pos);
+        infowindow.setOptions({pixelOffset: new google.maps.Size(0, -30)});
+        infowindow.open(map);
+
+        for (j in eventFeatures) {
+            if (j !== i) {
+                eventFeatures[j].line.setOptions({strokeWeight: eventFeatures[j].line.originalWeight});
+            }
+        }
+    }
+
+    function speedToColor(type, speed) {
+        let speedColors;
+        if (type === "H") {
+            //Snelweg
+            speedColors = {
+                0: "#D0D0D0",
+                1: "#BE0000",
+                30: "#FF0000",
+                50: "#FF9E00",
+                70: "#FFFF00",
+                90: "#AAFF00",
+                120: "#00B22D"
+            };
+        } else {
+            //Overige wegen
+             speedColors = {
+                0: "#D0D0D0",
+                1: "#BE0000",
+                10: "#FF0000",
+                20: "#FF9E00",
+                30: "#FFFF00",
+                40: "#AAFF00",
+                70: "#00B22D"
+            };
+        }
+        let currentColor = "#D0D0D0";
+        for (let i in speedColors) {
+            if (speed >= i) currentColor = speedColors[i];
+        }
+        return currentColor;
+    }
+
+</script>
+
+<script async defer
+        src=https://maps.googleapis.com/maps/api/js?key=AIzaSyB6SSvjmmzWA9zOVHhh4IsBbp3qqY25qas&callback=initMap>
+</script>
+<!--or https://demos.shieldui.com/web/grid-general/basic-usage-->
+
+
+<!--JavaScript Area:-->
+<!--document.getElementById('name').innerHTML = 'rai parking';-->
+<!--HTML Area:-->
+<!--<td id="name">Day</td>-->
+<body onLoad='main()'>
+<div id="map"></div>
+<div id="grid"></div>
+<table id="dataTable">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Priority</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td id="id">no errors</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#grid").shieldGrid({
+            sorting: true,
+            dataSource: {
+                data: "#dataTable",
+                schema: {
+                    type: "table",
+                    fields: {
+                        Id: {type: Number},
+                        Name: {type: String},
+                        Description: {type: String},
+                        Category: {type: Number},
+                        Date: {type: Date},
+                        Available: {type: Boolean}
+                    }
+                }
+            },
+            columns: [
+                {field: "Id"},
+                {field: "Name"},
+                {field: "Description"},
+                {field: "Category"},
+                {field: "Date"},
+                {field: "Available"}
+            ]
+        });
+    });
+</script>
+<style>
+    #dataTable {
+        display: none;
+    }
+</style>
+
+
+</body>
+</html>

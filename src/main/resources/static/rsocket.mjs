@@ -4,38 +4,30 @@ const {
   JsonSerializer,
   IdentitySerializer
 } = require('rsocket-core');
+
 const RSocketWebSocketClient = require('rsocket-websocket-client').default;
+
 var client = undefined;
 
-function addErrorMessage(prefix, error) {
-  // var ul = document.getElementById("messages");
-  // var li = document.createElement("li");
-  // li.appendChild(document.createTextNode(prefix + error));
-  // ul.appendChild(li);
+export default function addErrorMessage(prefix, error) {
+
+  console.log(prefix + error);
 }
 
-function reloadMessages(message) {
-  var ul = document.getElementById("messages");
-  var all_li = ul.getElementsByTagName("li");
 
-  for (let i = 0; i < all_li.length; i++) {
-    const li = all_li[i];
-    if (li.innerText.includes(message['id']))
-      return;
-  }
+export default function receiveCallback( feature ) : Object{
 
-  var li = document.createElement("li");
-  li.appendChild(document.createTextNode(JSON.stringify(message)));
-  ul.appendChild(li);
+  console.log(feature);
 }
 
-function main() {
+//traveltime-message
+//url='ws://localhost:8888/traveltime-message'
+export default function requestStream(url, messageRoute, messageCallback ) {
   if (client !== undefined) {
     client.close();
- //   document.getElementById("messages").innerHTML = "";
+    // document.getElementById("messages").innerHTML = "";
   }
 
-  // Create an instance of a client
   client = new RSocketClient({
     serializers: {
       data: JsonSerializer,
@@ -52,20 +44,18 @@ function main() {
       metadataMimeType: 'message/x.rsocket.routing.v0',
     },
     transport: new RSocketWebSocketClient({
-      url: 'ws://localhost:8888/traveltime-message'
+      url: url
     }),
   });
 
+  client.connect()
+        .subscribe( { onComplete: socket => {
 
-  // Open the connection
-  client.connect().subscribe({    onComplete: socket => {
-      // socket provides the rsocket interactions fire/forget, request/response,
-      // request/stream, etc as well as methods to close the socket.
       socket.requestStream({
         data: {
           //   'author': document.getElementById("author-filter").value
         },
-        metadata: String.fromCharCode('traveltime-message'.length) + 'traveltime-message',
+        metadata: String.fromCharCode(messageRoute.length) + messageRoute,
       }).subscribe({
         onComplete: () => console.log('complete'),
         onError: error => {
@@ -73,7 +63,9 @@ function main() {
           addErrorMessage("Connection has been closed due to ", error);
         },
         onNext: payload => {
+          // payload.data
           console.log(payload.data);
+
          // reloadMessages(payload.data);
         },
         onSubscribe: subscription => {
@@ -91,5 +83,6 @@ function main() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', main);
+
+//document.addEventListener('DOMContentLoaded', main);
 //document.getElementById('author-filter').addEventListener('change', main);
