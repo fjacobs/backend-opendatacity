@@ -2,7 +2,6 @@ package com.dynacore.livemap.traveltime.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.FeatureCollection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,11 +17,14 @@ import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 @Component
 public class HttpRetriever implements OpenDataRetriever {
 
-    @Autowired
-    WebClient webClient;
+    private WebClient webClient;
 
-    public Flux<FeatureCollection> requestFeatures() {
-        return Flux.interval(Duration.ofSeconds(4))
+    public HttpRetriever(WebClient webClient) {
+        this.webClient = webClient;
+    }
+
+    public Flux<FeatureCollection> requestSourceFc(Duration interval) {
+        return Flux.interval(interval)
                    .concatMap(tick-> webClient
                    .get()
                    .exchange()

@@ -15,7 +15,6 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -33,7 +32,6 @@ import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 
-import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -57,16 +55,15 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
     private static final String THEIR_RETRIEVAL = "Timestamp";
     private static final String DYNACORE_ERRORS = "dynacoreErrors";
 
-    //-------
-
     private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
     private Flux<Feature> sharedFlux;
     private final OpenDataRetriever retriever;
     private final TravelTimeRepo repo;
-    private final ServiceConfig config;
+    private final TravelTimeServiceConfig config;
 
     @Autowired
-    public TravelTimeService(TravelTimeRepo repo, OpenDataRetriever retriever, ServiceConfig config) throws JsonProcessingException {
+    public TravelTimeService(TravelTimeRepo repo, OpenDataRetriever retriever, TravelTimeServiceConfig config) throws JsonProcessingException {
+
         this.retriever = retriever;
         this.repo = repo;
         this.config = config;
@@ -75,9 +72,8 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
 
     private void pollProcessor() throws JsonProcessingException {
 
-        sharedFlux = retriever.requestFeatures()
-                .delayElements(Duration.ofSeconds(5))
-                .doOnNext(x-> System.out.println("Retrieved new featurecollection.."))
+        sharedFlux = retriever.requestSourceFc(config.getRequestInterval())
+                .doOnNext(x-> System.out.println("Retrieved new featurecollection, size: " + x.getFeatures().size()))
                 .flatMapIterable(FeatureCollection::getFeatures)
                 .map(this::processFeature)
                 .cache();
@@ -85,7 +81,6 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
         var saveFlux =  Flux.from(sharedFlux)
                 .map(this::convertToEntity)
                 .filterWhen(repo::isUnique)
-                .delayElements(Duration.ofMillis(3))
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
                 .flatMap(repo::save);

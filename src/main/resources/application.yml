@@ -1,5 +1,5 @@
 
-debug: true
+debug: false
 
 # Spring Configuration
 
@@ -13,6 +13,13 @@ logging:
                     r2dbc: info
 spring:
 
+    #test || dev || prod
+    #traveltime && parking
+    #httpretrieval || fileretrieval
+
+    profiles:
+        include: postgres, traveltime, dev
+
     h2:
         console:
             enabled: on
@@ -22,9 +29,6 @@ spring:
     application:
         name: OpenCity
 
-    #test, traveltime, parking,
-    profiles:
-        include: traveltime, dev, file
 
     jpa:
         open-in-view: on
@@ -43,28 +47,32 @@ spring:
 
     rsocket:
         server:
-            mapping-path: /traveltime-message
+            mapping-path: /traveltimesocket
             transport: websocket
-            port: 8888
+            port: 9897
 
 # Traffic Data Configuration
 
 # Eigenaar dataset: Gemeente Amsterdam, Verkeer en Openbare Ruimte ---
 parking:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
-    initialdelay: 0
-    requestinterval: 1000
+    initialdelay: 0s
+    requestinterval: 60s
+    elementdelay: 0s
+
 
 guidancesign:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
-    initialdelay: 0
-    requestinterval: 1000
+    initialdelay: 0s
+    requestinterval: 60s
+    elementdelay: 0s
 
 traveltime:
     #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
     url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
-    initialdelay: 0
-    requestinterval: 4
+    initialdelay: 0s
+    requestinterval: 4s
+    elementdelay: 0s
 
     
 #    -- traveltime properties --

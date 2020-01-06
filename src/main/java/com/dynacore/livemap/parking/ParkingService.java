@@ -40,7 +40,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
             } catch (ResponseStatusException responseException) {
                 lastUpdate.setErrorReport(responseException.getReason());
             }
-        }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
+        }, config.getInitialDelay().getSeconds(), config.getRequestInterval().getSeconds(), TimeUnit.SECONDS);
     }
 
     @Transactional

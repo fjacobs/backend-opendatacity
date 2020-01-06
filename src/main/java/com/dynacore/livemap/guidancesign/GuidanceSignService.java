@@ -34,7 +34,8 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
                 featureCollection.setTimeOfRetrievalNow();
             }
             saveCollection(featureCollection);
-        }, config.getInitialDelay(), config.getRequestInterval(), TimeUnit.SECONDS);
+        }, config.getInitialDelay().getSeconds(), config.getRequestInterval().getSeconds(), TimeUnit.SECONDS);
+
     }
 
     public synchronized FeatureCollection<GuidanceSignModel> getLastUpdate() {

@@ -10,14 +10,10 @@ import java.time.Duration;
 
 import com.dynacore.livemap.configuration.PostgresConfig;
 import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
-import com.dynacore.livemap.traveltime.service.FileRetriever;
 import com.dynacore.livemap.traveltime.service.HttpRetriever;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
 import org.junit.Assert;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.r2dbc.core.DatabaseClient;
@@ -38,9 +34,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.HttpUrl;
 
 import com.dynacore.livemap.testing.database.H2TestSupport;
-import com.dynacore.livemap.traveltime.controller.HttpController;
+import com.dynacore.livemap.traveltime.controller.HttpSseController;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
-import com.dynacore.livemap.traveltime.service.ServiceConfig;
+import com.dynacore.livemap.traveltime.service.TravelTimeServiceConfig;
 import com.dynacore.livemap.traveltime.service.TravelTimeService;
 
 class HttpIntegrationTest {
@@ -50,7 +46,7 @@ class HttpIntegrationTest {
     static String json3;
     static String notAjson = "this is not a json";
 
-    static HttpController controller;
+    static HttpSseController controller;
     static MockWebServer server;
     static DatabaseClient databaseClient;
 
@@ -60,9 +56,9 @@ class HttpIntegrationTest {
 
         HttpUrl baseUrl = server.url("/v1/chat/");
 
-        ServiceConfig serviceConfig = new ServiceConfig();
-        serviceConfig.setInitialDelay(0);
-        serviceConfig.setRequestInterval(1);
+        TravelTimeServiceConfig serviceConfig = new TravelTimeServiceConfig();
+        serviceConfig.setInitialDelay(Duration.ZERO);
+        serviceConfig.setRequestInterval(Duration.ofSeconds(1));
         serviceConfig.setUrl(baseUrl.url().toString());
 
         databaseClient = DatabaseClient.create(new PostgresConfig().connectionFactory());
@@ -88,8 +84,8 @@ class HttpIntegrationTest {
                 .build();
 
 
-        TravelTimeService service = new TravelTimeService(repo, new HttpRetriever(), serviceConfig);
-        controller = new HttpController(service);
+        TravelTimeService service = new TravelTimeService(repo, new HttpRetriever(webClient), serviceConfig);
+        controller = new HttpSseController(service);
     }
 
     private String getString(String fileName)  {

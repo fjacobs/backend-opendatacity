@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-public class HttpControllerTest {
+public class HttpSseControllerTest {
 
     @Test
     public void testFeatureSubscription() {
@@ -33,10 +33,10 @@ public class HttpControllerTest {
         feature2.setProperty("prop2_2", 3);
 
         TravelTimeService service = Mockito.mock(TravelTimeService.class);
-        Mockito.when(service.getFeatures()).thenReturn(Flux.just(feature1,feature2));
+        Mockito.when(service.getFeatures()).thenReturn(Flux.just(feature1, feature2));
 
-        ParameterizedTypeReference<ServerSentEvent<Feature>> typeRef = new ParameterizedTypeReference<>() {};
-        WebTestClient.bindToController(new HttpController(service))
+        ParameterizedTypeReference<ServerSentEvent<Feature>> typeRef = new ParameterizedTypeReference<>() { };
+        WebTestClient.bindToController(new HttpSseController(service))
                 .build()
                 .get()
                 .uri("/featureSubscription")
@@ -65,26 +65,27 @@ public class HttpControllerTest {
         feature2.setProperty("prop3", "value3");
         feature2.setProperty("prop4", 4);
         FeatureCollection fc = new FeatureCollection();
-        fc.setFeatures(Arrays.asList(feature1,feature2));
+        fc.setFeatures(Arrays.asList(feature1, feature2));
 
         TravelTimeService service = Mockito.mock(TravelTimeService.class);
-        WebTestClient client = WebTestClient.bindToController(new HttpController(service)).build();
+        WebTestClient client = WebTestClient.bindToController(new HttpSseController(service)).build();
         ParameterizedTypeReference<ServerSentEvent<FeatureCollection>> typeRef = new ParameterizedTypeReference<>() {};
 
         Mockito.when(service.getFeatureCollection()).thenReturn(Mono.just(fc));
 
-        var x = client.get()
+        client.get()
                 .uri("/roadSubscription")
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .expectStatus().isOk()
-                .returnResult(typeRef);
-
-        Flux<ServerSentEvent<FeatureCollection>> eventFlux = x.getResponseBody();
-
-        StepVerifier.create(eventFlux)
+                .returnResult(typeRef)
+                .getResponseBody()
+                .as(StepVerifier::create)
                 .thenAwait(Duration.ofSeconds(1))
-                .expectNextCount(1)
+                .expectNextMatches(sse -> {
+                    assert sse.data() != null;
+                    return sse.data().getFeatures().size() == 2;
+                })
                 .thenCancel()
                 .verify();
 

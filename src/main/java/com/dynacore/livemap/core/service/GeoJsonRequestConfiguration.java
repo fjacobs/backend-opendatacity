@@ -5,11 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Duration;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
 public class GeoJsonRequestConfiguration {
     private String url;
-    private int initialDelay;
-    private int requestInterval;
+    private Duration initialDelay;
+    private Duration requestInterval;
+    private Duration elementDelay;
 }

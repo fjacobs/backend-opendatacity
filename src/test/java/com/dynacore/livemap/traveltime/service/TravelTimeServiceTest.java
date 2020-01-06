@@ -15,28 +15,29 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.time.Duration;
 
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.jupiter.api.AfterAll;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.geojson.FeatureCollection;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-//@ActiveProfiles("dev")
+@ActiveProfiles("dev")
 class TravelTimeServiceTest {
 
     static String jsonCorrect = "{\"type\":\"FeatureCollection\",\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"urn:ogc:def:crs:OGC:1.3:CRS84\"}}," +
@@ -54,80 +55,44 @@ class TravelTimeServiceTest {
             ":[[5.004879014653774,52.324294987008926],[5.005005993142421,52.324559388367234],[5.005049301921006,52.32465911236145],[5.005433357558088,52.325807142107685]," +
             "[5.005562368354391,52.32628371039965],[5.005723592066905,52.32730043716067],[5.005711772825435,52.327993424971154],[5.005687110573994,52.32836111625229]]}}]}";
 
-    static String notAjson = "gjhkg^&#fsa@^&@*( ";
 
     static MockWebServer server;
-    static HttpUrl baseUrl;
     static TravelTimeService service;
-    static ServiceConfig serviceConfig;
+    static TravelTimeServiceConfig serviceConfig;
 
     @BeforeAll
     static void setUp() throws JsonProcessingException {
 
-//    @Test
-//    public void receilveStream() {
-//        Flux.interval(Duration.ofMillis(1))
-//                .log()
-//                .concatMap(x -> Mono.delay(Duration.ofMillis(100)))
-//                .blockLast();
-//
-//    }
+        Hooks.onOperatorDebug();
+        TravelTimeRepo repo = mock(TravelTimeRepo.class);
+
+        when(repo.isUnique(any(TravelTimeEntity.class))).thenReturn(Mono.just(false));
+
+        serviceConfig = new TravelTimeServiceConfig();
+        serviceConfig.setInitialDelay(Duration.ZERO);
+        serviceConfig.setRequestInterval(Duration.ofSeconds(1));
+
+        OpenDataRetriever smallFc = (serviceConfig) -> Flux.just( new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
+
+        service = new TravelTimeService(repo, smallFc, serviceConfig);
     }
+
     @Test
-    public void receilveStream() {
-        Flux.interval(Duration.ofMillis(1))
-                .log()
-                .concatMap(x -> Mono.delay(Duration.ofMillis(100)))
-                .blockLast();
-
-    }
-
-   // @Test
     void expectThreeFeatures() {
-
-        server.enqueue(
-                new MockResponse()
-                        .setResponseCode(200)
-                        .setBody(jsonCorrect));
 
         service.getFeatures()
                 .as(StepVerifier::create)
-                .expectNextCount(3)
+                .expectNextMatches(ft -> ft.getId().matches("RWS01_MONIBAS_0091hrl0356ra0"))
+                .expectNextCount(2)
                 .verifyComplete();
     }
 
-    //@Test
-    void expectClassCastException() {
-
-        server.enqueue(
-                new MockResponse()
-                        .setResponseCode(200)
-                        .setBody(notAjson));
-
-        service.getFeatures()
-                .delaySubscription(Duration.ofSeconds(serviceConfig.getRequestInterval()+1))
-                .as(StepVerifier::create)
-                .expectErrorMatches(throwable -> throwable instanceof ClassCastException)
-                .verify();
-    }
-
-    //@Test
+    @Test
     void getFeatureCollection() {
-
-        server.enqueue(
-                new MockResponse()
-                        .setResponseCode(200)
-                        .setBody(jsonCorrect));
 
         service.getFeatureCollection()
                 .as(StepVerifier::create)
-                .expectNextCount(1)
+                .expectNextMatches(ft -> ft.getFeatures().size() == 3)
                 .verifyComplete();
     }
-
-  //  @AfterAll
-    static void tearDown() throws IOException {
-        server.shutdown();
-    }
-
 }

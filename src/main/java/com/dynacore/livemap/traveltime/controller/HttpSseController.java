@@ -25,13 +25,13 @@ import com.dynacore.livemap.traveltime.service.TravelTimeService;
 
 @Profile("traveltime")
 @RestController
-public class HttpController implements ReactiveGeoJsonController {
+public class HttpSseController implements ReactiveGeoJsonController {
 
-    private final Logger logger = LoggerFactory.getLogger(HttpController.class);
+    private final Logger logger = LoggerFactory.getLogger(HttpSseController.class);
     private TravelTimeService travelTimeService;
 
     @Autowired
-    public HttpController(TravelTimeService TravelTimeService) {
+    public HttpSseController(TravelTimeService TravelTimeService) {
         this.travelTimeService = TravelTimeService;
     }
 
