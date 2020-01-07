@@ -8,5 +8,5 @@ import java.time.Duration;
 
 public interface OpenDataRetriever {
 
-    Flux<FeatureCollection> requestSourceFc(Duration interval) throws JsonProcessingException;
+    Flux<FeatureCollection> requestHotSourceFc(Duration interval) throws JsonProcessingException;
 }

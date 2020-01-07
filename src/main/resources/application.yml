@@ -73,6 +73,8 @@ traveltime:
     initialdelay: 0s
     requestinterval: 4s
     elementdelay: 0s
+    dbEnabled: true
+
 
     
 #    -- traveltime properties --

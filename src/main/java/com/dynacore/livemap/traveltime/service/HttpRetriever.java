@@ -23,7 +23,7 @@ public class HttpRetriever implements OpenDataRetriever {
         this.webClient = webClient;
     }
 
-    public Flux<FeatureCollection> requestSourceFc(Duration interval) {
+    public Flux<FeatureCollection> requestHotSourceFc(Duration interval) {
         return Flux.interval(interval)
                    .concatMap(tick-> webClient
                    .get()

@@ -16,16 +16,16 @@
 package com.dynacore.livemap.traveltime.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.time.Duration;
+import java.util.Arrays;
 
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.geojson.Feature;
 import org.geojson.FeatureCollection;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -60,26 +60,22 @@ class TravelTimeServiceTest {
     static TravelTimeService service;
     static TravelTimeServiceConfig serviceConfig;
 
-    @BeforeAll
-    static void setUp() throws JsonProcessingException {
 
+    @Test
+    void expectThreeFeatures() throws JsonProcessingException {
         Hooks.onOperatorDebug();
+
         TravelTimeRepo repo = mock(TravelTimeRepo.class);
 
-        when(repo.isUnique(any(TravelTimeEntity.class))).thenReturn(Mono.just(false));
+        when(repo.isNew(any(TravelTimeEntity.class))).thenReturn(Mono.just(false));
 
         serviceConfig = new TravelTimeServiceConfig();
         serviceConfig.setInitialDelay(Duration.ZERO);
         serviceConfig.setRequestInterval(Duration.ofSeconds(1));
 
-        OpenDataRetriever smallFc = (serviceConfig) -> Flux.just( new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
+        OpenDataRetriever smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 
         service = new TravelTimeService(repo, smallFc, serviceConfig);
-    }
-
-    @Test
-    void expectThreeFeatures() {
-
         service.getFeatures()
                 .as(StepVerifier::create)
                 .expectNextMatches(ft -> ft.getId().matches("RWS01_MONIBAS_0091hrl0356ra0"))
@@ -88,8 +84,70 @@ class TravelTimeServiceTest {
     }
 
     @Test
-    void getFeatureCollection() {
+    void emitDistinctFeatures() throws JsonProcessingException {
+        Hooks.onOperatorDebug();
+        OpenDataRetriever prop3Changed = (interval) -> {
+            FeatureCollection fc = new FeatureCollection();
+            Feature feature1 = new Feature();
+            feature1.setId("Feature1");
+            feature1.setProperty("prop1", "value1");
+            feature1.setProperty("prop2", 2);
+            Feature feature2 = new Feature();
+            feature2.setId("Feature2");
+            feature2.setProperty("prop3", "value3");
+            feature2.setProperty("prop4", 4);
+            fc.setFeatures(Arrays.asList(feature1, feature2));
 
+            FeatureCollection fc2 = new FeatureCollection();
+            Feature feature3 = new Feature();
+            feature1.setId("Feature4");
+            feature1.setProperty("prop1", "value1");
+            feature1.setProperty("prop2", 2);
+            Feature feature4 = new Feature();
+            feature2.setId("Feature5");
+            feature2.setProperty("prop3", "CHANGED");
+            feature2.setProperty("prop4", 4);
+            fc.setFeatures(Arrays.asList(feature3, feature4));
+
+            return Flux.just(fc, fc2);
+        };
+
+        // service = new TravelTimeService(repo, smallFc, serviceConfig);
+
+        TravelTimeRepo repo = mock(TravelTimeRepo.class);
+        TravelTimeServiceConfig serviceConfig = new TravelTimeServiceConfig();
+        serviceConfig.setElementDelay(Duration.ofSeconds(1));
+        serviceConfig.setInitialDelay(Duration.ZERO);
+        serviceConfig.setRequestInterval(Duration.ofSeconds(1));
+        serviceConfig.setDbEnabled(false);
+
+        TravelTimeService service = new TravelTimeService(repo, prop3Changed, serviceConfig);
+
+        when(repo.save(any(TravelTimeEntity.class))).thenReturn(Mono.just(1));
+
+        //  doReturn(ParallelFlux.from(Mono.just(1), Mono.just(1))).when(repo.save(any(TravelTimeEntity.class)));
+
+        StepVerifier.create(service.getFeatures().doOnNext(ft-> System.out.println("id: " + ft.getId() + "\nproperties: " + ft.getProperties().toString())))
+                .expectNextCount(1)
+                .verifyComplete();
+
+    }
+
+
+    @Test
+    void getFeatureCollection() throws JsonProcessingException {
+        Hooks.onOperatorDebug();
+        TravelTimeRepo repo = mock(TravelTimeRepo.class);
+
+        when(repo.isNew(any(TravelTimeEntity.class))).thenReturn(Mono.just(false));
+
+        serviceConfig = new TravelTimeServiceConfig();
+        serviceConfig.setInitialDelay(Duration.ZERO);
+        serviceConfig.setRequestInterval(Duration.ofSeconds(1));
+
+        OpenDataRetriever smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
+
+        service = new TravelTimeService(repo, smallFc, serviceConfig);
         service.getFeatureCollection()
                 .as(StepVerifier::create)
                 .expectNextMatches(ft -> ft.getFeatures().size() == 3)

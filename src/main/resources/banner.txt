@@ -1,0 +1,8 @@
+
+${AnsiColor.BRIGHT_CYAN}__  __ \________ _____ _______ __  ____/___(_)__  /______  __
+${AnsiColor.BRIGHT_CYAN}_  / / /___  __ \_  _ \__  __ \_  /     __  / _  __/__  / / /
+${AnsiColor.BRIGHT_CYAN}/ /_/ / __  /_/ //  __/_  / / // /___   _  /  / /_  _  /_/ /
+${AnsiColor.BRIGHT_CYAN}\____/  _  .___/ \___/ /_/ /_/ \____/   /_/   \__/  _\__, /
+${AnsiColor.BRIGHT_CYAN}        /_/                                         /____/
+Spring Boot ${spring-boot.version}
+${application.title} - ${application.formatted-version}${AnsiBackground.DEFAULT}

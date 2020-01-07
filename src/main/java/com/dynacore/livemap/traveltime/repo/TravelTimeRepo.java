@@ -3,14 +3,13 @@ package com.dynacore.livemap.traveltime.repo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
-import static org.springframework.data.r2dbc.query.Criteria.where;
-
 import reactor.bool.BooleanUtils;
 import reactor.core.publisher.Mono;
+
+import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
@@ -23,35 +22,31 @@ public class TravelTimeRepo {
         this.databaseClient = databaseClient;
     }
 
-    public Mono<Boolean> isUnique(TravelTimeEntity entity) {
-        Mono<Boolean> result = null;
-        try {
-            result = databaseClient.select().from(TravelTimeEntity.class)
-                    .matching(where("id")
-                            .is(entity.getId())
-                            .and("pubDate")
-                            .is(entity.getPubDate()))
-                    .fetch()
-                    .first()
-                    .hasElement();
-        } catch (Exception e) {
-            logger.error("Can't save road information to DB: " + e.toString());
-            return Mono.error(new Exception());
-        }
-        return  BooleanUtils.not(result);
+    public Mono<Boolean> isNew(TravelTimeEntity entity) {
+        return databaseClient.select().from(TravelTimeEntity.class)
+                .matching(where("id")
+                        .is(entity.getId())
+                        .and("pubDate")
+                        .is(entity.getPubDate()))
+                .fetch()
+                .first()
+                .hasElement()
+                .as(BooleanUtils::not);
     }
 
     public Mono<Integer> save(TravelTimeEntity entity) {
+        return Mono.just(entity)
+                .filterWhen(this::isNew)
+                .flatMap(newEntity -> databaseClient.insert()
+                                        .into(TravelTimeEntity.class)
+                                        .using(newEntity)
+                                        .fetch()
+                                        .rowsUpdated()
+                                        .doOnError(e -> logger.error("Error writing to db:  ", e)));
 
-            return databaseClient.insert()
-                    .into(TravelTimeEntity.class)
-                    .using(entity)
-                    .fetch()
-                    .rowsUpdated()
-                    .doOnError(e -> logger.error("Error writing to db:  ", e));
     }
 
-    public Mono<TravelTimeEntity> getLastStored(TravelTimeEntity entity) {
+    public Mono<TravelTimeEntity> getLatest(TravelTimeEntity entity) {
         return databaseClient.execute(
                 "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n" +
                         "     FROM public.travel_time_entity\n" +
@@ -62,8 +57,8 @@ public class TravelTimeRepo {
                 .first();
     }
 
-    public Mono<Boolean> didPropertiesChange(TravelTimeEntity entity) {
-        return getLastStored(entity)
+    public Mono<Boolean> propertiesChanged(TravelTimeEntity entity) {
+        return getLatest(entity)
                 .map(storedEntity -> {
                     boolean changed = false;
                     if (storedEntity.getLength() != entity.getLength()) {
@@ -87,5 +82,4 @@ public class TravelTimeRepo {
                     return changed;
                 });
     }
-
 }

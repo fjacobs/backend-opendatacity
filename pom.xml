@@ -51,7 +51,7 @@
 
     <properties>
         <geojson-jackson.version>1.12</geojson-jackson.version>
-        <java.version>11</java.version>
+        <java.version>13</java.version>
     </properties>
 
     <dependencies>
@@ -99,6 +99,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.11</version>
+        </dependency>
         <!--    DB drivers -->
 
         <dependency>

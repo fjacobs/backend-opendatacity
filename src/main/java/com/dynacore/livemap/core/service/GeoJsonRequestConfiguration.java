@@ -15,4 +15,5 @@ public class GeoJsonRequestConfiguration {
     private Duration initialDelay;
     private Duration requestInterval;
     private Duration elementDelay;
+    private Boolean dbEnabled;
 }
