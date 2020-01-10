@@ -70,7 +70,7 @@ guidancesign:
 traveltime:
     #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
     url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
-    initialdelay: 0s
+    initialdelay: 5s
     requestinterval: 4s
     elementdelay: 0s
     dbEnabled: true

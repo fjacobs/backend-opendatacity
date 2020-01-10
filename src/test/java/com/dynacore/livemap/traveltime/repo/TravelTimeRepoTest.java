@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 
@@ -98,6 +97,10 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
     public void insertEntityOne() {
         dropCreate(client);
 
+        String pubDate = "2019-10-16T15:52:00Z";
+        String retDate = "2019-10-16T16:00:00Z";
+        TravelTimeEntity  entityOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+
         client.insert()
                 .into(TravelTimeEntity.class)
                 .using(entityOne)
@@ -106,6 +109,24 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
                 .as(StepVerifier::create)
                 .expectNext(1)
                 .verifyComplete();
+    }
+
+    @Test
+    public void insertOneEntity() throws InterruptedException {
+
+        dropCreate(client);
+        String pubDate = "2019-10-16T15:52:00Z";
+        String retDate = "2019-10-16T16:00:00Z";
+        TravelTimeEntity  entityOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        client.insert()
+                .into(TravelTimeEntity.class)
+                .using(entityOne)
+                .fetch()
+                .rowsUpdated()
+                .subscribe((x)-> System.out.println("Result consumed:" + x));
+
+        Thread.sleep(1000);
+
     }
 
     @Test
@@ -186,19 +207,4 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
                 .verifyComplete();
     }
 
-    @Test
-    public void didPropertiesChange() {
-        dropCreate(client);
-        insertEntityOne();
-
-        repo.propertiesChanged(entitySameAsOne)
-                .as(StepVerifier::create)
-                .expectNext(false)
-                .verifyComplete();
-
-        repo.propertiesChanged(entitySameAsOneChangedProperties)
-                .as(StepVerifier::create)
-                .expectNext(true)
-                .verifyComplete();
-    }
 }

@@ -32,31 +32,21 @@ class RSocketIntegrationTest {
 
     @Test
     public void testRsocketRequestStream() {
-
         Hooks.onOperatorDebug();
         RSocketRequester rsocketClient =  builder.connect( WebsocketClientTransport
                                              .create(serverPort))
                                              .block();
 
         rsocketClient.route("TRAVELTIME_STREAM")
-                .retrieveFlux(Feature.class)
-                .as(StepVerifier::create)
-                .expectNextCount(1012)
-                .expectNextCount(1012)
-                .expectNextCount(1012)
-                .thenCancel()
-                .verify();
+            .retrieveFlux(Feature.class)
+            .as(StepVerifier::create)
+            .expectNextCount(1015)
+            .thenCancel()
+            .verify();
     }
 
     @TestConfiguration
     static class MyTestConfiguration {
-
-        @Bean
-        @Primary
-        OpenDataRetriever createTestFileRetriever(){
-            return (interval) -> Flux.fromIterable(FileToGeojson.readCollection("/traveltimedata/real/"))
-                    .delayElements(interval);
-        }
         @Bean
         @Primary
         TravelTimeServiceConfig createServiceConfig(){
@@ -64,7 +54,13 @@ class RSocketIntegrationTest {
             serviceConfig.setInitialDelay(Duration.ZERO);
             serviceConfig.setRequestInterval(Duration.ofSeconds(0));
             serviceConfig.setElementDelay(Duration.ofMillis(0));
-            return  serviceConfig;
+            return serviceConfig;
+        }
+        @Bean
+        @Primary
+        OpenDataRetriever createTestFileRetriever(){
+            return (interval) -> Flux.fromIterable(FileToGeojson.readCollection("/traveltimedata/real/"))
+                    .delayElements(interval);
         }
     }
 }

@@ -15,27 +15,27 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.time.Duration;
-import java.util.Arrays;
-
+import com.dynacore.livemap.testing.subscriber.AssertSubscriber;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.mockwebserver.MockWebServer;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-
-import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
-
-import okhttp3.mockwebserver.MockWebServer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.time.Duration;
+import java.util.Arrays;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ActiveProfiles("dev")
 class TravelTimeServiceTest {
@@ -84,54 +84,125 @@ class TravelTimeServiceTest {
     }
 
     @Test
+    void distinctKeySelectorTest() {
+
+        Feature feature1 = new Feature();
+        feature1.setId("Feature1");
+        feature1.setProperty("prop1", "value1");
+        feature1.setProperty("prop2", 2);
+
+        Feature feature2 = new Feature();
+        feature2.setId("Feature1");
+        feature2.setProperty("prop1", "value1");
+        feature2.setProperty("prop2", 2);
+
+        Feature feature3 = new Feature();
+        feature3.setId("Feature1");
+        feature3.setProperty("prop1", "value1");
+        feature3.setProperty("prop2", 5);
+
+        Feature feature4 = new Feature();
+        feature4.setId("Feature1");
+        feature4.setProperty("prop1", "value1");
+        feature4.setProperty("prop2", 6);
+
+        FeatureCollection fc = new FeatureCollection();
+        fc.setFeatures(Arrays.asList(feature1, feature2, feature3, feature4));
+
+        AssertSubscriber<Feature> ts = AssertSubscriber.create();
+
+        Flux.fromIterable(fc.getFeatures())
+                .distinct(DistinctUtil.hashCodeNoRetDate)
+                .subscribe(ts);
+
+        ts.assertValues(feature1, feature3, feature4)
+                .assertComplete()
+                .assertNoError();
+    }
+
+
+
+    @Test
     void emitDistinctFeatures() throws JsonProcessingException {
         Hooks.onOperatorDebug();
+
+        final Feature feature1_1 = new Feature();
+        final Feature feature2_1 = new Feature();
+        final Feature feature1_2 = new Feature();
+        final Feature feature2_2 = new Feature();
+        final Feature feature1_3 = new Feature();
+        final Feature feature2_3 = new Feature();
+
         OpenDataRetriever prop3Changed = (interval) -> {
+
+            //Emit two features:
+            feature1_1.setId("Feature1");
+            feature1_1.setProperty("prop1", "value1");
+            feature1_1.setProperty("prop2", 2);
+            feature1_1.setProperty("retrievedFromThirdParty", "2019-10-16T15:52:00Z");
+
+            feature2_1.setId("Feature2");
+            feature2_1.setProperty("prop1", "value1");
+            feature2_1.setProperty("prop2", 2);
+            feature2_1.setProperty("retrievedFromThirdParty", "2019-10-16T15:52:00Z");
+
             FeatureCollection fc = new FeatureCollection();
-            Feature feature1 = new Feature();
-            feature1.setId("Feature1");
-            feature1.setProperty("prop1", "value1");
-            feature1.setProperty("prop2", 2);
-            Feature feature2 = new Feature();
-            feature2.setId("Feature2");
-            feature2.setProperty("prop3", "value3");
-            feature2.setProperty("prop4", 4);
-            fc.setFeatures(Arrays.asList(feature1, feature2));
+            fc.setFeatures(Arrays.asList(feature1_1, feature2_1));
 
+            //Emit one feature:
+            // -F1 prop1 changed
             FeatureCollection fc2 = new FeatureCollection();
-            Feature feature3 = new Feature();
-            feature1.setId("Feature4");
-            feature1.setProperty("prop1", "value1");
-            feature1.setProperty("prop2", 2);
-            Feature feature4 = new Feature();
-            feature2.setId("Feature5");
-            feature2.setProperty("prop3", "CHANGED");
-            feature2.setProperty("prop4", 4);
-            fc.setFeatures(Arrays.asList(feature3, feature4));
+            feature1_2.setId("Feature1");
+            feature1_2.setProperty("prop1", "value2");
+            feature1_2.setProperty("prop2", 2);
+            feature1_2.setProperty("retrievedFromThirdParty", "2019-10-16T15:53:00Z");
 
-            return Flux.just(fc, fc2);
+            feature2_2.setId("Feature2");
+            feature2_2.setProperty("prop1", "value1");
+            feature2_2.setProperty("prop2", 2);
+            feature2_2.setProperty("retrievedFromThirdParty", "2019-10-16T15:53:00Z");
+
+            fc2.setFeatures(Arrays.asList(feature1_2, feature2_2));
+
+            //Emit two features:
+            // - F1 prop2 changed
+            FeatureCollection fc3 = new FeatureCollection();
+            feature1_3.setId("Feature1");
+            feature1_3.setProperty("prop1", "value2");
+            feature1_3.setProperty("prop2", 9);
+            feature1_3.setProperty("retrievedFromThirdParty", "2019-10-16T15:54:00Z");
+
+            feature2_3.setId("Feature2");
+            feature2_3.setProperty("prop1", "value1");
+            feature2_3.setProperty("prop2", 2);
+            feature2_3.setProperty("retrievedFromThirdParty", "2019-10-16T15:54:00Z");
+            fc3.setFeatures(Arrays.asList(feature1_3, feature2_3));
+
+            return Flux.just(fc, fc2, fc3);
         };
-
-        // service = new TravelTimeService(repo, smallFc, serviceConfig);
 
         TravelTimeRepo repo = mock(TravelTimeRepo.class);
         TravelTimeServiceConfig serviceConfig = new TravelTimeServiceConfig();
-        serviceConfig.setElementDelay(Duration.ofSeconds(1));
+        serviceConfig.setElementDelay(Duration.ofSeconds(0));
         serviceConfig.setInitialDelay(Duration.ZERO);
         serviceConfig.setRequestInterval(Duration.ofSeconds(1));
         serviceConfig.setDbEnabled(false);
 
         TravelTimeService service = new TravelTimeService(repo, prop3Changed, serviceConfig);
 
-        when(repo.save(any(TravelTimeEntity.class))).thenReturn(Mono.just(1));
+        AssertSubscriber<Feature> ts = AssertSubscriber.create();
 
-        //  doReturn(ParallelFlux.from(Mono.just(1), Mono.just(1))).when(repo.save(any(TravelTimeEntity.class)));
+        service.getFeatures().distinct(DistinctUtil.hashCodeNoRetDate)
+                             .subscribe(ts);
 
-        StepVerifier.create(service.getFeatures().doOnNext(ft-> System.out.println("id: " + ft.getId() + "\nproperties: " + ft.getProperties().toString())))
-                .expectNextCount(1)
-                .verifyComplete();
-
+        StepVerifier.create(service.getFeatures().distinct(DistinctUtil.hashCodeNoRetDate))
+            .expectNext(feature1_1)
+            .expectNext(feature2_1)
+            .expectNext(feature1_2)
+            .expectNext(feature1_3)
+            .verifyComplete();
     }
+
 
 
     @Test

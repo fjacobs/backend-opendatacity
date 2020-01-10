@@ -1,10 +1,10 @@
 package com.dynacore.livemap.traveltime.repo;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.core.DatabaseClient;
+
 import org.springframework.stereotype.Repository;
 import reactor.bool.BooleanUtils;
 import reactor.core.publisher.Mono;
@@ -41,8 +41,7 @@ public class TravelTimeRepo {
                                         .into(TravelTimeEntity.class)
                                         .using(newEntity)
                                         .fetch()
-                                        .rowsUpdated()
-                                        .doOnError(e -> logger.error("Error writing to db:  ", e)));
+                                        .rowsUpdated());
 
     }
 
@@ -57,29 +56,4 @@ public class TravelTimeRepo {
                 .first();
     }
 
-    public Mono<Boolean> propertiesChanged(TravelTimeEntity entity) {
-        return getLatest(entity)
-                .map(storedEntity -> {
-                    boolean changed = false;
-                    if (storedEntity.getLength() != entity.getLength()) {
-                        changed = true;
-                        logger.trace("--Length changed");
-                        logger.trace("----old: " + storedEntity.getLength());
-                        logger.trace("----new: " + entity.getLength());
-                    }
-                    if (storedEntity.getTravel_time() != entity.getTravel_time()) {
-                        changed = true;
-                        logger.trace("--Traveltime changed");
-                        logger.trace("----old: " + storedEntity.getTravel_time());
-                        logger.trace("----new: " + entity.getTravel_time());
-                    }
-                    if (storedEntity.getVelocity() != entity.getVelocity()) {
-                        changed = true;
-                        logger.trace("--Velocity changed: ");
-                        logger.trace("----old: " + storedEntity.getVelocity());
-                        logger.trace("----new: " + entity.getVelocity());
-                    }
-                    return changed;
-                });
-    }
 }

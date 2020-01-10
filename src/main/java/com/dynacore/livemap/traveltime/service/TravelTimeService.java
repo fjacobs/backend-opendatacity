@@ -18,15 +18,19 @@ package com.dynacore.livemap.traveltime.service;
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
+import com.dynacore.livemap.traveltime.service.visitor.CalculateTravelTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -48,6 +52,7 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
     private Flux<Feature> sharedFlux;
     private final OpenDataRetriever retriever;
     private final TravelTimeServiceConfig config;
+    private final Logger log = LoggerFactory.getLogger(TravelTimeService.class);
 
     @Autowired
     public TravelTimeService(TravelTimeRepo repo, OpenDataRetriever retriever, TravelTimeServiceConfig config) throws JsonProcessingException {
@@ -61,21 +66,23 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
         Flux.from(sharedFlux)
                 .parallel(Runtime.getRuntime().availableProcessors())
                 .runOn(Schedulers.parallel())
-                .subscribe(feature -> repo.save(new TravelTimeEntity((feature))))
-                .dispose();
+                .map(feature -> repo.save(new TravelTimeEntity((feature))))
+                .subscribe( Mono::subscribe,
+                            error -> log.error("Error: " + error) );
     }
 
     private Flux<Feature> processFlux() throws JsonProcessingException {
 
-        return retriever.requestHotSourceFc(config.getRequestInterval())
+        return retriever
+                .requestHotSourceFc(config.getRequestInterval())
                 .doOnNext(x-> System.out.println("Retrieved new featurecollection, size: " + x.getFeatures().size()))
                 .flatMapIterable(FeatureCollection::getFeatures)
-                .map(feature -> feature.accept(new calculateTravelTimeVisitor()));
+                .distinct(DistinctUtil.hashCodeNoRetDate)
+                .map(road -> road.accept(new CalculateTravelTime()));
     }
 
     public Flux<Feature> getFeatures() {
-        return Flux.from(sharedFlux)
-                   .distinct();
+        return Flux.from(sharedFlux);
     }
 
     public Mono<FeatureCollection> getFeatureCollection() {

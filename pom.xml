@@ -46,7 +46,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.1.RELEASE</version>
+        <version>2.2.3.BUILD-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -104,6 +104,7 @@
             <artifactId>logback-classic</artifactId>
             <version>1.1.11</version>
         </dependency>
+
         <!--    DB drivers -->
 
         <dependency>
@@ -187,7 +188,7 @@
             <dependency>
             <groupId>org.springframework.boot.experimental</groupId>
             <artifactId>spring-boot-bom-r2dbc</artifactId>
-            <version>0.1.0.BUILD-SNAPSHOT</version>
+            <version>0.1.0.M3</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>

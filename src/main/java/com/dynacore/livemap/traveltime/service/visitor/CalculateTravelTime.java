@@ -1,4 +1,4 @@
-package com.dynacore.livemap.traveltime.service;
+package com.dynacore.livemap.traveltime.service.visitor;
 
 import com.dynacore.livemap.core.geojson.GeoJsonObjectVisitorWrapper;
 import org.geojson.*;
@@ -6,7 +6,7 @@ import org.geojson.*;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-public class calculateTravelTimeVisitor extends GeoJsonObjectVisitorWrapper<Feature> {
+public class CalculateTravelTime extends GeoJsonObjectVisitorWrapper<Feature> {
 
     private static final String ID = "Id";
     private static final String TRAVEL_TIME = "Traveltime";
