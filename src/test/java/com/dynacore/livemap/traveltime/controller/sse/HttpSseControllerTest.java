@@ -34,7 +34,7 @@ public class HttpSseControllerTest {
         feature2.setProperty("prop2_2", 3);
 
         TravelTimeService service = Mockito.mock(TravelTimeService.class);
-        Mockito.when(service.getFeatures()).thenReturn(Flux.just(feature1, feature2));
+        Mockito.when(service.getLiveData()).thenReturn(Flux.just(feature1, feature2));
 
         ParameterizedTypeReference<ServerSentEvent<Feature>> typeRef = new ParameterizedTypeReference<>() { };
         WebTestClient.bindToController(new HttpSseController(service))

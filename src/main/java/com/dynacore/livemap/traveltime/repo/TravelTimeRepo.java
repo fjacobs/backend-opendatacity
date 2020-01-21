@@ -7,6 +7,7 @@ import org.springframework.data.r2dbc.core.DatabaseClient;
 
 import org.springframework.stereotype.Repository;
 import reactor.bool.BooleanUtils;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.data.r2dbc.query.Criteria.where;
@@ -54,6 +55,13 @@ public class TravelTimeRepo {
                 .as(TravelTimeEntity.class)
                 .fetch()
                 .first();
+    }
+
+    public Flux<TravelTimeEntity> getAllDescending() {
+        return databaseClient.execute("SELECT * FROM public.travel_time_entity ORDER BY pub_date DESC")
+                             .as(TravelTimeEntity.class)
+                             .fetch()
+                             .all();
     }
 
 }

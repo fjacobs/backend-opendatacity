@@ -72,11 +72,12 @@ class TravelTimeServiceTest {
         serviceConfig = new TravelTimeServiceConfig();
         serviceConfig.setInitialDelay(Duration.ZERO);
         serviceConfig.setRequestInterval(Duration.ofSeconds(1));
+        serviceConfig.setSaveToDbEnabled(false);
 
         OpenDataRetriever smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 
         service = new TravelTimeService(repo, smallFc, serviceConfig);
-        service.getFeatures()
+        service.getLiveData()
                 .as(StepVerifier::create)
                 .expectNextMatches(ft -> ft.getId().matches("RWS01_MONIBAS_0091hrl0356ra0"))
                 .expectNextCount(2)
@@ -185,17 +186,17 @@ class TravelTimeServiceTest {
         TravelTimeServiceConfig serviceConfig = new TravelTimeServiceConfig();
         serviceConfig.setElementDelay(Duration.ofSeconds(0));
         serviceConfig.setInitialDelay(Duration.ZERO);
-        serviceConfig.setRequestInterval(Duration.ofSeconds(1));
-        serviceConfig.setDbEnabled(false);
+        serviceConfig.setRequestInterval(Duration.ofSeconds(0));
+        serviceConfig.setSaveToDbEnabled(false);
 
         TravelTimeService service = new TravelTimeService(repo, prop3Changed, serviceConfig);
 
         AssertSubscriber<Feature> ts = AssertSubscriber.create();
 
-        service.getFeatures().distinct(DistinctUtil.hashCodeNoRetDate)
+        service.getLiveData().distinct(DistinctUtil.hashCodeNoRetDate)
                              .subscribe(ts);
 
-        StepVerifier.create(service.getFeatures().distinct(DistinctUtil.hashCodeNoRetDate))
+        StepVerifier.create(service.getLiveData().distinct(DistinctUtil.hashCodeNoRetDate))
             .expectNext(feature1_1)
             .expectNext(feature2_1)
             .expectNext(feature1_2)
@@ -214,7 +215,8 @@ class TravelTimeServiceTest {
 
         serviceConfig = new TravelTimeServiceConfig();
         serviceConfig.setInitialDelay(Duration.ZERO);
-        serviceConfig.setRequestInterval(Duration.ofSeconds(1));
+        serviceConfig.setRequestInterval(Duration.ofSeconds(0));
+        serviceConfig.setSaveToDbEnabled(false);
 
         OpenDataRetriever smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 

@@ -13,12 +13,12 @@ logging:
                     r2dbc: info
 spring:
 
-    #test || dev || prod
-    #traveltime && parking
+    # dev || prod
+    #traveltime && parking && guidancesign
     #httpretrieval || fileretrieval
 
     profiles:
-        include: postgres, traveltime, dev, http
+        include: postgres, traveltime, dev, file
 
     h2:
         console:
@@ -72,12 +72,15 @@ traveltime:
     initialdelay: 5s
     requestinterval: 20s
     elementdelay: 0s
-    dbEnabled: true
+    saveToDbEnabled: false
 
 
     
-#    -- traveltime properties --
-#    Timestamp:    Timestamp van het moment waarop de reistijd bepaalt is
+#    -- Traveltime informatie van de data provider:
+
+#   taken from:  https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-Index-Statisch-en-Dynamisch/f6v7-gjpa
+#
+#    Timestamp:   Timestamp van het moment waarop de reistijd is berekend
 #    Velocity:    Huidige snelheid (km/u) op traject
 #    Length:      Lengte van traject (in meters)
 #    Traveltime:  De huidige reistijd op het traject
@@ -87,4 +90,3 @@ traveltime:
 
 #-----------------------
 
-# https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-Index-Statisch-en-Dynamisch/f6v7-gjpa

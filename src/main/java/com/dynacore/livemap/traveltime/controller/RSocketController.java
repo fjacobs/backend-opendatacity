@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 @Controller
 public class RSocketController {
 
@@ -23,18 +25,31 @@ public class RSocketController {
     }
 
     //RSocket request-stream mode
+    //Get live data directly from the open data source
     @CrossOrigin(origins = "http://localhost:9000")
     @MessageMapping("TRAVELTIME_STREAM")
-    public Flux<Feature> streamFeatures() {
+    public Flux<Feature> streamLiveData() {
         logger.info("Enter RSocketController::streamFeatures");
-        return service.getFeatures();
+        return service.getLiveData();
+    }
+
+    //RSocket request-stream mode
+    //Get road data from the database
+    @CrossOrigin(origins = "http://localhost:9000")
+    @MessageMapping("TRAVELTIME_HISTORY")
+    public Flux<Feature> streamHistory() {
+        logger.info("Enter RSocketController::streamHistory");
+        return service.streamHistory().delayElements(Duration.ofMillis(1));
     }
 
     //RSocket request-response mode
     @CrossOrigin(origins = "http://localhost:9000")
     @MessageMapping("traveltime_collection")
-    public Mono<FeatureCollection> streamFeatureCollection() {
+    public Mono<FeatureCollection> requestResponseFc() {
         logger.info("Enter RSocketController::requestFeatureCollection");
-        return service.getFeatureCollection().log();
+        return service.getFeatureCollection();
     }
+
+
+
 }

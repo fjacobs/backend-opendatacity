@@ -9,5 +9,5 @@ import reactor.core.publisher.Flux;
  */
 
 public interface ReactiveGeoJsonPublisher {
-    Flux<Feature> getFeatures();
+    Flux<Feature> getLiveData();
 }

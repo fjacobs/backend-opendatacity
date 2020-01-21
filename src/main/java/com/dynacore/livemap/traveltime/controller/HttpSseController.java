@@ -43,7 +43,7 @@ public class HttpSseController implements ReactiveGeoJsonController {
     @GetMapping("/featureSubscription")
     public Flux<ServerSentEvent<Feature>> streamFeatures() {
 
-        return travelTimeService.getFeatures()
+        return travelTimeService.getLiveData()
                 .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
                 .doOnComplete(()-> logger.info("Completed Road SSE.."))
                 .doOnError(e ->  logger.error("SSE Error: " + e))

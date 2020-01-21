@@ -36,7 +36,7 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
 
     @Override
     protected ConnectionFactory createConnectionFactory() {
-        return new PostgresConfig().connectionFactory();
+        return PostgresTestSupport.createConnectionFactory(database);
     }
 
     @Before

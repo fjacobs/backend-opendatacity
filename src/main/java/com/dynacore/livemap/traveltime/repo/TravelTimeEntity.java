@@ -20,15 +20,15 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class TravelTimeEntity {
 
-    private static final String ID = "Id";
-    private static final String NAME = "Name";
-    private static final String TYPE = "Type";
-    private static final String TRAVEL_TIME = "Traveltime";
-    private static final String LENGTH = "Length";
-    private static final String VELOCITY = "Velocity";
-    private static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
-    private static final String THEIR_RETRIEVAL = "Timestamp";
-    private static final String DYNACORE_ERRORS = "dynacoreErrors";
+    public static final String ID = "Id";
+    public static final String NAME = "Name";
+    public static final String TYPE = "Type";
+    public static final String TRAVEL_TIME = "Traveltime";
+    public static final String LENGTH = "Length";
+    public static final String VELOCITY = "Velocity";
+    public static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
+    public static final String THEIR_RETRIEVAL = "Timestamp";
+    public static final String DYNACORE_ERRORS = "dynacoreErrors";
 
     private static final Logger log = LoggerFactory.getLogger(TravelTimeEntity.class);
 

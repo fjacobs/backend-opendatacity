@@ -47,6 +47,7 @@ class RSocketIntegrationTest {
 
     @TestConfiguration
     static class MyTestConfiguration {
+
         @Bean
         @Primary
         TravelTimeServiceConfig createServiceConfig(){
@@ -54,8 +55,10 @@ class RSocketIntegrationTest {
             serviceConfig.setInitialDelay(Duration.ZERO);
             serviceConfig.setRequestInterval(Duration.ofSeconds(0));
             serviceConfig.setElementDelay(Duration.ofMillis(0));
+            serviceConfig.setSaveToDbEnabled(false);
             return serviceConfig;
         }
+
         @Bean
         @Primary
         OpenDataRetriever createTestFileRetriever(){

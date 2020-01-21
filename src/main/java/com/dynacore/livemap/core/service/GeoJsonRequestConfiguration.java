@@ -1,9 +1,6 @@
 package com.dynacore.livemap.core.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Duration;
 
@@ -15,5 +12,11 @@ public class GeoJsonRequestConfiguration {
     private Duration initialDelay;
     private Duration requestInterval;
     private Duration elementDelay;
-    private Boolean dbEnabled;
+
+    @Getter(AccessLevel.NONE)
+    private Boolean saveToDbEnabled;
+
+    public Boolean isSaveToDbEnabled() {
+        return saveToDbEnabled;
+    }
 }

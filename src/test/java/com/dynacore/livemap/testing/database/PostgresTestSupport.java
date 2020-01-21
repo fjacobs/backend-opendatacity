@@ -13,9 +13,11 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 
 /**
- * Utility class for testing against Postgres.
+ * Utility class for testing against Postgres either locally, or on Docker.
  *
- * This file is copied from the org.springframework.data.r2dbc project, it's original authors are:
+ * This file is copied from the <a href="https://github.com/spring-projects/spring-data-r2dbc">spring-data-r2dbc project</a>
+ *
+ *  it's original authors are:
  *
  * @author Mark Paluch
  * @author Jens Schauder
@@ -119,7 +121,7 @@ public class PostgresTestSupport {
         dataSource.setUser(database.getUsername());
         dataSource.setPassword(database.getPassword());
 		//dataSource.setURL(database.getJdbcUrl());
-        dataSource.setURL("jdbc:postgresql://localhost:5432/trafficdata");
+        dataSource.setURL("jdbc:postgresql://localhost:5432/test");
 
         return dataSource;
     }
