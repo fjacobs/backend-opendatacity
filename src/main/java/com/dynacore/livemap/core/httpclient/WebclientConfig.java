@@ -1,9 +1,8 @@
-package com.dynacore.livemap.configuration;
+package com.dynacore.livemap.core.httpclient;
 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,7 +19,7 @@ public class WebclientConfig {
         return WebClient.builder()
                 .clientConnector(httpConnector)
                 .exchangeStrategies(ExchangeStrategies.builder()
-                        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 10))
+                        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(1000 * 5000))
                         .build())
                 .baseUrl(SOURCEURL)
                 .build();

@@ -1,8 +1,8 @@
-package com.dynacore.livemap.configuration;
+package com.dynacore.livemap.core.httpclient;
 
-import com.dynacore.livemap.core.http.handlers.EtagInboundHandler;
-import com.dynacore.livemap.core.http.handlers.EtagOutboundHandler;
-import com.dynacore.livemap.core.http.observer.ETagObserver;
+import com.dynacore.livemap.core.httpclient.handlers.EtagInboundHandler;
+import com.dynacore.livemap.core.httpclient.handlers.EtagOutboundHandler;
+import com.dynacore.livemap.core.httpclient.observer.ETagObserver;
 import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpObjectAggregator;

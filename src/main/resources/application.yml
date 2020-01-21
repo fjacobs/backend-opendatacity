@@ -18,7 +18,7 @@ spring:
     #httpretrieval || fileretrieval
 
     profiles:
-        include: postgres, traveltime, dev
+        include: postgres, traveltime, dev, http
 
     h2:
         console:
@@ -28,7 +28,6 @@ spring:
 
     application:
         name: OpenCity
-
 
     jpa:
         open-in-view: on
@@ -71,7 +70,7 @@ traveltime:
     #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
     url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
     initialdelay: 5s
-    requestinterval: 4s
+    requestinterval: 20s
     elementdelay: 0s
     dbEnabled: true
 

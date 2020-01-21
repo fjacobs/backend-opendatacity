@@ -1,8 +1,9 @@
-package com.dynacore.livemap.traveltime.controller;
+package com.dynacore.livemap.traveltime.controller.sse;
 
 import java.time.Duration;
 import java.util.Arrays;
 
+import com.dynacore.livemap.traveltime.controller.HttpSseController;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.junit.Test;

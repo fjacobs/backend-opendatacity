@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.http.handlers;
+package com.dynacore.livemap.core.httpclient.handlers;
 
 import io.netty.util.AttributeKey;
 import org.springframework.http.HttpHeaders;

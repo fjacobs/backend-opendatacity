@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 
-@Profile("prod")
+@Profile("http")
 @Component
 public class HttpRetriever implements OpenDataRetriever {
 

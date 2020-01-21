@@ -1,4 +1,4 @@
-package com.dynacore.livemap.traveltime;
+package com.dynacore.livemap.traveltime.controller.sse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 
 import com.dynacore.livemap.configuration.PostgresConfig;
-import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
+import com.dynacore.livemap.core.httpclient.HttpClientFactoryConfig;
 import com.dynacore.livemap.traveltime.service.HttpRetriever;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.http.observer;
+package com.dynacore.livemap.core.httpclient.observer;
 
 import org.springframework.context.annotation.Configuration;
 

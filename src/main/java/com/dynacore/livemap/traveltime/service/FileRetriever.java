@@ -10,7 +10,7 @@ import reactor.core.scheduler.Schedulers;
 @Configuration
 public class FileRetriever {
 
-    @Profile("dev")
+    @Profile("file")
     @Bean(name="getThreeRepeat")
     OpenDataRetriever getThreeFullRepeat() {
         return (interval) -> Flux.fromIterable(FileToGeojson.readCollection("/traveltimedata/real/"))

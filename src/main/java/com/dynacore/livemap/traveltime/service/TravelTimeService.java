@@ -61,7 +61,8 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
         this.config = config;
 
         sharedFlux = processFlux()
-                    .cache(config.getRequestInterval());
+                    .cache(config
+                    .getRequestInterval());
 
         Flux.from(sharedFlux)
                 .parallel(Runtime.getRuntime().availableProcessors())
@@ -77,12 +78,12 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
                 .requestHotSourceFc(config.getRequestInterval())
                 .doOnNext(x-> System.out.println("Retrieved new featurecollection, size: " + x.getFeatures().size()))
                 .flatMapIterable(FeatureCollection::getFeatures)
-                .distinct(DistinctUtil.hashCodeNoRetDate)
                 .map(road -> road.accept(new CalculateTravelTime()));
     }
 
     public Flux<Feature> getFeatures() {
-        return Flux.from(sharedFlux);
+        return Flux.from(sharedFlux)
+                .distinct(DistinctUtil.hashCodeNoRetDate);
     }
 
     public Mono<FeatureCollection> getFeatureCollection() {
