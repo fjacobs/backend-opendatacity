@@ -1,6 +1,5 @@
 package com.dynacore.livemap.traveltime.repo;
 
-import com.dynacore.livemap.configuration.PostgresConfig;
 import com.dynacore.livemap.testing.database.AbstractDatabaseClientIntegrationTests;
 import com.dynacore.livemap.testing.database.ExternalDatabase;
 import com.dynacore.livemap.testing.database.PostgresTestSupport;

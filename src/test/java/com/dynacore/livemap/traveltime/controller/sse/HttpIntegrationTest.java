@@ -8,9 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 
-import com.dynacore.livemap.configuration.PostgresConfig;
-import com.dynacore.livemap.core.httpclient.HttpClientFactoryConfig;
-import com.dynacore.livemap.traveltime.service.HttpRetriever;
+import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
+import com.dynacore.livemap.testing.database.PostgresTestSupport;
+import com.dynacore.livemap.configuration.adapter.HttpAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
 import org.junit.Assert;
@@ -61,7 +61,7 @@ class HttpIntegrationTest {
         serviceConfig.setRequestInterval(Duration.ofSeconds(1));
         serviceConfig.setUrl(baseUrl.url().toString());
 
-        databaseClient = DatabaseClient.create(new PostgresConfig().connectionFactory());
+        databaseClient = DatabaseClient.create(PostgresTestSupport.createConnectionFactory(PostgresTestSupport.database()));
 
         databaseClient.execute("DROP TABLE IF EXISTS travel_time_entity;")
                 .then()
@@ -84,7 +84,7 @@ class HttpIntegrationTest {
                 .build();
 
 
-        TravelTimeService service = new TravelTimeService(repo, new HttpRetriever(webClient), serviceConfig);
+        TravelTimeService service = new TravelTimeService(repo, new HttpAdapter(webClient), serviceConfig);
         controller = new HttpSseController(service);
     }
 

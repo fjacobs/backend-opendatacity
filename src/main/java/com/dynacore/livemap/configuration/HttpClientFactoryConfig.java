@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.httpclient;
+package com.dynacore.livemap.configuration;
 
 import com.dynacore.livemap.core.httpclient.handlers.EtagInboundHandler;
 import com.dynacore.livemap.core.httpclient.handlers.EtagOutboundHandler;

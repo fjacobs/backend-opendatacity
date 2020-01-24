@@ -3,6 +3,8 @@ package com.dynacore.livemap.core.tools;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.FeatureCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
 
@@ -19,11 +21,12 @@ import java.util.stream.Collectors;
 
 
 /*
-      Utility class to convert files with GeoJson contents to objects.
-      Used as a helper to import GeoJson files into the database or for dev/testing purposes.
+   Utility class to convert files with GeoJson contents to objects.
+   Used as a helper to import GeoJson files into the database or for dev/testing purposes.
 */
 public class FileToGeojson {
 
+    private static final Logger log = LoggerFactory.getLogger(FileToGeojson.class);
      /*
       *   Converts all files in a folder.
       *   @param folderName  folderName must be relative to the resources folder.
@@ -39,7 +42,8 @@ public class FileToGeojson {
                     try {
                         fc = new ObjectMapper().readValue(getString(folderName.concat(file.getName())), FeatureCollection.class);
                     } catch (JsonProcessingException e) {
-                        e.printStackTrace();
+                        log.error("Error reading: " + file.getName());
+                        throw new RuntimeException(e);
                     }
                     return fc;
                 })
@@ -59,9 +63,9 @@ public class FileToGeojson {
                     featureCollection = "" + tempLine;
                 }
             }
-        } catch (Exception error) {
-            error.printStackTrace();
-            Assert.state(false, "Error reading test geojson file '" + fileName + "'  in resources: " + error.toString());
+        } catch (Exception e) {
+            log.error("Error reading test geojson file '" + fileName + "'  in resources: " + e.toString());
+            throw new RuntimeException(e);
         }
         return featureCollection;
     }

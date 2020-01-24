@@ -15,6 +15,7 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
+import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.dynacore.livemap.testing.subscriber.AssertSubscriber;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
@@ -74,7 +75,7 @@ class TravelTimeServiceTest {
         serviceConfig.setRequestInterval(Duration.ofSeconds(1));
         serviceConfig.setSaveToDbEnabled(false);
 
-        OpenDataRetriever smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
+        GeoJsonAdapter smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 
         service = new TravelTimeService(repo, smallFc, serviceConfig);
         service.getLiveData()
@@ -134,7 +135,7 @@ class TravelTimeServiceTest {
         final Feature feature1_3 = new Feature();
         final Feature feature2_3 = new Feature();
 
-        OpenDataRetriever prop3Changed = (interval) -> {
+        GeoJsonAdapter prop3Changed = (interval) -> {
 
             //Emit two features:
             feature1_1.setId("Feature1");
@@ -204,8 +205,6 @@ class TravelTimeServiceTest {
             .verifyComplete();
     }
 
-
-
     @Test
     void getFeatureCollection() throws JsonProcessingException {
         Hooks.onOperatorDebug();
@@ -218,7 +217,7 @@ class TravelTimeServiceTest {
         serviceConfig.setRequestInterval(Duration.ofSeconds(0));
         serviceConfig.setSaveToDbEnabled(false);
 
-        OpenDataRetriever smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
+        GeoJsonAdapter smallFc = (serviceConfig) -> Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 
         service = new TravelTimeService(repo, smallFc, serviceConfig);
         service.getFeatureCollection()

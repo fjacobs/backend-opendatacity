@@ -7,7 +7,7 @@ import java.time.Duration;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class GeoJsonRequestConfiguration {
+public class ServiceConfiguration {
     private String url;
     private Duration initialDelay;
     private Duration requestInterval;

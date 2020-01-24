@@ -1,4 +1,4 @@
-package com.dynacore.livemap.configuration;
+package com.dynacore.livemap.configuration.database;
 
 
 import io.r2dbc.spi.ConnectionFactories;
@@ -14,7 +14,13 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 @Profile("postgres")
 @Configuration
 @EnableR2dbcRepositories
-public class PostgresConfig extends AbstractR2dbcConfiguration {
+public class PostgresR2dbcFactoryConfig extends AbstractR2dbcConfiguration {
+
+    private PostgresConfiguration config;
+
+    public PostgresR2dbcFactoryConfig(PostgresConfiguration config) {
+        this.config = config;
+    }
 
     @Bean("postgresPoolConnFactory")
     public ConnectionFactory connectionFactory() {
@@ -22,11 +28,11 @@ public class PostgresConfig extends AbstractR2dbcConfiguration {
         return ConnectionFactories.get(builder()
                 .option(DRIVER, "pool")
                 .option(PROTOCOL, "postgresql")
-                .option(HOST, "localhost")
-                .option(PORT, 5432)
-                .option(USER, "postgres")
-                .option(PASSWORD, "admin")
-                .option(DATABASE, "trafficdata")
+                .option(HOST, config.getHost())
+                .option(USER, config.getUser())
+                .option(PORT, config.getPort())
+                .option(PASSWORD, config.getPassword())
+                .option(DATABASE, config.getDatabase())
                 .build());
     }
 }

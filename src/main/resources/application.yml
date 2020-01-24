@@ -1,9 +1,42 @@
 
 debug: false
 
-# Spring Configuration
 
-local.server.port: 7777
+# Traffic Data Configuration
+
+fileadapter:
+    folder: /traveltimedata/blinking/
+
+postgres:
+    host: localhost
+    port: 5432
+    user: postgres
+    password: admin
+    database: blinkingroads
+
+parking:
+    url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
+    initialdelay: 0s
+    requestinterval: 60s
+    elementdelay: 0s
+
+guidancesign:
+    url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
+    initialdelay: 0s
+    requestinterval: 60s
+    elementdelay: 0s
+
+traveltime:
+    #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
+    url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
+    initialdelay: 0s
+    requestinterval: 3s
+    elementdelay: 0s
+    saveToDbEnabled: false
+
+
+
+#local.server.port: 7777
 
 logging:
     level:
@@ -16,7 +49,6 @@ spring:
     # dev || prod
     #traveltime && parking && guidancesign
     #httpretrieval || fileretrieval
-
     profiles:
         include: postgres, traveltime, dev, file
 
@@ -50,29 +82,6 @@ spring:
             transport: websocket
             port: 9897
 
-# Traffic Data Configuration
-
-# Eigenaar dataset: Gemeente Amsterdam, Verkeer en Openbare Ruimte ---
-parking:
-    url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
-    initialdelay: 0s
-    requestinterval: 60s
-    elementdelay: 0s
-
-
-guidancesign:
-    url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
-    initialdelay: 0s
-    requestinterval: 60s
-    elementdelay: 0s
-
-traveltime:
-    #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
-    url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
-    initialdelay: 5s
-    requestinterval: 20s
-    elementdelay: 0s
-    saveToDbEnabled: false
 
 
     

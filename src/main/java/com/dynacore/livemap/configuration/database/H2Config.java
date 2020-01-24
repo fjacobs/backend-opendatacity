@@ -1,4 +1,4 @@
-package com.dynacore.livemap.configuration;
+package com.dynacore.livemap.configuration.database;
 
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;

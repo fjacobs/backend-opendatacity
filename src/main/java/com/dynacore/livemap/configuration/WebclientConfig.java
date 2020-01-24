@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.httpclient;
+package com.dynacore.livemap.configuration;
 
 
 import org.springframework.context.annotation.Bean;

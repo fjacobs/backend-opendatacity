@@ -1,5 +1,6 @@
-package com.dynacore.livemap.traveltime.service;
+package com.dynacore.livemap.configuration.adapter;
 
+import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.FeatureCollection;
 import org.springframework.context.annotation.Profile;
@@ -15,11 +16,11 @@ import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 
 @Profile("http")
 @Component
-public class HttpRetriever implements OpenDataRetriever {
+public class HttpAdapter implements GeoJsonAdapter {
 
     private WebClient webClient;
 
-    public HttpRetriever(WebClient webClient) {
+    public HttpAdapter(WebClient webClient) {
         this.webClient = webClient;
     }
 

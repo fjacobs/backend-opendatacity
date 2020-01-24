@@ -15,6 +15,7 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
+import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
@@ -47,51 +48,42 @@ import reactor.core.scheduler.Schedulers;
 public class TravelTimeService implements ReactiveGeoJsonPublisher {
 
     private Flux<Feature> sharedFlux;
-    private final OpenDataRetriever retriever;
+    private final GeoJsonAdapter retriever;
     private final TravelTimeServiceConfig config;
     private final TravelTimeRepo repo;
     private final Logger log = LoggerFactory.getLogger(TravelTimeService.class);
 
     @Autowired
-    public TravelTimeService(TravelTimeRepo repo, OpenDataRetriever retriever, TravelTimeServiceConfig config) throws JsonProcessingException {
+    public TravelTimeService(TravelTimeRepo repo, GeoJsonAdapter retriever, TravelTimeServiceConfig config) throws JsonProcessingException {
         this.retriever = retriever;
         this.config = config;
         this.repo = repo;
+
+        log.info(this.config.getRequestInterval().toString());
 
         sharedFlux = processFlux()
                     .cache(config.getRequestInterval());
 
         if(config.isSaveToDbEnabled()) {
             Flux.from(sharedFlux)
-                    .parallel(Runtime.getRuntime().availableProcessors())
-                    .runOn(Schedulers.parallel())
-                    .map(feature -> repo.save(new TravelTimeEntity((feature))))
-                    .subscribe( Mono::subscribe,
-                            error -> log.error("Error: " + error) );
+                .parallel(Runtime.getRuntime().availableProcessors())
+                .runOn(Schedulers.parallel())
+                .map(feature -> repo.save(new TravelTimeEntity(feature)))
+                .subscribe( Mono::subscribe, error -> log.error("Error: " + error) );
         }
     }
 
     private Flux<Feature> processFlux() throws JsonProcessingException {
         return retriever
-                .requestHotSourceFc(config.getRequestInterval())
-                .doOnNext(x-> System.out.println("Retrieved new featurecollection, size: " + x.getFeatures().size()))
-                .flatMapIterable(FeatureCollection::getFeatures)
-                .map(road -> road.accept(new CalculateTravelTime()));
+            .requestHotSourceFc(config.getRequestInterval())
+            .doOnNext(x-> System.out.println("Retrieved new featurecollection, size: " + x.getFeatures().size()))
+            .flatMapIterable(FeatureCollection::getFeatures)
+            .map(road -> road.accept(new CalculateTravelTime()));
     }
 
     public Flux<Feature> getLiveData() {
         return Flux.from(sharedFlux)
-                .distinct(DistinctUtil.hashCodeNoRetDate);
-    }
-
-    public Mono<FeatureCollection> getFeatureCollection() {
-        return Flux.from(sharedFlux)
-                .collectList()
-                .map(features -> {
-                    FeatureCollection fc = new FeatureCollection();
-                    fc.setFeatures(features);
-                    return fc;
-                });
+                .distinctUntilChanged(DistinctUtil.hashCodeNoRetDate);
     }
 
     public Flux<Feature> streamHistory() {
@@ -107,5 +99,15 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
             feature.setProperty(TravelTimeEntity.VELOCITY, entity.getVelocity());
             return feature;
         });
+    }
+
+    public Mono<FeatureCollection> getFeatureCollection() {
+        return Flux.from(sharedFlux)
+                .collectList()
+                .map(features -> {
+                    FeatureCollection fc = new FeatureCollection();
+                    fc.setFeatures(features);
+                    return fc;
+                });
     }
 }

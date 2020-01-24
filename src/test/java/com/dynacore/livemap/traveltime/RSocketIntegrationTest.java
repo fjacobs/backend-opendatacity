@@ -1,7 +1,7 @@
 package com.dynacore.livemap.traveltime;
 
 import com.dynacore.livemap.core.tools.FileToGeojson;
-import com.dynacore.livemap.traveltime.service.OpenDataRetriever;
+import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.dynacore.livemap.traveltime.service.TravelTimeServiceConfig;
 import io.rsocket.transport.netty.client.WebsocketClientTransport;
 import org.geojson.Feature;
@@ -31,16 +31,23 @@ class RSocketIntegrationTest {
     private RSocketRequester.Builder builder;
 
     @Test
-    public void testRsocketRequestStream() {
+    public void testRSocketRequestStream() {
         Hooks.onOperatorDebug();
-        RSocketRequester rsocketClient =  builder.connect( WebsocketClientTransport
+        RSocketRequester rSocketClient =  builder.connect( WebsocketClientTransport
                                              .create(serverPort))
                                              .block();
 
-        rsocketClient.route("TRAVELTIME_STREAM")
+        rSocketClient.route("TRAVELTIME_STREAM")
             .retrieveFlux(Feature.class)
             .as(StepVerifier::create)
-            .expectNextCount(1015)
+            .expectNextCount(1011)
+            .expectNextMatches(feature-> feature.getProperties().get("Velocity").equals(50) )
+            .expectNextCount(1011)
+            .expectNextMatches(feature-> feature.getProperties().get("Velocity").equals(120) )
+            .expectNextCount(1011)
+            .expectNextMatches(feature-> feature.getProperties().get("Velocity").equals(50) )
+            .expectNextCount(1011)
+            .expectNextMatches(feature-> feature.getProperties().get("Velocity").equals(120) )
             .thenCancel()
             .verify();
     }
@@ -59,11 +66,12 @@ class RSocketIntegrationTest {
             return serviceConfig;
         }
 
-        @Bean
+        @Bean(name= "testFileBean")
         @Primary
-        OpenDataRetriever createTestFileRetriever(){
-            return (interval) -> Flux.fromIterable(FileToGeojson.readCollection("/traveltimedata/real/"))
-                    .delayElements(interval);
+        GeoJsonAdapter createTestFileRetriever(){
+            return (interval) -> Flux.fromIterable(FileToGeojson.readCollection("/traveltimedata/blinking/"))
+                    .delayElements(interval)
+                    .repeat(1);
         }
     }
 }
