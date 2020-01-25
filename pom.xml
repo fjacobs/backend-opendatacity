@@ -5,7 +5,7 @@
     <groupId>com.dynacore</groupId>
     <artifactId>livemap</artifactId>
     <name>OpenCity</name>
-    <version>1.0.0-BUILD-SNAPSHOT</version>
+    <version>0.0.8-BUILD-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -50,6 +50,7 @@
     </parent>
 
     <properties>
+        <spring-data-r2dbc.version>1.1.0.BUILD-SNAPSHOT</spring-data-r2dbc.version>
         <geojson-jackson.version>1.12</geojson-jackson.version>
         <java.version>13</java.version>
     </properties>
@@ -69,6 +70,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-r2dbc</artifactId>
+            <version>${spring-data-r2dbc.version}</version>
         </dependency>
 
         <dependency>
@@ -109,13 +111,22 @@
 
         <dependency>
             <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <version>0.9.0.BUILD-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-postgresql</artifactId>
+            <artifactId>r2dbc-pool</artifactId>
+            <version>0.9.0.BUILD-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <version>0.9.0.BUILD-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -125,11 +136,7 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-pool</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+
 
 <!-- Testing -->
 
@@ -168,6 +175,7 @@
             <version>4.2.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>mockwebserver</artifactId>
@@ -185,13 +193,7 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-            <groupId>org.springframework.boot.experimental</groupId>
-            <artifactId>spring-boot-bom-r2dbc</artifactId>
-            <version>0.1.0.M3</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
+
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
