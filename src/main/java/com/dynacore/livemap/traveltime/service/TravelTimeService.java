@@ -15,8 +15,8 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
+import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.dynacore.livemap.traveltime.service.visitor.CalculateTravelTime;
@@ -33,13 +33,16 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-/**
-     Road traffic traveltime service
+import java.util.HashMap;
+import java.util.Map;
 
-     This service will subscribe to a traffic information data source.
-     It checks the GeoJson for RFC compliance and calculates properties and publishes the new data in a reactive manner.
-     The data is automatically saved in a reactive database (R2DBC) and the last emitted signals are cached
-     for new subscribers.
+/**
+ * Road traffic traveltime service
+ * <p>
+ * This service will subscribe to a traffic information data source.
+ * It checks the GeoJson for RFC compliance and calculates properties and publishes the new data in a reactive manner.
+ * The data is automatically saved in a reactive database (R2DBC) and the last emitted signals are cached
+ * for new subscribers.
  */
 
 @Lazy(false)
@@ -52,6 +55,7 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
     private final TravelTimeServiceConfig config;
     private final TravelTimeRepo repo;
     private final Logger log = LoggerFactory.getLogger(TravelTimeService.class);
+    Map<String, Integer> store = new HashMap<>();
 
     @Autowired
     public TravelTimeService(TravelTimeRepo repo, GeoJsonAdapter retriever, TravelTimeServiceConfig config) throws JsonProcessingException {
@@ -62,32 +66,44 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
         log.info(this.config.getRequestInterval().toString());
 
         sharedFlux = processFlux()
-                    .cache(config.getRequestInterval());
+                .cache(config.getRequestInterval());
 
-        if(config.isSaveToDbEnabled()) {
+        if (config.isSaveToDbEnabled()) {
             Flux.from(sharedFlux)
-                .parallel(Runtime.getRuntime().availableProcessors())
-                .runOn(Schedulers.parallel())
-                .map(feature -> repo.save(new TravelTimeEntity(feature)))
-                .subscribe( Mono::subscribe, error -> log.error("Error: " + error) );
+                    .parallel(Runtime.getRuntime().availableProcessors())
+                    .runOn(Schedulers.parallel())
+                    .map(feature -> repo.save(new TravelTimeEntity(feature)))
+                    .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
         }
     }
 
     private Flux<Feature> processFlux() throws JsonProcessingException {
         return retriever
-            .requestHotSourceFc(config.getRequestInterval())
-            .doOnNext(x-> System.out.println("Retrieved new featurecollection, size: " + x.getFeatures().size()))
-            .flatMapIterable(FeatureCollection::getFeatures)
-            .map(road -> road.accept(new CalculateTravelTime()));
+                .requestHotSourceFc(config.getRequestInterval())
+                .doOnNext(x -> System.out.println("Retrieved new featurecollection, size: " + x.getFeatures().size()))
+                .flatMapIterable(FeatureCollection::getFeatures)
+                .map(road -> road.accept(new CalculateTravelTime()));
     }
 
     public Flux<Feature> getLiveData() {
         return Flux.from(sharedFlux)
-                .distinctUntilChanged(DistinctUtil.hashCodeNoRetDate);
+                .handle((feature, sink) -> {
+                    Integer newHash = DistinctUtil.hashCodeNoRetDate.apply(feature);
+                    Integer oldHash;
+                    if ((oldHash = store.get(feature.getId())) != null) {
+                        if (!newHash.equals(oldHash)) {
+                            store.put(feature.getId(), newHash);
+                            sink.next(feature);
+                        }
+                    } else {
+                        store.put(feature.getId(), newHash);
+                        sink.next(feature);
+                    }
+                });
     }
 
     public Flux<Feature> streamHistory() {
-        return repo.getAllDescending().map((entity)-> {
+        return repo.getAllDescending().map((entity) -> {
             Feature feature = new Feature();
             feature.setProperty(TravelTimeEntity.ID, entity.getId());
             feature.setProperty(TravelTimeEntity.NAME, entity.getName());

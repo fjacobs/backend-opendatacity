@@ -33,11 +33,11 @@ class RSocketIntegrationTest {
     @Test
     public void testRSocketRequestStream() {
         Hooks.onOperatorDebug();
-        RSocketRequester rSocketClient =  builder.connect( WebsocketClientTransport
-                                             .create(serverPort))
-                                             .block();
+        RSocketRequester webSocket = builder.connect( WebsocketClientTransport
+                                                .create(serverPort))
+                                                .block();
 
-        rSocketClient.route("TRAVELTIME_STREAM")
+        webSocket.route("TRAVELTIME_STREAM")
             .retrieveFlux(Feature.class)
             .as(StepVerifier::create)
             .expectNextCount(1011)
@@ -60,15 +60,15 @@ class RSocketIntegrationTest {
         TravelTimeServiceConfig createServiceConfig(){
             TravelTimeServiceConfig serviceConfig = new TravelTimeServiceConfig();
             serviceConfig.setInitialDelay(Duration.ZERO);
-            serviceConfig.setRequestInterval(Duration.ofSeconds(0));
-            serviceConfig.setElementDelay(Duration.ofMillis(0));
+            serviceConfig.setRequestInterval(Duration.ofSeconds(2));
+            serviceConfig.setElementDelay(Duration.ofMillis(2));
             serviceConfig.setSaveToDbEnabled(false);
             return serviceConfig;
         }
 
         @Bean(name= "testFileBean")
         @Primary
-        GeoJsonAdapter createTestFileRetriever(){
+        GeoJsonAdapter fileReaderRepeat(){
             return (interval) -> Flux.fromIterable(FileToGeojson.readCollection("/traveltimedata/blinking/"))
                     .delayElements(interval)
                     .repeat(1);

@@ -137,7 +137,7 @@ class TravelTimeServiceTest {
 
         GeoJsonAdapter prop3Changed = (interval) -> {
 
-            //Emit two features:
+            //Emit two new features:
             feature1_1.setId("Feature1");
             feature1_1.setProperty("prop1", "value1");
             feature1_1.setProperty("prop2", 2);
@@ -167,11 +167,13 @@ class TravelTimeServiceTest {
             fc2.setFeatures(Arrays.asList(feature1_2, feature2_2));
 
             //Emit two features:
-            // - F1 prop2 changed
+            // - F1 Changed back to first it's first form (ie. Assert that literal 'distinct until changed'
+            //      was performed instead of Reactor's version of distinct(), or distinctUntilChanged)
+            // - F2 Changed (first time)
             FeatureCollection fc3 = new FeatureCollection();
             feature1_3.setId("Feature1");
-            feature1_3.setProperty("prop1", "value2");
-            feature1_3.setProperty("prop2", 9);
+            feature1_3.setProperty("prop1", "value1");
+            feature1_3.setProperty("prop2", 2);
             feature1_3.setProperty("retrievedFromThirdParty", "2019-10-16T15:54:00Z");
 
             feature2_3.setId("Feature2");
@@ -192,12 +194,7 @@ class TravelTimeServiceTest {
 
         TravelTimeService service = new TravelTimeService(repo, prop3Changed, serviceConfig);
 
-        AssertSubscriber<Feature> ts = AssertSubscriber.create();
-
-        service.getLiveData().distinct(DistinctUtil.hashCodeNoRetDate)
-                             .subscribe(ts);
-
-        StepVerifier.create(service.getLiveData().distinct(DistinctUtil.hashCodeNoRetDate))
+        StepVerifier.create(service.getLiveData())
             .expectNext(feature1_1)
             .expectNext(feature2_1)
             .expectNext(feature1_2)
