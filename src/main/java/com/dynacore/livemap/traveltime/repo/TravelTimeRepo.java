@@ -10,6 +10,8 @@ import reactor.bool.BooleanUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.OffsetDateTime;
+
 import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
@@ -39,11 +41,10 @@ public class TravelTimeRepo {
         return Mono.just(entity)
                 .filterWhen(this::isNew)
                 .flatMap(newEntity -> databaseClient.insert()
-                                        .into(TravelTimeEntity.class)
-                                        .using(newEntity)
-                                        .fetch()
-                                        .rowsUpdated());
-
+                        .into(TravelTimeEntity.class)
+                        .using(newEntity)
+                        .fetch()
+                        .rowsUpdated());
     }
 
     public Mono<TravelTimeEntity> getLatest(TravelTimeEntity entity) {
@@ -59,9 +60,46 @@ public class TravelTimeRepo {
 
     public Flux<TravelTimeEntity> getAllDescending() {
         return databaseClient.execute("SELECT * FROM public.travel_time_entity ORDER BY pub_date DESC")
-                             .as(TravelTimeEntity.class)
-                             .fetch()
-                             .all();
+                .as(TravelTimeEntity.class)
+                .fetch()
+                .all();
+    }
+
+    public Flux<ReplayMetaData> getReplayMetaData() {
+        return databaseClient.execute(" SELECT pub_date, COUNT (pub_date) FROM public.travel_time_entity GROUP BY travel_time_entity.pub_date ORDER BY pub_date DESC;")
+                .as(ReplayMetaData.class)
+                .fetch()
+                .all();
+    }
+
+    public Flux<ReplayMetaData> getReplayMetaData(OffsetDateTime start, OffsetDateTime end) {
+        return databaseClient.execute("    SELECT pub_date, COUNT (pub_date)\n" +
+                "    FROM\n" +
+                "             public.travel_time_entity\n" +
+                "    WHERE\n" +
+                "    pub_date >= '" + start + "'\n" +
+                "    AND    pub_date <='" + end + "'\n" +
+                "\n" +
+                "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date DESC;")
+                .as(ReplayMetaData.class)
+                .fetch()
+                .all();
+    }
+
+    public Flux<TravelTimeEntity> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end) {
+        return databaseClient.execute("    SELECT pub_date, COUNT (pub_date)\n" +
+                "    FROM\n" +
+                "             public.travel_time_entity\n" +
+                "    WHERE\n" +
+                "    pub_date >= '" + start + "'\n" +
+                "    AND    pub_date <= '" + end + "'\n" +
+                "\n" +
+                "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date DESC;")
+                .as(TravelTimeEntity.class)
+                .fetch()
+                .all();
     }
 
 }
+
+

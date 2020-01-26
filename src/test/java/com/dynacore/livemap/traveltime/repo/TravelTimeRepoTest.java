@@ -7,6 +7,7 @@ import io.r2dbc.spi.ConnectionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.r2dbc.core.DatabaseClient;
+import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
 
 import javax.sql.DataSource;
@@ -206,4 +207,86 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
                 .verifyComplete();
     }
 
+    @Test
+    public void getHistoryMetaData() {
+        Hooks.onOperatorDebug();
+        dropCreate(client);
+
+        String retDate = "2019-10-16T16:00:00Z";
+        String pubDate = "2020-10-16T15:52:00Z";
+        String pubDate2 = "2020-10-17T15:52:00Z";
+        String pubDate3 = "2020-10-18T15:52:00Z";
+        String pubDate4 = "2020-10-19T15:52:00Z";
+
+        TravelTimeEntity  entityOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  x = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate2), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  y = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate3), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  z = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate4), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+
+        repo.save(entityOne).block();
+        repo.save(x).block();
+        repo.save(y).block();
+        repo.save(z).block();
+
+        repo.getReplayMetaData()
+                .as(StepVerifier::create)
+                .expectNextCount(4)
+                .verifyComplete();
+    }
+
+    @Test
+    public void getHistoryMetaDataRange() {
+        Hooks.onOperatorDebug();
+        dropCreate(client);
+
+        String retDate = "2019-10-16T16:00:00Z";
+
+
+        String pubDate = "2020-10-16T15:52:00Z";
+        String pubDate2 = "2020-10-17T15:52:00Z";
+        String pubDate3 = "2020-10-18T15:52:00Z";
+        String pubDate4 = "2020-10-19T15:52:00Z";
+
+        TravelTimeEntity  entityOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  x = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate2), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  y = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate3), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  z = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate4), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+
+        repo.save(entityOne).block();
+        repo.save(x).block();
+        repo.save(y).block();
+        repo.save(z).block();
+
+        repo.getReplayMetaData(OffsetDateTime.parse(pubDate2), OffsetDateTime.parse(pubDate4))
+                .as(StepVerifier::create)
+                .expectNextCount(3)
+                .verifyComplete();
+    }
+
+    @Test
+    public void getFeatureDateRange() {
+        Hooks.onOperatorDebug();
+        dropCreate(client);
+
+        String retDate = "2019-10-16T16:00:00Z";
+        String pubDate = "2020-10-16T15:52:00Z";
+        String pubDate2 = "2020-10-17T15:52:00Z";
+        String pubDate3 = "2020-10-18T15:52:00Z";
+        String pubDate4 = "2020-10-19T15:52:00Z";
+
+        TravelTimeEntity  entityOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  x = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate2), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  y = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate3), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+        TravelTimeEntity  z = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate4), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
+
+        repo.save(entityOne).block();
+        repo.save(x).block();
+        repo.save(y).block();
+        repo.save(z).block();
+
+        repo.getFeatureDateRange(OffsetDateTime.parse(pubDate2), OffsetDateTime.parse(pubDate4))
+                .as(StepVerifier::create)
+                .expectNextCount(3)
+                .verifyComplete();
+    }
 }

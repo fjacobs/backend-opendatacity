@@ -17,8 +17,10 @@ package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
+import com.dynacore.livemap.traveltime.repo.ReplayMetaData;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
+import com.dynacore.livemap.traveltime.service.filter.DateRangeRequest;
 import com.dynacore.livemap.traveltime.service.visitor.CalculateTravelTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
@@ -102,19 +104,16 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
                 });
     }
 
-    public Flux<Feature> streamHistory() {
-        return repo.getAllDescending().map((entity) -> {
-            Feature feature = new Feature();
-            feature.setProperty(TravelTimeEntity.ID, entity.getId());
-            feature.setProperty(TravelTimeEntity.NAME, entity.getName());
-            feature.setProperty(TravelTimeEntity.THEIR_RETRIEVAL, entity.getPubDate());
-            feature.setProperty(TravelTimeEntity.OUR_RETRIEVAL, entity.getRetrievedFromThirdParty());
-            feature.setProperty(TravelTimeEntity.TYPE, entity.getType());
-            feature.setProperty(TravelTimeEntity.LENGTH, entity.getLength());
-            feature.setProperty(TravelTimeEntity.TRAVEL_TIME, entity.getTravel_time());
-            feature.setProperty(TravelTimeEntity.VELOCITY, entity.getVelocity());
-            return feature;
-        });
+    public Flux<ReplayMetaData> getReplayMetaData() {
+        return repo.getReplayMetaData();
+    }
+
+    public Flux<ReplayMetaData> getReplayMetaData(DateRangeRequest range) {
+        return repo.getReplayMetaData(range.getStartDate(), range.getEndDate());
+    }
+
+    public Flux<TravelTimeEntity> getFeatureRange(DateRangeRequest range) {
+        return repo.getFeatureDateRange(range.getStartDate(), range.getEndDate());
     }
 
     public Mono<FeatureCollection> getFeatureCollection() {
