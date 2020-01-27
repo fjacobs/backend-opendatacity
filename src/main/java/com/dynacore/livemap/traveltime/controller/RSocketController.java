@@ -1,10 +1,10 @@
 package com.dynacore.livemap.traveltime.controller;
 
 
-import com.dynacore.livemap.traveltime.repo.ReplayMetaData;
+import com.dynacore.livemap.traveltime.service.filter.PubDateSizeResponse;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.service.TravelTimeService;
-import com.dynacore.livemap.traveltime.service.filter.DateRangeRequest;
+import com.dynacore.livemap.traveltime.service.filter.FeatureRequest;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
@@ -14,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
+import java.util.List;
 
 @Controller
 public class RSocketController {
@@ -32,25 +35,26 @@ public class RSocketController {
         return service.getLiveData();
     }
 
-    /*
-      Call to determine future requests for Feature history streaming replay.
-        - The Feature count can determine the request(n) size for every pub_date.
-        - The OffsetDateTime between multiple pub_dates to calculate the fast forward or rewind speed
-        and the time interval between every request(n)
-    */
     @CrossOrigin(origins = "http://localhost:9000")
     @MessageMapping("TRAVELTIME_REPLAY_METADATA")
-    public Flux<ReplayMetaData> replayMetaData() {
+    public Flux<PubDateSizeResponse> replayMetaData() {
         logger.info("Enter RSocketController::streamHistory");
         return service.getReplayMetaData();
     }
 
 
+    @CrossOrigin(origins = "http://localhost:9000")
+    @MessageMapping("TRAVELTIME_REPLAY")
+    public Flux<List<TravelTimeEntity>> replayAll(Duration delay) {
+        logger.info("Enter RSocketController::streamHistory");
+        return service.replayGroupedByPubdate(delay);
+    }
+
     /*  Returns Feature properties without geolocation
     */
     @CrossOrigin(origins = "http://localhost:9000")
     @MessageMapping("TRAVELTIME_HISTORY")
-    public Flux<TravelTimeEntity> getEntityRange(DateRangeRequest request) {
+    public Flux<TravelTimeEntity> getEntityRange(FeatureRequest request) {
         logger.info("Enter RSocketController::streamHistory");
         return service.getFeatureRange(request);
     }

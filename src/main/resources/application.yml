@@ -1,5 +1,5 @@
 
-debug: false
+debug:  true
 
 
 # Traffic Data Configuration
@@ -7,12 +7,18 @@ debug: false
 fileadapter:
     folder: /traveltimedata/blinking/
 
+#    @NotBlank String host;
+#    @NotBlank int port;
+#    @NotBlank String user;
+#    @NotBlank String password;
+#    @NotBlank String database;
+
 postgres:
     host: localhost
     port: 5432
     user: postgres
     password: admin
-    database: blinkingroads
+    database: trafficdata
 
 parking:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json

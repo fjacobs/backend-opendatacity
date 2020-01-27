@@ -22,7 +22,7 @@ public class H2TestSupport {
 
     public static ConnectionFactory createConnectionFactory() {
         return new H2ConnectionFactory(H2ConnectionConfiguration.builder() //
-                .file("~/r2dbc") //
+                .file("~/mem") //
                 .username("sa") //
                 .password("") //
                 .option("DB_CLOSE_DELAY=-1").build());

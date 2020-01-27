@@ -241,6 +241,8 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
         dropCreate(client);
         OffsetDateTime retDate = OffsetDateTime.parse("2020-10-16T14:00:00Z");
 
+        //2-2-1-1-2
+
         //COUNT: 2
         String pubDate = "2020-10-16T15:52:00+02:00";
         String pubDate2 = "2020-10-16T15:52:00+02:00";

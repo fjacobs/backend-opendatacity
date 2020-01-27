@@ -1,5 +1,6 @@
 package com.dynacore.livemap.traveltime.repo;
 
+import com.dynacore.livemap.traveltime.service.filter.PubDateSizeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -65,14 +66,14 @@ public class TravelTimeRepo {
                 .all();
     }
 
-    public Flux<ReplayMetaData> getReplayMetaData() {
+    public Flux<PubDateSizeResponse> getReplayMetaData() {
         return databaseClient.execute(" SELECT pub_date, COUNT (pub_date) FROM public.travel_time_entity GROUP BY travel_time_entity.pub_date ORDER BY pub_date ASC;")
-                .as(ReplayMetaData.class)
+                .as(PubDateSizeResponse.class)
                 .fetch()
                 .all();
     }
 
-    public Flux<ReplayMetaData> getReplayMetaData(OffsetDateTime start, OffsetDateTime end) {
+    public Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end) {
         return databaseClient.execute("    SELECT pub_date, COUNT (pub_date)\n" +
                 "    FROM\n" +
                 "             public.travel_time_entity\n" +
@@ -81,7 +82,7 @@ public class TravelTimeRepo {
                 "    AND    pub_date <='" + end + "'\n" +
                 "\n" +
                 "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date ASC;")
-                .as(ReplayMetaData.class)
+                .as(PubDateSizeResponse.class)
                 .fetch()
                 .all();
     }

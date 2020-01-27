@@ -22,7 +22,7 @@ public class PostgresR2dbcFactoryConfig extends AbstractR2dbcConfiguration {
         this.config = config;
     }
 
-    @Bean("postgresPoolConnFactory")
+    @Bean
     public ConnectionFactory connectionFactory() {
 
         return ConnectionFactories.get(builder()

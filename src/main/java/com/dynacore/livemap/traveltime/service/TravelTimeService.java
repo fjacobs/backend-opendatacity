@@ -17,10 +17,10 @@ package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
-import com.dynacore.livemap.traveltime.repo.ReplayMetaData;
+import com.dynacore.livemap.traveltime.service.filter.PubDateSizeResponse;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
-import com.dynacore.livemap.traveltime.service.filter.DateRangeRequest;
+import com.dynacore.livemap.traveltime.service.filter.FeatureRequest;
 import com.dynacore.livemap.traveltime.service.visitor.CalculateTravelTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
@@ -35,7 +35,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,16 +106,23 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
                 });
     }
 
-    public Flux<ReplayMetaData> getReplayMetaData() {
+    public Flux<PubDateSizeResponse> getReplayMetaData() {
         return repo.getReplayMetaData();
     }
 
-    public Flux<ReplayMetaData> getReplayMetaData(DateRangeRequest range) {
+    public Flux<PubDateSizeResponse> getReplayMetaData(FeatureRequest range) {
         return repo.getReplayMetaData(range.getStartDate(), range.getEndDate());
     }
 
-    public Flux<TravelTimeEntity> getFeatureRange(DateRangeRequest range) {
+    public Flux<TravelTimeEntity> getFeatureRange(FeatureRequest range) {
         return repo.getFeatureDateRange(range.getStartDate(), range.getEndDate());
+    }
+
+    public Flux<List<TravelTimeEntity>> replayGroupedByPubdate(Duration delay) {
+        return repo.getAllAscending()
+                   .windowUntilChanged(TravelTimeEntity::getPubDate)
+                   .flatMap(Flux::buffer)
+                   .delayElements(delay);
     }
 
     public Mono<FeatureCollection> getFeatureCollection() {
