@@ -17,7 +17,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
-public class TravelTimeRepo {
+public class TravelTimeRepo implements TravelTimeRepository {
 
     private DatabaseClient databaseClient;
     private final static Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
@@ -26,6 +26,7 @@ public class TravelTimeRepo {
         this.databaseClient = databaseClient;
     }
 
+    @Override
     public Mono<Boolean> isNew(TravelTimeEntity entity) {
         return databaseClient.select().from(TravelTimeEntity.class)
                 .matching(where("id")
@@ -38,6 +39,7 @@ public class TravelTimeRepo {
                 .as(BooleanUtils::not);
     }
 
+    @Override
     public Mono<Integer> save(TravelTimeEntity entity) {
         return Mono.just(entity)
                 .filterWhen(this::isNew)
@@ -48,6 +50,7 @@ public class TravelTimeRepo {
                         .rowsUpdated());
     }
 
+    @Override
     public Mono<TravelTimeEntity> getLatest(TravelTimeEntity entity) {
         return databaseClient.execute(
                 "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n" +
@@ -59,6 +62,7 @@ public class TravelTimeRepo {
                 .first();
     }
 
+    @Override
     public Flux<TravelTimeEntity> getAllAscending() {
         return databaseClient.execute("SELECT * FROM public.travel_time_entity ORDER BY pub_date ASC")
                 .as(TravelTimeEntity.class)
@@ -66,6 +70,7 @@ public class TravelTimeRepo {
                 .all();
     }
 
+    @Override
     public Flux<PubDateSizeResponse> getReplayMetaData() {
         return databaseClient.execute(" SELECT pub_date, COUNT (pub_date) FROM public.travel_time_entity GROUP BY travel_time_entity.pub_date ORDER BY pub_date ASC;")
                 .as(PubDateSizeResponse.class)
@@ -73,6 +78,7 @@ public class TravelTimeRepo {
                 .all();
     }
 
+    @Override
     public Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end) {
         return databaseClient.execute("    SELECT pub_date, COUNT (pub_date)\n" +
                 "    FROM\n" +
@@ -87,6 +93,7 @@ public class TravelTimeRepo {
                 .all();
     }
 
+    @Override
     public Flux<TravelTimeEntity> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end) {
         return databaseClient.execute("    SELECT pub_date, COUNT (pub_date)\n" +
                 "    FROM\n" +

@@ -36,14 +36,6 @@ public class RSocketController {
     }
 
     @CrossOrigin(origins = "http://localhost:9000")
-    @MessageMapping("TRAVELTIME_REPLAY_METADATA")
-    public Flux<PubDateSizeResponse> replayMetaData() {
-        logger.info("Enter RSocketController::streamHistory");
-        return service.getReplayMetaData();
-    }
-
-
-    @CrossOrigin(origins = "http://localhost:9000")
     @MessageMapping("TRAVELTIME_REPLAY")
     public Flux<List<TravelTimeEntity>> replayAll(Duration delay) {
         logger.info("Enter RSocketController::streamHistory");

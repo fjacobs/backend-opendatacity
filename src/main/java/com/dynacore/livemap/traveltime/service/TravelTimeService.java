@@ -106,14 +106,6 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
                 });
     }
 
-    public Flux<PubDateSizeResponse> getReplayMetaData() {
-        return repo.getReplayMetaData();
-    }
-
-    public Flux<PubDateSizeResponse> getReplayMetaData(FeatureRequest range) {
-        return repo.getReplayMetaData(range.getStartDate(), range.getEndDate());
-    }
-
     public Flux<TravelTimeEntity> getFeatureRange(FeatureRequest range) {
         return repo.getFeatureDateRange(range.getStartDate(), range.getEndDate());
     }
