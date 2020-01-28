@@ -181,9 +181,9 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
                     assertTrue(retrieved.getPubDate().isEqual(OffsetDateTime.parse("2019-10-16T15:52:00Z")));
                     assertTrue(retrieved.getRetrievedFromThirdParty().isEqual(OffsetDateTime.parse("2019-10-16T16:00:00Z")));
                     assertEquals(retrieved.getType(), "type");
-                    assertEquals(200, retrieved.getLength());
-                    assertEquals(5, retrieved.getTravel_time());
-                    assertEquals(100, retrieved.getVelocity());
+                    assertEquals(200, retrieved.getLength().intValue());
+                    assertEquals(5, retrieved.getTravel_time().intValue());
+                    assertEquals(100, retrieved.getVelocity().intValue());
                 })
                 .verifyComplete();
 

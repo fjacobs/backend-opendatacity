@@ -37,9 +37,9 @@ public class RSocketController {
 
     @CrossOrigin(origins = "http://localhost:9000")
     @MessageMapping("TRAVELTIME_REPLAY")
-    public Flux<List<TravelTimeEntity>> replayAll(Duration delay) {
+    public Flux<List<TravelTimeEntity>> replayAll(Integer intervalSeconds) {
         logger.info("Enter RSocketController::streamHistory");
-        return service.replayGroupedByPubdate(delay);
+        return service.replayGroupedByPubdate(intervalSeconds);
     }
 
     /*  Returns Feature properties without geolocation
@@ -49,6 +49,15 @@ public class RSocketController {
     public Flux<TravelTimeEntity> getEntityRange(FeatureRequest request) {
         logger.info("Enter RSocketController::streamHistory");
         return service.getFeatureRange(request);
+    }
+
+
+    //RSocket request-response mode
+    @CrossOrigin(origins = "http://localhost:9000")
+    @MessageMapping("test")
+    public Mono<TravelTimeEntity> entityTest() {
+        logger.info("Enter RSocketController::requestFeatureCollection");
+        return Mono.just(new TravelTimeEntity(1, "id", null, null, null, null, 100, null,null ));
     }
 
     //RSocket request-response mode

@@ -17,7 +17,7 @@ package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
-import com.dynacore.livemap.traveltime.service.filter.PubDateSizeResponse;
+import com.dynacore.livemap.traveltime.domain.RoadFeature;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.dynacore.livemap.traveltime.service.filter.FeatureRequest;
@@ -76,7 +76,7 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
             Flux.from(sharedFlux)
                     .parallel(Runtime.getRuntime().availableProcessors())
                     .runOn(Schedulers.parallel())
-                    .map(feature -> repo.save(new TravelTimeEntity(feature)))
+                    .map(feature -> repo.save(new TravelTimeEntity((RoadFeature)feature)))
                     .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
         }
     }
@@ -110,11 +110,11 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
         return repo.getFeatureDateRange(range.getStartDate(), range.getEndDate());
     }
 
-    public Flux<List<TravelTimeEntity>> replayGroupedByPubdate(Duration delay) {
+    public Flux<List<TravelTimeEntity>> replayGroupedByPubdate(Integer delay) {
         return repo.getAllAscending()
                    .windowUntilChanged(TravelTimeEntity::getPubDate)
                    .flatMap(Flux::buffer)
-                   .delayElements(delay);
+                   .delayElements(Duration.ofSeconds(delay));
     }
 
     public Mono<FeatureCollection> getFeatureCollection() {

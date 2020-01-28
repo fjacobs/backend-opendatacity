@@ -74,7 +74,7 @@ class RSocketIntegrationTest {
 
         StepVerifier
             .withVirtualTime(() -> webSocket.route("TRAVELTIME_REPLAY")
-                                            .data(Duration.ofSeconds(1))
+                                            .data(1)
                                             .retrieveFlux(typeRef)
                                             .take(2))
             .expectSubscription()

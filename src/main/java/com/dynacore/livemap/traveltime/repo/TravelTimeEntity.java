@@ -1,5 +1,6 @@
 package com.dynacore.livemap.traveltime.repo;
 
+import com.dynacore.livemap.traveltime.domain.RoadFeature;
 import lombok.*;
 import org.geojson.Feature;
 import org.slf4j.Logger;
@@ -13,19 +14,8 @@ import java.time.OffsetDateTime;
 @Table
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor @ToString
 public class TravelTimeEntity {
-
-    public static final String ID = "Id";
-    public static final String NAME = "Name";
-    public static final String TYPE = "Type";
-    public static final String TRAVEL_TIME = "Traveltime";
-    public static final String LENGTH = "Length";
-    public static final String VELOCITY = "Velocity";
-    public static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
-    public static final String THEIR_RETRIEVAL = "Timestamp";
-    public static final String DYNACORE_ERRORS = "dynacoreErrors";
 
     private static final Logger log = LoggerFactory.getLogger(TravelTimeEntity.class);
 
@@ -39,11 +29,23 @@ public class TravelTimeEntity {
     private OffsetDateTime retrievedFromThirdParty;
     private String type;
 
-    private int length;
-    private int travel_time;
-    private int velocity;
+    private Integer length;
+    private Integer travel_time;
+    private Integer velocity;
 
-    public TravelTimeEntity(Feature travelTime) {
+    public TravelTimeEntity(Integer pkey, String id, String name, OffsetDateTime pubDate, OffsetDateTime retrievedFromThirdParty, String type, Integer length, Integer travel_time, Integer velocity) {
+        this.pkey = pkey;
+        this.id = id;
+        this.name = name;
+        this.pubDate = pubDate;
+        this.retrievedFromThirdParty = retrievedFromThirdParty;
+        this.type = type;
+        this.length = length;
+        this.travel_time = travel_time;
+        this.velocity = velocity;
+    }
+
+    public TravelTimeEntity(RoadFeature travelTime) {
 
         try {
             setPkey(null);
@@ -52,17 +54,17 @@ public class TravelTimeEntity {
             } else {
                 log.warn("Feature doesn't have an ID: " + travelTime.toString());
             }
-            setName((String) travelTime.getProperties().get(NAME));
-            if(travelTime.getProperties().containsKey(THEIR_RETRIEVAL))
-                setPubDate(OffsetDateTime.parse(travelTime.getProperties().get(THEIR_RETRIEVAL).toString()));
+            setName(travelTime.getName());
+            if(travelTime.getPubDate() != null)
+                setPubDate(travelTime.getPubDate());
             else {
                 log.warn("Feature doesn't have a pub date: " + travelTime.toString());
             }
-            setRetrievedFromThirdParty(OffsetDateTime.parse(travelTime.getProperties().get(OUR_RETRIEVAL).toString()));
-            setType((String) travelTime.getProperties().get(TYPE));
-            setTravel_time((int) travelTime.getProperties().get(TRAVEL_TIME));
-            setVelocity((int) travelTime.getProperties().get(VELOCITY));
-            setLength((int) travelTime.getProperties().get(LENGTH));
+            setRetrievedFromThirdParty(travelTime.getRetrievedFromThirdParty());
+            setType(travelTime.getType());
+            setTravel_time(travelTime.getTravelTime());
+            setVelocity(travelTime.getVelocity());
+            setLength(travelTime.getLength());
 
         } catch (Exception e) {
             e.printStackTrace();

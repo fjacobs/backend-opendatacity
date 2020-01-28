@@ -31,8 +31,9 @@ public class CalculateTravelTime extends GeoJsonObjectVisitorWrapper<Feature> {
                 feature.getProperties().put(LENGTH, -1);
             }
             if (feature.getProperties().containsKey(ID)) {
-                feature.setId((String) feature.getProperties().get(ID));  // See RFC: If used then id SHOULD be included as a member of the Feature
-                feature.getProperties().remove(ID);                      // (ie. not as a member of properties)
+                feature.setId((String) feature.getProperties().get(ID));  // See RFC 7946: If an ID is used then it SHOULD
+                                                                          // be included as a top level member
+                feature.getProperties().remove(ID);                       // and not as a member of properties
             }
         } catch (Exception e) {
             e.printStackTrace();
