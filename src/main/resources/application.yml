@@ -1,17 +1,11 @@
 
-debug:  true
+debug:  false
 
 
 # Traffic Data Configuration
 
 fileadapter:
     folder: /traveltimedata/blinking/
-
-#    @NotBlank String host;
-#    @NotBlank int port;
-#    @NotBlank String user;
-#    @NotBlank String password;
-#    @NotBlank String database;
 
 postgres:
     host: localhost
