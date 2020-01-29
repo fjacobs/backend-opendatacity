@@ -1,14 +1,13 @@
 package com.dynacore.livemap.traveltime.repo;
 
-import com.dynacore.livemap.traveltime.domain.RoadFeature;
 import lombok.*;
-import org.geojson.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 
 @Table
@@ -45,31 +44,19 @@ public class TravelTimeEntity {
         this.velocity = velocity;
     }
 
-    public TravelTimeEntity(RoadFeature travelTime) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TravelTimeEntity)) return false;
+        TravelTimeEntity that = (TravelTimeEntity) o;
+        return Objects.equals(length, that.length) &&
+                Objects.equals(travel_time, that.travel_time) &&
+                Objects.equals(velocity, that.velocity);
+    }
 
-        try {
-            setPkey(null);
-            if(travelTime.getId() != null) {
-                setId(travelTime.getId());
-            } else {
-                log.warn("Feature doesn't have an ID: " + travelTime.toString());
-            }
-            setName(travelTime.getName());
-            if(travelTime.getPubDate() != null)
-                setPubDate(travelTime.getPubDate());
-            else {
-                log.warn("Feature doesn't have a pub date: " + travelTime.toString());
-            }
-            setRetrievedFromThirdParty(travelTime.getRetrievedFromThirdParty());
-            setType(travelTime.getType());
-            setTravel_time(travelTime.getTravelTime());
-            setVelocity(travelTime.getVelocity());
-            setLength(travelTime.getLength());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getMessage());
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(length, travel_time, velocity);
     }
 }
 

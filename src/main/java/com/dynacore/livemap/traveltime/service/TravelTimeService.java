@@ -17,7 +17,7 @@ package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.ReactiveGeoJsonPublisher;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
-import com.dynacore.livemap.traveltime.domain.RoadFeature;
+import com.dynacore.livemap.traveltime.domain.RoadDTO;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.dynacore.livemap.traveltime.service.filter.FeatureRequest;
@@ -25,6 +25,7 @@ import com.dynacore.livemap.traveltime.service.visitor.CalculateTravelTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import javax.xml.transform.Source;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -59,24 +61,28 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
     private final TravelTimeServiceConfig config;
     private final TravelTimeRepo repo;
     private final Logger log = LoggerFactory.getLogger(TravelTimeService.class);
-    Map<String, Integer> store = new HashMap<>();
+
+    Map<String, Integer> featureStore = new HashMap<>();
+    Map<String, TravelTimeEntity> entityStore = new HashMap<>();
+    Map<String, RoadDTO> dtoStore = new HashMap<>();
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Autowired
     public TravelTimeService(TravelTimeRepo repo, GeoJsonAdapter retriever, TravelTimeServiceConfig config) throws JsonProcessingException {
         this.retriever = retriever;
         this.config = config;
         this.repo = repo;
-
         log.info(this.config.getRequestInterval().toString());
 
-        sharedFlux = processFlux()
-                .cache(config.getRequestInterval());
+        sharedFlux = processFlux().cache(config.getRequestInterval());
 
         if (config.isSaveToDbEnabled()) {
             Flux.from(sharedFlux)
                     .parallel(Runtime.getRuntime().availableProcessors())
                     .runOn(Schedulers.parallel())
-                    .map(feature -> repo.save(new TravelTimeEntity((RoadFeature)feature)))
+                    .map(feature -> repo.save(modelMapper.map(feature, TravelTimeEntity.class)))
                     .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
         }
     }
@@ -94,13 +100,13 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
                 .handle((feature, sink) -> {
                     Integer newHash = DistinctUtil.hashCodeNoRetDate.apply(feature);
                     Integer oldHash;
-                    if ((oldHash = store.get(feature.getId())) != null) {
+                    if ((oldHash = featureStore.get(feature.getId())) != null) {
                         if (!newHash.equals(oldHash)) {
-                            store.put(feature.getId(), newHash);
+                            featureStore.put(feature.getId(), newHash);
                             sink.next(feature);
                         }
                     } else {
-                        store.put(feature.getId(), newHash);
+                        featureStore.put(feature.getId(), newHash);
                         sink.next(feature);
                     }
                 });
@@ -116,6 +122,79 @@ public class TravelTimeService implements ReactiveGeoJsonPublisher {
                    .flatMap(Flux::buffer)
                    .delayElements(Duration.ofSeconds(delay));
     }
+
+
+    // DB independent replay
+    public Flux<List<RoadDTO>> replayGroupedByPubdateUniqueMinimal(Integer delay) {
+        return repo.getAllAscending()
+                .map(entity-> {
+                    RoadDTO roadDTO = new RoadDTO();
+                    roadDTO.setId(entity.getId());
+                    roadDTO.setVelocity(entity.getVelocity());
+                    roadDTO.setPubDate(entity.getPubDate());
+                    return  roadDTO;
+                } )
+                .handle((newDTO, sink) -> {
+                    RoadDTO lastChangedEntity;
+                    if (( lastChangedEntity = dtoStore.get(newDTO.getId())) != null) {
+                        if (!lastChangedEntity.equals(newDTO)) {
+                            dtoStore.put(newDTO.getId(), newDTO);
+                            if(!lastChangedEntity.getVelocity().equals(newDTO.getVelocity())) {
+                                sink.next(newDTO);
+                            }
+                        }
+                    } else {
+                        dtoStore.put(newDTO.getId(), newDTO);
+                        sink.next(newDTO);
+                    }
+                })
+                .cast(RoadDTO.class)
+                .windowUntilChanged(RoadDTO::getPubDate)
+                .flatMap(Flux::buffer)
+                .doOnNext(x-> System.out.println("Amount of features changed: " + x.size()))
+                .delayElements(Duration.ofMillis(delay));
+    }
+
+    // DB independent replay
+    public Flux<List<RoadDTO>> replayGroupedByPubdateUnique(Integer delay) {
+        return repo.getAllAscending()
+                .map((newEntity) -> {
+
+                    RoadDTO roadDTO = new RoadDTO();
+                    roadDTO.setId(newEntity.getId());
+                    roadDTO.setPubDate(newEntity.getPubDate());
+                    roadDTO.setOurRetrieval(newEntity.getRetrievedFromThirdParty());
+
+                    TravelTimeEntity lastChangedEntity;
+                    if (( lastChangedEntity = entityStore.get(newEntity.getId())) != null) {
+                        if (!lastChangedEntity.equals(newEntity)) {
+                            entityStore.put(newEntity.getId(), newEntity);
+
+                            if(!lastChangedEntity.getLength().equals(newEntity.getLength())) {
+                                roadDTO.setLength(newEntity.getLength());
+                            }
+                            if(!lastChangedEntity.getTravel_time().equals(newEntity.getTravel_time())) {
+                                roadDTO.setTravelTime(newEntity.getTravel_time());
+                            }
+                            if(!lastChangedEntity.getVelocity().equals(newEntity.getVelocity())) {
+                                roadDTO.setVelocity(newEntity.getVelocity());
+                            }
+                        } else {
+                            roadDTO.setSameSince(lastChangedEntity.getPubDate());
+                        }
+                    } else {
+                        entityStore.put(newEntity.getId(), newEntity);
+                        roadDTO.setLength(newEntity.getLength());
+                        roadDTO.setTravelTime(newEntity.getTravel_time());
+                        roadDTO.setVelocity(newEntity.getVelocity());
+                    }
+                    return roadDTO;
+                })
+                .windowUntilChanged(RoadDTO::getPubDate)
+                .flatMap(Flux::buffer)
+                .delayElements(Duration.ofMillis(delay));
+    }
+
 
     public Mono<FeatureCollection> getFeatureCollection() {
         return Flux.from(sharedFlux)

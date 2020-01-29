@@ -15,16 +15,17 @@ import java.util.HashMap;
 
 public class RoadDTO extends HashMap<Object,Object> {
 
-   public void setId(String id) {
+    public void setId(String id) {
         put(RoadFeature.ID, id);
     }
+    public String getId() {
+         return (String) get(RoadFeature.ID);
+    }
+
     public void setName(String name) {
         put(RoadFeature.NAME, name);
     }
 
-    public String getType() {
-        return (String) get(RoadFeature.TYPE);
-    }
 
     public void setType(String type) {
         put(RoadFeature.TYPE, type);
@@ -54,6 +55,14 @@ public class RoadDTO extends HashMap<Object,Object> {
         put(RoadFeature.VELOCITY, velocity);
     }
 
+    public OffsetDateTime getPubDate() {
+        return (OffsetDateTime) get(RoadFeature.THEIR_RETRIEVAL);
+    }
+
+    public void setPubDate(OffsetDateTime pubDate) {
+        put(RoadFeature.THEIR_RETRIEVAL, pubDate);
+    }
+
     public OffsetDateTime getOurRetrieval() {
         return (OffsetDateTime) get(RoadFeature.OUR_RETRIEVAL);
     }
@@ -62,11 +71,16 @@ public class RoadDTO extends HashMap<Object,Object> {
         put(RoadFeature.OUR_RETRIEVAL, ourRetrieval);
     }
 
-    public OffsetDateTime getPubDate() {
-        return (OffsetDateTime) get(RoadFeature.THEIR_RETRIEVAL);
+    public String getType() {
+        return (String) get(RoadFeature.TYPE);
     }
 
-    public void setPubDate(OffsetDateTime pubDate) {
-        put(RoadFeature.THEIR_RETRIEVAL, pubDate);
+
+    public OffsetDateTime getSameSince() {
+        return (OffsetDateTime) get(RoadFeature.SAME_SINCE);
+    }
+
+    public void setSameSince(OffsetDateTime pubDate) {
+        put(RoadFeature.SAME_SINCE, pubDate);
     }
 }

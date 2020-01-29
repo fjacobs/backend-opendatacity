@@ -16,6 +16,7 @@ public class RoadFeature extends Feature {
     public static final String VELOCITY = "Velocity";
     public static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
     public static final String THEIR_RETRIEVAL = "pubDate";
+    public static final String SAME_SINCE = "sameSince";
 
     public String getName() {
         return getProperty(NAME);
