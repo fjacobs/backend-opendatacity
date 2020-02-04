@@ -113,24 +113,6 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
     }
 
     @Test
-    public void insertOneEntity() throws InterruptedException {
-
-        dropCreate(client);
-        String pubDate = "2019-10-16T15:52:00Z";
-        String retDate = "2019-10-16T16:00:00Z";
-        TravelTimeEntity entityOne = new TravelTimeEntity(null, "002", "First entity", OffsetDateTime.parse(pubDate), OffsetDateTime.parse(retDate), "type", 200, 5, 100);
-        client.insert()
-                .into(TravelTimeEntity.class)
-                .using(entityOne)
-                .fetch()
-                .rowsUpdated()
-                .subscribe((x) -> System.out.println("Result consumed:" + x));
-
-        Thread.sleep(1000);
-
-    }
-
-    @Test
     public void isNew() {
 
         dropCreate(client);

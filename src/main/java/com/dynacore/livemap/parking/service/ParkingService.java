@@ -53,8 +53,8 @@ import java.util.Map;
  */
 
 @Lazy(false)
-@Profile("traveltime")
-@Service("travelTimeService")
+@Profile("parking")
+@Service("parkingService")
 public class ParkingService implements ReactiveGeoJsonPublisher {
 
     private Flux<Feature> sharedFlux;
