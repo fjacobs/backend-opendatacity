@@ -7,17 +7,17 @@ import reactor.core.publisher.Mono;
 import java.time.OffsetDateTime;
 
 public interface TravelTimeRepository {
-    Mono<Boolean> isNew(TravelTimeEntity entity);
+  Mono<Boolean> isNew(TravelTimeEntity entity);
 
-    Mono<Integer> save(TravelTimeEntity entity);
+  Mono<Integer> save(TravelTimeEntity entity);
 
-    Mono<TravelTimeEntity> getLatest(TravelTimeEntity entity);
+  Mono<TravelTimeEntity> getLatest(TravelTimeEntity entity);
 
-    Flux<TravelTimeEntity> getAllAscending();
+  Flux<TravelTimeEntity> getAllAscending();
 
-    Flux<PubDateSizeResponse> getReplayMetaData();
+  Flux<PubDateSizeResponse> getReplayMetaData();
 
-    Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end);
+  Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end);
 
-    Flux<TravelTimeEntity> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end);
+  Flux<TravelTimeEntity> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end);
 }

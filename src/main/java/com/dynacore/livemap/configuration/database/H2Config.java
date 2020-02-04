@@ -19,29 +19,31 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 @EnableR2dbcRepositories(basePackages = "com.dynacore.livemap.traveltime.repo")
 public class H2Config extends AbstractR2dbcConfiguration {
 
-    private boolean enablePopulator = true;
+  private boolean enablePopulator = true;
 
-    public void enablePopulator(boolean enablePopulator){
-        this.enablePopulator=enablePopulator;
-    }
+  public void enablePopulator(boolean enablePopulator) {
+    this.enablePopulator = enablePopulator;
+  }
 
-    @Bean("h2ConnectionFactory")
-    public ConnectionFactory connectionFactory() {
-        return ConnectionFactories.get(ConnectionFactoryOptions.
-                parse("r2dbc:h2:mem:////trafficdata;DB_CLOSE_DELAY=-1?MODE=PostgreSQL"));
-    }
+  @Bean("h2ConnectionFactory")
+  public ConnectionFactory connectionFactory() {
+    return ConnectionFactories.get(
+        ConnectionFactoryOptions.parse(
+            "r2dbc:h2:mem:////trafficdata;DB_CLOSE_DELAY=-1?MODE=PostgreSQL"));
+  }
 
-    @Bean
-    public ConnectionFactoryInitializer prodInitializer(@Qualifier("h2ConnectionFactory") ConnectionFactory connectionFactory) {
+  @Bean
+  public ConnectionFactoryInitializer prodInitializer(
+      @Qualifier("h2ConnectionFactory") ConnectionFactory connectionFactory) {
 
-        ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
-        initializer.setConnectionFactory(connectionFactory);
+    ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
+    initializer.setConnectionFactory(connectionFactory);
 
-        CompositeDatabasePopulator populator = new CompositeDatabasePopulator();
-        populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("schema.sql")));
-        initializer.setDatabasePopulator(populator);
-        initializer.setEnabled(enablePopulator);
+    CompositeDatabasePopulator populator = new CompositeDatabasePopulator();
+    populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("schema.sql")));
+    initializer.setDatabasePopulator(populator);
+    initializer.setEnabled(enablePopulator);
 
-        return initializer;
-    }
+    return initializer;
+  }
 }

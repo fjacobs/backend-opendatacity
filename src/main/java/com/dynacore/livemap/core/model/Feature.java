@@ -7,17 +7,18 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 public abstract class Feature {
 
-    @JsonProperty("Id")
-    protected UUID id;
+  @JsonProperty("Id")
+  protected UUID id;
 
-    @JsonProperty("type")
-    protected String type;
-    @JsonProperty("geometry")
-    protected Geometry geometry;
+  @JsonProperty("type")
+  protected String type;
 
-    @JsonIgnore
-    protected Properties properties;
+  @JsonProperty("geometry")
+  protected Geometry geometry;
+
+  @JsonIgnore protected Properties properties;
 }

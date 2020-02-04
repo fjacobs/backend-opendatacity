@@ -19,54 +19,57 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
 /*
    Utility class to convert files with GeoJson contents to objects.
    Used as a helper to import GeoJson files into the database or for dev/testing purposes.
 */
 public class FileToGeojson {
 
-    private static final Logger log = LoggerFactory.getLogger(FileToGeojson.class);
-     /*
-      *   Converts all files in a folder.
-      *   @param folderName  folderName must be relative to the resources folder.
-     */
-    public static List<FeatureCollection> readCollection(String folderName) {
+  private static final Logger log = LoggerFactory.getLogger(FileToGeojson.class);
+  /*
+   *   Converts all files in a folder.
+   *   @param folderName  folderName must be relative to the resources folder.
+   */
+  public static List<FeatureCollection> readCollection(String folderName) {
 
-        File folder = new File(FileToGeojson.class.getResource(folderName).getPath());
+    File folder = new File(FileToGeojson.class.getResource(folderName).getPath());
 
-        return Arrays.stream(Objects.requireNonNull(folder.listFiles()))
-                .filter(File::isFile)
-                .map(file -> {
-                    FeatureCollection fc = null;
-                    try {
-                        fc = new ObjectMapper().readValue(getString(folderName.concat(file.getName())), FeatureCollection.class);
-                    } catch (JsonProcessingException e) {
-                        log.error("Error reading: " + file.getName());
-                        throw new RuntimeException(e);
-                    }
-                    return fc;
-                })
-                .collect(Collectors.toList());
+    return Arrays.stream(Objects.requireNonNull(folder.listFiles()))
+        .filter(File::isFile)
+        .map(
+            file -> {
+              FeatureCollection fc = null;
+              try {
+                fc =
+                    new ObjectMapper()
+                        .readValue(
+                            getString(folderName.concat(file.getName())), FeatureCollection.class);
+              } catch (JsonProcessingException e) {
+                log.error("Error reading: " + file.getName());
+                throw new RuntimeException(e);
+              }
+              return fc;
+            })
+        .collect(Collectors.toList());
+  }
 
-    }
+  private static String getString(String fileName) {
 
-    private static String getString(String fileName) {
-
-        String featureCollection = "";
-        try {
-            Path path = ResourceUtils.getFile(FileToGeojson.class.getResource(fileName)).toPath();
-            Charset charset = StandardCharsets.UTF_8;
-            try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
-                String tempLine;
-                while ((tempLine = reader.readLine()) != null) {
-                    featureCollection = "" + tempLine;
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error reading test geojson file '" + fileName + "'  in resources: " + e.toString());
-            throw new RuntimeException(e);
+    String featureCollection = "";
+    try {
+      Path path = ResourceUtils.getFile(FileToGeojson.class.getResource(fileName)).toPath();
+      Charset charset = StandardCharsets.UTF_8;
+      try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+        String tempLine;
+        while ((tempLine = reader.readLine()) != null) {
+          featureCollection = "" + tempLine;
         }
-        return featureCollection;
+      }
+    } catch (Exception e) {
+      log.error(
+          "Error reading test geojson file '" + fileName + "'  in resources: " + e.toString());
+      throw new RuntimeException(e);
     }
+    return featureCollection;
+  }
 }

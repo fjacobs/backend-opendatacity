@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class GuidanceSignController {
 
-    private final GuidanceSignService guidanceSignService;
+  private final GuidanceSignService guidanceSignService;
 
-    @Autowired
-    public GuidanceSignController(GuidanceSignService guidanceSignService) {
-        this.guidanceSignService = guidanceSignService;
-    }
+  @Autowired
+  public GuidanceSignController(GuidanceSignService guidanceSignService) {
+    this.guidanceSignService = guidanceSignService;
+  }
 
-    @GetMapping(value = "getCustomGuidanceSignJson")
-    @ResponseBody
-    public FeatureCollection<GuidanceSignModel> getCustomJson() {
-        return guidanceSignService.getLastUpdate();
-    }
+  @GetMapping(value = "getCustomGuidanceSignJson")
+  @ResponseBody
+  public FeatureCollection<GuidanceSignModel> getCustomJson() {
+    return guidanceSignService.getLastUpdate();
+  }
 }

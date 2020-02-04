@@ -30,242 +30,232 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 
 /**
- * {@link ExternalResource} wrapper to encapsulate {@link ProvidedDatabase} and
- * {@link org.testcontainers.containers.PostgreSQLContainer}.
+ * {@link ExternalResource} wrapper to encapsulate {@link ProvidedDatabase} and {@link
+ * org.testcontainers.containers.PostgreSQLContainer}.
  *
- * This file is copied from the org.springframework.data.r2dbc project, it's original authors are:
+ * <p>This file is copied from the org.springframework.data.r2dbc project, it's original authors
+ * are:
+ *
  * @author Mark Paluch
  * @author Jens Schauder
  */
 public abstract class ExternalDatabase extends ExternalResource {
 
-    private static Logger LOG = LoggerFactory.getLogger(ExternalDatabase.class);
+  private static Logger LOG = LoggerFactory.getLogger(ExternalDatabase.class);
 
-    /**
-     * Construct an absent database that is used as {@literal null} object if no database is available.
-     *
-     * @return an absent database.
-     */
-    public static ExternalDatabase unavailable() {
-        return NoAvailableDatabase.INSTANCE;
+  /**
+   * Construct an absent database that is used as {@literal null} object if no database is
+   * available.
+   *
+   * @return an absent database.
+   */
+  public static ExternalDatabase unavailable() {
+    return NoAvailableDatabase.INSTANCE;
+  }
+
+  /** @return hostname on which the database service runs. */
+  public abstract String getHostname();
+
+  /** @return the post of the database service. */
+  public abstract int getPort();
+
+  /** @return database user name. */
+  public abstract String getUsername();
+
+  /** @return password for the database user. */
+  public abstract String getPassword();
+
+  /** @return name of the database. */
+  public abstract String getDatabase();
+
+  /** @return JDBC URL for the endpoint. */
+  public abstract String getJdbcUrl();
+
+  /** Throws an {@link AssumptionViolatedException} if the database cannot be reached. */
+  @Override
+  protected void before() {
+
+    if (!checkValidity()) {
+      throw new AssumptionViolatedException(
+          String.format("Cannot connect to %s:%d. Skipping tests.", getHostname(), getPort()));
+    }
+  }
+
+  /**
+   * Performs a test if the database can actually be reached.
+   *
+   * @return true, if the database could be reached.
+   */
+  boolean checkValidity() {
+
+    try (Socket socket = new Socket()) {
+
+      socket.connect(
+          new InetSocketAddress(getHostname(), getPort()),
+          Math.toIntExact(TimeUnit.SECONDS.toMillis(5)));
+      return true;
+
+    } catch (IOException e) {
+      LOG.debug("external database not available.", e);
+    }
+
+    return false;
+  }
+
+  /** Provided (unmanaged resource) database connection coordinates. */
+  @Builder
+  public static class ProvidedDatabase extends ExternalDatabase {
+
+    private final String hostname;
+    private final int port;
+    private final String username;
+    private final String password;
+    private final String database;
+    private final String jdbcUrl;
+
+    public static ProvidedDatabaseBuilder builder() {
+      return new ProvidedDatabaseBuilder();
     }
 
     /**
-     * @return hostname on which the database service runs.
+     * Create a {@link ProvidedDatabaseBuilder} initialized with {@link JdbcDatabaseContainer}.
+     *
+     * @param container
+     * @return
      */
-    public abstract String getHostname();
+    public static ProvidedDatabaseBuilder builder(JdbcDatabaseContainer container) {
+
+      return builder()
+          .hostname(container.getContainerIpAddress()) //
+          .port(container.getFirstMappedPort()) //
+          .username(container.getUsername()) //
+          .password(container.getPassword()) //
+          .database(container.getDatabaseName()) //
+          .jdbcUrl(container.getJdbcUrl());
+    }
 
     /**
-     * @return the post of the database service.
+     * Create a {@link ProvidedDatabase} from {@link JdbcDatabaseContainer}.
+     *
+     * @param container
+     * @return
      */
-    public abstract int getPort();
+    public static ProvidedDatabase from(JdbcDatabaseContainer container) {
+      return builder(container).build();
+    }
 
-    /**
-     * @return database user name.
-     */
-    public abstract String getUsername();
-
-    /**
-     * @return password for the database user.
-     */
-    public abstract String getPassword();
-
-    /**
-     * @return name of the database.
-     */
-    public abstract String getDatabase();
-
-    /**
-     * @return JDBC URL for the endpoint.
-     */
-    public abstract String getJdbcUrl();
-
-    /**
-     * Throws an {@link AssumptionViolatedException} if the database cannot be reached.
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getHostname()
      */
     @Override
-    protected void before() {
-
-        if (!checkValidity()) {
-            throw new AssumptionViolatedException(
-                    String.format("Cannot connect to %s:%d. Skipping tests.", getHostname(), getPort()));
-        }
+    public String getHostname() {
+      return hostname;
     }
 
-    /**
-     * Performs a test if the database can actually be reached.
-     *
-     * @return true, if the database could be reached.
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPort()
      */
+    @Override
+    public int getPort() {
+      return port;
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getUsername()
+     */
+    @Override
+    public String getUsername() {
+      return username;
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPassword()
+     */
+    @Override
+    public String getPassword() {
+      return password;
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getDatabase()
+     */
+    @Override
+    public String getDatabase() {
+      return database;
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getJdbcUrl()
+     */
+    @Override
+    public String getJdbcUrl() {
+      return jdbcUrl;
+    }
+  }
+
+  /**
+   * An {@link ExternalDatabase} that couldn't get constructed.
+   *
+   * @author Jens Schauder
+   */
+  private static class NoAvailableDatabase extends ExternalDatabase {
+
+    private static final NoAvailableDatabase INSTANCE = new NoAvailableDatabase();
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPort()
+     */
+    @Override
     boolean checkValidity() {
-
-        try (Socket socket = new Socket()) {
-
-            socket.connect(new InetSocketAddress(getHostname(), getPort()), Math.toIntExact(TimeUnit.SECONDS.toMillis(5)));
-            return true;
-
-        } catch (IOException e) {
-            LOG.debug("external database not available.", e);
-        }
-
-        return false;
+      return false;
     }
 
-    /**
-     * Provided (unmanaged resource) database connection coordinates.
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getHostname()
      */
-    @Builder
-    public static class ProvidedDatabase extends ExternalDatabase {
-
-        private final String hostname;
-        private final int port;
-        private final String username;
-        private final String password;
-        private final String database;
-        private final String jdbcUrl;
-
-        public static ProvidedDatabaseBuilder builder() {
-            return new ProvidedDatabaseBuilder();
-        }
-
-        /**
-         * Create a {@link ProvidedDatabaseBuilder} initialized with {@link JdbcDatabaseContainer}.
-         *
-         * @param container
-         * @return
-         */
-        public static ProvidedDatabaseBuilder builder(JdbcDatabaseContainer container) {
-
-            return builder().hostname(container.getContainerIpAddress()) //
-                    .port(container.getFirstMappedPort()) //
-                    .username(container.getUsername()) //
-                    .password(container.getPassword()) //
-                    .database(container.getDatabaseName()) //
-                    .jdbcUrl(container.getJdbcUrl());
-        }
-
-        /**
-         * Create a {@link ProvidedDatabase} from {@link JdbcDatabaseContainer}.
-         *
-         * @param container
-         * @return
-         */
-        public static ProvidedDatabase from(JdbcDatabaseContainer container) {
-            return builder(container).build();
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getHostname()
-         */
-        @Override
-        public String getHostname() {
-            return hostname;
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPort()
-         */
-        @Override
-        public int getPort() {
-            return port;
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getUsername()
-         */
-        @Override
-        public String getUsername() {
-            return username;
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPassword()
-         */
-        @Override
-        public String getPassword() {
-            return password;
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getDatabase()
-         */
-        @Override
-        public String getDatabase() {
-            return database;
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getJdbcUrl()
-         */
-        @Override
-        public String getJdbcUrl() {
-            return jdbcUrl;
-        }
+    @Override
+    public String getHostname() {
+      throw new UnsupportedOperationException(getClass().getSimpleName());
     }
 
-    /**
-     * An {@link ExternalDatabase} that couldn't get constructed.
-     *
-     * @author Jens Schauder
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPort()
      */
-    private static class NoAvailableDatabase extends ExternalDatabase {
-
-        private static final NoAvailableDatabase INSTANCE = new NoAvailableDatabase();
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPort()
-         */
-        @Override
-        boolean checkValidity() {
-            return false;
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getHostname()
-         */
-        @Override
-        public String getHostname() {
-            throw new UnsupportedOperationException(getClass().getSimpleName());
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPort()
-         */
-        @Override
-        public int getPort() {
-            throw new UnsupportedOperationException(getClass().getSimpleName());
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getUsername()
-         */
-        @Override
-        public String getUsername() {
-            throw new UnsupportedOperationException(getClass().getSimpleName());
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPassword()
-         */
-        @Override
-        public String getPassword() {
-            throw new UnsupportedOperationException(getClass().getSimpleName());
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getDatabase()
-         */
-        @Override
-        public String getDatabase() {
-            throw new UnsupportedOperationException(getClass().getSimpleName());
-        }
-
-        /* (non-Javadoc)
-         * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getJdbcUrl()
-         */
-        @Override
-        public String getJdbcUrl() {
-            throw new UnsupportedOperationException(getClass().getSimpleName());
-        }
+    @Override
+    public int getPort() {
+      throw new UnsupportedOperationException(getClass().getSimpleName());
     }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getUsername()
+     */
+    @Override
+    public String getUsername() {
+      throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getPassword()
+     */
+    @Override
+    public String getPassword() {
+      throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getDatabase()
+     */
+    @Override
+    public String getDatabase() {
+      throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.data.jdbc.core.function.ExternalDatabase#getJdbcUrl()
+     */
+    @Override
+    public String getJdbcUrl() {
+      throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+  }
 }

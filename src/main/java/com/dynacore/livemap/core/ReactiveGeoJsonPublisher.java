@@ -5,9 +5,9 @@ import org.geojson.Feature;
 import reactor.core.publisher.Flux;
 
 /*
-    Publisher for GeoJson objects.
- */
+   Publisher for GeoJson objects.
+*/
 
 public interface ReactiveGeoJsonPublisher {
-    Flux<Feature> getLiveData();
+  Flux<Feature> getLiveData();
 }

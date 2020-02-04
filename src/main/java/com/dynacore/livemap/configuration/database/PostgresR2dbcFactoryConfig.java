@@ -1,6 +1,5 @@
 package com.dynacore.livemap.configuration.database;
 
-
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,23 +15,24 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 @EnableR2dbcRepositories
 public class PostgresR2dbcFactoryConfig extends AbstractR2dbcConfiguration {
 
-    private PostgresConfiguration config;
+  private PostgresConfiguration config;
 
-    public PostgresR2dbcFactoryConfig(PostgresConfiguration config) {
-        this.config = config;
-    }
+  public PostgresR2dbcFactoryConfig(PostgresConfiguration config) {
+    this.config = config;
+  }
 
-    @Bean
-    public ConnectionFactory connectionFactory() {
+  @Bean
+  public ConnectionFactory connectionFactory() {
 
-        return ConnectionFactories.get(builder()
-                .option(DRIVER, "pool")
-                .option(PROTOCOL, "postgresql")
-                .option(HOST, config.getHost())
-                .option(USER, config.getUser())
-                .option(PORT, config.getPort())
-                .option(PASSWORD, config.getPassword())
-                .option(DATABASE, config.getDatabase())
-                .build());
-    }
+    return ConnectionFactories.get(
+        builder()
+            .option(DRIVER, "pool")
+            .option(PROTOCOL, "postgresql")
+            .option(HOST, config.getHost())
+            .option(USER, config.getUser())
+            .option(PORT, config.getPort())
+            .option(PASSWORD, config.getPassword())
+            .option(DATABASE, config.getDatabase())
+            .build());
+  }
 }

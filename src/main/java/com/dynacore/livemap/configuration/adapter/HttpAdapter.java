@@ -18,30 +18,36 @@ import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 @Component
 public class HttpAdapter implements GeoJsonAdapter {
 
-    private WebClient webClient;
+  private WebClient webClient;
 
-    public HttpAdapter(WebClient webClient) {
-        this.webClient = webClient;
-    }
+  public HttpAdapter(WebClient webClient) {
+    this.webClient = webClient;
+  }
 
-    public Flux<FeatureCollection> requestHotSourceFc(Duration interval) {
-        return Flux.interval(interval)
-                   .concatMap(tick-> webClient
-                   .get()
-                   .exchange()
-                   .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
-                   .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
-                   .map(bytes -> {
-                        FeatureCollection featureColl = null;
-                        try {
-                            featureColl = Optional.of(new ObjectMapper().readValue(bytes, FeatureCollection.class))
-                                .orElseThrow(IllegalStateException::new);
-                            } catch (Exception e) {
-                                return Mono.error(new IllegalArgumentException("Could not serialize GeoJson."));
-                            }
-                                return featureColl;
-                            }
-                        )
-                   .cast(FeatureCollection.class));
-    }
+  public Flux<FeatureCollection> requestHotSourceFc(Duration interval) {
+    return Flux.interval(interval)
+        .concatMap(
+            tick ->
+                webClient
+                    .get()
+                    .exchange()
+                    .filter(clientResponse -> (clientResponse.statusCode() != NOT_MODIFIED))
+                    .flatMap(clientResponse -> clientResponse.bodyToMono(byte[].class))
+                    .map(
+                        bytes -> {
+                          FeatureCollection featureColl = null;
+                          try {
+                            featureColl =
+                                Optional.of(
+                                        new ObjectMapper()
+                                            .readValue(bytes, FeatureCollection.class))
+                                    .orElseThrow(IllegalStateException::new);
+                          } catch (Exception e) {
+                            return Mono.error(
+                                new IllegalArgumentException("Could not serialize GeoJson."));
+                          }
+                          return featureColl;
+                        })
+                    .cast(FeatureCollection.class));
+  }
 }

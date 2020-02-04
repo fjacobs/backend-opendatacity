@@ -14,20 +14,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ParkingController {
 
-    private ParkingService parkingPlaceService;
-    private final Logger logger = LoggerFactory.getLogger(ParkingController.class);
+  private ParkingService parkingPlaceService;
+  private final Logger logger = LoggerFactory.getLogger(ParkingController.class);
 
+  @Autowired
+  public ParkingController(ParkingService parkingPlaceService) {
+    this.parkingPlaceService = parkingPlaceService;
+  }
 
-    @Autowired
-    public ParkingController(ParkingService parkingPlaceService) {
-        this.parkingPlaceService = parkingPlaceService;
-    }
-
-    @CrossOrigin
-    @GetMapping(value = "getCustomParkingJson")
-    @ResponseBody
-    public FeatureCollection<ParkingModel> getCustomParkingJson() {
-        return parkingPlaceService.getLastUpdate();
-    }
-
+  @CrossOrigin
+  @GetMapping(value = "getCustomParkingJson")
+  @ResponseBody
+  public FeatureCollection<ParkingModel> getCustomParkingJson() {
+    return parkingPlaceService.getLastUpdate();
+  }
 }

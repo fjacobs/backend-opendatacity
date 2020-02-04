@@ -6,5 +6,4 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties("guidancesign")
-public class GuidanceSignConfiguration extends ServiceConfiguration {
-}
+public class GuidanceSignConfiguration extends ServiceConfiguration {}

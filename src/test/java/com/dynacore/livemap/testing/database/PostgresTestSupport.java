@@ -1,6 +1,5 @@
 package com.dynacore.livemap.testing.database;
 
-
 import io.r2dbc.spi.ConnectionFactory;
 
 import java.util.function.Supplier;
@@ -15,115 +14,110 @@ import javax.sql.DataSource;
 /**
  * Utility class for testing against Postgres either locally, or on Docker.
  *
- * This file is copied from the <a href="https://github.com/spring-projects/spring-data-r2dbc">spring-data-r2dbc project</a>
+ * <p>This file is copied from the <a
+ * href="https://github.com/spring-projects/spring-data-r2dbc">spring-data-r2dbc project</a>
  *
- *  it's original authors are:
+ * <p>it's original authors are:
  *
  * @author Mark Paluch
  * @author Jens Schauder
  */
 public class PostgresTestSupport {
 
-    private static final boolean PREFER_LOCAL = true;
-    private static ExternalDatabase testContainerDatabase;
+  private static final boolean PREFER_LOCAL = true;
+  private static ExternalDatabase testContainerDatabase;
 
-    public static final String CREATE_TABLE_TRAVEL_TIME =  "CREATE TABLE travel_time_entity\n" +
-            "(\n" +
-            "    pkey SERIAL PRIMARY KEY,\n" +
-            "    id                         VARCHAR(200),\n" +
-            "    name                       VARCHAR(200),\n" +
-            "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
-            "    retrieved_from_third_party TIMESTAMP WITH TIME ZONE  NOT NULL,\n" +
-            "    type                       VARCHAR(200),\n" +
-            "    length                     SMALLINT CHECK (length >= -1),\n" +
-            "    velocity                   SMALLINT CHECK (velocity >= -1),\n" +
-            "    travel_time                SMALLINT CHECK (travel_time >= -1),\n" +
-            "    unique (id, pub_date)\n" +
-            ");";
+  public static final String CREATE_TABLE_TRAVEL_TIME =
+      "CREATE TABLE travel_time_entity\n"
+          + "(\n"
+          + "    pkey SERIAL PRIMARY KEY,\n"
+          + "    id                         VARCHAR(200),\n"
+          + "    name                       VARCHAR(200),\n"
+          + "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
+          + "    retrieved_from_third_party TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
+          + "    type                       VARCHAR(200),\n"
+          + "    length                     SMALLINT CHECK (length >= -1),\n"
+          + "    velocity                   SMALLINT CHECK (velocity >= -1),\n"
+          + "    travel_time                SMALLINT CHECK (travel_time >= -1),\n"
+          + "    unique (id, pub_date)\n"
+          + ");";
 
-    /**
-     * Returns a database either hosted locally at {@code postgres:@localhost:5432/postgres} or running inside Docker.
-     *
-     * @return information about the database. Guaranteed to be not {@literal null}.
-     */
-    public static ExternalDatabase database() {
+  /**
+   * Returns a database either hosted locally at {@code postgres:@localhost:5432/postgres} or
+   * running inside Docker.
+   *
+   * @return information about the database. Guaranteed to be not {@literal null}.
+   */
+  public static ExternalDatabase database() {
 
-        if (PREFER_LOCAL) {
-            return getFirstWorkingDatabase( //
-                    PostgresTestSupport::local, //
-                    PostgresTestSupport::testContainer //
-            );
-        } else {
-            return getFirstWorkingDatabase( //
-                    PostgresTestSupport::testContainer, //
-                    PostgresTestSupport::local //
-            );
-        }
+    if (PREFER_LOCAL) {
+      return getFirstWorkingDatabase( //
+          PostgresTestSupport::local, //
+          PostgresTestSupport::testContainer //
+          );
+    } else {
+      return getFirstWorkingDatabase( //
+          PostgresTestSupport::testContainer, //
+          PostgresTestSupport::local //
+          );
     }
+  }
 
-    @SafeVarargs
-    private static ExternalDatabase getFirstWorkingDatabase(Supplier<ExternalDatabase>... suppliers) {
+  @SafeVarargs
+  private static ExternalDatabase getFirstWorkingDatabase(Supplier<ExternalDatabase>... suppliers) {
 
-        return Stream.of(suppliers).map(Supplier::get) //
-                .filter(ExternalDatabase::checkValidity) //
-                .findFirst() //
-                .orElse(ExternalDatabase.unavailable());
+    return Stream.of(suppliers)
+        .map(Supplier::get) //
+        .filter(ExternalDatabase::checkValidity) //
+        .findFirst() //
+        .orElse(ExternalDatabase.unavailable());
+  }
+
+  /** Returns a locally provided database at {@code postgres:@localhost:5432/postgres}. */
+  private static ExternalDatabase local() {
+
+    return ProvidedDatabase.builder() //
+        .hostname("localhost") //
+        .port(5432) //
+        .database("test") //
+        .username("postgres") //
+        .password("admin")
+        .build();
+  }
+
+  /** Returns a database provided via Testcontainers. */
+  private static ExternalDatabase testContainer() {
+
+    if (testContainerDatabase == null) {
+      try {
+        PostgreSQLContainer container = new PostgreSQLContainer();
+        container.start();
+
+        testContainerDatabase = ProvidedDatabase.from(container);
+
+      } catch (IllegalStateException ise) {
+        // docker not available.
+        testContainerDatabase = ExternalDatabase.unavailable();
+      }
     }
+    return testContainerDatabase;
+  }
 
-    /**
-     * Returns a locally provided database at {@code postgres:@localhost:5432/postgres}.
-     */
-    private static ExternalDatabase local() {
+  /** Creates a new {@link ConnectionFactory} configured from the {@link ExternalDatabase}.. */
+  public static ConnectionFactory createConnectionFactory(ExternalDatabase database) {
+    return ConnectionUtils.getConnectionFactory("postgresql", database);
+  }
 
-        return ProvidedDatabase.builder() //
-                .hostname("localhost") //
-                .port(5432) //
-                .database("test") //
-                .username("postgres") //
-                .password("admin").build();
+  /** Creates a new {@link DataSource} configured from the {@link ExternalDatabase}. */
+  public static DataSource createDataSource(ExternalDatabase database) {
 
-    }
+    PGSimpleDataSource dataSource = new PGSimpleDataSource();
 
-    /**
-     * Returns a database provided via Testcontainers.
-     */
-    private static ExternalDatabase testContainer() {
+    dataSource.setUser(database.getUsername());
+    dataSource.setPassword(database.getPassword());
+    // dataSource.setURL(database.getJdbcUrl());
+    dataSource.setURL("jdbc:postgresql://localhost:5432/test");
 
-        if (testContainerDatabase == null) {
-            try {
-                PostgreSQLContainer container = new PostgreSQLContainer();
-                container.start();
-
-                testContainerDatabase = ProvidedDatabase.from(container);
-
-            } catch (IllegalStateException ise) {
-                // docker not available.
-                testContainerDatabase = ExternalDatabase.unavailable();
-            }
-        }
-        return testContainerDatabase;
-    }
-
-    /**
-     * Creates a new {@link ConnectionFactory} configured from the {@link ExternalDatabase}..
-     */
-    public static ConnectionFactory createConnectionFactory(ExternalDatabase database) {
-        return ConnectionUtils.getConnectionFactory("postgresql", database);
-    }
-
-    /**
-     * Creates a new {@link DataSource} configured from the {@link ExternalDatabase}.
-     */
-    public static DataSource createDataSource(ExternalDatabase database) {
-
-        PGSimpleDataSource dataSource = new PGSimpleDataSource();
-
-        dataSource.setUser(database.getUsername());
-        dataSource.setPassword(database.getPassword());
-		//dataSource.setURL(database.getJdbcUrl());
-        dataSource.setURL("jdbc:postgresql://localhost:5432/test");
-
-        return dataSource;
-    }
-
+    return dataSource;
+  }
 }

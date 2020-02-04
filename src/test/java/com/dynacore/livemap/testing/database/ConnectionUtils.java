@@ -27,41 +27,43 @@ import javax.sql.DataSource;
 /**
  * Utility methods to configure {@link DataSource}/{@link ConnectionFactoryOptions}.
  *
- * This file is copied from the org.springframework.data.r2dbc project, the original author is:
+ * <p>This file is copied from the org.springframework.data.r2dbc project, the original author is:
+ *
  * @author Mark Paluch
  */
 abstract class ConnectionUtils {
 
-    /**
-     * Obtain a {@link ConnectionFactory} given {@link ExternalDatabase} and {@code driver}.
-     *
-     * @param driver
-     * @param configuration
-     * @return
-     */
-    static ConnectionFactory getConnectionFactory(String driver, ExternalDatabase configuration) {
-        return ConnectionFactories.get(createOptions(driver, configuration));
-    }
+  /**
+   * Obtain a {@link ConnectionFactory} given {@link ExternalDatabase} and {@code driver}.
+   *
+   * @param driver
+   * @param configuration
+   * @return
+   */
+  static ConnectionFactory getConnectionFactory(String driver, ExternalDatabase configuration) {
+    return ConnectionFactories.get(createOptions(driver, configuration));
+  }
 
-    /**
-     * Create {@link ConnectionFactoryOptions} from {@link ExternalDatabase} and {@code driver}.
-     *
-     * @param driver
-     * @param configuration
-     * @return
-     */
-    static ConnectionFactoryOptions createOptions(String driver, ExternalDatabase configuration) {
+  /**
+   * Create {@link ConnectionFactoryOptions} from {@link ExternalDatabase} and {@code driver}.
+   *
+   * @param driver
+   * @param configuration
+   * @return
+   */
+  static ConnectionFactoryOptions createOptions(String driver, ExternalDatabase configuration) {
 
-        return ConnectionFactoryOptions.builder().option(DRIVER, driver) //
-                .option(USER, configuration.getUsername()) //
-                .option(PASSWORD, configuration.getPassword()) //
-                .option(DATABASE, configuration.getDatabase()) //
-                .option(HOST, configuration.getHostname()) //
-                .option(PORT, configuration.getPort()) //
-                .build();
-    }
+    return ConnectionFactoryOptions.builder()
+        .option(DRIVER, driver) //
+        .option(USER, configuration.getUsername()) //
+        .option(PASSWORD, configuration.getPassword()) //
+        .option(DATABASE, configuration.getDatabase()) //
+        .option(HOST, configuration.getHostname()) //
+        .option(PORT, configuration.getPort()) //
+        .build();
+  }
 
-    private ConnectionUtils() {
-        // utility constructor.
-    }
+  private ConnectionUtils() {
+    // utility constructor.
+  }
 }

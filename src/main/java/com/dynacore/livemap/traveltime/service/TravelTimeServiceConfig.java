@@ -9,4 +9,3 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @ConfigurationProperties("traveltime")
 public class TravelTimeServiceConfig extends ServiceConfiguration {}
-

@@ -17,41 +17,42 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpGeoJsonSerializer<T>  {
-    private Logger logger = LoggerFactory.getLogger(HttpGeoJsonSerializer.class);
+public class HttpGeoJsonSerializer<T> {
+  private Logger logger = LoggerFactory.getLogger(HttpGeoJsonSerializer.class);
 
-    public <T> FeatureCollection marshallFromUrl(String url, Class<T> clazz) {
-        RestTemplate client = createRestClient();
+  public <T> FeatureCollection marshallFromUrl(String url, Class<T> clazz) {
+    RestTemplate client = createRestClient();
 
-        Type resolvableType = ResolvableType.forClassWithGenerics(FeatureCollection.class, clazz).getType();
-        ResponseEntity<FeatureCollection> responseEntity = null;
-        try{
-              responseEntity = client.exchange(url,
-                    HttpMethod.GET,
-                    null,
-                    ParameterizedTypeReference.forType(resolvableType), clazz);
-        } catch(RestClientException error) {
-            logger.error("Could not get data from: " + url + " error: " + error);
-        } catch(HttpMessageConversionException | IllegalStateException error) {
-            logger.error("Can't unmarshall check model.... ", error);
-        }
-
-        if(responseEntity==null) {
-            throw new NullPointerException("Could not unmarshall from: " + url);
-        }
-        return  responseEntity.getBody();
+    Type resolvableType =
+        ResolvableType.forClassWithGenerics(FeatureCollection.class, clazz).getType();
+    ResponseEntity<FeatureCollection> responseEntity = null;
+    try {
+      responseEntity =
+          client.exchange(
+              url, HttpMethod.GET, null, ParameterizedTypeReference.forType(resolvableType), clazz);
+    } catch (RestClientException error) {
+      logger.error("Could not get data from: " + url + " error: " + error);
+    } catch (HttpMessageConversionException | IllegalStateException error) {
+      logger.error("Can't unmarshall check model.... ", error);
     }
 
-    private RestTemplate createRestClient() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        List<MediaType> supportedMediaTypes = new ArrayList<>();
-        supportedMediaTypes.add(MediaType.ALL);
-
-        MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
-        jacksonMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
-
-        restTemplate.getMessageConverters().add(jacksonMessageConverter);
-        return restTemplate;
+    if (responseEntity == null) {
+      throw new NullPointerException("Could not unmarshall from: " + url);
     }
+    return responseEntity.getBody();
+  }
+
+  private RestTemplate createRestClient() {
+    RestTemplate restTemplate = new RestTemplate();
+
+    List<MediaType> supportedMediaTypes = new ArrayList<>();
+    supportedMediaTypes.add(MediaType.ALL);
+
+    MappingJackson2HttpMessageConverter jacksonMessageConverter =
+        new MappingJackson2HttpMessageConverter();
+    jacksonMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
+
+    restTemplate.getMessageConverters().add(jacksonMessageConverter);
+    return restTemplate;
+  }
 }

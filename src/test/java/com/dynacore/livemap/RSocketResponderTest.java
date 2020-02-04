@@ -1,41 +1,41 @@
-//package com.dynacore.livemap;
+// package com.dynacore.livemap;
 //
-//import java.time.Duration;
-//import java.time.OffsetDateTime;
+// import java.time.Duration;
+// import java.time.OffsetDateTime;
 //
-//import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
-//import lombok.AllArgsConstructor;
-//import lombok.ToString;
-//import org.junit.jupiter.api.AfterAll;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.Test;
+// import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+// import lombok.AllArgsConstructor;
+// import lombok.ToString;
+// import org.junit.jupiter.api.AfterAll;
+// import org.junit.jupiter.api.BeforeAll;
+// import org.junit.jupiter.api.Test;
 //
-//import io.rsocket.RSocketFactory;
-//import io.rsocket.SocketAcceptor;
-//import io.rsocket.frame.decoder.PayloadDecoder;
-//import io.rsocket.metadata.WellKnownMimeType;
-//import io.rsocket.transport.netty.server.CloseableChannel;
-//import io.rsocket.transport.netty.server.TcpServerTransport;
+// import io.rsocket.RSocketFactory;
+// import io.rsocket.SocketAcceptor;
+// import io.rsocket.frame.decoder.PayloadDecoder;
+// import io.rsocket.metadata.WellKnownMimeType;
+// import io.rsocket.transport.netty.server.CloseableChannel;
+// import io.rsocket.transport.netty.server.TcpServerTransport;
 //
-//import org.springframework.messaging.rsocket.RSocketRequester;
+// import org.springframework.messaging.rsocket.RSocketRequester;
 //
-//import reactor.test.StepVerifier;
-//import org.springframework.messaging.rsocket.RSocketStrategies;
-//import reactor.core.publisher.Flux;
-//import reactor.core.publisher.Mono;
-//import reactor.core.publisher.ReplayProcessor;
+// import reactor.test.StepVerifier;
+// import org.springframework.messaging.rsocket.RSocketStrategies;
+// import reactor.core.publisher.Flux;
+// import reactor.core.publisher.Mono;
+// import reactor.core.publisher.ReplayProcessor;
 //
-//import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.messaging.handler.annotation.MessageMapping;
-//import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler;
-//import org.springframework.util.MimeType;
-//import org.springframework.util.MimeTypeUtils;
+// import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.stereotype.Controller;
+// import org.springframework.context.annotation.Configuration;
+// import org.springframework.messaging.handler.annotation.MessageMapping;
+// import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler;
+// import org.springframework.util.MimeType;
+// import org.springframework.util.MimeTypeUtils;
 //
 //
-//public class RSocketResponderTest {
+// public class RSocketResponderTest {
 //
 //    private static AnnotationConfigApplicationContext context;
 //    private static CloseableChannel server;
@@ -132,7 +132,8 @@
 //
 //        @MessageMapping("jsonTest2")
 //        Mono<TravelTimeEntity> sendJson2() {
-//            return Mono.just(new TravelTimeEntity(1, "id", null, null, null, null, 100, null,null ));
+//            return Mono.just(new TravelTimeEntity(1, "id", null, null, null, null, 100, null,null
+// ));
 //        }
 //
 //
@@ -180,15 +181,15 @@
 //        }
 //    }
 //
-//}
+// }
 //
 //
-//@AllArgsConstructor
-//@ToString
-//class EntityClass {
+// @AllArgsConstructor
+// @ToString
+// class EntityClass {
 //    Integer pkey;
 //
 //    String id;
 //    Integer travelTime;
 //    Integer length;
-//}
+// }

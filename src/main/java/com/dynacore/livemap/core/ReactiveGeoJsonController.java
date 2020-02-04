@@ -6,6 +6,5 @@ import reactor.core.publisher.Flux;
 
 public interface ReactiveGeoJsonController {
 
-     Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection();
-
+  Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection();
 }

@@ -5,13 +5,13 @@ import java.util.Optional;
 
 public interface JpaRepository<T> {
 
-    Optional<T> get(long id);
+  Optional<T> get(long id);
 
-    List<T> getAll();
+  List<T> getAll();
 
-    void save(T t);
+  void save(T t);
 
-    void update(T t, String[] params);
+  void update(T t, String[] params);
 
-    void delete(T t);
+  void delete(T t);
 }

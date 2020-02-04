@@ -13,14 +13,15 @@ import javax.validation.constraints.NotBlank;
 @Profile("postgres")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 @ConfigurationProperties(prefix = "postgres")
 @Component
 public class PostgresConfiguration {
 
-    @NotBlank String host;
-    @NotBlank int port;
-    @NotBlank String user;
-    @NotBlank String password;
-    @NotBlank String database;
+  @NotBlank String host;
+  @NotBlank int port;
+  @NotBlank String user;
+  @NotBlank String password;
+  @NotBlank String database;
 }

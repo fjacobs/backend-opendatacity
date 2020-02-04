@@ -6,21 +6,26 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
+@Setter
 public abstract class Properties {
-    @JsonProperty("name")
-    protected String name;
-    @JsonProperty("pubDate")
-    protected LocalDateTime pubDate;
-    @JsonProperty("retrievedFromThirdParty")
-    protected LocalDateTime retrievedFromThirdParty;
-    @JsonProperty("type")
-    protected String type;
+  @JsonProperty("name")
+  protected String name;
 
-    public void setTimeOfRetrievalNow() {
-        retrievedFromThirdParty = LocalDateTime.now();
-    }
-    public void setTimeOfRetrieval(LocalDateTime dateTime) {
-        retrievedFromThirdParty = dateTime;
-    }
+  @JsonProperty("pubDate")
+  protected LocalDateTime pubDate;
+
+  @JsonProperty("retrievedFromThirdParty")
+  protected LocalDateTime retrievedFromThirdParty;
+
+  @JsonProperty("type")
+  protected String type;
+
+  public void setTimeOfRetrievalNow() {
+    retrievedFromThirdParty = LocalDateTime.now();
+  }
+
+  public void setTimeOfRetrieval(LocalDateTime dateTime) {
+    retrievedFromThirdParty = dateTime;
+  }
 }

@@ -6,6 +6,4 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties("parking")
-public class ParkingConfiguration extends ServiceConfiguration {
-
-}
+public class ParkingConfiguration extends ServiceConfiguration {}

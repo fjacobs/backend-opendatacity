@@ -11,18 +11,19 @@ import reactor.core.scheduler.Schedulers;
 @Configuration
 public class FileAdapter {
 
-    private FileAdapterConfig config;
+  private FileAdapterConfig config;
 
-    public FileAdapter(FileAdapterConfig config) {
-        this.config = config;
-    }
+  public FileAdapter(FileAdapterConfig config) {
+    this.config = config;
+  }
 
-    @Profile("file")
-    @Bean(name="fileReaderRepeat")
-    GeoJsonAdapter fileReaderRepeat() {
-        return (interval) -> Flux.fromIterable(FileToGeojson.readCollection(config.getFolder()))
-                                 .publishOn(Schedulers.boundedElastic())
-                                 .delayElements(interval)
-                                 .repeat();
-    }
+  @Profile("file")
+  @Bean(name = "fileReaderRepeat")
+  GeoJsonAdapter fileReaderRepeat() {
+    return (interval) ->
+        Flux.fromIterable(FileToGeojson.readCollection(config.getFolder()))
+            .publishOn(Schedulers.boundedElastic())
+            .delayElements(interval)
+            .repeat();
+  }
 }

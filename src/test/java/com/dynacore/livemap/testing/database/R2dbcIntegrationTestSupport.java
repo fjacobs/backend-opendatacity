@@ -26,10 +26,8 @@ import javax.sql.DataSource;
  */
 public abstract class R2dbcIntegrationTestSupport {
 
-	/**
-	 * Creates a new {@link JdbcTemplate} for a {@link DataSource}.
-	 */
-	protected JdbcTemplate createJdbcTemplate(DataSource dataSource) {
-		return new JdbcTemplate(dataSource);
-	}
+  /** Creates a new {@link JdbcTemplate} for a {@link DataSource}. */
+  protected JdbcTemplate createJdbcTemplate(DataSource dataSource) {
+    return new JdbcTemplate(dataSource);
+  }
 }
