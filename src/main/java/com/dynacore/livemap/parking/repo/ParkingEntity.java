@@ -1,6 +1,9 @@
-package com.dynacore.livemap.traveltime.repo;
+package com.dynacore.livemap.parking.repo;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
@@ -14,9 +17,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor @ToString
-public class TravelTimeEntity {
+public class ParkingEntity {
 
-    private static final Logger log = LoggerFactory.getLogger(TravelTimeEntity.class);
+    private static final Logger log = LoggerFactory.getLogger(ParkingEntity.class);
 
     @Id
     private Integer pkey;
@@ -32,7 +35,7 @@ public class TravelTimeEntity {
     private Integer travel_time;
     private Integer velocity;
 
-    public TravelTimeEntity(Integer pkey, String id, String name, OffsetDateTime pubDate, OffsetDateTime retrievedFromThirdParty, String type, Integer length, Integer travel_time, Integer velocity) {
+    public ParkingEntity(Integer pkey, String id, String name, OffsetDateTime pubDate, OffsetDateTime retrievedFromThirdParty, String type, Integer length, Integer travel_time, Integer velocity) {
         this.pkey = pkey;
         this.id = id;
         this.name = name;
@@ -47,8 +50,8 @@ public class TravelTimeEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TravelTimeEntity)) return false;
-        TravelTimeEntity that = (TravelTimeEntity) o;
+        if (!(o instanceof ParkingEntity)) return false;
+        ParkingEntity that = (ParkingEntity) o;
         return Objects.equals(length, that.length) &&
                 Objects.equals(travel_time, that.travel_time) &&
                 Objects.equals(velocity, that.velocity);
