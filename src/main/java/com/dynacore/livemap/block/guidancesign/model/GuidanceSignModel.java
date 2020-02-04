@@ -1,4 +1,4 @@
-package com.dynacore.livemap.guidancesign.model;
+package com.dynacore.livemap.block.guidancesign.model;
 
 import com.dynacore.livemap.core.model.Feature;
 import com.fasterxml.jackson.annotation.JsonIgnore;

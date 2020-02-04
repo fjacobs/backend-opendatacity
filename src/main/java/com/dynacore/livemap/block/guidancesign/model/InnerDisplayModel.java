@@ -1,4 +1,4 @@
-package com.dynacore.livemap.guidancesign.model;
+package com.dynacore.livemap.block.guidancesign.model;
 
 
 //For a full description see: https://open.data.amsterdam.nl/uploads/actuele_beschikbaarheid_parkeergarages/Beschrijving%20Dataset%20-%20Actuele%20beschikbaarheid%20Parkeergarages%20v2.pdf
@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 @Getter @Setter
 public class InnerDisplayModel {
 
-//    "ParkingguidanceDisplay":[  
-//                              {  
+//    "ParkingguidanceDisplay":[
+//                              {
 //                                 "Id":"000001091",
 //                                 "OutputDescription":"VOL",
 //                                 "Description":"A0201_VVX_P+R Arena",

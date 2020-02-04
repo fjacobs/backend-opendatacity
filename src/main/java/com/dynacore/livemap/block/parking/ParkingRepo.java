@@ -1,4 +1,4 @@
-package com.dynacore.livemap.parking;
+package com.dynacore.livemap.block.parking;
 
 import com.dynacore.livemap.core.repo.JpaRepository;
 import org.springframework.context.annotation.Profile;

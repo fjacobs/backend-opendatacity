@@ -1,4 +1,4 @@
-package com.dynacore.livemap.guidancesign.entity;
+package com.dynacore.livemap.block.guidancesign.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

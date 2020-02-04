@@ -1,6 +1,6 @@
-package com.dynacore.livemap.guidancesign.entity;
+package com.dynacore.livemap.block.guidancesign.entity;
 
-import com.dynacore.livemap.guidancesign.model.GuidanceSignModel;
+import com.dynacore.livemap.block.guidancesign.model.GuidanceSignModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

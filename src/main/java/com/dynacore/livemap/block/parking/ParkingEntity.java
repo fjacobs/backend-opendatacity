@@ -1,4 +1,4 @@
-package com.dynacore.livemap.parking;
+package com.dynacore.livemap.block.parking;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

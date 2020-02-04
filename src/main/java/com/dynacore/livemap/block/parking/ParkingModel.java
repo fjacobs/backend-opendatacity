@@ -1,4 +1,4 @@
-package com.dynacore.livemap.parking;
+package com.dynacore.livemap.block.parking;
 
 import com.dynacore.livemap.core.model.Feature;
 import com.dynacore.livemap.core.model.Properties;
