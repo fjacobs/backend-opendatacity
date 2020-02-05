@@ -1,6 +1,6 @@
 package com.dynacore.livemap.block.guidancesign;
 
-import com.dynacore.livemap.core.repo.JpaRepository;
+import com.dynacore.livemap.block.core.repo.JpaRepository;
 import com.dynacore.livemap.block.guidancesign.entity.GuidanceSignEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

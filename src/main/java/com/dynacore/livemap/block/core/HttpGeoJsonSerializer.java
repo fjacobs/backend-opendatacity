@@ -1,6 +1,6 @@
-package com.dynacore.livemap.core.tools;
+package com.dynacore.livemap.block.core;
 
-import com.dynacore.livemap.core.model.FeatureCollection;
+import com.dynacore.livemap.block.core.model.FeatureCollectionBlock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,12 +20,12 @@ import java.util.List;
 public class HttpGeoJsonSerializer<T> {
   private Logger logger = LoggerFactory.getLogger(HttpGeoJsonSerializer.class);
 
-  public <T> FeatureCollection marshallFromUrl(String url, Class<T> clazz) {
+  public <T> FeatureCollectionBlock marshallFromUrl(String url, Class<T> clazz) {
     RestTemplate client = createRestClient();
 
     Type resolvableType =
-        ResolvableType.forClassWithGenerics(FeatureCollection.class, clazz).getType();
-    ResponseEntity<FeatureCollection> responseEntity = null;
+        ResolvableType.forClassWithGenerics(FeatureCollectionBlock.class, clazz).getType();
+    ResponseEntity<FeatureCollectionBlock> responseEntity = null;
     try {
       responseEntity =
           client.exchange(

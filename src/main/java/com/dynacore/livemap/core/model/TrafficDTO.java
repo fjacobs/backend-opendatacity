@@ -1,9 +1,11 @@
-package com.dynacore.livemap.parking.domain;
+package com.dynacore.livemap.core.model;
 
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
+import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+
 
 // Send updated Feature properties after initial subscription
 // This DTO extends from HashMap to keep the json (or ideally cbor)
@@ -14,9 +16,7 @@ import java.util.HashMap;
 //    id: <id>,
 //    velocity: <changed velocity>
 // }
-
-public class ParkingDTO extends HashMap<Object, Object> {
-
+public abstract class TrafficDTO extends HashMap<Object, Object> {
   public void setId(String id) {
     put(TravelTimeFeature.ID, id);
   }
@@ -37,16 +37,16 @@ public class ParkingDTO extends HashMap<Object, Object> {
     put(TravelTimeFeature.THEIR_RETRIEVAL, pubDate);
   }
 
+  public OffsetDateTime getSameSince() {
+    return (OffsetDateTime) get(TravelTimeFeature.SAME_SINCE);
+  }
+
   public OffsetDateTime getOurRetrieval() {
     return (OffsetDateTime) get(TravelTimeFeature.OUR_RETRIEVAL);
   }
 
   public void setOurRetrieval(OffsetDateTime ourRetrieval) {
     put(TravelTimeFeature.OUR_RETRIEVAL, ourRetrieval);
-  }
-
-  public OffsetDateTime getSameSince() {
-    return (OffsetDateTime) get(TravelTimeFeature.SAME_SINCE);
   }
 
   public void setSameSince(OffsetDateTime pubDate) {

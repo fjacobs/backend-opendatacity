@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.model;
+package com.dynacore.livemap.block.core.model;
 
 import java.util.List;
 

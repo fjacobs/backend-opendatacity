@@ -17,7 +17,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
-public class TravelTimeRepo implements TravelTimeRepository {
+public class TravelTimeRepo implements TrafficRepository {
 
   private DatabaseClient databaseClient;
   private static final Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);

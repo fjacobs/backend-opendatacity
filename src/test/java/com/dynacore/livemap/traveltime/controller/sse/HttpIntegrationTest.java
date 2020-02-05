@@ -37,7 +37,7 @@ import com.dynacore.livemap.testing.database.H2TestSupport;
 import com.dynacore.livemap.traveltime.controller.HttpSseController;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.dynacore.livemap.traveltime.service.TravelTimeServiceConfig;
-import com.dynacore.livemap.traveltime.service.TravelTimeService;
+import com.dynacore.livemap.traveltime.service.TravelTimeReactorService;
 
 class HttpIntegrationTest {
 
@@ -85,8 +85,8 @@ class HttpIntegrationTest {
             .baseUrl(baseUrl.toString())
             .build();
 
-    TravelTimeService service =
-        new TravelTimeService(repo, new HttpAdapter(webClient), serviceConfig);
+    TravelTimeReactorService service =
+        new TravelTimeReactorService(repo, new HttpAdapter(webClient), serviceConfig);
     controller = new HttpSseController(service);
   }
 

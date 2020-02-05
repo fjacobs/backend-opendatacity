@@ -1,9 +1,9 @@
 package com.dynacore.livemap.block.guidancesign;
 
-import com.dynacore.livemap.core.model.FeatureCollection;
-import com.dynacore.livemap.core.repo.JpaRepository;
+import com.dynacore.livemap.block.core.model.FeatureCollectionBlock;
+import com.dynacore.livemap.block.core.repo.JpaRepository;
 import com.dynacore.livemap.core.service.GeoJsonRequester;
-import com.dynacore.livemap.core.tools.HttpGeoJsonSerializer;
+import com.dynacore.livemap.block.core.HttpGeoJsonSerializer;
 import com.dynacore.livemap.block.guidancesign.entity.GuidanceSignEntity;
 import com.dynacore.livemap.block.guidancesign.model.GuidanceSignModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
 
 @Profile("guidancesign")
 @Service("guidanceSignService")
-public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<GuidanceSignModel>> {
+public class GuidanceSignService implements GeoJsonRequester<FeatureCollectionBlock<GuidanceSignModel>> {
 
   private JpaRepository<GuidanceSignEntity> guidanceSignRepository;
-  private FeatureCollection<GuidanceSignModel> featureCollection;
+  private FeatureCollectionBlock<GuidanceSignModel> featureCollectionBlock;
   private GuidanceSignConfiguration config;
 
   @Autowired
@@ -30,26 +30,26 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollection<G
     ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
     exec.scheduleAtFixedRate(
         () -> {
-          HttpGeoJsonSerializer<FeatureCollection<GuidanceSignModel>> httpGeoJsonSerializer =
+          HttpGeoJsonSerializer<FeatureCollectionBlock<GuidanceSignModel>> httpGeoJsonSerializer =
               new HttpGeoJsonSerializer<>();
           synchronized (this) {
-            featureCollection =
+            featureCollectionBlock =
                 httpGeoJsonSerializer.marshallFromUrl(config.getUrl(), GuidanceSignModel.class);
-            featureCollection.setTimeOfRetrievalNow();
+            featureCollectionBlock.setTimeOfRetrievalNow();
           }
-          saveCollection(featureCollection);
+          saveCollection(featureCollectionBlock);
         },
         config.getInitialDelay().getSeconds(),
         config.getRequestInterval().getSeconds(),
         TimeUnit.SECONDS);
   }
 
-  public synchronized FeatureCollection<GuidanceSignModel> getLastUpdate() {
-    return featureCollection;
+  public synchronized FeatureCollectionBlock<GuidanceSignModel> getLastUpdate() {
+    return featureCollectionBlock;
   }
 
   @Override
-  public synchronized void saveCollection(FeatureCollection<GuidanceSignModel> featureColl) {
+  public synchronized void saveCollection(FeatureCollectionBlock<GuidanceSignModel> featureColl) {
     featureColl.getFeatures().stream()
         .map(GuidanceSignEntity::new)
         .forEach(guidanceSignDTO -> guidanceSignRepository.save(guidanceSignDTO));

@@ -1,7 +1,7 @@
 package com.dynacore.livemap.block.parking;
 
-import com.dynacore.livemap.core.model.Feature;
-import com.dynacore.livemap.core.model.Properties;
+import com.dynacore.livemap.block.core.model.FeatureBlock;
+import com.dynacore.livemap.block.core.model.Properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class ParkingModel extends Feature {
+public class ParkingModel extends FeatureBlock {
 
   @JsonProperty("Id")
   private void createUUID(String id) {

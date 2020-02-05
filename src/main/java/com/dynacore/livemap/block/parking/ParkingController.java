@@ -1,6 +1,6 @@
 package com.dynacore.livemap.block.parking;
 
-import com.dynacore.livemap.core.model.FeatureCollection;
+import com.dynacore.livemap.block.core.model.FeatureCollectionBlock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class ParkingController {
   @CrossOrigin
   @GetMapping(value = "getCustomParkingJson")
   @ResponseBody
-  public FeatureCollection<ParkingModel> getCustomParkingJson() {
+  public FeatureCollectionBlock<ParkingModel> getCustomParkingJson() {
     return parkingPlaceService.getLastUpdate();
   }
 }

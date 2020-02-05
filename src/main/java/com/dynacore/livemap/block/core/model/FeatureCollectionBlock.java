@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.model;
+package com.dynacore.livemap.block.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ import java.util.List;
  * Member types must be public for population by rest client mapper.
  */
 
-public class FeatureCollection<T extends Feature> {
+public class FeatureCollectionBlock<T extends FeatureBlock> {
 
   private String type;
   private List<T> features;

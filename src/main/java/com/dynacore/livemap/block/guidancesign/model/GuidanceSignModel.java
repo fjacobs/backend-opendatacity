@@ -1,6 +1,6 @@
 package com.dynacore.livemap.block.guidancesign.model;
 
-import com.dynacore.livemap.core.model.Feature;
+import com.dynacore.livemap.block.core.model.FeatureBlock;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toList;
 
 @Getter
 @Setter
-public class GuidanceSignModel extends Feature {
+public class GuidanceSignModel extends FeatureBlock {
 
   @JsonIgnore
   public String getName() {

@@ -1,6 +1,6 @@
 package com.dynacore.livemap.block.guidancesign.model;
 
-import com.dynacore.livemap.core.model.Properties;
+import com.dynacore.livemap.block.core.model.Properties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;

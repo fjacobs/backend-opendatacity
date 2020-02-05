@@ -1,6 +1,5 @@
 package com.dynacore.livemap.core.geojson;
 
-import com.dynacore.livemap.traveltime.service.TravelTimeService;
 import org.geojson.*;
 import org.geojson.GeoJsonObjectVisitor;
 import org.slf4j.Logger;
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
 // Empty GeoJsonObjectVisitor, extend if you don't want to override methods that aren't used
 
 public class GeoJsonObjectVisitorWrapper<T> implements GeoJsonObjectVisitor<T> {
-  private final Logger logger = LoggerFactory.getLogger(TravelTimeService.class);
+  private final Logger logger = LoggerFactory.getLogger(GeoJsonObjectVisitorWrapper.class);
 
   @Override
   public T visit(Feature feature) {
@@ -18,14 +17,13 @@ public class GeoJsonObjectVisitorWrapper<T> implements GeoJsonObjectVisitor<T> {
   }
 
   @Override
-  public T visit(FeatureCollection featureCollection) {
-    logger.warn("empty geojson object visitor: featureCollection");
+  public T visit(GeometryCollection geometryCollection) {
+    logger.warn("empty geojson object visitor: geometryCollection");
     return null;
   }
 
   @Override
-  public T visit(GeometryCollection geometryCollection) {
-    logger.warn("empty geojson object visitor: geometryCollection");
+  public T visit(org.geojson.FeatureCollection geoJsonObject) {
     return null;
   }
 

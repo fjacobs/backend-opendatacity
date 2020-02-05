@@ -1,4 +1,4 @@
-package com.dynacore.livemap.core.model;
+package com.dynacore.livemap.block.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public abstract class Feature {
+public abstract class FeatureBlock {
 
   @JsonProperty("Id")
   protected UUID id;

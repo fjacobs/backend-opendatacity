@@ -1,5 +1,6 @@
 package com.dynacore.livemap.traveltime;
 
+import com.dynacore.livemap.core.geojson.TrafficFeature;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.dynacore.livemap.core.tools.FileToGeojson;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
@@ -44,7 +45,7 @@ class RSocketIntegrationTest {
 
     webSocket
         .route("TRAVELTIME_STREAM")
-        .retrieveFlux(Feature.class)
+        .retrieveFlux(TrafficFeature.class)
         .as(StepVerifier::create)
         .expectNextCount(1011)
         .expectNextMatches(feature -> feature.getProperties().get("Velocity").equals(50))
@@ -82,7 +83,7 @@ class RSocketIntegrationTest {
         .thenAwait(Duration.ofSeconds(1))
         .consumeNextWith(
             group -> {
-              assertThat(group.size(), is(1012));
+              assertThat(group.size(), is(153));
               assertThat(group.get(0).getPubDate(), is(pubDate2));
             })
         .verifyComplete();

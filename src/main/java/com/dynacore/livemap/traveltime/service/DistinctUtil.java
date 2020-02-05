@@ -1,14 +1,15 @@
 package com.dynacore.livemap.traveltime.service;
 
-import org.geojson.Feature;
+import com.dynacore.livemap.core.geojson.TrafficFeature;
 
 import java.util.function.Function;
 
+import static com.dynacore.livemap.core.geojson.TrafficFeature.OUR_RETRIEVAL;
+
 public class DistinctUtil {
 
-  public static Function<Feature, Integer> hashCodeNoRetDate =
-      (Feature road) -> {
-        final String OUR_RETRIEVAL = "retrievedFromThirdParty";
+  public static Function<TrafficFeature, Integer> hashCodeNoRetDate =
+      (TrafficFeature road) -> {
         int result;
         if (road.getProperties().containsKey(OUR_RETRIEVAL)) {
           String retDate = road.getProperty(OUR_RETRIEVAL);

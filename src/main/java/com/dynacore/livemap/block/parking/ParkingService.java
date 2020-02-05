@@ -1,9 +1,9 @@
 package com.dynacore.livemap.block.parking;
 
-import com.dynacore.livemap.core.model.FeatureCollection;
-import com.dynacore.livemap.core.repo.JpaRepository;
+import com.dynacore.livemap.block.core.model.FeatureCollectionBlock;
+import com.dynacore.livemap.block.core.repo.JpaRepository;
 import com.dynacore.livemap.core.service.GeoJsonRequester;
-import com.dynacore.livemap.core.tools.HttpGeoJsonSerializer;
+import com.dynacore.livemap.block.core.HttpGeoJsonSerializer;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 
 @Profile("parking")
 @Service("parkingPlaceService")
-public class ParkingService implements GeoJsonRequester<FeatureCollection<ParkingModel>> {
+public class ParkingService implements GeoJsonRequester<FeatureCollectionBlock<ParkingModel>> {
 
   private JpaRepository<ParkingEntity> parkingRepo;
-  private FeatureCollection<ParkingModel> lastUpdate;
+  private FeatureCollectionBlock<ParkingModel> lastUpdate;
   private ParkingConfiguration config;
 
   public ParkingService(JpaRepository<ParkingEntity> parkingRepo, ParkingConfiguration config) {
@@ -31,7 +31,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
     ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
     exec.scheduleAtFixedRate(
         () -> {
-          HttpGeoJsonSerializer<FeatureCollection<ParkingModel>> httpGeoJsonSerializer =
+          HttpGeoJsonSerializer<FeatureCollectionBlock<ParkingModel>> httpGeoJsonSerializer =
               new HttpGeoJsonSerializer<>();
           try {
             synchronized (this) {
@@ -50,7 +50,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
   }
 
   @Transactional
-  public synchronized void saveCollection(FeatureCollection<ParkingModel> features) {
+  public synchronized void saveCollection(FeatureCollectionBlock<ParkingModel> features) {
     features
         .getFeatures()
         .forEach(
@@ -69,11 +69,11 @@ public class ParkingService implements GeoJsonRequester<FeatureCollection<Parkin
   }
 
   @Override
-  public synchronized FeatureCollection<ParkingModel> getLastUpdate() {
+  public synchronized FeatureCollectionBlock<ParkingModel> getLastUpdate() {
     if (lastUpdate != null) {
       lastUpdate.getFeatures().forEach(ParkingService::setPercentage);
     } else {
-      lastUpdate = new FeatureCollection<>();
+      lastUpdate = new FeatureCollectionBlock<>();
       lastUpdate.setErrorReport("Error: Could not get data from " + config.getUrl());
     }
 

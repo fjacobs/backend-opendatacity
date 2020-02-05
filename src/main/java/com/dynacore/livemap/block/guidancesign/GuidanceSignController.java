@@ -1,6 +1,6 @@
 package com.dynacore.livemap.block.guidancesign;
 
-import com.dynacore.livemap.core.model.FeatureCollection;
+import com.dynacore.livemap.block.core.model.FeatureCollectionBlock;
 import com.dynacore.livemap.block.guidancesign.model.GuidanceSignModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -21,7 +21,7 @@ public class GuidanceSignController {
 
   @GetMapping(value = "getCustomGuidanceSignJson")
   @ResponseBody
-  public FeatureCollection<GuidanceSignModel> getCustomJson() {
+  public FeatureCollectionBlock<GuidanceSignModel> getCustomJson() {
     return guidanceSignService.getLastUpdate();
   }
 }

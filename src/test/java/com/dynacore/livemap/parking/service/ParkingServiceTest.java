@@ -38,6 +38,6 @@ class ParkingServiceTest {
           + "[5.005562368354391,52.32628371039965],[5.005723592066905,52.32730043716067],[5.005711772825435,52.327993424971154],[5.005687110573994,52.32836111625229]]}}]}";
 
   static MockWebServer server;
-  static ParkingService service;
+//  static ParkingService service;
   static ParkingServiceConfig serviceConfig;
 }

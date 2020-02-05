@@ -4,11 +4,9 @@ import com.dynacore.livemap.testing.database.AbstractDatabaseClientIntegrationTe
 import com.dynacore.livemap.testing.database.ExternalDatabase;
 import com.dynacore.livemap.testing.database.PostgresTestSupport;
 import io.r2dbc.spi.ConnectionFactory;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.r2dbc.core.DatabaseClient;
-import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
 
 import javax.sql.DataSource;

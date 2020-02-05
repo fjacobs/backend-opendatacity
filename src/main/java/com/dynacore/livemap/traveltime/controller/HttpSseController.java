@@ -1,7 +1,7 @@
 package com.dynacore.livemap.traveltime.controller;
 
-import org.geojson.Feature;
 import org.geojson.FeatureCollection;
+import org.geojson.Feature;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import com.dynacore.livemap.core.ReactiveGeoJsonController;
-import com.dynacore.livemap.traveltime.service.TravelTimeService;
+import com.dynacore.livemap.traveltime.service.TravelTimeReactorService;
 
 /*
    Deprecated in favour of RSocket protocol
@@ -27,10 +27,10 @@ import com.dynacore.livemap.traveltime.service.TravelTimeService;
 public class HttpSseController implements ReactiveGeoJsonController {
 
   private final Logger logger = LoggerFactory.getLogger(HttpSseController.class);
-  private TravelTimeService travelTimeService;
+  private TravelTimeReactorService travelTimeService;
 
   @Autowired
-  public HttpSseController(TravelTimeService TravelTimeService) {
+  public HttpSseController(TravelTimeReactorService TravelTimeService) {
     this.travelTimeService = TravelTimeService;
   }
 
