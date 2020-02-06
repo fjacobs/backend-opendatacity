@@ -16,22 +16,16 @@
 package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.geojson.GeoJsonObjectVisitorWrapper;
-import com.dynacore.livemap.core.geojson.TrafficFeature;
-import com.dynacore.livemap.core.model.TrafficDTO;
+import com.dynacore.livemap.core.service.configuration.DtoFilter;
+import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
-import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.dynacore.livemap.traveltime.service.visitor.CalculateTravelTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.SynchronousSink;
-
-import java.util.function.BiConsumer;
 
 /**
  * Road traffic traveltime service
@@ -47,9 +41,13 @@ import java.util.function.BiConsumer;
 public class TravelTimeReactorService extends GeoJsonReactorService {
 
   public TravelTimeReactorService(
-          TravelTimeRepo repo, GeoJsonAdapter retriever, TravelTimeServiceConfig config)
+      TravelTimeRepo repo,
+      GeoJsonAdapter retriever,
+      TravelTimeServiceConfig config,
+      DtoFilter roadDtoFilter,
+      FeatureFilter roadFeatureFilter)
       throws JsonProcessingException {
-    super(repo, retriever, config);
+    super(retriever, repo,  config, roadDtoFilter, roadFeatureFilter);
   }
 
   @Override
@@ -57,42 +55,4 @@ public class TravelTimeReactorService extends GeoJsonReactorService {
     return new CalculateTravelTime();
   }
 
-  @Override
-  protected BiConsumer<? super TrafficFeature, SynchronousSink<TrafficFeature>> liveUpdateFilter() {
-    return (feature, sink) -> {
-      Integer newHash = DistinctUtil.hashCodeNoRetDate.apply(feature);
-      Integer oldHash;
-
-      if ((oldHash = geoJsonStore.get(feature.getId())) != null) {
-        if (!newHash.equals(oldHash)) {
-          geoJsonStore.put(feature.getId(), newHash);
-
-          sink.next(feature);
-        }
-      } else {
-        geoJsonStore.put(feature.getId(), newHash);
-        sink.next(feature);
-      }
-    };
-  }
-
-  @Override
-  protected BiConsumer<? super TrafficDTO, SynchronousSink<TrafficDTO>> replayDtoFilter() {
-    return (newDTO, sink) -> {
-      modelMapper.map(newDTO, TravelTimeDTO.class);
-
-      TravelTimeDTO lastChangedDTO;
-      if ((lastChangedDTO = (TravelTimeDTO) dtoStore.get(newDTO.getId())) != null) {
-        if (!lastChangedDTO.equals(newDTO)) {
-          dtoStore.put(newDTO.getId(), newDTO);
-          if (!(lastChangedDTO.getVelocity().equals(((TravelTimeDTO) newDTO).getVelocity()))) {
-            sink.next(newDTO);
-          }
-        }
-      } else {
-        dtoStore.put(newDTO.getId(), newDTO);
-        sink.next(newDTO);
-      }
-    };
-  }
 }

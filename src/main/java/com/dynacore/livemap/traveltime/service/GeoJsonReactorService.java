@@ -3,6 +3,8 @@ package com.dynacore.livemap.traveltime.service;
 import com.dynacore.livemap.core.geojson.GeoJsonObjectVisitorWrapper;
 import com.dynacore.livemap.core.geojson.TrafficFeature;
 import com.dynacore.livemap.core.model.TrafficDTO;
+import com.dynacore.livemap.core.service.configuration.DtoFilter;
+import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
 import com.dynacore.livemap.core.service.ServiceConfiguration;
 import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
@@ -18,13 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.SynchronousSink;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 public abstract class GeoJsonReactorService {
 
@@ -32,25 +30,31 @@ public abstract class GeoJsonReactorService {
   protected final GeoJsonAdapter retriever;
   protected final ServiceConfiguration config;
   protected final TrafficRepository repo;
+  private final DtoFilter dtoFilter;
+  private final FeatureFilter featureFilter;
 
-  Map<String, Integer> geoJsonStore = new HashMap<>();
-  Map<String, TrafficDTO> dtoStore = new HashMap<>();
 
   @Autowired ModelMapper modelMapper;
   private final Logger logger = LoggerFactory.getLogger(GeoJsonReactorService.class);
 
   @Autowired
   public GeoJsonReactorService(
-          TrafficRepository repo, GeoJsonAdapter retriever, ServiceConfiguration config)
+      GeoJsonAdapter retriever,
+      TrafficRepository repo,
+      ServiceConfiguration generalConfig,
+      DtoFilter dtoFilter,
+      FeatureFilter featureFilter)
       throws JsonProcessingException {
     this.retriever = retriever;
-    this.config = config;
+    this.config = generalConfig;
     this.repo = repo;
+    this.dtoFilter = dtoFilter;
+    this.featureFilter = featureFilter;
     logger.info(this.config.getRequestInterval().toString());
 
-    sharedFlux = processFlux().cache(config.getRequestInterval());
+    sharedFlux = processFlux().cache(generalConfig.getRequestInterval());
 
-    if (config.isSaveToDbEnabled()) {
+    if (generalConfig.isSaveToDbEnabled()) {
       Flux.from(sharedFlux)
           .parallel(Runtime.getRuntime().availableProcessors())
           .runOn(Schedulers.parallel())
@@ -59,23 +63,7 @@ public abstract class GeoJsonReactorService {
     }
   }
 
-  protected abstract BiConsumer<? super TrafficFeature, SynchronousSink<TrafficFeature>> liveUpdateFilter();
-  protected abstract BiConsumer<? super TrafficDTO, SynchronousSink<TrafficDTO>> replayDtoFilter();
   protected abstract GeoJsonObjectVisitorWrapper<Feature> processFeature();
-
-  // DB independent replay
-  protected Flux<List<TrafficDTO>> filterFlux(
-          Flux<TrafficDTO> featureFlux,
-          BiConsumer<? super TrafficDTO, SynchronousSink<TrafficDTO>> passThroughFilter) {
-
-    // This can also be done with groupBy/concatMap (instead of
-    // handle/windowUntilChanged/buffer):
-    return featureFlux
-            .handle(passThroughFilter)
-            .windowUntilChanged(TrafficDTO::getPubDate)
-            .flatMap(Flux::buffer)
-            .doOnNext(x -> System.out.println("Amount of features changed: " + x.size()));
-  }
 
   public Flux<TrafficFeature> getFeatureRange(FeatureRequest range) {
     return repo.getFeatureDateRange(range.getStartDate(), range.getEndDate())
@@ -84,22 +72,25 @@ public abstract class GeoJsonReactorService {
 
   public Flux<TrafficFeature> processFlux() throws JsonProcessingException {
     return retriever
-            .requestHotSourceFc(config.getRequestInterval())
-            .doOnNext(
-                    x -> logger.info("Retrieved new featurecollection, size: " + x.getFeatures().size()))
-            .flatMapIterable(FeatureCollection::getFeatures)
-            .map(road -> ((TrafficFeature) road.accept(processFeature())));
+        .requestHotSourceFc(config.getRequestInterval())
+        .doOnNext(
+            x -> logger.info("Retrieved new featurecollection, size: " + x.getFeatures().size()))
+        .flatMapIterable(FeatureCollection::getFeatures)
+        .map(road -> ((TrafficFeature) road.accept(processFeature())));
   }
 
   public Flux<TrafficFeature> getLiveData() {
-    return Flux.from(sharedFlux).handle(liveUpdateFilter());
+    return Flux.from(sharedFlux).handle(featureFilter.filter());
   }
 
   public Flux<List<TrafficDTO>> replayHistoryGroup() {
-    Flux<TrafficDTO> trafficDTOFlux =
-        repo.getAllAscending().map(feature -> modelMapper.map(feature, TravelTimeDTO.class));
-    return filterFlux(trafficDTOFlux, replayDtoFilter());
+        return repo.getAllAscending().map(feature -> modelMapper.map(feature, TravelTimeDTO.class))
+               .handle(dtoFilter.filter())
+               .windowUntilChanged(TrafficDTO::getPubDate)
+               .flatMap(Flux::buffer)
+               .doOnNext(x -> System.out.println("Amount of features changed: " + x.size()));
   }
+
   public Mono<FeatureCollection> getFeatureCollection() {
     return Flux.from(sharedFlux)
         .collectList()
@@ -113,5 +104,4 @@ public abstract class GeoJsonReactorService {
               return fc;
             });
   }
-
 }

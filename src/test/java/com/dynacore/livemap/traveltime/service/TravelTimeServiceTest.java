@@ -17,6 +17,8 @@ package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.geojson.TrafficFeature;
 import com.dynacore.livemap.core.service.GeoJsonAdapter;
+import com.dynacore.livemap.core.service.configuration.DtoFilter;
+import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.testing.subscriber.AssertSubscriber;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
@@ -81,7 +83,7 @@ class TravelTimeServiceTest {
             Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 
 
-    service = new TravelTimeReactorService(repo, smallFc, serviceConfig);
+    service = new TravelTimeReactorService(repo, smallFc, serviceConfig,new DtoFilter(), new FeatureFilter());
     service
         .getLiveData()
         .as(StepVerifier::create)
@@ -195,7 +197,7 @@ class TravelTimeServiceTest {
     serviceConfig.setSaveToDbEnabled(false);
 
     TravelTimeReactorService service =
-        new TravelTimeReactorService(repo, prop3Changed, serviceConfig);
+        new TravelTimeReactorService(repo, prop3Changed, serviceConfig,new DtoFilter(), new FeatureFilter());
 
     StepVerifier.create(service.getLiveData())
         .expectNext(feature1_1)

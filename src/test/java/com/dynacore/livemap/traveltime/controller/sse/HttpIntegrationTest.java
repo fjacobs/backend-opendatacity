@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.time.Duration;
 
 import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
+import com.dynacore.livemap.core.service.configuration.DtoFilter;
+import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.testing.database.PostgresTestSupport;
 import com.dynacore.livemap.configuration.adapter.HttpAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -86,7 +88,7 @@ class HttpIntegrationTest {
             .build();
 
     TravelTimeReactorService service =
-        new TravelTimeReactorService(repo, new HttpAdapter(webClient), serviceConfig);
+        new TravelTimeReactorService(repo, new HttpAdapter(webClient), serviceConfig, new DtoFilter(), new FeatureFilter());
     controller = new HttpSseController(service);
   }
 
