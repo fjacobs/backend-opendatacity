@@ -1,109 +1,103 @@
-
 debug:  false
 
 
 # Traffic Data Configuration
 
-
-
-
-
 parking:
-    url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
-    initialdelay: 0s
-    requestinterval: 60s
-    elementdelay: 0s
+  url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
+  initialdelay: 0s
+  requestinterval: 60s
+  elementdelay: 0s
 
 guidancesign:
-    url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
-    initialdelay: 0s
-    requestinterval: 60s
-    elementdelay: 0s
+  url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
+  initialdelay: 0s
+  requestinterval: 60s
+  elementdelay: 0s
 
 traveltime:
-    #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
-    url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
-    initialdelay: 0s
-    requestinterval: 3s
-    elementdelay: 0s
-    saveToDbEnabled: false
-
-
+  #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
+  url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
+  initialdelay: 0s
+  requestinterval: 3s
+  elementdelay: 0s
+  saveToDbEnabled: false
 
 #local.server.port: 7777
 
 logging:
-    level:
-        org:
-            springframework:
-                data:
-                    r2dbc: info
+  level:
+    org:
+      springframework:
+        data:
+          r2dbc: info
 spring:
 
-    # dev || prod
-    #traveltime && parking && guidancesign
-    #httpretrieval || fileretrieval
-    profiles:
-        include: dev, file
+  # dev || prod
+  #traveltime && parking && guidancesign
+  #http || file
+  profiles:
+    include: test, file, postgres, traveltime
+  rsocket:
+    server:
+      mapping-path: /traveltimesocket
+      transport: websocket
+      port: 9897
+  h2:
+    console:
+    enabled: on
+  main:
+    lazy-initialization: on
+
+  application:
+    name: OpenCity
+
+  jpa:
+    open-in-view: on
+    show-sql: off
+    generate-ddl: off
+
+  hibernate:
+    ddl-auto: none
+
+  banner:
+    image:
+      invert: on
+
+  output:
+    ansi:
+      enabled: always
 
 ---
 spring:
-    profiles: dev
-    include: postgres, traveltime, file
-    fileadapter:
-        folder: /traveltimedata/blinking/
-    postgres:
-        host: localhost
-        port: 5432
-        user: postgres
-        password: admin
-        database: trafficdata
+  profiles: "!test"
+
+fileadapter:
+  folder: /traveltimedata/import/
+
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: admin
+  database: trafficdata
+
+
 ---
 spring:
-    profiles: test
-    include: postgres, traveltime, file
+  profiles: test
 
-    fileadapter:
-        folder: /traveltimedata/blinkingsmall/
-    postgres:
-        host: localhost
-        port: 5432
-        user: postgres
-        password: admin
-        database: blinkingroads
+fileadapter:
+  folder: /traveltimedata/traveltimesmall/
 
-    h2:
-        console:
-            enabled: on
-    main:
-        lazy-initialization: on
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: admin
+  database: blinkingroads
 
-    application:
-        name: OpenCity
-
-    jpa:
-        open-in-view: on
-        show-sql: off
-        generate-ddl: off
-
-        hibernate:
-            ddl-auto: none
-
-    banner:
-        image:
-            invert: on
-    output:
-        ansi:
-            enabled: always
-
-    rsocket:
-        server:
-            mapping-path: /traveltimesocket
-            transport: websocket
-            port: 9897
-
-
-
+---
 
 #    -- Traveltime informatie van de data provider:
 

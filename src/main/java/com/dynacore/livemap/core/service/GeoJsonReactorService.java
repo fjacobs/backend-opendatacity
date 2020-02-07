@@ -33,7 +33,6 @@ public abstract class GeoJsonReactorService {
   @Autowired ModelMapper modelMapper;
   private final Logger logger = LoggerFactory.getLogger(GeoJsonReactorService.class);
 
-  @Autowired
   public GeoJsonReactorService(
           GeoJsonAdapter retriever,
           TrafficRepository<? extends TrafficEntity> repo,

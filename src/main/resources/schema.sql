@@ -1,5 +1,5 @@
 
-create table table2
+create table travel_time_entity
 (
     pkey                       serial                   not null
         constraint travel_time_entity_pkey

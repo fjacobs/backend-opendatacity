@@ -7,6 +7,7 @@ import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.SynchronousSink;
 
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+@Profile("traveltime")
 @Component
 public class TravelTimeRepoDtoMapper implements RepoFilter {
 

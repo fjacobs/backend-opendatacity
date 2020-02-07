@@ -46,8 +46,9 @@ public class TravelTimeReactorService extends GeoJsonReactorService {
           TravelTimeRepoDtoMapper roadDtoFilter,
           FeatureFilter roadFeatureFilter)
       throws JsonProcessingException {
-
     super(retriever, repo,  config, roadDtoFilter, roadFeatureFilter);
+    System.out.println(retriever.getClass().toString());
+    assert false;
   }
 
   @Override
