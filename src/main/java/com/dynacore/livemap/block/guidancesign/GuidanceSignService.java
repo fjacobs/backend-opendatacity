@@ -2,7 +2,7 @@ package com.dynacore.livemap.block.guidancesign;
 
 import com.dynacore.livemap.block.core.model.FeatureCollectionBlock;
 import com.dynacore.livemap.block.core.repo.JpaRepository;
-import com.dynacore.livemap.core.service.GeoJsonRequester;
+import com.dynacore.livemap.block.core.GeoJsonRequester;
 import com.dynacore.livemap.block.core.HttpGeoJsonSerializer;
 import com.dynacore.livemap.block.guidancesign.entity.GuidanceSignEntity;
 import com.dynacore.livemap.block.guidancesign.model.GuidanceSignModel;

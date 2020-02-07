@@ -245,6 +245,42 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
   }
 
   @Test
+  public void isTimeZoneCorrectlyStoredAndRetrieved() {
+    dropCreate(client);
+
+    String pubDate = "2019-10-16T15:52:00Z";
+    String retDate = "2019-10-16T16:00:00Z";
+    TravelTimeEntity entityOne =
+            new TravelTimeEntity(
+                    null,
+                    "002",
+                    "First entity",
+                    OffsetDateTime.parse(pubDate),
+                    OffsetDateTime.parse(retDate),
+                    "type",
+                    200,
+                    5,
+                    100);
+
+    client
+            .insert()
+            .into(TravelTimeEntity.class)
+            .using(entityOne)
+            .fetch()
+            .rowsUpdated()
+            .block();
+
+   TravelTimeEntity entityTwo = repo.getLatest("002").block();
+
+    assert entityTwo != null;
+
+    System.out.println(entityOne.getPubDate());
+    System.out.println(entityTwo.getPubDate());
+
+    assertTrue(entityOne.getPubDate().isEqual(entityTwo.getPubDate()));
+  }
+
+  @Test
   public void saveOneThenIgnoreSame() {
 
     dropCreate(client);
@@ -290,6 +326,6 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
   public void getLastStored() {
     dropCreate(client);
     insertEntityOne();
-    repo.getLatest(entityOne).as(StepVerifier::create).expectNextCount(1).verifyComplete();
+    repo.getLatest(entityOne.getId()).as(StepVerifier::create).expectNext(entityOne).verifyComplete();
   }
 }

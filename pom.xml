@@ -39,7 +39,6 @@
             <snapshots>
                 <checksumPolicy>warn</checksumPolicy>
                 <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </pluginRepository>
     </pluginRepositories>

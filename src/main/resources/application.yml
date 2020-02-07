@@ -4,15 +4,9 @@ debug:  false
 
 # Traffic Data Configuration
 
-fileadapter:
-    folder: /traveltimedata/blinking/
 
-postgres:
-    host: localhost
-    port: 5432
-    user: postgres
-    password: admin
-    database: trafficdata
+
+
 
 parking:
     url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/ParkingLocation.json
@@ -50,7 +44,33 @@ spring:
     #traveltime && parking && guidancesign
     #httpretrieval || fileretrieval
     profiles:
-        include: postgres, traveltime, dev, file
+        include: dev, file
+
+---
+spring:
+    profiles: dev
+    include: postgres, traveltime, file
+    fileadapter:
+        folder: /traveltimedata/blinking/
+    postgres:
+        host: localhost
+        port: 5432
+        user: postgres
+        password: admin
+        database: trafficdata
+---
+spring:
+    profiles: test
+    include: postgres, traveltime, file
+
+    fileadapter:
+        folder: /traveltimedata/blinkingsmall/
+    postgres:
+        host: localhost
+        port: 5432
+        user: postgres
+        password: admin
+        database: blinkingroads
 
     h2:
         console:
@@ -84,7 +104,7 @@ spring:
 
 
 
-    
+
 #    -- Traveltime informatie van de data provider:
 
 #   taken from:  https://opendata.rdw.nl/Parkeren/Open-Data-Parkeren-Index-Statisch-en-Dynamisch/f6v7-gjpa

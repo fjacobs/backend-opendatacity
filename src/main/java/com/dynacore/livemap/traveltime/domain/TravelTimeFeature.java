@@ -1,7 +1,8 @@
 package com.dynacore.livemap.traveltime.domain;
 
-import com.dynacore.livemap.core.geojson.TrafficFeature;
+import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import org.geojson.Feature;
 
 // Wrapper class for GeoJson Feature
 // See visitor package for methods.
@@ -16,14 +17,21 @@ public class TravelTimeFeature extends TrafficFeature {
   public TravelTimeFeature(){}
 
   public TravelTimeFeature(TravelTimeEntity entity) {
-    setId(entity.getId());
-    setName(entity.getName());
+    super(entity);
     setPubDate(entity.getPubDate());
     setOurRetrieval(entity.getRetrievedFromThirdParty());
     setType(entity.getType());
     setLength(entity.getLength());
     setTravelTime(entity.getTravel_time());
     setVelocity(entity.getVelocity());
+  }
+
+  public TravelTimeFeature(Feature feature) {
+    super(feature);
+    setType(feature.getProperty(TYPE));
+    setLength(feature.getProperty(LENGTH));
+    setTravelTime(feature.getProperty(TRAVEL_TIME));
+    setVelocity(feature.getProperty(VELOCITY));
   }
 
   public String getType() {
@@ -41,8 +49,6 @@ public class TravelTimeFeature extends TrafficFeature {
   public Integer getVelocity() {
     return getProperty(VELOCITY);
   }
-
-
 
   public void setType(String type) {
     getProperties().put(TYPE, type);

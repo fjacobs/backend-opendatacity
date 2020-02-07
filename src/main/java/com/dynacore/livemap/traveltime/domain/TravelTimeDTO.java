@@ -1,6 +1,7 @@
 package com.dynacore.livemap.traveltime.domain;
 
 import com.dynacore.livemap.core.model.TrafficDTO;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
@@ -8,10 +9,10 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class TravelTimeDTO extends TrafficDTO {
 
-  public TravelTimeDTO(String id, OffsetDateTime pubDate, int velocity) {
-    setId(id);
-    setPubDate(pubDate);
-    setVelocity(velocity);
+  public TravelTimeDTO(TravelTimeEntity entity) {
+    setId(entity.getId());
+    setPubDate(entity.getPubDate());
+    setVelocity(entity.getVelocity());
   }
 
   public void setType(String type) {

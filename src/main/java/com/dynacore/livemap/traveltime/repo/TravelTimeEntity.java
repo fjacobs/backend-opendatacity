@@ -1,5 +1,7 @@
 package com.dynacore.livemap.traveltime.repo;
 
+import com.dynacore.livemap.core.repository.TrafficEntity;
+import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,19 +16,11 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @ToString
-public class TravelTimeEntity {
+public class TravelTimeEntity extends TrafficEntity {
 
   private static final Logger log = LoggerFactory.getLogger(TravelTimeEntity.class);
 
-  @Id private Integer pkey;
-
-  private String id;
-  private String name;
-
-  private OffsetDateTime pubDate;
-  private OffsetDateTime retrievedFromThirdParty;
   private String type;
-
   private Integer length;
   private Integer travel_time;
   private Integer velocity;

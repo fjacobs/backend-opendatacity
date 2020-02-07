@@ -1,7 +1,7 @@
 package com.dynacore.livemap.core.service.configuration;
 
-import com.dynacore.livemap.core.geojson.TrafficFeature;
-import com.dynacore.livemap.traveltime.service.DistinctUtil;
+import com.dynacore.livemap.core.model.TrafficFeature;
+import com.dynacore.livemap.core.service.DistinctUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +31,7 @@ public class FeatureFilter implements Filter<TrafficFeature,TrafficFeature> {
 
                     sink.next(feature);
                 }
+
             } else {
                 geoJsonStore.put(feature.getId(), newHash);
                 sink.next(feature);

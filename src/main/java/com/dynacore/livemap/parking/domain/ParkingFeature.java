@@ -1,8 +1,13 @@
 package com.dynacore.livemap.parking.domain;
 
-import org.geojson.Feature;
-
-import java.time.OffsetDateTime;
+import com.dynacore.livemap.core.model.TrafficFeature;
+import lombok.NoArgsConstructor;
 
 // Wrapper class for GeoJson Feature
-public class ParkingFeature extends Feature {}
+// See visitor package for methods.
+@NoArgsConstructor
+public class ParkingFeature extends TrafficFeature {
+
+
+
+}

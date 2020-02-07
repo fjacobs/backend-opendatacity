@@ -1,7 +1,7 @@
 package com.dynacore.livemap.configuration.adapter;
 
 import org.geojson.FeatureCollection;
-import com.dynacore.livemap.core.service.GeoJsonAdapter;
+import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

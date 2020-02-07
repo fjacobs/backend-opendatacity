@@ -2,7 +2,7 @@ package com.dynacore.livemap.block.parking;
 
 import com.dynacore.livemap.block.core.model.FeatureCollectionBlock;
 import com.dynacore.livemap.block.core.repo.JpaRepository;
-import com.dynacore.livemap.core.service.GeoJsonRequester;
+import com.dynacore.livemap.block.core.GeoJsonRequester;
 import com.dynacore.livemap.block.core.HttpGeoJsonSerializer;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

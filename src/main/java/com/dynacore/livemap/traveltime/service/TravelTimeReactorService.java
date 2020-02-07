@@ -15,12 +15,11 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.core.geojson.GeoJsonObjectVisitorWrapper;
-import com.dynacore.livemap.core.service.configuration.DtoFilter;
+import com.dynacore.livemap.core.model.GeoJsonObjectVisitorWrapper;
+import com.dynacore.livemap.core.service.GeoJsonReactorService;
 import com.dynacore.livemap.core.service.configuration.FeatureFilter;
-import com.dynacore.livemap.core.service.GeoJsonAdapter;
+import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
-import com.dynacore.livemap.traveltime.service.visitor.CalculateTravelTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.Feature;
 import org.springframework.context.annotation.Lazy;
@@ -41,18 +40,19 @@ import org.springframework.stereotype.Service;
 public class TravelTimeReactorService extends GeoJsonReactorService {
 
   public TravelTimeReactorService(
-      TravelTimeRepo repo,
-      GeoJsonAdapter retriever,
-      TravelTimeServiceConfig config,
-      DtoFilter roadDtoFilter,
-      FeatureFilter roadFeatureFilter)
+          TravelTimeRepo repo,
+          GeoJsonAdapter retriever,
+          TravelTimeServiceConfig config,
+          TravelTimeRepoDtoMapper roadDtoFilter,
+          FeatureFilter roadFeatureFilter)
       throws JsonProcessingException {
+
     super(retriever, repo,  config, roadDtoFilter, roadFeatureFilter);
   }
 
   @Override
   protected GeoJsonObjectVisitorWrapper<Feature> processFeature() {
-    return new CalculateTravelTime();
+    return new VisitTravelTime();
   }
 
 }

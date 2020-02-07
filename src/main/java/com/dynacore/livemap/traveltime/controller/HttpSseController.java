@@ -1,22 +1,17 @@
 package com.dynacore.livemap.traveltime.controller;
 
+import com.dynacore.livemap.core.model.TrafficFeature;
+import com.dynacore.livemap.core.service.GeoJsonReactorService;
 import org.geojson.FeatureCollection;
-import org.geojson.Feature;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import reactor.core.publisher.Flux;
-
-import com.dynacore.livemap.core.ReactiveGeoJsonController;
-import com.dynacore.livemap.traveltime.service.TravelTimeReactorService;
 
 /*
    Deprecated in favour of RSocket protocol
@@ -24,13 +19,13 @@ import com.dynacore.livemap.traveltime.service.TravelTimeReactorService;
 
 @Profile("traveltime")
 @RestController
-public class HttpSseController implements ReactiveGeoJsonController {
+public class HttpSseController {
 
   private final Logger logger = LoggerFactory.getLogger(HttpSseController.class);
-  private TravelTimeReactorService travelTimeService;
+  private GeoJsonReactorService travelTimeService;
 
   @Autowired
-  public HttpSseController(TravelTimeReactorService TravelTimeService) {
+  public HttpSseController(GeoJsonReactorService TravelTimeService) {
     this.travelTimeService = TravelTimeService;
   }
 
@@ -40,20 +35,19 @@ public class HttpSseController implements ReactiveGeoJsonController {
    */
   @CrossOrigin(origins = "http://localhost:8000")
   @GetMapping("/featureSubscription")
-  public Flux<ServerSentEvent<Feature>> streamFeatures() {
+  public Flux<ServerSentEvent<TrafficFeature>> streamFeatures() {
 
     return travelTimeService
-        .getLiveData()
-        .doOnNext(feature -> logger.info((String) feature.getProperties().get("Id")))
-        .doOnComplete(() -> logger.info("Completed Road SSE.."))
-        .doOnError(e -> logger.error("SSE Error: " + e))
-        .map(
-            sequence ->
-                ServerSentEvent.<Feature>builder()
-                    .id("Roads")
-                    .event("event")
-                    .data(sequence)
-                    .build());
+            .getLiveData()
+            .doOnComplete(() -> logger.info("Completed Road SSE.."))
+            .doOnError(e -> logger.error("SSE Error: " + e))
+            .map(
+                    sequence ->
+                            ServerSentEvent.<TrafficFeature>builder()
+                                    .id("Roads")
+                                    .event("event")
+                                    .data((TrafficFeature) sequence)
+                                    .build());
   }
 
   /**
@@ -66,14 +60,14 @@ public class HttpSseController implements ReactiveGeoJsonController {
   public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
 
     return Flux.concat(travelTimeService.getFeatureCollection())
-        .doOnComplete(() -> logger.info("Completed Road FeatureCollection standardSubscription.."))
-        .doOnError(e -> logger.error("SSE Error: " + e))
-        .map(
-            sequence ->
-                ServerSentEvent.<FeatureCollection>builder()
-                    .id("Roads")
-                    .event("event")
-                    .data(sequence)
-                    .build());
+            .doOnComplete(() -> logger.info("Completed Road FeatureCollection standardSubscription.."))
+            .doOnError(e -> logger.error("SSE Error: " + e))
+            .map(
+                    sequence ->
+                            ServerSentEvent.<FeatureCollection>builder()
+                                    .id("Roads")
+                                    .event("event")
+                                    .data((FeatureCollection) sequence)
+                                    .build());
   }
 }

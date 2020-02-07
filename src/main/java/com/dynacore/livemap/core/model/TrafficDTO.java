@@ -1,11 +1,9 @@
 package com.dynacore.livemap.core.model;
 
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
-import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;
-
 
 // Send updated Feature properties after initial subscription
 // This DTO extends from HashMap to keep the json (or ideally cbor)
@@ -16,40 +14,54 @@ import java.util.HashMap;
 //    id: <id>,
 //    velocity: <changed velocity>
 // }
-public abstract class TrafficDTO extends HashMap<Object, Object> {
+public class TrafficDTO extends HashMap<String, Object> {
   public void setId(String id) {
-    put(TravelTimeFeature.ID, id);
+    put(TrafficFeature.ID, id);
   }
 
   public String getId() {
-    return (String) get(TravelTimeFeature.ID);
+    return (String) get(TrafficFeature.ID);
   }
 
   public void setName(String name) {
-    put(TravelTimeFeature.NAME, name);
+    put(TrafficFeature.NAME, name);
   }
 
   public OffsetDateTime getPubDate() {
-    return (OffsetDateTime) get(TravelTimeFeature.THEIR_RETRIEVAL);
+    Object x = get(TravelTimeFeature.THEIR_RETRIEVAL);
+    assert x != null;
+    if (x instanceof OffsetDateTime) {
+      return (OffsetDateTime) x;
+    }
+    try {
+      if (x instanceof String) {
+        return OffsetDateTime.parse((String) x);
+      }
+    } catch (Exception error) {
+      System.out.println(error.getMessage());
+      error.printStackTrace();
+    }
+    assert false;
+    return null;
   }
 
   public void setPubDate(OffsetDateTime pubDate) {
-    put(TravelTimeFeature.THEIR_RETRIEVAL, pubDate);
+    put(TrafficFeature.THEIR_RETRIEVAL, pubDate);
   }
 
   public OffsetDateTime getSameSince() {
-    return (OffsetDateTime) get(TravelTimeFeature.SAME_SINCE);
+    return (OffsetDateTime) get(TrafficFeature.SAME_SINCE);
   }
 
   public OffsetDateTime getOurRetrieval() {
-    return (OffsetDateTime) get(TravelTimeFeature.OUR_RETRIEVAL);
+    return (OffsetDateTime) get(TrafficFeature.OUR_RETRIEVAL);
   }
 
   public void setOurRetrieval(OffsetDateTime ourRetrieval) {
-    put(TravelTimeFeature.OUR_RETRIEVAL, ourRetrieval);
+    put(TrafficFeature.OUR_RETRIEVAL, ourRetrieval);
   }
 
   public void setSameSince(OffsetDateTime pubDate) {
-    put(TravelTimeFeature.SAME_SINCE, pubDate);
+    put(TrafficFeature.SAME_SINCE, pubDate);
   }
 }

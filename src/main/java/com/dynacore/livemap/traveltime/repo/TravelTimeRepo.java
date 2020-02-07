@@ -1,6 +1,7 @@
 package com.dynacore.livemap.traveltime.repo;
 
-import com.dynacore.livemap.traveltime.service.filter.PubDateSizeResponse;
+import com.dynacore.livemap.core.PubDateSizeResponse;
+import com.dynacore.livemap.core.repository.TrafficRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -17,7 +18,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
-public class TravelTimeRepo implements TrafficRepository {
+public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
 
   private DatabaseClient databaseClient;
   private static final Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
@@ -53,14 +54,14 @@ public class TravelTimeRepo implements TrafficRepository {
   }
 
   @Override
-  public Mono<TravelTimeEntity> getLatest(TravelTimeEntity entity) {
+  public Mono<TravelTimeEntity> getLatest(String entityId) {
     return databaseClient
         .execute(
             "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n"
                 + "     FROM public.travel_time_entity\n"
                 + "\t   WHERE pub_date=(\n"
                 + "                SELECT MAX(pub_date) FROM public.travel_time_entity WHERE id='"
-                + entity.getId()
+                + entityId
                 + "');")
         .as(TravelTimeEntity.class)
         .fetch()

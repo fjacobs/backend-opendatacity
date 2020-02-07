@@ -1,6 +1,5 @@
 package com.dynacore.livemap.core.model;
 
-import com.dynacore.livemap.core.geojson.TrafficFeature;
 import org.geojson.FeatureCollection;
 import org.geojson.*;
 

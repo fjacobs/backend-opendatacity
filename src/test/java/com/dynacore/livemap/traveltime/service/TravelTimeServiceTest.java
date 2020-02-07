@@ -15,9 +15,9 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.core.geojson.TrafficFeature;
-import com.dynacore.livemap.core.service.GeoJsonAdapter;
-import com.dynacore.livemap.core.service.configuration.DtoFilter;
+import com.dynacore.livemap.core.model.TrafficFeature;
+import com.dynacore.livemap.core.service.DistinctUtil;
+import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.testing.subscriber.AssertSubscriber;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
@@ -83,7 +83,7 @@ class TravelTimeServiceTest {
             Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 
 
-    service = new TravelTimeReactorService(repo, smallFc, serviceConfig,new DtoFilter(), new FeatureFilter());
+    service = new TravelTimeReactorService(repo, smallFc, serviceConfig,new TravelTimeRepoDtoMapper(), new FeatureFilter());
     service
         .getLiveData()
         .as(StepVerifier::create)
@@ -196,8 +196,9 @@ class TravelTimeServiceTest {
     serviceConfig.setRequestInterval(Duration.ofSeconds(0));
     serviceConfig.setSaveToDbEnabled(false);
 
-    TravelTimeReactorService service =
-        new TravelTimeReactorService(repo, prop3Changed, serviceConfig,new DtoFilter(), new FeatureFilter());
+
+
+    service = new TravelTimeReactorService(repo, prop3Changed, serviceConfig,new TravelTimeRepoDtoMapper(), new FeatureFilter());
 
     StepVerifier.create(service.getLiveData())
         .expectNext(feature1_1)

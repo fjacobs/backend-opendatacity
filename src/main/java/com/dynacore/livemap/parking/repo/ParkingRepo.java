@@ -1,5 +1,7 @@
 package com.dynacore.livemap.parking.repo;
 
+import com.dynacore.livemap.core.repository.TrafficRepository;
+import com.dynacore.livemap.core.PubDateSizeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -15,7 +17,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("parking")
 @Repository("parkingRepository")
-public class ParkingRepo implements ParkingRepository {
+public class ParkingRepo implements TrafficRepository<ParkingEntity> {
 
   private DatabaseClient databaseClient;
   private static final Logger logger = LoggerFactory.getLogger(ParkingRepo.class);
@@ -51,14 +53,14 @@ public class ParkingRepo implements ParkingRepository {
   }
 
   @Override
-  public Mono<ParkingEntity> getLatest(ParkingEntity entity) {
+  public Mono<ParkingEntity> getLatest(String entityId) {
     return databaseClient
         .execute(
             "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n"
                 + "     FROM public.travel_time_entity\n"
                 + "\t   WHERE pub_date=(\n"
                 + "                SELECT MAX(pub_date) FROM public.travel_time_entity WHERE id='"
-                + entity.getId()
+                + entityId
                 + "');")
         .as(ParkingEntity.class)
         .fetch()
@@ -70,6 +72,38 @@ public class ParkingRepo implements ParkingRepository {
     return databaseClient
         .execute("SELECT * FROM public.travel_time_entity ORDER BY pub_date ASC")
         .as(ParkingEntity.class)
+        .fetch()
+        .all();
+  }
+
+  @Override
+  public Flux<PubDateSizeResponse> getReplayMetaData() {
+    return databaseClient
+            .execute(
+                    " SELECT pub_date, COUNT (pub_date) FROM public.travel_time_entity GROUP BY travel_time_entity.pub_date ORDER BY pub_date ASC;")
+            .as(PubDateSizeResponse.class)
+            .fetch()
+            .all();
+  }
+
+
+  @Override
+  public Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end) {
+    return databaseClient
+        .execute(
+            "    SELECT pub_date, COUNT (pub_date)\n"
+                + "    FROM\n"
+                + "             public.travel_time_entity\n"
+                + "    WHERE\n"
+                + "    pub_date >= '"
+                + start
+                + "'\n"
+                + "    AND    pub_date <='"
+                + end
+                + "'\n"
+                + "\n"
+                + "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date ASC;")
+        .as(PubDateSizeResponse.class)
         .fetch()
         .all();
   }
