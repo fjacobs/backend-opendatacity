@@ -31,12 +31,12 @@ public class FileToGeojson {
    */
   public static List<FeatureCollection> readCollection(String folderName) {
 
-    log.info("Class FileToGeojson ");
-    log.info("Reading file contents from folder: " +  folderName);
+    log.info("Importing geojson folder: " + folderName);
 
     File folder = new File(FileToGeojson.class.getResource(folderName).getPath());
-
-    return Arrays.stream(Objects.requireNonNull(folder.listFiles()))
+    File[] files = folder.listFiles();
+    Arrays.sort(Objects.requireNonNull(files));
+    return Arrays.stream(files)
         .filter(File::isFile)
         .map(
             file -> {

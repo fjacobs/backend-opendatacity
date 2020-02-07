@@ -1,6 +1,6 @@
 package com.dynacore.livemap.core.model;
 
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.geojson.Feature;
@@ -16,23 +16,28 @@ public class TrafficFeature extends Feature {
   @JsonIgnore public static final String THEIR_RETRIEVAL = "pubDate";
   @JsonIgnore public static final String SAME_SINCE = "sameSince";
 
-  public TrafficFeature(){}
+  public TrafficFeature() {}
 
-  public TrafficFeature(TravelTimeEntity entity) {
+  public TrafficFeature(TrafficEntity entity) {
     setId(entity.getId());
     setName(entity.getName());
     setPubDate(entity.getPubDate());
   }
-
-  public TrafficFeature(Feature feature) {
+  //Different suppliers use different keys for it's pubdate:
+  public TrafficFeature(Feature feature, String pubDateKey) {
     setId(feature.getId());
+    setOurRetrieval(OffsetDateTime.parse(feature.getProperty(OUR_RETRIEVAL)));
+    setPubDate(OffsetDateTime.parse(feature.getProperty(pubDateKey)));
     setName(feature.getProperty(NAME));
-    setPubDate(feature.getProperty(THEIR_RETRIEVAL));
     setGeometry(feature.getGeometry());
   }
 
   public void setName(String name) {
     getProperties().put(NAME, name);
+  }
+
+  public String getName() {
+    return (String) getProperty(NAME);
   }
 
   public OffsetDateTime getPubDate() {
@@ -58,4 +63,5 @@ public class TrafficFeature extends Feature {
   public void setOurRetrieval(OffsetDateTime ourRetrieval) {
     getProperties().put(OUR_RETRIEVAL, ourRetrieval);
   }
+
 }

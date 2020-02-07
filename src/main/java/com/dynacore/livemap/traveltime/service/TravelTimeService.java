@@ -15,16 +15,21 @@
  */
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.core.model.GeoJsonObjectVisitorWrapper;
-import com.dynacore.livemap.core.service.GeoJsonReactorService;
-import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
+import com.dynacore.livemap.core.service.GeoJsonReactorService;
+import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.geojson.Feature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * Road traffic traveltime service
@@ -37,23 +42,28 @@ import org.springframework.stereotype.Service;
 @Lazy(false)
 @Profile("traveltime")
 @Service("travelTimeService")
-public class TravelTimeReactorService extends GeoJsonReactorService {
+public class TravelTimeService
+    extends GeoJsonReactorService<TravelTimeEntity, TravelTimeFeature, TravelTimeDTO> {
 
-  public TravelTimeReactorService(
-          TravelTimeRepo repo,
-          GeoJsonAdapter retriever,
-          TravelTimeServiceConfig config,
-          TravelTimeRepoDtoMapper roadDtoFilter,
-          FeatureFilter roadFeatureFilter)
+  Logger log = LoggerFactory.getLogger(TravelTimeService.class);
+
+  public TravelTimeService(
+      TravelTimeServiceConfig config,
+      GeoJsonAdapter adapter,
+      TravelTimeImporter importer,
+      TravelTimeRepo repo,
+      TravelTimeEntityDistinct entityDtoDistinct,
+      TravelTimeFeatureDistinct featureDistinct
+      )
       throws JsonProcessingException {
-    super(retriever, repo,  config, roadDtoFilter, roadFeatureFilter);
-    System.out.println(retriever.getClass().toString());
-    assert false;
-  }
+    super(config, adapter, importer, repo,  entityDtoDistinct, featureDistinct);
 
-  @Override
-  protected GeoJsonObjectVisitorWrapper<Feature> processFeature() {
-    return new VisitTravelTime();
+    if (config.isSaveToDbEnabled()) {
+      Flux.from(importedFlux)
+          .parallel(Runtime.getRuntime().availableProcessors())
+          .runOn(Schedulers.parallel())
+          .map(feature -> repo.save(new TravelTimeEntity(feature)))
+          .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
+    }
   }
-
 }

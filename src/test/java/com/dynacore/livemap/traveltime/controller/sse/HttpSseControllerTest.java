@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.traveltime.controller.HttpSseController;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
 import org.geojson.Feature;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.dynacore.livemap.traveltime.service.TravelTimeReactorService;
+import com.dynacore.livemap.traveltime.service.TravelTimeService;
 
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -22,16 +23,16 @@ public class HttpSseControllerTest {
   @Test
   public void testFeatureSubscription() {
 
-    TrafficFeature feature1 = new TrafficFeature();
+    TravelTimeFeature feature1 = new TravelTimeFeature();
     feature1.setId("Feature1");
     feature1.setProperty("prop1", "value1");
     feature1.setProperty("prop2", 2);
-    TrafficFeature feature2 = new TrafficFeature();
+    TravelTimeFeature feature2 = new TravelTimeFeature();
     feature2.setId("Feature2");
     feature2.setProperty("prop2_1", "value2");
     feature2.setProperty("prop2_2", 3);
 
-    TravelTimeReactorService service = Mockito.mock(TravelTimeReactorService.class);
+    TravelTimeService service = Mockito.mock(TravelTimeService.class);
     Mockito.when(service.getLiveData()).thenReturn(Flux.just(feature1, feature2));
 
     ParameterizedTypeReference<ServerSentEvent<Feature>> typeRef =
@@ -47,7 +48,6 @@ public class HttpSseControllerTest {
         .returnResult(typeRef)
         .getResponseBody()
         .as(StepVerifier::create)
-        .thenAwait(Duration.ofSeconds(3))
         .thenCancel()
         .verify();
   }

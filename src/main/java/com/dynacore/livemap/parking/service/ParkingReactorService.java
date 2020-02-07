@@ -17,6 +17,7 @@ package com.dynacore.livemap.parking.service;
 
 import com.dynacore.livemap.core.model.GeoJsonObjectVisitorWrapper;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
+import com.dynacore.livemap.core.repository.TrafficRepository;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
 import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.parking.repo.ParkingRepo;
@@ -41,7 +42,7 @@ import org.springframework.stereotype.Service;
 public class ParkingReactorService extends GeoJsonReactorService {
 
   public ParkingReactorService(
-          ParkingRepo repo,
+          TrafficRepository repo,
           GeoJsonAdapter retriever,
           ParkingServiceConfig config,
           TravelTimeRepoDtoMapper roadDtoFilter,

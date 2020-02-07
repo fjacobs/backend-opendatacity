@@ -24,7 +24,7 @@ public class HttpAdapter implements GeoJsonAdapter {
     this.webClient = webClient;
   }
 
-  public Flux<FeatureCollection> requestHotSourceFc(Duration interval) {
+  public Flux<FeatureCollection> adapterHotSourceReq(Duration interval) {
     return Flux.interval(interval)
         .concatMap(
             tick ->

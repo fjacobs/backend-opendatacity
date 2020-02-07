@@ -29,6 +29,7 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
 
   @Override
   public Mono<Boolean> isNew(TravelTimeEntity entity) {
+
     return databaseClient
         .select()
         .from(TravelTimeEntity.class)

@@ -2,97 +2,84 @@ package com.dynacore.livemap.core.service;
 
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
-import com.dynacore.livemap.core.model.GeoJsonObjectVisitorWrapper;
-import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.core.model.TrafficDTO;
+import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
-import com.dynacore.livemap.core.service.configuration.FeatureFilter;
-import com.dynacore.livemap.core.service.configuration.RepoFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.geojson.Feature;
 import org.geojson.FeatureCollection;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.List;
 
-public abstract class GeoJsonReactorService {
+public abstract class GeoJsonReactorService<T extends TrafficEntity, R extends TrafficFeature, D extends TrafficDTO> {
 
-  protected Flux<TrafficFeature> sharedFlux;
+  protected Flux<R> importedFlux;
   protected final GeoJsonAdapter retriever;
   protected final ServiceConfiguration config;
-  protected final TrafficRepository<? extends TrafficEntity> repo;
-  private final RepoFilter repoFilter;
-  private final FeatureFilter featureFilter;
+  protected final TrafficRepository<T> repo;
+  private final EntityDistinct<T, D> entityDistinct;
+  private final FeatureDistinct<R, R> featureDistinct;
+  protected final FeatureImporter<R> featureImporter;
 
-  @Autowired ModelMapper modelMapper;
   private final Logger logger = LoggerFactory.getLogger(GeoJsonReactorService.class);
 
   public GeoJsonReactorService(
-          GeoJsonAdapter retriever,
-          TrafficRepository<? extends TrafficEntity> repo,
           ServiceConfiguration generalConfig,
-          RepoFilter repoFilter,
-          FeatureFilter featureFilter)
+          GeoJsonAdapter geoJsonAdapter,
+          FeatureImporter<R> featureImporter,
+          TrafficRepository<T> repo,
+          EntityDistinct<T, D> entityDistinct,
+          FeatureDistinct<R, R> featureDistinct
+          )
       throws JsonProcessingException {
-    this.retriever = retriever;
+    this.retriever = geoJsonAdapter;
     this.config = generalConfig;
     this.repo = repo;
-    this.repoFilter = repoFilter;
-    this.featureFilter = featureFilter;
+    this.entityDistinct = entityDistinct;
+    this.featureDistinct = featureDistinct;
+    this.featureImporter = featureImporter;
 
     logger.info(this.config.getRequestInterval().toString());
-
-    sharedFlux = processFlux().cache(generalConfig.getRequestInterval());
-
-    //    if (generalConfig.isSaveToDbEnabled()) {
-    //      Flux.from(sharedFlux)
-    //          .parallel(Runtime.getRuntime().availableProcessors())
-    //          .runOn(Schedulers.parallel())
-    //          .map(feature -> repo.save(modelMapper.map(feature, ParkingEntity.class)))
-    //          .subscribe(Mono::subscribe, error -> logger.error("Error: " + error));
-    //    }
+    importedFlux = importFlux().cache(generalConfig.getRequestInterval());
   }
 
-  public Flux<TrafficFeature> processFlux() throws JsonProcessingException {
+  protected Flux<R> importFlux() throws JsonProcessingException {
     return retriever
-            .requestHotSourceFc(config.getRequestInterval())
+            .adapterHotSourceReq(config.getRequestInterval())
             .doOnNext(
-                    x -> logger.info("Retrieved new featurecollection, size: " + x.getFeatures().size())
-
-            )
+                    x -> {
+                      logger.info("Retrieved new featurecollection, size: " + x.getFeatures().size());
+                      // System.out.println(x.getFeatures().get(0));
+                    })
             .flatMapIterable(FeatureCollection::getFeatures)
-            .map(feature -> ((TrafficFeature) feature.accept(processFeature())));
+            .map(featureImporter::importFeature);
   }
-
-  protected abstract GeoJsonObjectVisitorWrapper<Feature> processFeature();
 
   public Flux<TrafficFeature> getFeatureRange(FeatureRequest range) {
     return repo.getFeatureDateRange(range.getStartDate(), range.getEndDate())
-        .map(entity -> modelMapper.map(entity, TrafficFeature.class));
+        .map(TrafficFeature::new);
   }
 
-
-
-  public Flux<TrafficFeature> getLiveData() {
-    return Flux.from(sharedFlux).handle(featureFilter.filter());
+  public Flux<R> getLiveData() {
+    return Flux.from(importedFlux).handle(featureDistinct.getFilter());
   }
 
-  public Flux<List<TrafficDTO>> replayHistoryGroup() {
-    return repo.getAllAscending()
-        .handle(repoFilter.filter())
-        .windowUntilChanged(TrafficDTO::getPubDate)
+  public Flux<List<D>> replayHistoryGroup(Duration interval) {
+     return repo.getAllAscending()
+        .handle(entityDistinct.filter())
+        .windowUntilChanged(D::getPubDate)
         .flatMap(Flux::buffer)
-        .doOnNext(x -> System.out.println("Amount of features changed: " + x.size()));
+        .delayElements(interval)
+        .doOnNext(x -> System.out.println("Amount of distinct features: " + x.size()));
   }
 
   public Mono<FeatureCollection> getFeatureCollection() {
-    return Flux.from(sharedFlux)
+    return Flux.from(importedFlux)
         .collectList()
         .map(
             list -> {

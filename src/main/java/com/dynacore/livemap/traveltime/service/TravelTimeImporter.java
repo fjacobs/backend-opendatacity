@@ -1,8 +1,9 @@
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.core.model.GeoJsonObjectVisitorWrapper;
+import com.dynacore.livemap.core.service.FeatureImporter;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
 import org.geojson.Feature;
+import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -11,16 +12,13 @@ import static com.dynacore.livemap.core.model.TrafficFeature.ID;
 import static com.dynacore.livemap.core.model.TrafficFeature.OUR_RETRIEVAL;
 import static com.dynacore.livemap.traveltime.domain.TravelTimeFeature.*;
 
-public class VisitTravelTime extends GeoJsonObjectVisitorWrapper<Feature> {
+@Component
+public class TravelTimeImporter implements FeatureImporter<TravelTimeFeature> {
 
   @Override
-  public Feature visit(Feature feature) {
-    TravelTimeFeature travelTimeFeature;
-    if (feature instanceof TravelTimeFeature) {
-       travelTimeFeature = (TravelTimeFeature) feature;
-    } else {
-      travelTimeFeature = new TravelTimeFeature(feature);
-    }
+  public TravelTimeFeature importFeature(Feature feature) {
+
+    TravelTimeFeature travelTimeFeature = null;
     try {
       OffsetDateTime retrieved = OffsetDateTime.now(ZoneOffset.UTC);
       feature.getProperties().put(OUR_RETRIEVAL, retrieved.toString());
@@ -35,14 +33,22 @@ public class VisitTravelTime extends GeoJsonObjectVisitorWrapper<Feature> {
       }
       if (feature.getProperties().containsKey(ID)) {
         feature.setId(
-            (String)
-                feature.getProperties().get(ID)); // See RFC 7946: If an ID is used then it SHOULD
-                                                  // be included as a top level member
+                (String)
+                        feature.getProperties().get(ID)); // See RFC 7946: If an ID is used then it SHOULD
+        // be included as a top level member
         feature.getProperties().remove(ID); // and not as a member of properties
       }
+
+      if (feature instanceof TravelTimeFeature) {
+        travelTimeFeature = (TravelTimeFeature) feature;
+      } else {
+        travelTimeFeature = new TravelTimeFeature(feature);
+      }
     } catch (Exception e) {
-      e.printStackTrace();
+      System.err.println("Could not import feature: " + feature);
+      assert false;
     }
+
     return travelTimeFeature;
   }
 }

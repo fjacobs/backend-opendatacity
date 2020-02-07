@@ -2,6 +2,7 @@ package com.dynacore.livemap.traveltime.repo;
 
 import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +13,8 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @Table
-@Getter
-@Setter
-@NoArgsConstructor
 @ToString
+@Getter @Setter
 public class TravelTimeEntity extends TrafficEntity {
 
   private static final Logger log = LoggerFactory.getLogger(TravelTimeEntity.class);
@@ -24,6 +23,18 @@ public class TravelTimeEntity extends TrafficEntity {
   private Integer length;
   private Integer travel_time;
   private Integer velocity;
+
+  public TravelTimeEntity() { }
+
+  public TravelTimeEntity(TravelTimeFeature feature) {
+
+    super(null, feature.getId(), feature.getName(), feature.getPubDate(), feature.getOurRetrieval());
+//    System.out.println("printing casted feature to tt:" + feature);
+    setLength(feature.getLength());
+    setTravel_time(feature.getTravelTime());
+    setType(feature.getType());
+    setVelocity(feature.getVelocity());
+  }
 
   public TravelTimeEntity(
       Integer pkey,
@@ -35,11 +46,7 @@ public class TravelTimeEntity extends TrafficEntity {
       Integer length,
       Integer travel_time,
       Integer velocity) {
-    this.pkey = pkey;
-    this.id = id;
-    this.name = name;
-    this.pubDate = pubDate;
-    this.retrievedFromThirdParty = retrievedFromThirdParty;
+    super(pkey, id, name, pubDate, retrievedFromThirdParty);
     this.type = type;
     this.length = length;
     this.travel_time = travel_time;

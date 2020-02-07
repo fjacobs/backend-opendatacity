@@ -21,7 +21,7 @@ traveltime:
   initialdelay: 0s
   requestinterval: 3s
   elementdelay: 0s
-  saveToDbEnabled: false
+  saveToDbEnabled: true
 
 #local.server.port: 7777
 
@@ -37,7 +37,7 @@ spring:
   #traveltime && parking && guidancesign
   #http || file
   profiles:
-    include: test, file, postgres, traveltime
+    include: dev, file, postgres, traveltime
   rsocket:
     server:
       mapping-path: /traveltimesocket
@@ -73,14 +73,14 @@ spring:
   profiles: "!test"
 
 fileadapter:
-  folder: /traveltimedata/import/
+  folder: /traveltimedata/traveltimesmall/
 
 postgres:
   host: localhost
   port: 5432
   user: postgres
   password: admin
-  database: trafficdata
+  database: travel_time_small
 
 
 ---
@@ -95,8 +95,7 @@ postgres:
   port: 5432
   user: postgres
   password: admin
-  database: blinkingroads
-
+  database: travel_time_small
 ---
 
 #    -- Traveltime informatie van de data provider:

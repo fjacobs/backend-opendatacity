@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.OffsetDateTime;
 
-public interface TrafficRepository<T extends TrafficEntity> {
+public interface TrafficRepository<T> {
   Mono<Boolean> isNew(T entity);
 
   Mono<Integer> save(T entity);

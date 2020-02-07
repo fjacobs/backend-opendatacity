@@ -23,7 +23,7 @@ public class GeoJsonObjectVisitorWrapper<T> implements GeoJsonObjectVisitor<T> {
   }
 
   @Override
-  public T visit(org.geojson.FeatureCollection geoJsonObject) {
+  public T visit(FeatureCollection geoJsonObject) {
     return null;
   }
 

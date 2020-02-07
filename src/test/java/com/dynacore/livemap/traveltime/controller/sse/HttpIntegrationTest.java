@@ -10,8 +10,7 @@ import java.time.Duration;
 
 import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
-import com.dynacore.livemap.traveltime.service.TravelTimeRepoDtoMapper;
-import com.dynacore.livemap.core.service.configuration.FeatureFilter;
+import com.dynacore.livemap.traveltime.service.*;
 import com.dynacore.livemap.testing.database.PostgresTestSupport;
 import com.dynacore.livemap.configuration.adapter.HttpAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,8 +38,6 @@ import okhttp3.HttpUrl;
 import com.dynacore.livemap.testing.database.H2TestSupport;
 import com.dynacore.livemap.traveltime.controller.HttpSseController;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
-import com.dynacore.livemap.traveltime.service.TravelTimeServiceConfig;
-import com.dynacore.livemap.traveltime.service.TravelTimeReactorService;
 
 class HttpIntegrationTest {
 
@@ -89,7 +86,7 @@ class HttpIntegrationTest {
             .build();
 
     GeoJsonReactorService service =
-        new TravelTimeReactorService(repo, new HttpAdapter(webClient), serviceConfig, new TravelTimeRepoDtoMapper(), new FeatureFilter());
+        new TravelTimeService(serviceConfig, new HttpAdapter(webClient), new TravelTimeImporter(), repo, new TravelTimeEntityDistinct(), new TravelTimeFeatureDistinct());
     controller = new HttpSseController(service);
   }
 

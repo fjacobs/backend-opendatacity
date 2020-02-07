@@ -2,12 +2,11 @@ package com.dynacore.livemap.traveltime.controller;
 
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.TrafficController;
-import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
+import com.dynacore.livemap.traveltime.service.TravelTimeService;
 import org.geojson.FeatureCollection;
-import com.dynacore.livemap.traveltime.service.TravelTimeReactorService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +17,26 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Type;
+import java.time.Duration;
 import java.util.List;
 
 @Profile("traveltime")
 @Controller
 public class TravelTimeController implements TrafficController {
 
-  private final TravelTimeReactorService service;
+  private final TravelTimeService service;
   private final Logger logger = LoggerFactory.getLogger(TravelTimeController.class);
-  private final Type listType = new TypeToken<List<TravelTimeDTO>>() {}.getType();
 
   @Autowired private ModelMapper modelMapper;
 
-  public TravelTimeController(TravelTimeReactorService service) {
+  public TravelTimeController(TravelTimeService service) {
     this.service = service;
   }
 
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("TRAVELTIME_STREAM")
-  public Flux<TrafficFeature> streamLiveData() {
+  public Flux<TravelTimeFeature> streamLiveData() {
     logger.info("Enter TravelTimeGeoJsonController::streamLiveData");
     return service.getLiveData();
   }
@@ -48,7 +46,7 @@ public class TravelTimeController implements TrafficController {
   @MessageMapping("TRAVELTIME_REPLAY")
   public Flux<List<TravelTimeDTO>> replayAllDistinct(Integer intervalMilliSec) {
     logger.info("Enter TravelTimeGeoJsonController::replayAllDistinct");
-    return service.replayHistoryGroup().map(featureList-> modelMapper.map(featureList, listType));
+    return service.replayHistoryGroup(Duration.ofMillis(intervalMilliSec));
   }
 
   /*  Returns Feature properties without geolocation

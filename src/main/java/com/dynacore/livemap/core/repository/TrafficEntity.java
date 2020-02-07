@@ -4,12 +4,15 @@ import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
 
+@ToString
 @Getter @Setter
 @NoArgsConstructor
 public abstract class TrafficEntity {

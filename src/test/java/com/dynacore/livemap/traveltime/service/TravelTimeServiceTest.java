@@ -18,7 +18,6 @@ package com.dynacore.livemap.traveltime.service;
 import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.core.service.DistinctUtil;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
-import com.dynacore.livemap.core.service.configuration.FeatureFilter;
 import com.dynacore.livemap.testing.subscriber.AssertSubscriber;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
@@ -62,7 +61,7 @@ class TravelTimeServiceTest {
           + "[5.005562368354391,52.32628371039965],[5.005723592066905,52.32730043716067],[5.005711772825435,52.327993424971154],[5.005687110573994,52.32836111625229]]}}]}";
 
   static MockWebServer server;
-  static TravelTimeReactorService service;
+  static TravelTimeService service;
   static TravelTimeServiceConfig serviceConfig;
 
   @Test
@@ -78,12 +77,12 @@ class TravelTimeServiceTest {
     serviceConfig.setRequestInterval(Duration.ofSeconds(1));
     serviceConfig.setSaveToDbEnabled(false);
 
-    GeoJsonAdapter smallFc =
+    GeoJsonAdapter smallFcAdapter =
         (serviceConfig) ->
             Flux.just(new ObjectMapper().readValue(jsonCorrect, FeatureCollection.class));
 
 
-    service = new TravelTimeReactorService(repo, smallFc, serviceConfig,new TravelTimeRepoDtoMapper(), new FeatureFilter());
+    service = new TravelTimeService(serviceConfig, smallFcAdapter,  new TravelTimeImporter(), repo,  new TravelTimeEntityDistinct(), new TravelTimeFeatureDistinct());
     service
         .getLiveData()
         .as(StepVerifier::create)
@@ -96,22 +95,22 @@ class TravelTimeServiceTest {
   @Test
   void distinctKeySelectorTest() {
 
-    TrafficFeature feature1 = new TrafficFeature();
+    TravelTimeFeature feature1 = new TravelTimeFeature();
     feature1.setId("Feature1");
     feature1.setProperty("prop1", "value1");
     feature1.setProperty("prop2", 2);
 
-    TrafficFeature feature2 = new TrafficFeature();
+     TravelTimeFeature feature2 = new TravelTimeFeature();
     feature2.setId("Feature1");
     feature2.setProperty("prop1", "value1");
     feature2.setProperty("prop2", 2);
 
-    TrafficFeature feature3 = new TrafficFeature();
+    TravelTimeFeature feature3 = new TravelTimeFeature();
     feature3.setId("Feature1");
     feature3.setProperty("prop1", "value1");
     feature3.setProperty("prop2", 5);
 
-    TrafficFeature feature4 = new TrafficFeature();
+    TravelTimeFeature feature4 = new TravelTimeFeature();
     feature4.setId("Feature1");
     feature4.setProperty("prop1", "value1");
     feature4.setProperty("prop2", 6);
@@ -130,12 +129,12 @@ class TravelTimeServiceTest {
   void emitDistinctFeatures() throws JsonProcessingException {
     Hooks.onOperatorDebug();
 
-    final TrafficFeature feature1_1 = new TravelTimeFeature();
-    final TrafficFeature feature2_1 = new TravelTimeFeature();
-    final TrafficFeature feature1_2 = new TravelTimeFeature();
-    final TrafficFeature feature2_2 = new TravelTimeFeature();
-    final TrafficFeature feature1_3 = new TravelTimeFeature();
-    final TrafficFeature feature2_3 = new TravelTimeFeature();
+    final TravelTimeFeature feature1_1 = new TravelTimeFeature();
+    final TravelTimeFeature feature2_1 = new TravelTimeFeature();
+    final TravelTimeFeature feature1_2 = new TravelTimeFeature();
+    final TravelTimeFeature feature2_2 = new TravelTimeFeature();
+    final TravelTimeFeature feature1_3 = new TravelTimeFeature();
+    final TravelTimeFeature feature2_3 = new TravelTimeFeature();
 
     GeoJsonAdapter prop3Changed =
         (interval) -> {
@@ -198,7 +197,7 @@ class TravelTimeServiceTest {
 
 
 
-    service = new TravelTimeReactorService(repo, prop3Changed, serviceConfig,new TravelTimeRepoDtoMapper(), new FeatureFilter());
+    service = new TravelTimeService(serviceConfig,prop3Changed, new TravelTimeImporter(),repo, new TravelTimeEntityDistinct(), new TravelTimeFeatureDistinct());
 
     StepVerifier.create(service.getLiveData())
         .expectNext(feature1_1)
@@ -224,7 +223,7 @@ class TravelTimeServiceTest {
 
     GeoJsonAdapter smallFc = (serviceConfig) -> Flux.just(fc);
 
-    smallFc.requestHotSourceFc(Duration.ofSeconds(1)).blockLast();
+    smallFc.adapterHotSourceReq(Duration.ofSeconds(1)).blockLast();
 
     //    service = new TravelTimeReactorService(repo, smallFc, serviceConfig);
     //    service
