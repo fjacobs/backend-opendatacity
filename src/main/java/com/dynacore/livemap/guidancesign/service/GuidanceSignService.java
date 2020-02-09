@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dynacore.livemap.traveltime.service;
+package com.dynacore.livemap.guidancesign.service;
 
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
-import com.dynacore.livemap.core.service.TrafficFeatureDistinct;
-import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
-import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
-import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignDTO;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeature;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
+import com.dynacore.livemap.guidancesign.repo.GuidanceSignRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,20 +40,20 @@ import reactor.core.scheduler.Schedulers;
  * cached for new subscribers.
  */
 @Lazy(false)
-@Profile("traveltime")
-@Service("travelTimeService")
-public class TravelTimeService
-    extends GeoJsonReactorService<TravelTimeEntity, TravelTimeFeature, TravelTimeDTO> {
+@Profile("guidancesign")
+@Service("guidanceSignService")
+public class GuidanceSignService
+    extends GeoJsonReactorService<GuidanceSignEntity, GuidanceSignFeature, GuidanceSignDTO> {
 
-  Logger log = LoggerFactory.getLogger(TravelTimeService.class);
+  Logger log = LoggerFactory.getLogger(GuidanceSignService.class);
 
-  public TravelTimeService(
-      TravelTimeServiceConfig config,
-      GeoJsonAdapter adapter,
-      TravelTimeImporter importer,
-      TravelTimeRepo repo,
-      TravelTimeEntityDistinct entityDtoDistinct,
-      TravelTimeFeatureDistinct featureDistinct
+  public GuidanceSignService(
+          GuidanceSignServiceConfig config,
+          GeoJsonAdapter adapter,
+          GuidanceSignImporter importer,
+          GuidanceSignRepo repo,
+          GuidanceSignEntityDistinct entityDtoDistinct,
+          GuidanceSignFeatureDistinct featureDistinct
       )
       throws JsonProcessingException {
     super(config, adapter, importer, repo,  entityDtoDistinct, featureDistinct);
@@ -63,7 +62,7 @@ public class TravelTimeService
       Flux.from(importedFlux)
           .parallel(Runtime.getRuntime().availableProcessors())
           .runOn(Schedulers.parallel())
-          .map(feature -> repo.save(new TravelTimeEntity(feature)))
+          .map(feature -> repo.save(new GuidanceSignEntity(feature)))
           .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
     }
   }

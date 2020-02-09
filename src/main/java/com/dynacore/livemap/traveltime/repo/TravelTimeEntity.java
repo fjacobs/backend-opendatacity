@@ -1,12 +1,10 @@
 package com.dynacore.livemap.traveltime.repo;
 
 import com.dynacore.livemap.core.repository.TrafficEntity;
-import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
@@ -28,7 +26,7 @@ public class TravelTimeEntity extends TrafficEntity {
 
   public TravelTimeEntity(TravelTimeFeature feature) {
 
-    super(null, feature.getId(), feature.getName(), feature.getPubDate(), feature.getOurRetrieval());
+    super(null, feature.getId(), feature.getName(), feature.getPubDate(), feature.getOurCreationDate());
 //    System.out.println("printing casted feature to tt:" + feature);
     setLength(feature.getLength());
     setTravel_time(feature.getTravelTime());

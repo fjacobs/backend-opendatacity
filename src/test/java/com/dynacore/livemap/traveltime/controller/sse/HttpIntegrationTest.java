@@ -10,6 +10,7 @@ import java.time.Duration;
 
 import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
+import com.dynacore.livemap.core.service.TrafficFeatureDistinct;
 import com.dynacore.livemap.traveltime.service.*;
 import com.dynacore.livemap.testing.database.PostgresTestSupport;
 import com.dynacore.livemap.configuration.adapter.HttpAdapter;

@@ -33,7 +33,7 @@ public class HttpGeoJsonSerializer<T> {
     } catch (RestClientException error) {
       logger.error("Could not get data from: " + url + " error: " + error);
     } catch (HttpMessageConversionException | IllegalStateException error) {
-      logger.error("Can't unmarshall check model.... ", error);
+      logger.error("Can't unmarshall check domain.... ", error);
     }
 
     if (responseEntity == null) {

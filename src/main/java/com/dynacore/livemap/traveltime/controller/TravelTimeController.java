@@ -60,11 +60,4 @@ public class TravelTimeController implements TrafficController {
 
   }
 
-  @Override
-  @CrossOrigin(origins = "http://localhost:9000")
-  @MessageMapping("traveltime_collection")
-  public Mono<FeatureCollection> requestResponseFc() {
-    logger.info("Enter TravelTimeGeoJsonController::requestResponseFc");
-    return service.getFeatureCollection();
-  }
 }

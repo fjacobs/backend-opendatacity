@@ -54,11 +54,11 @@ public class TrafficDTO extends HashMap<String, Object> {
   }
 
   public OffsetDateTime getOurRetrieval() {
-    return (OffsetDateTime) get(TrafficFeature.OUR_RETRIEVAL);
+    return (OffsetDateTime) get(TrafficFeature.OUR_CREATION_DATE);
   }
 
   public void setOurRetrieval(OffsetDateTime ourRetrieval) {
-    put(TrafficFeature.OUR_RETRIEVAL, ourRetrieval);
+    put(TrafficFeature.OUR_CREATION_DATE, ourRetrieval);
   }
 
   public void setSameSince(OffsetDateTime pubDate) {

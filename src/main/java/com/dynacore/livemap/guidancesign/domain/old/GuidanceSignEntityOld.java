@@ -1,6 +1,5 @@
-package com.dynacore.livemap.block.guidancesign.entity;
+package com.dynacore.livemap.guidancesign.domain.old;
 
-import com.dynacore.livemap.block.guidancesign.model.GuidanceSignModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,9 +22,9 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GuidanceSignEntity implements Serializable {
+public class GuidanceSignEntityOld implements Serializable {
 
-  @Transient Logger logger = LoggerFactory.getLogger(GuidanceSignEntity.class);
+  @Transient Logger logger = LoggerFactory.getLogger(GuidanceSignEntityOld.class);
 
   @Id
   @Column(name = "ID", nullable = false, updatable = false)
@@ -44,9 +43,9 @@ public class GuidanceSignEntity implements Serializable {
   private LocalDateTime retrievedFromThirdParty;
 
   @OneToMany(mappedBy = "parentRef", fetch = FetchType.LAZY)
-  private Set<InnerDisplayEntity> innerDisplays;
+  private Set<InnerDisplayEntityOld> innerDisplays;
 
-  public GuidanceSignEntity(GuidanceSignModel model) {
+  public GuidanceSignEntityOld(GuidanceSignModel model) {
     guidanceSignId = model.getId();
     name = model.getName();
     pubDate = model.getPubDate();
@@ -57,7 +56,7 @@ public class GuidanceSignEntity implements Serializable {
         model.getProperties().getInnerDisplayModelList().stream()
             .map(
                 inner ->
-                    new InnerDisplayEntity.Builder()
+                    new InnerDisplayEntityOld.Builder()
                         .innerDisplayId(inner.getId())
                         .outputDescription(inner.getOutputDescription())
                         .output(inner.getOutput())
@@ -79,8 +78,8 @@ public class GuidanceSignEntity implements Serializable {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof GuidanceSignEntity)) return false;
-    GuidanceSignEntity that = (GuidanceSignEntity) o;
+    if (!(o instanceof GuidanceSignEntityOld)) return false;
+    GuidanceSignEntityOld that = (GuidanceSignEntityOld) o;
     return guidanceSignId.equals(that.guidanceSignId)
         && name.equals(that.name)
         && pubDate.equals(that.pubDate)
