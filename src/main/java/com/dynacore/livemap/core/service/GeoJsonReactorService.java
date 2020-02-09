@@ -4,6 +4,7 @@ import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.model.TrafficDTO;
 import com.dynacore.livemap.core.model.TrafficFeature;
+import com.dynacore.livemap.core.model.TrafficFeatureInterface;
 import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.util.List;
 
-public abstract class GeoJsonReactorService<T extends TrafficEntity, R extends TrafficFeature, D extends TrafficDTO> {
+public abstract class GeoJsonReactorService<T extends TrafficEntity, R extends TrafficFeatureInterface, D extends TrafficDTO> {
 
   protected Flux<R> importedFlux;
   protected final GeoJsonAdapter retriever;
@@ -76,16 +77,5 @@ public abstract class GeoJsonReactorService<T extends TrafficEntity, R extends T
         .flatMap(Flux::buffer)
         .delayElements(interval)
         .doOnNext(x -> System.out.println("Amount of distinct features: " + x.size()));
-  }
-
-  public Mono<FeatureCollection> getFeatureCollection() {
-    return Flux.from(importedFlux)
-        .collectList()
-        .map(
-            list -> {
-              FeatureCollection fc = new FeatureCollection();
-              list.forEach(fc::add);
-              return fc;
-            });
   }
 }

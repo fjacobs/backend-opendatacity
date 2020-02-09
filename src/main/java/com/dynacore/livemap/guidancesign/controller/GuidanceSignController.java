@@ -1,10 +1,10 @@
-package com.dynacore.livemap.traveltime.controller;
+package com.dynacore.livemap.guidancesign.controller;
 
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.TrafficController;
-import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
-import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
-import com.dynacore.livemap.traveltime.service.TravelTimeService;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignDTO;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeature;
+import com.dynacore.livemap.guidancesign.service.GuidanceSignService;
 import org.geojson.FeatureCollection;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -22,21 +22,21 @@ import java.util.List;
 
 @Profile("traveltime")
 @Controller
-public class TravelTimeController implements TrafficController {
+public class GuidanceSignController implements TrafficController {
 
-  private final TravelTimeService service;
-  private final Logger logger = LoggerFactory.getLogger(TravelTimeController.class);
+  private final GuidanceSignService service;
+  private final Logger logger = LoggerFactory.getLogger(GuidanceSignController.class);
 
   @Autowired private ModelMapper modelMapper;
 
-  public TravelTimeController(TravelTimeService service) {
+  public GuidanceSignController(GuidanceSignService service) {
     this.service = service;
   }
 
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("TRAVELTIME_STREAM")
-  public Flux<TravelTimeFeature> streamLiveData() {
+  public Flux<GuidanceSignFeature> streamLiveData() {
     logger.info("Enter TravelTimeGeoJsonController::streamLiveData");
     return service.getLiveData();
   }
@@ -44,7 +44,7 @@ public class TravelTimeController implements TrafficController {
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("TRAVELTIME_REPLAY")
-  public Flux<List<TravelTimeDTO>> replayAllDistinct(Integer intervalMilliSec) {
+  public Flux<List<GuidanceSignDTO>> replayAllDistinct(Integer intervalMilliSec) {
     logger.info("Enter TravelTimeGeoJsonController::replayAllDistinct");
     return service.replayHistoryGroup(Duration.ofMillis(intervalMilliSec));
   }
@@ -54,10 +54,9 @@ public class TravelTimeController implements TrafficController {
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("TRAVELTIME_HISTORY")
-  public Flux<TravelTimeDTO> getFeatureRange(FeatureRequest request) {
+  public Flux<GuidanceSignDTO> getFeatureRange(FeatureRequest request) {
     logger.info("Enter TravelTimeGeoJsonController::getFeatureRange");
-    return service.getFeatureRange(request).map(feature-> modelMapper.map(feature, TravelTimeDTO.class));
+    return service.getFeatureRange(request).map(feature-> modelMapper.map(feature, GuidanceSignDTO.class));
 
   }
-
 }

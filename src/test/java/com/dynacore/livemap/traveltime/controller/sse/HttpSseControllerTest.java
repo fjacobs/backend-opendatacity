@@ -1,8 +1,5 @@
 package com.dynacore.livemap.traveltime.controller.sse;
 
-import java.time.Duration;
-
-import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.traveltime.controller.HttpSseController;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
 import org.geojson.Feature;

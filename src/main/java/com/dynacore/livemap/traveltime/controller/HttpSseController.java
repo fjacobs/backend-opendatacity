@@ -49,25 +49,4 @@ public class HttpSseController {
                                     .data((TrafficFeature) sequence)
                                     .build());
   }
-
-  /**
-   * @return Returns a SSE subscription for a FeatureCollection GeoJson object. The first event will
-   *     send the complete collection, the events that follow only contain property data that has
-   *     been changed compared to the previous event.
-   */
-  @CrossOrigin
-  @GetMapping("/roadSubscription")
-  public Flux<ServerSentEvent<FeatureCollection>> streamFeatureCollection() {
-
-    return Flux.concat(travelTimeService.getFeatureCollection())
-            .doOnComplete(() -> logger.info("Completed Road FeatureCollection standardSubscription.."))
-            .doOnError(e -> logger.error("SSE Error: " + e))
-            .map(
-                    sequence ->
-                            ServerSentEvent.<FeatureCollection>builder()
-                                    .id("Roads")
-                                    .event("event")
-                                    .data((FeatureCollection) sequence)
-                                    .build());
-  }
 }

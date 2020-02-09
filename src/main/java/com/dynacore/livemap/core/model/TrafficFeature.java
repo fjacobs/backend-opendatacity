@@ -8,13 +8,7 @@ import org.geojson.Feature;
 import java.time.OffsetDateTime;
 
 @JsonTypeName("Feature")
-public class TrafficFeature extends Feature {
-
-  @JsonIgnore public static final String ID = "Id";
-  @JsonIgnore public static final String NAME = "Name";
-  @JsonIgnore public static final String OUR_RETRIEVAL = "retrievedFromThirdParty";
-  @JsonIgnore public static final String THEIR_RETRIEVAL = "pubDate";
-  @JsonIgnore public static final String SAME_SINCE = "sameSince";
+public class TrafficFeature extends Feature implements TrafficFeatureInterface {
 
   public TrafficFeature() {}
 
@@ -32,34 +26,42 @@ public class TrafficFeature extends Feature {
     setGeometry(feature.getGeometry());
   }
 
+  @Override
   public void setName(String name) {
     getProperties().put(NAME, name);
   }
 
+  @Override
   public String getName() {
     return (String) getProperty(NAME);
   }
 
+  @Override
   public OffsetDateTime getPubDate() {
     return (OffsetDateTime) getProperties().get(THEIR_RETRIEVAL);
   }
 
+  @Override
   public void setPubDate(OffsetDateTime pubDate) {
     getProperties().put(THEIR_RETRIEVAL, pubDate);
   }
 
+  @Override
   public OffsetDateTime getSameSince() {
     return (OffsetDateTime) getProperties().get(SAME_SINCE);
   }
 
+  @Override
   public void setSameSince(OffsetDateTime date) {
     getProperties().put(SAME_SINCE, date);
   }
 
+  @Override
   public OffsetDateTime getOurRetrieval() {
     return (OffsetDateTime) getProperties().get(OUR_RETRIEVAL);
   }
 
+  @Override
   public void setOurRetrieval(OffsetDateTime ourRetrieval) {
     getProperties().put(OUR_RETRIEVAL, ourRetrieval);
   }
