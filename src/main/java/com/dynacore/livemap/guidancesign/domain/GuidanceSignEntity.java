@@ -14,9 +14,10 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
-@Table(name = "GUIDANCE_SIGN")
+@Table(name = "guidance_sign")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -24,13 +25,16 @@ public class GuidanceSignEntity extends TrafficEntity {
 
   @Transient Logger logger = LoggerFactory.getLogger(GuidanceSignEntity.class);
 
-  private boolean removed;
+  private Boolean removed;
   private String state;
 
   // The time this system retrieved the data from the external provider
   private OffsetDateTime ourCreationDate;
+
+  @Transient
   private Set<InnerDisplayEntity> innerDisplays;
 
+  @Transient
   public Flux<InnerDisplayEntity> getInnerDisplays() {
     return Flux.fromIterable(innerDisplays);
   }
@@ -56,13 +60,13 @@ public class GuidanceSignEntity extends TrafficEntity {
                                             .build())
                     .collect(Collectors.toSet());
 
-//    Stream.of(id, name, removed, pubDate, state, innerDisplays)
-//            .filter(Objects::isNull)
-//            .findAny()
-//            .ifPresent(
-//                    nullMember -> {
-//                      throw new IllegalStateException("Error: Could not initialize:  " + id);
-//                    });
+    Stream.of(id, name, removed, pubDate, state, innerDisplays)
+            .filter(Objects::isNull)
+            .findAny()
+            .ifPresent(
+                    nullMember -> {
+                      throw new IllegalStateException("Error: Could not initialize:  " + id);
+                    });
   }
 
   @Override
