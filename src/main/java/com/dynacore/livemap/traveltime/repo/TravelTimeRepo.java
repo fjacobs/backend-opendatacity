@@ -40,8 +40,9 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
         .as(BooleanUtils::not);
   }
 
+  //TODO:
   @Override
-  public Mono<Integer> save(TravelTimeEntity entity) {
+  public Mono<Void> save(TravelTimeEntity entity) {
     return Mono.just(entity)
         .filterWhen(this::isNew)
         .flatMap(
@@ -51,7 +52,7 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
                     .into(TravelTimeEntity.class)
                     .using(newEntity)
                     .fetch()
-                    .rowsUpdated());
+                    .rowsUpdated().then());
   }
 
   @Override

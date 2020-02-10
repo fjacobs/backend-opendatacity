@@ -2,6 +2,7 @@ package com.dynacore.livemap.core.model;
 
 import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.Builder;
 import org.geojson.Feature;
 import org.geojson.GeoJsonObject;
 import org.slf4j.Logger;

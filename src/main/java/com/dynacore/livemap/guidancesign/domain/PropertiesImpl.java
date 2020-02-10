@@ -4,27 +4,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 @Getter
 @Setter
-public class PropertiesImpl extends Properties {
+public class PropertiesImpl  {
 
-  @JsonProperty("State")
   String state;
 
-  @JsonProperty("Removed")
+  String type;
+
   boolean removed;
 
   @JsonProperty("ParkingguidanceDisplay")
   List<InnerDisplayModel> innerDisplayModelList;
 
+  public PropertiesImpl() {}
+
   private PropertiesImpl(Builder builder) {
-    name = builder.name;
-//    pubDate = builder.pubDate;
     type = builder.type;
     state = builder.state;
     removed = builder.removed;
@@ -33,7 +32,6 @@ public class PropertiesImpl extends Properties {
 
   static final class Builder {
     private String name;
-//    private OffsetDateTime pubDate;
     private String type;
     private String state;
     private boolean removed;

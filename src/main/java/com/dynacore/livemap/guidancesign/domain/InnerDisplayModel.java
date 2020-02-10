@@ -29,7 +29,7 @@ public class InnerDisplayModel {
   //                              }
   //                           ]
   @JsonProperty("Id")
-  private UUID id;
+  private String id;
 
   @JsonProperty("Description")
   private String description;
@@ -64,7 +64,7 @@ public class InnerDisplayModel {
   }
 
   public static final class Builder {
-    private UUID id;
+    private String id;
     private String description;
     private boolean removed;
     private String type;
@@ -73,7 +73,7 @@ public class InnerDisplayModel {
 
     public Builder() {}
 
-    public Builder id(UUID val) {
+    public Builder id(String val) {
       id = val;
       return this;
     }

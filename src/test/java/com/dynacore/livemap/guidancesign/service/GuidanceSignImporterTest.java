@@ -55,8 +55,8 @@ class GuidanceSignImporterTest {
                 assertThat(guidanceSignFeature.getRemoved(), is(false));
                 assertThat(guidanceSignFeature.getState(), is("ok"));
                assertTrue(guidanceSignFeature.getPubDate().isEqual(OffsetDateTime.parse("2020-02-08T21:25:41.900Z")));
-                InnerDisplayModel inner = guidanceSignFeature.getChildDisplays().stream().findFirst().orElseThrow();
-                assertThat(inner.getId(), is(UUID.fromString("397a43d2-355a-42fe-ab5a-1f9f0ffb4624")));
+                InnerDisplayModel inner = guidanceSignFeature.getInnerDisplays().stream().findFirst().orElseThrow();
+                assertThat(inner.getId(), is("397a43d2-355a-42fe-ab5a-1f9f0ffb4624"));
                 assertThat(inner.getDescription(), is("ZO-B13_VVX_02510/080 P+R Arena"));
                 assertThat(inner.getOutput(), is("VRIJ"));
                 assertThat(inner.getOutputDescription(), is("VRIJ"));
@@ -64,7 +64,7 @@ class GuidanceSignImporterTest {
             })
         .consumeNextWith(
             guidanceSignFeature -> {
-              assertThat(guidanceSignFeature.getChildDisplays().size(), is(3));
+              assertThat(guidanceSignFeature.getInnerDisplays().size(), is(3));
             })
         .thenCancel()
         .verify();

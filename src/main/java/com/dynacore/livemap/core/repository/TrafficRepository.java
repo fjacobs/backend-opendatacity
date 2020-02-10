@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 public interface TrafficRepository<T> {
   Mono<Boolean> isNew(T entity);
 
-  Mono<Integer> save(T entity);
+  Mono<Void> save(T entity);
 
   Mono<T> getLatest(String entityId);
 

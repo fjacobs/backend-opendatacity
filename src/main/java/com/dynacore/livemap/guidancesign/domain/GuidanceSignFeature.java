@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.ToString;
 import org.geojson.Feature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.time.OffsetDateTime;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -14,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 @ToString
 public class GuidanceSignFeature extends TrafficFeature {
 
-  private PropertiesImpl customProperties;
+  Logger log = LoggerFactory.getLogger(TrafficFeature.class);
 
   private static final String PUB_DATE = "PubDate"; // Different suppliers use different pubdates
   private static final String TYPE = "Type";
@@ -22,66 +23,84 @@ public class GuidanceSignFeature extends TrafficFeature {
   private static final String REMOVED = "Removed";
 
   // Inner displays:
-  private static final String INNER_DISPLAY = "ParkingguidanceDisplay";
-  private static final String DESCRIPTION = "Description";
-  private static final String OUTPUT = "Output";
-  private static final String OUTPUT_DESCRIPTION = "OutputDescription";
+  public static final String INNER_LIST_KEY = "ParkingguidanceDisplay";
+  public static final String DESCRIPTION = "Description";
+  public static final String OUTPUT = "Output";
+  public static final String OUTPUT_DESCRIPTION = "OutputDescription";
 
+  @JsonProperty("ParkingguidanceDisplay")
+  List<InnerDisplayModel> innerDisplayModelList;
+
+  public GuidanceSignFeature() {
+    feature = new Feature();
+    innerDisplayModelList = new ArrayList<>();
+  }
+
+  // Import external:
   public GuidanceSignFeature(Feature feature) {
     super(feature, PUB_DATE);
+    importInnerDisplayList(feature.getProperties());
 
-    unpackNested(feature.getProperties());
+    try {
+      if (!feature.getProperties().containsKey(TYPE)) throw new NoSuchElementException(NAME);
+      if (!feature.getProperties().containsKey(REMOVED)) throw new NoSuchElementException(REMOVED);
+      if (!feature.getProperties().containsKey(STATE)) throw new NoSuchElementException(NAME);
+    } catch (NoSuchElementException e) {
+      log.warn("Did not find property while importing: " + e.getMessage());
+    }
   }
 
   @JsonIgnore
-  public boolean getRemoved() {
-    return customProperties.removed;
+  public Boolean getRemoved() {
+    Boolean removed;
+    if (feature.getProperty(REMOVED) instanceof Boolean) {
+      removed = feature.getProperty(REMOVED);
+    } else {
+      removed = Boolean.parseBoolean(feature.getProperty(REMOVED));
+    }
+    return removed;
+  }
+
+  public void setRemoved(Boolean state) {
+    feature.setProperty(STATE, state);
   }
 
   @JsonIgnore
   public String getState() {
-    return customProperties.state;
+    return (String) feature.getProperty(STATE);
+  }
+
+  public void setState(String state) {
+    feature.setProperty(STATE, state);
+  }
+
+  public void setType(String type) {
+    feature.setProperty(TYPE, type);
   }
 
   @JsonIgnore
   public String getType() {
-    return customProperties.type;
+    return feature.getProperty(TYPE);
   }
 
-  public List<InnerDisplayModel> getChildDisplays() {
-    return customProperties.getInnerDisplayModelList();
+  public List<InnerDisplayModel> getInnerDisplays() {
+    return innerDisplayModelList;
   }
 
   @JsonProperty("properties")
-  public void unpackNested(Map<String, Object> prop) throws IllegalStateException {
-    List<InnerDisplayModel> childDisplays =
-        ((ArrayList<LinkedHashMap<String, String>>) prop.get(INNER_DISPLAY))
+  public void importInnerDisplayList(Map<String, Object> prop) throws IllegalStateException {
+    innerDisplayModelList =
+        ((ArrayList<LinkedHashMap<String, String>>) prop.get(INNER_LIST_KEY))
             .stream()
                 .map(
                     dispMap ->
                         new InnerDisplayModel.Builder()
-                            .id(UUID.fromString(dispMap.get(ID)))
+                            .id(dispMap.get(ID))
                             .description(dispMap.get(DESCRIPTION))
                             .output(dispMap.get(OUTPUT))
                             .outputDescription(dispMap.get(OUTPUT_DESCRIPTION))
                             .type(dispMap.get(TYPE))
                             .build())
                 .collect(toList());
-
-
-    customProperties =
-        new PropertiesImpl.Builder()
-            .name((String) prop.get(NAME))
-            .type((String) prop.get(TYPE))
-            .removed(Boolean.parseBoolean((String) prop.get(REMOVED)))
-            .state((String) prop.get(STATE))
-            .innerDisplayModelList(childDisplays)
-            .build();
-    if (prop.get(PUB_DATE) instanceof String) {
-      customProperties.setPubDate(OffsetDateTime.parse((String) prop.get(PUB_DATE)));
-    } else if (prop.get(PUB_DATE) instanceof OffsetDateTime) {
-      customProperties.setPubDate((OffsetDateTime) prop.get(PUB_DATE));
-    }
-
   }
 }
