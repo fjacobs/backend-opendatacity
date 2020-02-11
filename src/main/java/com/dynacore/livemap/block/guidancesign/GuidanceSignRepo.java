@@ -36,7 +36,7 @@ public class GuidanceSignRepo implements JpaRepository<GuidanceSignEntity> {
         logger.info(
             guidanceSignEntity.getName()
                 + "already written to db. The date and time we retrieved it from provider: "
-                + guidanceSignEntity.getRetrievedFromThirdParty()
+                + guidanceSignEntity.getOurRetrieval()
                 + " \n DateTime when it was published to the provider: "
                 + guidanceSignEntity.getPubDate());
       }

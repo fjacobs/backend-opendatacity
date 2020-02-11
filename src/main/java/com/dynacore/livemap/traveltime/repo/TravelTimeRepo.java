@@ -59,7 +59,7 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
   public Mono<TravelTimeEntity> getLatest(String entityId) {
     return databaseClient
         .execute(
-            "     SELECT id, name, pub_date, retrieved_from_third_party, type, length, travel_time, velocity \n"
+            "     SELECT id, name, pub_date, our_retrieval, type, length, travel_time, velocity \n"
                 + "     FROM public.travel_time_entity\n"
                 + "\t   WHERE pub_date=(\n"
                 + "                SELECT MAX(pub_date) FROM public.travel_time_entity WHERE id='"

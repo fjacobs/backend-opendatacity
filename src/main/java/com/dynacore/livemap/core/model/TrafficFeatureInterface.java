@@ -11,7 +11,7 @@ public interface TrafficFeatureInterface {
     @JsonIgnore
     String NAME = "Name";
     @JsonIgnore
-    String OUR_CREATION_DATE = "retrievedFromThirdParty";
+    String OUR_CREATION_DATE = "ourRetrieval";
     @JsonIgnore
     String THEIR_RETRIEVAL = "pubDate";
     @JsonIgnore
@@ -32,7 +32,7 @@ public interface TrafficFeatureInterface {
 
     void setSameSince(OffsetDateTime date);
 
-    OffsetDateTime getOurCreationDate();
+    OffsetDateTime getOurRetrieval();
 
     void setOurRetrieval(OffsetDateTime ourRetrieval);
 

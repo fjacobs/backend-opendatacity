@@ -2,70 +2,44 @@ package com.dynacore.livemap.guidancesign.repo;
 
 import com.dynacore.livemap.core.PubDateSizeResponse;
 import com.dynacore.livemap.core.repository.TrafficRepository;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.domain.InnerDisplayEntity;
-import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import reactor.bool.BooleanUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.OffsetDateTime;
 
+import static org.springframework.data.r2dbc.query.Criteria.where;
+
 @Profile("guidancesign")
 @Repository("guidanceSignRepository")
-public class GuidanceSignRepo implements TrafficRepository<GuidanceSignEntity> {
+public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate> {
 
-  private DatabaseClient db;
-  private static final Logger log = LoggerFactory.getLogger(TravelTimeRepo.class);
+  private DatabaseClient databaseClient;
+  private static final Logger log = LoggerFactory.getLogger(GuidanceSignRepo.class);
 
   public GuidanceSignRepo(DatabaseClient databaseClient) {
-    this.db = databaseClient;
-  }
-
-  @Transactional
-  public Mono<Void> save(GuidanceSignEntity entity) {
-
-    //         Nested is not supported yet and can't be supressed with @Transient:
-    //            return db.insert()
-    //                     .into(GuidanceSignEntity.class)
-    //                     .using(entity).fetch().rowsUpdated()
-    //                     .then(db.insert().into(InnerDisplayEntity.class).using(entity.getInnerDisplays()).fetch().rowsUpdated()).then();
-    return db.execute(
-            "insert into guidance_sign ( id, name, pub_date, retrieved_from_third_party, removed, state)  VALUES(:id,:name,:pub_date,:retrieved_from_third_party,:removed,:state)")
-        .bind("id", entity.getId())
-        .bind("name", entity.getName())
-        .bind("pub_date", entity.getPubDate())
-        .bind("retrieved_from_third_party", entity.getOurCreationDate())
-        .bind("removed", entity.getRemoved())
-        .bind("state", entity.getState())
-        .then()
-        .then(
-            db.insert()
-                .into(InnerDisplayEntity.class)
-                .using(entity.getInnerDisplays())
-                .fetch()
-                .rowsUpdated())
-        .then();
+    this.databaseClient = databaseClient;
   }
 
   @Override
-  public Mono<Boolean> isNew(GuidanceSignEntity entity) {
-    return null;
-  }
-
-  @Override
-  public Mono<GuidanceSignEntity> getLatest(String entityId) {
-    return null;
-  }
-
-  @Override
-  public Flux<GuidanceSignEntity> getAllAscending() {
-    return null;
+  public Mono<Boolean> isNew(GuidanceSignAggregate aggregate) {
+    var entity = aggregate.getGuidanceSignEntity();
+    return databaseClient
+        .select()
+        .from(GuidanceSignAggregate.class)
+        .matching(where("id").is(entity.getId()).and("pubDate").is(entity.getPubDate()))
+        .fetch()
+        .first()
+        .hasElement()
+        .as(BooleanUtils::not);
   }
 
   @Override
@@ -79,24 +53,62 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignEntity> {
   }
 
   @Override
-  public Flux<GuidanceSignEntity> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end) {
+  public Flux<GuidanceSignAggregate> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end) {
     return null;
   }
-}
 
-// class TransactionalService {
-//
-//    final DatabaseClient db
-//
-//    TransactionalService(DatabaseClient db) {
-//        this.db = db;
-//    }
-//
-//    @Transactional
-//    Mono<Void> insertRows() {
-//        return db.execute("INSERT INTO person (name, age) VALUES('Joe', 34)")
-//                .fetch().rowsUpdated()
-//                .then(db.execute("INSERT INTO contacts (name) VALUES('Joe')")
-//                        .then());
-//    }
-// }
+  @Override
+  public Mono<Void> save(GuidanceSignAggregate aggregate) {
+
+    return databaseClient
+        .insert()
+        .into(GuidanceSignEntity.class)
+        .using(aggregate.getGuidanceSignEntity())
+        .map(
+            (row, rowMetadata) -> {
+              aggregate.setFk(row.get("pkey", Integer.class));
+              return row;
+            })
+        .one()
+        .then(
+            databaseClient
+                .insert()
+                .into(InnerDisplayEntity.class)
+                .using(aggregate.getInnerDisplayEntities())
+                .fetch()
+                .all()
+                .then())
+        .then();
+  }
+
+  @Override
+  public Mono<GuidanceSignAggregate> getLatest(String entityId) {
+    return null;
+  }
+
+  @Override
+  public Flux<GuidanceSignAggregate> getAllAscending() {
+    return databaseClient
+        .select()
+        .from("guidance_sign_entity")
+        .as(GuidanceSignEntity.class)
+        .fetch()
+        .all()
+        .map(
+            guidanceSignEntity -> {
+              GuidanceSignAggregate aggregateFlux = new GuidanceSignAggregate(guidanceSignEntity);
+              Flux<InnerDisplayEntity> inner =
+                  databaseClient
+                      .select()
+                      .from("inner_display_entity")
+                      .matching(where("id").is(guidanceSignEntity.getId()))
+                      .as(InnerDisplayEntity.class)
+                      .fetch()
+                      .all()
+                      .doOnNext(innerDisplay -> System.out.println(innerDisplay.getId()));
+
+              aggregateFlux.setInnerDisplayEntities(inner);
+              return aggregateFlux;
+            });
+  }
+}

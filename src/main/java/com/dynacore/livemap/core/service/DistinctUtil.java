@@ -12,8 +12,8 @@ public class DistinctUtil {
         int result = 0;
 
         try {
-          if (trafficFeature.getOurCreationDate() != null) {
-            OffsetDateTime ourTimestamp = trafficFeature.getOurCreationDate();
+          if (trafficFeature.getOurRetrieval() != null) {
+            OffsetDateTime ourTimestamp = trafficFeature.getOurRetrieval();
             trafficFeature.setOurRetrieval(OffsetDateTime.MAX);
             OffsetDateTime theirTimestamp = trafficFeature.getPubDate();
             trafficFeature.setPubDate(OffsetDateTime.MAX);

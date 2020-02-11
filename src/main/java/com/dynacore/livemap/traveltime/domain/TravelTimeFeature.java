@@ -27,7 +27,7 @@ public class TravelTimeFeature extends TrafficFeature {
   public TravelTimeFeature(TravelTimeEntity entity) {
     super(entity);
     setPubDate(entity.getPubDate());
-    setOurRetrieval(entity.getRetrievedFromThirdParty());
+    setOurRetrieval(entity.getOurRetrieval());
     setType(entity.getType());
     setLength(entity.getLength());
     setTravelTime(entity.getTravel_time());

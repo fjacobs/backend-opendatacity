@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GuidanceSignDTO extends TrafficDTO {
 
+
   public GuidanceSignDTO(GuidanceSignEntity entity) {
 
   }

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 @Entity
 @Immutable
-@Table(name = "GUIDANCE_SIGN")
+@Table(name = "guidance_sign_entity")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -41,7 +41,7 @@ public class GuidanceSignEntity implements Serializable {
   private String state;
 
   // The time this system retrieved the data from the external provider
-  private LocalDateTime retrievedFromThirdParty;
+  private LocalDateTime ourRetrieval;
 
   @OneToMany(mappedBy = "parentRef", fetch = FetchType.LAZY)
   private Set<InnerDisplayEntity> innerDisplays;
@@ -52,7 +52,7 @@ public class GuidanceSignEntity implements Serializable {
     pubDate = model.getPubDate();
     removed = model.getRemoved();
     state = model.getState();
-    retrievedFromThirdParty = model.getProperties().getRetrievedFromThirdParty();
+    ourRetrieval = model.getProperties().getOurRetrieval();
     innerDisplays =
         model.getProperties().getInnerDisplayModelList().stream()
             .map(

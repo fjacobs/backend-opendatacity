@@ -1,21 +1,14 @@
 package com.dynacore.livemap.core.repository;
 
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
 
-@ToString
-@Getter @Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
-public abstract class TrafficEntity {
+public abstract class TrafficEntity implements TrafficEntityInterface {
 
   @Id protected Integer pkey;
 
@@ -23,18 +16,6 @@ public abstract class TrafficEntity {
   protected String name;
 
   protected OffsetDateTime pubDate;
-  protected OffsetDateTime retrievedFromThirdParty;
+  protected OffsetDateTime ourRetrieval;
 
-  public TrafficEntity(
-      Integer pkey,
-      String id,
-      String name,
-      OffsetDateTime pubDate,
-      OffsetDateTime retrievedFromThirdParty) {
-    this.pkey = pkey;
-    this.id = id;
-    this.name = name;
-    this.pubDate = pubDate;
-    this.retrievedFromThirdParty = retrievedFromThirdParty;
-  }
 }

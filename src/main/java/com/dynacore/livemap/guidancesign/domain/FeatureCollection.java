@@ -18,8 +18,8 @@ public class FeatureCollection<T extends Feature>  {
   @JsonProperty("dynacoreErrors")
   private String dynacoreErrors = "none";
 
-  @JsonProperty("retrievedFromThirdParty")
-  private LocalDateTime retrievedFromThirdParty;
+  @JsonProperty("ourRetrieval")
+  private LocalDateTime ourRetrieval;
 
   public String getType() {
     return type;
@@ -43,12 +43,12 @@ public class FeatureCollection<T extends Feature>  {
   }
 
   @JsonIgnore
-  public LocalDateTime getRetrievedFromThirdParty() {
-    return retrievedFromThirdParty;
+  public LocalDateTime getOurRetrieval() {
+    return ourRetrieval;
   };
 
   public void setTimeOfRetrievalNow() {
-    retrievedFromThirdParty = LocalDateTime.now();
+    ourRetrieval = LocalDateTime.now();
     features.stream().forEach(feature -> feature.getProperties().setTimeOfRetrievalNow());
   }
 }

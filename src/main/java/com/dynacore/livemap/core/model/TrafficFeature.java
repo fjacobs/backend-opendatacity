@@ -1,6 +1,7 @@
 package com.dynacore.livemap.core.model;
 
 import com.dynacore.livemap.core.repository.TrafficEntity;
+import com.dynacore.livemap.core.repository.TrafficEntityInterface;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import org.geojson.Feature;
@@ -20,11 +21,13 @@ public class TrafficFeature implements TrafficFeatureInterface {
     feature = new Feature();
   }
 
-  public TrafficFeature(TrafficEntity entity) {
+  public TrafficFeature(TrafficEntityInterface entity) {
     feature = new Feature();
     setId(entity.getId());
     setName(entity.getName());
     setPubDate(entity.getPubDate());
+    setOurRetrieval(entity.getOurRetrieval());
+
   }
   // Different suppliers use different keys for the data publication timestamp:
   public TrafficFeature(Feature feature, String pubDateKey) {
@@ -88,7 +91,7 @@ public class TrafficFeature implements TrafficFeatureInterface {
   }
 
   @Override
-  public OffsetDateTime getOurCreationDate() {
+  public OffsetDateTime getOurRetrieval() {
     if (feature.getProperties().get(OUR_CREATION_DATE) instanceof String) {
       return OffsetDateTime.parse((String) feature.getProperties().get(OUR_CREATION_DATE));
     } else {

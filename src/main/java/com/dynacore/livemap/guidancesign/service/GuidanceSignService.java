@@ -17,6 +17,7 @@ package com.dynacore.livemap.guidancesign.service;
 
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignDTO;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeature;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
@@ -43,7 +44,7 @@ import reactor.core.scheduler.Schedulers;
 @Profile("guidancesign")
 @Service("guidanceSignService")
 public class GuidanceSignService
-    extends GeoJsonReactorService<GuidanceSignEntity, GuidanceSignFeature, GuidanceSignDTO> {
+    extends GeoJsonReactorService<GuidanceSignAggregate, GuidanceSignFeature, GuidanceSignDTO> {
 
   Logger log = LoggerFactory.getLogger(GuidanceSignService.class);
 
@@ -62,7 +63,7 @@ public class GuidanceSignService
       Flux.from(importedFlux)
           .parallel(Runtime.getRuntime().availableProcessors())
           .runOn(Schedulers.parallel())
-          .map(feature -> repo.save(new GuidanceSignEntity(feature)))
+          .map(feature -> repo.save(new GuidanceSignAggregate(feature)))
           .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
     }
   }

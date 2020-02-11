@@ -60,7 +60,7 @@ public class ParkingService implements GeoJsonRequester<FeatureCollectionBlock<P
                         parking.getId(),
                         parking.getName(),
                         parking.getPubDate(),
-                        parking.getProperties().getRetrievedFromThirdParty(),
+                        parking.getProperties().getOurRetrieval(),
                         parking.getState(),
                         parking.getFreeSpaceShort(),
                         parking.getFreeSpaceLong(),

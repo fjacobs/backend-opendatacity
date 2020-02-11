@@ -26,7 +26,7 @@ public class TravelTimeEntity extends TrafficEntity {
 
   public TravelTimeEntity(TravelTimeFeature feature) {
 
-    super(null, feature.getId(), feature.getName(), feature.getPubDate(), feature.getOurCreationDate());
+    super(null, feature.getId(), feature.getName(), feature.getPubDate(), feature.getOurRetrieval());
 //    System.out.println("printing casted feature to tt:" + feature);
     setLength(feature.getLength());
     setTravel_time(feature.getTravelTime());
@@ -39,12 +39,12 @@ public class TravelTimeEntity extends TrafficEntity {
       String id,
       String name,
       OffsetDateTime pubDate,
-      OffsetDateTime retrievedFromThirdParty,
+      OffsetDateTime ourRetrieval,
       String type,
       Integer length,
       Integer travel_time,
       Integer velocity) {
-    super(pkey, id, name, pubDate, retrievedFromThirdParty);
+    super(pkey, id, name, pubDate, ourRetrieval);
     this.type = type;
     this.length = length;
     this.travel_time = travel_time;
@@ -65,4 +65,5 @@ public class TravelTimeEntity extends TrafficEntity {
   public int hashCode() {
     return Objects.hash(length, travel_time, velocity);
   }
+
 }

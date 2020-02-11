@@ -28,7 +28,7 @@ class ParkingEntity implements Serializable {
   private int freeSpaceLong;
   private int shortCapacity;
   private int longCapacity;
-  private LocalDateTime retrievedFromThirdParty;
+  private LocalDateTime ourRetrieval;
 
   ParkingEntity() {}
 
@@ -36,14 +36,14 @@ class ParkingEntity implements Serializable {
       UUID id,
       String name,
       LocalDateTime pubDate,
-      LocalDateTime retrievedFromThirdParty,
+      LocalDateTime ourRetrieval,
       String state,
       int freeSpaceShort,
       int freeSpaceLong,
       int shortCapacity,
       int longCapacity) {
     this.id = id;
-    this.retrievedFromThirdParty = retrievedFromThirdParty;
+    this.ourRetrieval = ourRetrieval;
     this.name = name;
     this.pubDate = pubDate;
     this.state = state;

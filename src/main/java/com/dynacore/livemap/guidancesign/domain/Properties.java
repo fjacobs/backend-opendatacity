@@ -16,17 +16,17 @@ public abstract class Properties {
   @JsonProperty("pubDate")
   protected OffsetDateTime pubDate;
 
-  @JsonProperty("retrievedFromThirdParty")
-  protected OffsetDateTime retrievedFromThirdParty;
+  @JsonProperty("ourRetrieval")
+  protected OffsetDateTime ourRetrieval;
 
   @JsonProperty("type")
   protected String type;
 
   public void setTimeOfRetrievalNow() {
-    retrievedFromThirdParty = OffsetDateTime.now();
+    ourRetrieval = OffsetDateTime.now();
   }
 
   public void setTimeOfRetrieval(OffsetDateTime dateTime) {
-    retrievedFromThirdParty = dateTime;
+    ourRetrieval = dateTime;
   }
 }

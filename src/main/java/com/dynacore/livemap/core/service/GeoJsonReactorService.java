@@ -6,6 +6,7 @@ import com.dynacore.livemap.core.model.TrafficDTO;
 import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.core.model.TrafficFeatureInterface;
 import com.dynacore.livemap.core.repository.TrafficEntity;
+import com.dynacore.livemap.core.repository.TrafficEntityInterface;
 import com.dynacore.livemap.core.repository.TrafficRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.FeatureCollection;
@@ -17,7 +18,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.util.List;
 
-public abstract class GeoJsonReactorService<T extends TrafficEntity, R extends TrafficFeatureInterface, D extends TrafficDTO> {
+public abstract class GeoJsonReactorService<T extends TrafficEntityInterface, R extends TrafficFeatureInterface, D extends TrafficDTO> {
 
   protected Flux<R> importedFlux;
   protected final GeoJsonAdapter retriever;

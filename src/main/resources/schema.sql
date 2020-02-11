@@ -7,7 +7,7 @@ create table travel_time_entity
     id                         varchar(200),
     name                       varchar(200),
     pub_date                   timestamp with time zone not null,
-    retrieved_from_third_party timestamp with time zone not null,
+    our_retrieval timestamp with time zone not null,
     type                       varchar(50),
     length                     smallint
         constraint travel_time_entity_length_check

@@ -34,7 +34,7 @@ public class PostgresTestSupport {
           + "    id                         VARCHAR(200),\n"
           + "    name                       VARCHAR(200),\n"
           + "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
-          + "    retrieved_from_third_party TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
+          + "    our_retrieval TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
           + "    type                       VARCHAR(200),\n"
           + "    length                     SMALLINT CHECK (length >= -1),\n"
           + "    velocity                   SMALLINT CHECK (velocity >= -1),\n"

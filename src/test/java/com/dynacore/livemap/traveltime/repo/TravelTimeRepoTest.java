@@ -1,15 +1,11 @@
 package com.dynacore.livemap.traveltime.repo;
 
-import com.dynacore.livemap.testing.database.AbstractDatabaseClientIntegrationTests;
-import com.dynacore.livemap.testing.database.ExternalDatabase;
-import com.dynacore.livemap.testing.database.PostgresTestSupport;
-import io.r2dbc.spi.ConnectionFactory;
+import io.r2dbc.spi.ConnectionFactories;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.test.StepVerifier;
 
-import javax.sql.DataSource;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +14,12 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
+public class TravelTimeRepoTest {
 
-  private DatabaseClient client = DatabaseClient.create(createConnectionFactory());
+  private DatabaseClient client =
+      DatabaseClient.create(
+          ConnectionFactories.get(
+              "r2dbc:h2:mem:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"));
   private TravelTimeRepo repo = new TravelTimeRepo(client);
 
   TravelTimeEntity entityOne,
@@ -29,21 +28,8 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
       entitySameAsOneChangedProperties,
       entityTwo;
 
-  public static final ExternalDatabase database = PostgresTestSupport.database();
-
-  @Override
-  protected DataSource createDataSource() {
-    return PostgresTestSupport.createDataSource(database);
-  }
-
-  @Override
-  protected ConnectionFactory createConnectionFactory() {
-    return PostgresTestSupport.createConnectionFactory(database);
-  }
-
   @Before
   public void setup() {
-
     String pubDate = "2019-10-16T15:52:00Z";
     String retDate = "2019-10-16T16:00:00Z";
 
@@ -109,14 +95,6 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
             200,
             5,
             100);
-
-    System.out.println("Database configuration-------------");
-    System.out.println("name: " + database.getDatabase());
-    System.out.println("host: " + database.getHostname());
-    System.out.println("jdbc url: " + database.getJdbcUrl());
-    System.out.println("port: " + database.getPort());
-    System.out.println("user name: " + database.getUsername());
-    System.out.println("-----------------------------------");
   }
 
   public void dropCreate(DatabaseClient client) {
@@ -130,13 +108,15 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
                 + "    id                         VARCHAR(200),\n"
                 + "    name                       VARCHAR(200),\n"
                 + "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
-                + "    retrieved_from_third_party TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
+                + "    our_retrieval TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
                 + "    type                       VARCHAR(50),\n"
                 + "    length                     SMALLINT CHECK (length >= -1),\n"
                 + "    velocity                   SMALLINT CHECK (velocity >= -1),\n"
                 + "    travel_time                SMALLINT CHECK (travel_time >= -1),\n"
                 + "    unique (id, pub_date)\n"
                 + ");");
+
+
 
     statements.forEach(
         it ->
@@ -251,26 +231,20 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
     String pubDate = "2019-10-16T15:52:00Z";
     String retDate = "2019-10-16T16:00:00Z";
     TravelTimeEntity entityOne =
-            new TravelTimeEntity(
-                    null,
-                    "002",
-                    "First entity",
-                    OffsetDateTime.parse(pubDate),
-                    OffsetDateTime.parse(retDate),
-                    "type",
-                    200,
-                    5,
-                    100);
+        new TravelTimeEntity(
+            null,
+            "002",
+            "First entity",
+            OffsetDateTime.parse(pubDate),
+            OffsetDateTime.parse(retDate),
+            "type",
+            200,
+            5,
+            100);
 
-    client
-            .insert()
-            .into(TravelTimeEntity.class)
-            .using(entityOne)
-            .fetch()
-            .rowsUpdated()
-            .block();
+    client.insert().into(TravelTimeEntity.class).using(entityOne).fetch().rowsUpdated().block();
 
-   TravelTimeEntity entityTwo = repo.getLatest("002").block();
+    TravelTimeEntity entityTwo = repo.getLatest("002").block();
 
     assert entityTwo != null;
 
@@ -301,7 +275,7 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
                   retrieved.getPubDate().isEqual(OffsetDateTime.parse("2019-10-16T15:52:00Z")));
               assertTrue(
                   retrieved
-                      .getRetrievedFromThirdParty()
+                      .getOurRetrieval()
                       .isEqual(OffsetDateTime.parse("2019-10-16T16:00:00Z")));
               assertEquals(retrieved.getType(), "type");
               assertEquals(200, retrieved.getLength().intValue());
@@ -326,6 +300,9 @@ public class TravelTimeRepoTest extends AbstractDatabaseClientIntegrationTests {
   public void getLastStored() {
     dropCreate(client);
     insertEntityOne();
-    repo.getLatest(entityOne.getId()).as(StepVerifier::create).expectNext(entityOne).verifyComplete();
+    repo.getLatest(entityOne.getId())
+        .as(StepVerifier::create)
+        .expectNext(entityOne)
+        .verifyComplete();
   }
 }
