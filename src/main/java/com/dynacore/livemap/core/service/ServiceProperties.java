@@ -8,7 +8,7 @@ import java.time.Duration;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ServiceConfiguration {
+public class ServiceProperties {
   private String url;
   private Duration initialDelay;
   private Duration requestInterval;
@@ -20,4 +20,6 @@ public class ServiceConfiguration {
   public Boolean isSaveToDbEnabled() {
     return saveToDbEnabled;
   }
+
+
 }

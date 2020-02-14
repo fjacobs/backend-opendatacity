@@ -19,9 +19,9 @@ public class ParkingService implements GeoJsonRequester<FeatureCollectionBlock<P
 
   private JpaRepository<ParkingEntity> parkingRepo;
   private FeatureCollectionBlock<ParkingModel> lastUpdate;
-  private ParkingConfiguration config;
+  private ParkingProperties config;
 
-  public ParkingService(JpaRepository<ParkingEntity> parkingRepo, ParkingConfiguration config) {
+  public ParkingService(JpaRepository<ParkingEntity> parkingRepo, ParkingProperties config) {
     this.parkingRepo = parkingRepo;
     this.config = config;
     pollRequest();

@@ -23,8 +23,8 @@ class GuidanceSignRepoTest {
 
   static DatabaseClient client;
   static GuidanceSignRepo repo;
-  static GuidanceSignFeature externalFeature1;
-  static GuidanceSignFeature externalFeature2;
+  static GuidanceSignFeatureImpl externalFeature1;
+  static GuidanceSignFeatureImpl externalFeature2;
 
   static GuidanceSignAggregate aggregate1;
   static GuidanceSignAggregate aggregate2;
@@ -40,7 +40,7 @@ class GuidanceSignRepoTest {
     client = DatabaseClient.create(connectionFactory);
     repo = new GuidanceSignRepo(client);
 
-    externalFeature1 = new GuidanceSignFeature();
+    externalFeature1 = new GuidanceSignFeatureImpl();
     externalFeature1.setId("id2");
     externalFeature1.setName("name2");
     externalFeature1.setState("ok");
@@ -71,7 +71,7 @@ class GuidanceSignRepoTest {
                 .build());
     aggregate1 = new GuidanceSignAggregate(externalFeature1);
 
-    externalFeature2 = new GuidanceSignFeature();
+    externalFeature2 = new GuidanceSignFeatureImpl();
     externalFeature2.setId("id1");
     externalFeature2.setName("name1");
     externalFeature2.setState("ok");

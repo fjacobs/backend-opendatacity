@@ -1,7 +1,7 @@
 package com.dynacore.livemap.traveltime.domain;
 
-import com.dynacore.livemap.core.model.TrafficFeature;
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import com.dynacore.livemap.core.model.TrafficFeatureImpl;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import org.geojson.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +11,9 @@ import java.time.ZoneOffset;
 import java.util.NoSuchElementException;
 
 // Wrapper class for GeoJson Feature
-public class TravelTimeFeature extends TrafficFeature {
+public class TravelTimeFeatureImpl extends TrafficFeatureImpl {
 
-  Logger log = LoggerFactory.getLogger(TravelTimeFeature.class);
+  Logger log = LoggerFactory.getLogger(TravelTimeFeatureImpl.class);
 
   public static final String TYPE = "Type";
   public static final String TRAVEL_TIME = "Traveltime";
@@ -21,10 +21,10 @@ public class TravelTimeFeature extends TrafficFeature {
   public static final String VELOCITY = "Velocity";
   public static final String THEIR_PUB_DATE_KEY = "Timestamp"; // Different suppliers use different pubdates
 
-  public TravelTimeFeature() {}
+  public TravelTimeFeatureImpl() {}
 
   // Internal Import
-  public TravelTimeFeature(TravelTimeEntity entity) {
+  public TravelTimeFeatureImpl(TravelTimeEntityImpl entity) {
     super(entity);
     setPubDate(entity.getPubDate());
     setOurRetrieval(entity.getOurRetrieval());
@@ -35,7 +35,7 @@ public class TravelTimeFeature extends TrafficFeature {
   }
 
   // External Import
-  public TravelTimeFeature(Feature feature) {
+  public TravelTimeFeatureImpl(Feature feature) {
     super(feature, THEIR_PUB_DATE_KEY);
     try {
 

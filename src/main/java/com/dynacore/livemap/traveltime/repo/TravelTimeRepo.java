@@ -18,7 +18,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 
 @Profile("traveltime")
 @Repository("travelTimeRepository")
-public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
+public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
 
   private DatabaseClient databaseClient;
   private static final Logger logger = LoggerFactory.getLogger(TravelTimeRepo.class);
@@ -28,11 +28,11 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
   }
 
   @Override
-  public Mono<Boolean> isNew(TravelTimeEntity entity) {
+  public Mono<Boolean> isNew(TravelTimeEntityImpl entity) {
 
     return databaseClient
         .select()
-        .from(TravelTimeEntity.class)
+        .from(TravelTimeEntityImpl.class)
         .matching(where("id").is(entity.getId()).and("pubDate").is(entity.getPubDate()))
         .fetch()
         .first()
@@ -42,21 +42,21 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
 
   //TODO:
   @Override
-  public Mono<Void> save(TravelTimeEntity entity) {
+  public Mono<Void> save(TravelTimeEntityImpl entity) {
     return Mono.just(entity)
         .filterWhen(this::isNew)
         .flatMap(
             newEntity ->
                 databaseClient
                     .insert()
-                    .into(TravelTimeEntity.class)
+                    .into(TravelTimeEntityImpl.class)
                     .using(newEntity)
                     .fetch()
                     .rowsUpdated().then());
   }
 
   @Override
-  public Mono<TravelTimeEntity> getLatest(String entityId) {
+  public Mono<TravelTimeEntityImpl> getLatest(String entityId) {
     return databaseClient
         .execute(
             "     SELECT id, name, pub_date, our_retrieval, type, length, travel_time, velocity \n"
@@ -65,16 +65,16 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
                 + "                SELECT MAX(pub_date) FROM public.travel_time_entity WHERE id='"
                 + entityId
                 + "');")
-        .as(TravelTimeEntity.class)
+        .as(TravelTimeEntityImpl.class)
         .fetch()
         .first();
   }
 
   @Override
-  public Flux<TravelTimeEntity> getAllAscending() {
+  public Flux<TravelTimeEntityImpl> getAllAscending() {
     return databaseClient
         .execute("SELECT * FROM public.travel_time_entity ORDER BY pub_date ASC")
-        .as(TravelTimeEntity.class)
+        .as(TravelTimeEntityImpl.class)
         .fetch()
         .all();
   }
@@ -111,7 +111,7 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
   }
 
   @Override
-  public Flux<TravelTimeEntity> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end) {
+  public Flux<TravelTimeEntityImpl> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end) {
     return databaseClient
         .execute(
             "    SELECT pub_date, COUNT (pub_date)\n"
@@ -126,7 +126,7 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntity> {
                 + "'\n"
                 + "\n"
                 + "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date DESC;")
-        .as(TravelTimeEntity.class)
+        .as(TravelTimeEntityImpl.class)
         .fetch()
         .all();
   }

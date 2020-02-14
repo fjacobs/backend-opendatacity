@@ -1,14 +1,14 @@
 package com.dynacore.livemap.core.service;
 
-import com.dynacore.livemap.core.model.TrafficFeatureInterface;
+import com.dynacore.livemap.core.model.TrafficFeature;
 
 import java.time.OffsetDateTime;
 import java.util.function.Function;
 
 public class DistinctUtil {
 
-  public static Function<TrafficFeatureInterface, Integer> hashCodeNoRetDate =
-      (TrafficFeatureInterface trafficFeature) -> {
+  public static Function<TrafficFeature, Integer> hashCodeNoRetDate =
+      (TrafficFeature trafficFeature) -> {
         int result = 0;
 
         try {

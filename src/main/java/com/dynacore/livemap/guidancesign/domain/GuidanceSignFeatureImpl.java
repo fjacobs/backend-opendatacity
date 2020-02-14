@@ -1,6 +1,6 @@
 package com.dynacore.livemap.guidancesign.domain;
 
-import com.dynacore.livemap.core.model.TrafficFeature;
+import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.ToString;
@@ -13,9 +13,9 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 
 @ToString
-public class GuidanceSignFeature extends TrafficFeature {
+public class GuidanceSignFeatureImpl extends TrafficFeatureImpl {
 
-  Logger log = LoggerFactory.getLogger(TrafficFeature.class);
+  Logger log = LoggerFactory.getLogger(TrafficFeatureImpl.class);
 
   private static final String PUB_DATE = "PubDate"; // Different suppliers use different pubdates
   private static final String TYPE = "Type";
@@ -31,13 +31,13 @@ public class GuidanceSignFeature extends TrafficFeature {
   @JsonProperty("ParkingguidanceDisplay")
   List<InnerDisplayModel> innerDisplayModelList;
 
-  public GuidanceSignFeature() {
+  public GuidanceSignFeatureImpl() {
     feature = new Feature();
     innerDisplayModelList = new ArrayList<>();
   }
 
   // Import external:
-  public GuidanceSignFeature(Feature feature) {
+  public GuidanceSignFeatureImpl(Feature feature) {
     super(feature, PUB_DATE);
     importInnerDisplayList(feature.getProperties());
 

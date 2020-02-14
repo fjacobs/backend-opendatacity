@@ -3,7 +3,7 @@ package com.dynacore.livemap.guidancesign.controller;
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.TrafficController;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignDTO;
-import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeature;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeatureImpl;
 import com.dynacore.livemap.guidancesign.service.GuidanceSignService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class GuidanceSignController implements TrafficController {
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("GUIDANCESIGN_STREAM")
-  public Flux<GuidanceSignFeature> streamLiveData() {
+  public Flux<GuidanceSignFeatureImpl> streamLiveData() {
     logger.info("Enter GuidanceSignGeoJsonController::streamLiveData");
     return service.getLiveData();
   }

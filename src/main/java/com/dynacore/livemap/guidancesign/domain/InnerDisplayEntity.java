@@ -7,8 +7,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-@ToString
 @Table(name = "inner_display_entity")
+@ToString
 @NoArgsConstructor
 @Getter
 @Setter

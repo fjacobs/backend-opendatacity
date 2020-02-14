@@ -1,20 +1,20 @@
 package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.service.FeatureImporter;
-import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
 import org.geojson.Feature;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TravelTimeImporter implements FeatureImporter<TravelTimeFeature> {
+public class TravelTimeImporter implements FeatureImporter<TravelTimeFeatureImpl> {
 
   @Override
-  public TravelTimeFeature importFeature(Feature feature) {
+  public TravelTimeFeatureImpl importFeature(Feature feature) {
 
-    TravelTimeFeature travelTimeFeature = null;
+    TravelTimeFeatureImpl travelTimeFeature = null;
 
     try {
-      travelTimeFeature = new TravelTimeFeature(feature);
+      travelTimeFeature = new TravelTimeFeatureImpl(feature);
 
     } catch (Exception e) {
       System.err.println("Could not import feature: " + feature);

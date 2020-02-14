@@ -10,7 +10,6 @@ import java.time.Duration;
 
 import com.dynacore.livemap.configuration.HttpClientFactoryConfig;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
-import com.dynacore.livemap.core.service.TrafficFeatureDistinct;
 import com.dynacore.livemap.traveltime.service.*;
 import com.dynacore.livemap.testing.database.PostgresTestSupport;
 import com.dynacore.livemap.configuration.adapter.HttpAdapter;
@@ -87,7 +86,7 @@ class HttpIntegrationTest {
             .build();
 
     GeoJsonReactorService service =
-        new TravelTimeService(serviceConfig, new HttpAdapter(webClient), new TravelTimeImporter(), repo, new TravelTimeEntityDistinct(), new TravelTimeFeatureDistinct());
+        new TravelTimeService(serviceConfig, new HttpAdapter(webClient), new TravelTimeImporter(), repo, new TravelTimeDTODistinct(), new TravelTimeFeatureDistinct());
     controller = new HttpSseController(service);
   }
 

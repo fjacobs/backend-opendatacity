@@ -1,24 +1,26 @@
 package com.dynacore.livemap.guidancesign.domain;
 
-import com.dynacore.livemap.core.repository.TrafficEntityInterface;
+import com.dynacore.livemap.core.repository.TrafficEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = "pkey")
-public class GuidanceSignAggregate implements TrafficEntityInterface {
+public class GuidanceSignAggregate implements TrafficEntity {
 
   Integer pkey;
   private GuidanceSignEntity guidanceSignEntity;
   private Flux<InnerDisplayEntity> innerDisplayEntities = Flux.empty();
+  private List<InnerDisplayEntity> innerDisplayList = new ArrayList<>();
 
-  public GuidanceSignAggregate(GuidanceSignFeature feature) {
+  public GuidanceSignAggregate(GuidanceSignFeatureImpl feature) {
     guidanceSignEntity = new GuidanceSignEntity(feature);
     innerDisplayEntities =
         Flux.fromIterable(feature.getInnerDisplays())
@@ -44,6 +46,10 @@ public class GuidanceSignAggregate implements TrafficEntityInterface {
 
   public Flux<InnerDisplayEntity> getInnerDisplayEntities() {
     return innerDisplayEntities;
+  }
+
+  public void setInnerDisplay(InnerDisplayEntity entity) {
+    innerDisplayList.add(entity);
   }
 
   public void setFk(Integer fk) {

@@ -16,12 +16,11 @@
 package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
-import com.dynacore.livemap.core.model.TrafficFeatureInterface;
+import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.core.service.DistinctUtil;
-import com.dynacore.livemap.core.service.TrafficFeatureDistinct;
 import com.dynacore.livemap.testing.subscriber.AssertSubscriber;
-import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,9 +37,9 @@ import reactor.test.StepVerifier;
 import java.time.Duration;
 import java.util.Arrays;
 
-import static com.dynacore.livemap.core.model.TrafficFeatureInterface.NAME;
-import static com.dynacore.livemap.traveltime.domain.TravelTimeFeature.THEIR_PUB_DATE_KEY;
-import static com.dynacore.livemap.traveltime.domain.TravelTimeFeature.VELOCITY;
+import static com.dynacore.livemap.core.model.TrafficFeature.NAME;
+import static com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl.THEIR_PUB_DATE_KEY;
+import static com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl.VELOCITY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,7 +75,7 @@ class TravelTimeServiceTest {
 
     TravelTimeRepo repo = mock(TravelTimeRepo.class);
 
-    when(repo.isNew(any(TravelTimeEntity.class))).thenReturn(Mono.just(false));
+    when(repo.isNew(any(TravelTimeEntityImpl.class))).thenReturn(Mono.just(false));
 
     serviceConfig = new TravelTimeServiceConfig();
     serviceConfig.setInitialDelay(Duration.ZERO);
@@ -93,7 +92,7 @@ class TravelTimeServiceTest {
             smallFcAdapter,
             new TravelTimeImporter(),
             repo,
-            new TravelTimeEntityDistinct(),
+            new TravelTimeDTODistinct(),
             new TravelTimeFeatureDistinct());
     service
         .getLiveData()
@@ -107,10 +106,10 @@ class TravelTimeServiceTest {
   @Test
   void distinctKeySelectorTest() {
 
-    TravelTimeFeature road1 = new TravelTimeFeature();
-    TravelTimeFeature road2 = new TravelTimeFeature();
-    TravelTimeFeature road3 = new TravelTimeFeature();
-    TravelTimeFeature road4 = new TravelTimeFeature();
+    TravelTimeFeatureImpl road1 = new TravelTimeFeatureImpl();
+    TravelTimeFeatureImpl road2 = new TravelTimeFeatureImpl();
+    TravelTimeFeatureImpl road3 = new TravelTimeFeatureImpl();
+    TravelTimeFeatureImpl road4 = new TravelTimeFeatureImpl();
 
     road1.setId("Feature1");
     road1.setVelocity(2);
@@ -143,10 +142,10 @@ class TravelTimeServiceTest {
             road3.getGenericGeoJson(),
             road4.getGenericGeoJson()));
 
-    AssertSubscriber<TrafficFeatureInterface> ts = AssertSubscriber.create();
+    AssertSubscriber<TrafficFeature> ts = AssertSubscriber.create();
 
     Flux.fromIterable(fc.getFeatures())
-        .map(feature -> new TravelTimeFeature(feature))
+        .map(feature -> new TravelTimeFeatureImpl(feature))
         .distinct(DistinctUtil.hashCodeNoRetDate)
         .blockLast();
 
@@ -233,7 +232,7 @@ class TravelTimeServiceTest {
             prop3Changed,
             new TravelTimeImporter(),
             repo,
-            new TravelTimeEntityDistinct(),
+            new TravelTimeDTODistinct(),
             new TravelTimeFeatureDistinct());
 
    //service.getLiveData().doOnNext(System.out::println).blockLast();
@@ -251,7 +250,7 @@ class TravelTimeServiceTest {
     Hooks.onOperatorDebug();
     TravelTimeRepo repo = mock(TravelTimeRepo.class);
 
-    when(repo.isNew(any(TravelTimeEntity.class))).thenReturn(Mono.just(false));
+    when(repo.isNew(any(TravelTimeEntityImpl.class))).thenReturn(Mono.just(false));
 
     serviceConfig = new TravelTimeServiceConfig();
     serviceConfig.setInitialDelay(Duration.ZERO);

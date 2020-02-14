@@ -1,8 +1,8 @@
 package com.dynacore.livemap.traveltime.service;
 
-import com.dynacore.livemap.core.service.EntityDistinct;
-import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import com.dynacore.livemap.core.service.DTODistinctInterface;
+import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.SynchronousSink;
@@ -13,17 +13,17 @@ import java.util.function.BiConsumer;
 
 @Profile("traveltime")
 @Component
-public class TravelTimeEntityDistinct implements EntityDistinct<TravelTimeEntity, TravelTimeDTO> {
+public class TravelTimeDTODistinct implements DTODistinctInterface<TravelTimeEntityImpl, TravelTimeMapDTO> {
 
 
-  Map<String, TravelTimeDTO> dtoStore = new HashMap<>();
+  Map<String, TravelTimeMapDTO> dtoStore = new HashMap<>();
 
   @Override
-  public BiConsumer<TravelTimeEntity, SynchronousSink<TravelTimeDTO>> filter() {
+  public BiConsumer<TravelTimeEntityImpl, SynchronousSink<TravelTimeMapDTO>> filter() {
     return (entity, sink) -> {
 
-      TravelTimeDTO newDTO = new TravelTimeDTO(entity);
-      TravelTimeDTO lastChangedDTO;
+      TravelTimeMapDTO newDTO = new TravelTimeMapDTO(entity);
+      TravelTimeMapDTO lastChangedDTO;
       if ((lastChangedDTO = dtoStore.get(newDTO.getId())) != null) {
         if (!lastChangedDTO.equals(newDTO)) {
           dtoStore.put(newDTO.getId(), newDTO);

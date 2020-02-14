@@ -1,118 +1,39 @@
 package com.dynacore.livemap.core.model;
 
-import com.dynacore.livemap.core.repository.TrafficEntity;
-import com.dynacore.livemap.core.repository.TrafficEntityInterface;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Builder;
-import org.geojson.Feature;
-import org.geojson.GeoJsonObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-//Typesafe wrapper for GeoJson Feature
-@JsonTypeName("Feature")
-public class TrafficFeature implements TrafficFeatureInterface {
-  Logger log = LoggerFactory.getLogger(TrafficFeature.class);
-  protected Feature feature;
+public interface TrafficFeature {
+    @JsonIgnore
+    String ID = "Id";
+    @JsonIgnore
+    String NAME = "Name";
+    @JsonIgnore
+    String OUR_CREATION_DATE = "ourRetrieval";
+    @JsonIgnore
+    String THEIR_RETRIEVAL = "pubDate";
+    @JsonIgnore
+    String SAME_SINCE = "sameSince";
 
-  public TrafficFeature() {
-    feature = new Feature();
-  }
+    String getId();
+    void setId(String Id);
 
-  public TrafficFeature(TrafficEntityInterface entity) {
-    feature = new Feature();
-    setId(entity.getId());
-    setName(entity.getName());
-    setPubDate(entity.getPubDate());
-    setOurRetrieval(entity.getOurRetrieval());
+    void setName(String name);
 
-  }
-  // Different suppliers use different keys for the data publication timestamp:
-  public TrafficFeature(Feature feature, String pubDateKey) {
-    try {
-      this.feature = feature;
+    String getName();
 
-      if (feature.getProperties().containsKey(pubDateKey)) {
-        feature.getProperties().put(THEIR_RETRIEVAL, feature.getProperties().get(pubDateKey));// new key
-        feature.getProperties().remove(pubDateKey);
-      } else {
-        log.warn("No pubdate key found during Feature import");
-      }
-    } catch (Exception error) {
-      log.error("Error mapping feature to TrafficFeature" + error.getMessage());
-      throw error;
-    }
-  }
+    OffsetDateTime getPubDate();
 
-  @Override
-  public String getId() {
-    return feature.getId();
-  }
+    void setPubDate(OffsetDateTime pubDate);
 
-  @Override
-  public void setId(String Id) {
-    feature.setId(Id);
-  }
+    OffsetDateTime getSameSince();
 
-  @Override
-  public void setName(String name) {
-    feature.getProperties().put(NAME, name);
-  }
+    void setSameSince(OffsetDateTime date);
 
-  @Override
-  public String getName() {
-    return (String) feature.getProperty(NAME);
-  }
+    OffsetDateTime getOurRetrieval();
 
-  @Override
-  public OffsetDateTime getPubDate() {
-    if (feature.getProperties().get(THEIR_RETRIEVAL) instanceof String) {
-      return OffsetDateTime.parse((String) feature.getProperties().get(THEIR_RETRIEVAL));
-    } else {
-      return (OffsetDateTime) feature.getProperties().get(THEIR_RETRIEVAL);
-    }
-  }
+    void setOurRetrieval(OffsetDateTime ourRetrieval);
 
-  @Override
-  public void setPubDate(OffsetDateTime pubDate) {
-    feature.getProperties().put(THEIR_RETRIEVAL, pubDate);
-  }
-
-  @Override
-  public OffsetDateTime getSameSince() {
-    return (OffsetDateTime) feature.getProperties().get(SAME_SINCE);
-  }
-
-  @Override
-  public void setSameSince(OffsetDateTime date) {
-    feature.getProperties().put(SAME_SINCE, date);
-  }
-
-  @Override
-  public OffsetDateTime getOurRetrieval() {
-    if (feature.getProperties().get(OUR_CREATION_DATE) instanceof String) {
-      return OffsetDateTime.parse((String) feature.getProperties().get(OUR_CREATION_DATE));
-    } else {
-      return (OffsetDateTime) feature.getProperties().get(OUR_CREATION_DATE);
-    }
-  }
-
-  @Override
-  public void setOurRetrieval(OffsetDateTime ourRetrieval) {
-    feature.getProperties().put(OUR_CREATION_DATE, ourRetrieval);
-  }
-  public GeoJsonObject getGeometry() {
-    return feature.getGeometry();
-  }
-
-  public Feature getGenericGeoJson() {
-    return feature;
-  }
-
-  @Override
-  public int hashCode() {
-    return feature.hashCode();
-  }
 }

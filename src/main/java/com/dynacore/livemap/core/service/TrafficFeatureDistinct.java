@@ -1,6 +1,6 @@
 package com.dynacore.livemap.core.service;
 
-import com.dynacore.livemap.core.model.TrafficFeatureInterface;
+import com.dynacore.livemap.core.model.TrafficFeature;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 @Component
-public class TrafficFeatureDistinct implements FeatureDistinct<TrafficFeatureInterface, TrafficFeatureInterface > {
+public class TrafficFeatureDistinct implements FeatureDistinct<TrafficFeature, TrafficFeature> {
 
     @Autowired
     ModelMapper modelMapper;
@@ -19,7 +19,7 @@ public class TrafficFeatureDistinct implements FeatureDistinct<TrafficFeatureInt
     Map<String, Integer> geoJsonStore = new HashMap<>();
 
     @Override
-    public BiConsumer<TrafficFeatureInterface, SynchronousSink<TrafficFeatureInterface>> getFilter() {
+    public BiConsumer<TrafficFeature, SynchronousSink<TrafficFeature>> getFilter() {
         return (feature, sink) -> {
             Integer newHash = DistinctUtil.hashCodeNoRetDate.apply(feature);
             Integer oldHash;

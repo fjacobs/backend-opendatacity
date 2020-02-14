@@ -1,8 +1,7 @@
 package com.dynacore.livemap.traveltime.controller;
 
-import com.dynacore.livemap.core.model.TrafficFeature;
+import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
-import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class HttpSseController {
    */
   @CrossOrigin(origins = "http://localhost:8000")
   @GetMapping("/featureSubscription")
-  public Flux<ServerSentEvent<TrafficFeature>> streamFeatures() {
+  public Flux<ServerSentEvent<TrafficFeatureImpl>> streamFeatures() {
 
     return travelTimeService
             .getLiveData()
@@ -43,10 +42,10 @@ public class HttpSseController {
             .doOnError(e -> logger.error("SSE Error: " + e))
             .map(
                     sequence ->
-                            ServerSentEvent.<TrafficFeature>builder()
+                            ServerSentEvent.<TrafficFeatureImpl>builder()
                                     .id("Roads")
                                     .event("event")
-                                    .data((TrafficFeature) sequence)
+                                    .data((TrafficFeatureImpl) sequence)
                                     .build());
   }
 }

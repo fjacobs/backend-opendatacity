@@ -20,11 +20,11 @@ public class GuidanceSignService implements GeoJsonRequester<FeatureCollectionBl
 
   private JpaRepository<GuidanceSignEntity> guidanceSignRepository;
   private FeatureCollectionBlock<GuidanceSignModel> featureCollectionBlock;
-  private GuidanceSignConfiguration config;
+  private GuidanceSignProperties config;
 
   @Autowired
   public GuidanceSignService(
-      GuidanceSignRepo guidanceSignRepository, GuidanceSignConfiguration config) {
+          GuidanceSignRepo guidanceSignRepository, GuidanceSignProperties config) {
     this.guidanceSignRepository = guidanceSignRepository;
     this.config = config;
     ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();

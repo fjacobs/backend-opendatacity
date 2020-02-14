@@ -1,7 +1,7 @@
 package com.dynacore.livemap.traveltime;
 
-import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
-import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
+import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
 import io.rsocket.transport.netty.client.WebsocketClientTransport;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ class RSocketIntegrationTest {
 
     webSocket
         .route("TRAVELTIME_STREAM")
-        .retrieveFlux(TravelTimeFeature.class)
+        .retrieveFlux(TravelTimeFeatureImpl.class)
         .as(StepVerifier::create)
         .expectSubscription()
         .expectNextMatches(
@@ -91,7 +91,7 @@ class RSocketIntegrationTest {
     Hooks.onOperatorDebug();
     RSocketRequester webSocket =
         builder.connect(WebsocketClientTransport.create(serverPort)).block();
-    ParameterizedTypeReference<List<TravelTimeDTO>> typeRef = new ParameterizedTypeReference<>() {};
+    ParameterizedTypeReference<List<TravelTimeMapDTO>> typeRef = new ParameterizedTypeReference<>() {};
 
     StepVerifier.create(webSocket.route("TRAVELTIME_REPLAY").data(10).retrieveFlux(typeRef))
         .expectSubscription()

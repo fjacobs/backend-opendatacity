@@ -1,9 +1,8 @@
 package com.dynacore.livemap.guidancesign.service;
 
-import com.dynacore.livemap.core.service.EntityDistinct;
+import com.dynacore.livemap.core.service.DTODistinctInterface;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignDTO;
-import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.SynchronousSink;
@@ -14,8 +13,7 @@ import java.util.function.BiConsumer;
 
 @Profile("GuidanceSign")
 @Component
-public class GuidanceSignEntityDistinct
-    implements EntityDistinct<GuidanceSignAggregate, GuidanceSignDTO> {
+public class GuidanceSignDTODistinct implements DTODistinctInterface<GuidanceSignAggregate, GuidanceSignDTO> {
 
   Map<String, GuidanceSignDTO> dtoStore = new HashMap<>();
 

@@ -1,19 +1,6 @@
 package com.dynacore.livemap.traveltime.controller.sse;
 
-import com.dynacore.livemap.traveltime.controller.HttpSseController;
-import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
-import org.geojson.Feature;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
-import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.test.web.reactive.server.WebTestClient;
-
-import com.dynacore.livemap.traveltime.service.TravelTimeService;
-
-import reactor.core.publisher.Flux;
-import reactor.test.StepVerifier;
 
 public class HttpSseControllerTest {
 

@@ -17,7 +17,7 @@ public interface GeoJsonObjectVisitor<T> {
 
     T visit(Point geoJsonObject);
 
-    T visit(TrafficFeature geoJsonObject);
+    T visit(TrafficFeatureImpl geoJsonObject);
 
     T visit(MultiLineString geoJsonObject);
 
@@ -54,7 +54,7 @@ public interface GeoJsonObjectVisitor<T> {
         }
 
         @Override
-        public T visit(TrafficFeature geoJsonObject) {
+        public T visit(TrafficFeatureImpl geoJsonObject) {
             return null;
         }
 

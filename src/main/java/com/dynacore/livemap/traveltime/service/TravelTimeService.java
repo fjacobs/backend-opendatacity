@@ -17,10 +17,9 @@ package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
-import com.dynacore.livemap.core.service.TrafficFeatureDistinct;
-import com.dynacore.livemap.traveltime.domain.TravelTimeDTO;
-import com.dynacore.livemap.traveltime.domain.TravelTimeFeature;
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntity;
+import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -44,17 +43,17 @@ import reactor.core.scheduler.Schedulers;
 @Profile("traveltime")
 @Service("travelTimeService")
 public class TravelTimeService
-    extends GeoJsonReactorService<TravelTimeEntity, TravelTimeFeature, TravelTimeDTO> {
+    extends GeoJsonReactorService<TravelTimeEntityImpl, TravelTimeFeatureImpl, TravelTimeMapDTO> {
 
   Logger log = LoggerFactory.getLogger(TravelTimeService.class);
 
   public TravelTimeService(
-      TravelTimeServiceConfig config,
-      GeoJsonAdapter adapter,
-      TravelTimeImporter importer,
-      TravelTimeRepo repo,
-      TravelTimeEntityDistinct entityDtoDistinct,
-      TravelTimeFeatureDistinct featureDistinct
+          TravelTimeServiceConfig config,
+          GeoJsonAdapter adapter,
+          TravelTimeImporter importer,
+          TravelTimeRepo repo,
+          TravelTimeDTODistinct entityDtoDistinct,
+          TravelTimeFeatureDistinct featureDistinct
       )
       throws JsonProcessingException {
     super(config, adapter, importer, repo,  entityDtoDistinct, featureDistinct);
@@ -63,7 +62,7 @@ public class TravelTimeService
       Flux.from(importedFlux)
           .parallel(Runtime.getRuntime().availableProcessors())
           .runOn(Schedulers.parallel())
-          .map(feature -> repo.save(new TravelTimeEntity(feature)))
+          .map(feature -> repo.save(new TravelTimeEntityImpl(feature)))
           .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
     }
   }

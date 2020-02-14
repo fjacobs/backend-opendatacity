@@ -22,7 +22,7 @@ public class TravelTimeRepoTest {
               "r2dbc:h2:mem:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"));
   private TravelTimeRepo repo = new TravelTimeRepo(client);
 
-  TravelTimeEntity entityOne,
+  TravelTimeEntityImpl entityOne,
       entitySameAsOne,
       entitySameAsOneWithNewPubDate,
       entitySameAsOneChangedProperties,
@@ -34,7 +34,7 @@ public class TravelTimeRepoTest {
     String retDate = "2019-10-16T16:00:00Z";
 
     entityOne =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -45,7 +45,7 @@ public class TravelTimeRepoTest {
             5,
             100);
     entitySameAsOne =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -58,7 +58,7 @@ public class TravelTimeRepoTest {
 
     String newPubDate = "2019-10-16T15:53:00Z";
     entitySameAsOneWithNewPubDate =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -74,7 +74,7 @@ public class TravelTimeRepoTest {
     int newVelocity = 60;
 
     entitySameAsOneChangedProperties =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -85,7 +85,7 @@ public class TravelTimeRepoTest {
             newTravelTime,
             newVelocity);
     entityTwo =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "009",
             "Second Entity",
@@ -135,8 +135,8 @@ public class TravelTimeRepoTest {
 
     String pubDate = "2019-10-16T15:52:00Z";
     String retDate = "2019-10-16T16:00:00Z";
-    TravelTimeEntity entityOne =
-        new TravelTimeEntity(
+    TravelTimeEntityImpl entityOne =
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -149,7 +149,7 @@ public class TravelTimeRepoTest {
 
     client
         .insert()
-        .into(TravelTimeEntity.class)
+        .into(TravelTimeEntityImpl.class)
         .using(entityOne)
         .fetch()
         .rowsUpdated()
@@ -167,7 +167,7 @@ public class TravelTimeRepoTest {
     String retDate = "2019-10-16T16:00:00Z";
 
     entityOne =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -178,7 +178,7 @@ public class TravelTimeRepoTest {
             5,
             100);
     entitySameAsOne =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -191,7 +191,7 @@ public class TravelTimeRepoTest {
 
     client
         .insert()
-        .into(TravelTimeEntity.class)
+        .into(TravelTimeEntityImpl.class)
         .using(entityOne)
         .fetch()
         .rowsUpdated()
@@ -206,7 +206,7 @@ public class TravelTimeRepoTest {
 
     String newPubDate = "2019-10-16T15:53:00Z";
     entitySameAsOneWithNewPubDate =
-        new TravelTimeEntity(
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -230,8 +230,8 @@ public class TravelTimeRepoTest {
 
     String pubDate = "2019-10-16T15:52:00Z";
     String retDate = "2019-10-16T16:00:00Z";
-    TravelTimeEntity entityOne =
-        new TravelTimeEntity(
+    TravelTimeEntityImpl entityOne =
+        new TravelTimeEntityImpl(
             null,
             "002",
             "First entity",
@@ -242,9 +242,9 @@ public class TravelTimeRepoTest {
             5,
             100);
 
-    client.insert().into(TravelTimeEntity.class).using(entityOne).fetch().rowsUpdated().block();
+    client.insert().into(TravelTimeEntityImpl.class).using(entityOne).fetch().rowsUpdated().block();
 
-    TravelTimeEntity entityTwo = repo.getLatest("002").block();
+    TravelTimeEntityImpl entityTwo = repo.getLatest("002").block();
 
     assert entityTwo != null;
 
@@ -262,7 +262,7 @@ public class TravelTimeRepoTest {
 
     client
         .select()
-        .from(TravelTimeEntity.class)
+        .from(TravelTimeEntityImpl.class)
         .fetch()
         .first()
         .as(StepVerifier::create)
@@ -288,7 +288,7 @@ public class TravelTimeRepoTest {
 
     client
         .select()
-        .from(TravelTimeEntity.class)
+        .from(TravelTimeEntityImpl.class)
         .fetch()
         .all()
         .as(StepVerifier::create)

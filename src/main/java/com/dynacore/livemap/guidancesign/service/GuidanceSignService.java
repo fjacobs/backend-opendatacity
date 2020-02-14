@@ -19,8 +19,7 @@ import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignDTO;
-import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeature;
-import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeatureImpl;
 import com.dynacore.livemap.guidancesign.repo.GuidanceSignRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -44,20 +43,20 @@ import reactor.core.scheduler.Schedulers;
 @Profile("guidancesign")
 @Service("guidanceSignService")
 public class GuidanceSignService
-    extends GeoJsonReactorService<GuidanceSignAggregate, GuidanceSignFeature, GuidanceSignDTO> {
+    extends GeoJsonReactorService<GuidanceSignAggregate, GuidanceSignFeatureImpl, GuidanceSignDTO> {
 
   Logger log = LoggerFactory.getLogger(GuidanceSignService.class);
 
   public GuidanceSignService(
-          GuidanceSignServiceConfig config,
+          GuidanceSignProperties config,
           GeoJsonAdapter adapter,
           GuidanceSignImporter importer,
           GuidanceSignRepo repo,
-          GuidanceSignEntityDistinct entityDtoDistinct,
+          GuidanceSignDTODistinct entityDtoDistinct,
           GuidanceSignFeatureDistinct featureDistinct
       )
       throws JsonProcessingException {
-    super(config, adapter, importer, repo,  entityDtoDistinct, featureDistinct);
+    super(config, adapter, importer, repo, entityDtoDistinct, featureDistinct);
 
     if (config.isSaveToDbEnabled()) {
       Flux.from(importedFlux)
