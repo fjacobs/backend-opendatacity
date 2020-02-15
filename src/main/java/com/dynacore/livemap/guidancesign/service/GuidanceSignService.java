@@ -18,7 +18,7 @@ package com.dynacore.livemap.guidancesign.service;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
-import com.dynacore.livemap.guidancesign.domain.GuidanceSignDTO;
+import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeatureImpl;
 import com.dynacore.livemap.guidancesign.repo.GuidanceSignRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,6 +30,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
+import java.time.Duration;
+import java.util.List;
 
 /**
  * Road traffic traveltime service
@@ -43,18 +46,17 @@ import reactor.core.scheduler.Schedulers;
 @Profile("guidancesign")
 @Service("guidanceSignService")
 public class GuidanceSignService
-    extends GeoJsonReactorService<GuidanceSignAggregate, GuidanceSignFeatureImpl, GuidanceSignDTO> {
+    extends GeoJsonReactorService<GuidanceSignAggregate, GuidanceSignFeatureImpl, DisplayDTO> {
 
   Logger log = LoggerFactory.getLogger(GuidanceSignService.class);
 
   public GuidanceSignService(
-          GuidanceSignProperties config,
-          GeoJsonAdapter adapter,
-          GuidanceSignImporter importer,
-          GuidanceSignRepo repo,
-          GuidanceSignDTODistinct entityDtoDistinct,
-          GuidanceSignFeatureDistinct featureDistinct
-      )
+      GuidanceSignProperties config,
+      GeoJsonAdapter adapter,
+      GuidanceSignImporter importer,
+      GuidanceSignRepo repo,
+      DisplayDTODistinct entityDtoDistinct,
+      GuidanceSignFeatureDistinct featureDistinct)
       throws JsonProcessingException {
     super(config, adapter, importer, repo, entityDtoDistinct, featureDistinct);
 
@@ -65,5 +67,31 @@ public class GuidanceSignService
           .map(feature -> repo.save(new GuidanceSignAggregate(feature)))
           .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
     }
+  }
+
+  @Override
+  public Flux<List<DisplayDTO>> replayHistoryGroup(Duration interval) {
+    return repo.getAllAscending()
+        .flatMap(
+            aggregate -> {
+              GuidanceSignEntity signEntity = aggregate.getGuidanceSignEntity();
+              return aggregate
+                  .getInnerDisplayEntities()
+                  .map(
+                      innerDisplayEntity ->
+                          new DisplayDTO(
+                              signEntity.getId(),
+                              signEntity.getName(),
+                              signEntity.getPubDate(),
+                              signEntity.getRemoved(),
+                              signEntity.getState(),
+                              innerDisplayEntity.getDescription(),
+                              innerDisplayEntity.getOutput(),
+                              innerDisplayEntity.getOutputDescription()))
+                  .windowUntilChanged(DisplayDTO::pubDate)
+                  .flatMap(Flux::buffer)
+                  .delayElements(interval)
+                  .doOnNext(x -> log.info("Amount of distinct features: " + x.size()));
+            });
   }
 }

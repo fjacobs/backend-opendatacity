@@ -73,7 +73,7 @@ public abstract class GeoJsonReactorService<
   public Flux<List<D>> replayHistoryGroup(Duration interval) {
     return repo.getAllAscending()
         .handle(DTODistinctInterface.filter())
-        .windowUntilChanged(D::getPubDate)
+        .windowUntilChanged(D::pubDate)
         .flatMap(Flux::buffer)
         .delayElements(interval)
         .doOnNext(x ->logger.info("Amount of distinct features: " + x.size()));

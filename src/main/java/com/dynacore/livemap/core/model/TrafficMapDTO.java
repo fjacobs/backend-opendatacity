@@ -15,12 +15,11 @@ import java.util.HashMap;
 //    velocity: <changed velocity>
 // }
 public class TrafficMapDTO extends HashMap<String, Object> implements TrafficDTO {
-  @Override
+
   public void setId(String id) {
     put(TrafficFeatureImpl.ID, id);
   }
 
-  @Override
   public String getId() {
     return (String) get(TrafficFeatureImpl.ID);
   }
@@ -29,7 +28,6 @@ public class TrafficMapDTO extends HashMap<String, Object> implements TrafficDTO
     put(TrafficFeatureImpl.NAME, name);
   }
 
-  @Override
   public OffsetDateTime getPubDate() {
     Object x = get(TravelTimeFeatureImpl.THEIR_RETRIEVAL);
     assert x != null;
@@ -48,7 +46,8 @@ public class TrafficMapDTO extends HashMap<String, Object> implements TrafficDTO
     return null;
   }
 
-  @Override
+  public OffsetDateTime pubDate() {return getPubDate();}
+
   public void setPubDate(OffsetDateTime pubDate) {
     put(TrafficFeatureImpl.THEIR_RETRIEVAL, pubDate);
   }
