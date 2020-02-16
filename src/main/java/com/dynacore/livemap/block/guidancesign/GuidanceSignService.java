@@ -14,17 +14,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@Profile("guidancesign")
-@Service("guidanceSignService")
+@Profile("guidancesignold")
+@Service("guidanceSignServiceold")
 public class GuidanceSignService implements GeoJsonRequester<FeatureCollectionBlock<GuidanceSignModel>> {
 
   private JpaRepository<GuidanceSignEntity> guidanceSignRepository;
   private FeatureCollectionBlock<GuidanceSignModel> featureCollectionBlock;
-  private GuidanceSignProperties config;
+  private GuidanceSignPropertiesOld config;
 
   @Autowired
   public GuidanceSignService(
-          GuidanceSignRepo guidanceSignRepository, GuidanceSignProperties config) {
+          GuidanceSignRepo guidanceSignRepository, GuidanceSignPropertiesOld config) {
     this.guidanceSignRepository = guidanceSignRepository;
     this.config = config;
     ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();

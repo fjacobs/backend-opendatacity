@@ -1,20 +1,28 @@
 package com.dynacore.livemap.traveltime;
 
-import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
+import com.dynacore.livemap.configuration.adapter.FileToGeojson;
+import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
+import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
 import io.rsocket.transport.netty.client.WebsocketClientTransport;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.test.context.ActiveProfiles;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
 
+import java.io.File;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +39,7 @@ import static org.junit.Assert.assertTrue;
     },
     webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-class RSocketIntegrationTest {
+@Ignore class RSocketIntegrationTest {
 
   @Value("${spring.rsocket.server.port}")
   private int serverPort;
@@ -113,5 +121,21 @@ class RSocketIntegrationTest {
               assertThat(dto2.getVelocity(), is(33));
             })
         .verifyComplete();
+  }
+
+  @TestConfiguration
+  static class FileReaderH2Beans {
+
+    @Bean(name = "fileReaderRepeat")
+    @Primary
+    GeoJsonAdapter fileReaderRepeat() {
+      System.out.println("Bean: resourceFileReader ");
+
+      return (interval) ->
+          Flux.fromIterable(
+                  FileToGeojson.readCollection(new File("/traveltimedata/blinkingsmall/")))
+              .delayElements(interval)
+              .repeat(10);
+    }
   }
 }

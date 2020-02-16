@@ -15,8 +15,8 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
-@Profile("guidancesign")
-@Repository("guidanceSignRepository")
+@Profile("guidancesignold")
+@Repository("guidanceSignRepositoryold")
 public class GuidanceSignRepo implements JpaRepository<GuidanceSignEntity> {
   private final Logger logger = LoggerFactory.getLogger(GuidanceSignRepo.class);
 

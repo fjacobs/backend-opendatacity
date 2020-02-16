@@ -22,7 +22,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 @Repository("guidanceSignRepository")
 public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate> {
 
-  private DatabaseClient databaseClient;
+  private final DatabaseClient databaseClient;
   private static final Logger log = LoggerFactory.getLogger(GuidanceSignRepo.class);
 
   public GuidanceSignRepo(DatabaseClient databaseClient) {
@@ -34,7 +34,7 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate
     var entity = aggregate.getGuidanceSignEntity();
     return databaseClient
         .select()
-        .from(GuidanceSignAggregate.class)
+        .from(GuidanceSignEntity.class)
         .matching(where("id").is(entity.getId()).and("pubDate").is(entity.getPubDate()))
         .fetch()
         .first()

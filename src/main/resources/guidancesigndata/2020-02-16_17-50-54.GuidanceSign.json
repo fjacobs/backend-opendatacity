@@ -1,0 +1,5328 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "Id": "34280b21-5a1c-429d-94c0-a1706b4e3f62",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.944938,
+        52.315838
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B13 - ZO-B13 Burg.Stramanweg 02510/080",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "397a43d2-355a-42fe-ab5a-1f9f0ffb4624",
+            "OutputDescription": "X",
+            "Description": "ZO-B13_VVX_02510/080  P+R Arena",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "768730c0-de14-40f3-a59a-2ef423a68e7f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.911008,
+        52.360648
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_63225/003_Mauritskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "e3c2295d-bd21-462a-b1f7-c9bbe7730f84",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN558_63225/003_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "850"
+          },{
+            "Id": "fe1c9e78-6ee3-4415-8e45-fe600ad44adc",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN559_63225/003_Muntplein",
+            "Type": "VVXNUMERIC",
+            "Output": "75"
+          },{
+            "Id": "a7b4a301-c672-4ed1-8b99-a07a2815f65c",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN560_63225/003_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "650"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "b55609a7-cc98-4bb7-869f-a07a7fd407dc",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.88204,
+        52.33825
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1010 - A1010_A010-18,400-Li-1_P+R S109",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "bf0a7f39-23c9-41bd-8c0f-ca73c6e72159",
+            "OutputDescription": "X",
+            "Description": "A1010_VVX_P+R S109 / RAI",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f7289e9d-2f37-4449-8584-81502b0121ca",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9341,
+        52.3119
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B05 - ZO-B05 Burg.Stramanweg 02510/045",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f03d5127-02cb-4100-81b2-9581596d422c",
+            "OutputDescription": "VRIJ",
+            "Description": "FJ462B05 - 02510/945 VVX P2 (Evenemententerrein)",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "1e0f5007-2a63-436a-b2a0-718be8c44f3d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.89316,
+        52.33648
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1008 - A1008_A010-17,490a-Re-1_P+R S109",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "67a2b4c6-cda1-4220-90cb-4aaed46cd755",
+            "OutputDescription": "X",
+            "Description": "A1008_VVX_P+R S109 / RAI",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "1dd41b56-46f9-40b3-8503-93043f483028",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.878541,
+        52.364959
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_00877/011_Nassaukade 2de Helmerstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "dd7b256d-89e6-4702-9a34-c2b3566373cf",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN236_00877/011_Byzantium",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          },{
+            "Id": "61f9124a-f7eb-420a-80fd-b67406e8c1fd",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN237_00877/011_Heinekenplein",
+            "Type": "VVXNUMERIC",
+            "Output": "119"
+          },{
+            "Id": "db4406fa-85da-4ab7-b25d-8f81ebc5eea9",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN238_00877/011_Albert Cuyp",
+            "Type": "VVXNUMERIC",
+            "Output": "175"
+          },{
+            "Id": "d1cc442d-be77-4ea4-a270-a66169be6fd4",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN239_00877/011_Museumplein",
+            "Type": "VVXNUMERIC",
+            "Output": "330"
+          },{
+            "Id": "ecaf7647-d1a1-4568-b21b-831cc1f1465d",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN240_00877/011_Museumplein bussen",
+            "Type": "VVXNUMERIC",
+            "Output": "24"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "6e03fd57-9c32-4c45-8286-0243c6497511",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.923422,
+        52.413873
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1015 - A1015_A010-2,900-Re-1_P+R Noord",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "62f5894a-740d-42d4-9db8-9398646135eb",
+            "OutputDescription": "VRIJ",
+            "Description": "A1015_VVX_P+R Noord",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "1831a7c2-81e2-446d-8bed-24dace4cf8ce",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.343078,
+        52.314477
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_07723/004_Prins Hendrikkade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "c717f995-705f-4abf-8b84-c9984b1cf0c4",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN373_07723/004_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "dd364e4b-1624-4c87-9cf1-e1f123ac5b94",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN374_07723/004_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "bc3600e7-51cf-4fec-9270-66228aa44154",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.892667,
+        52.386525
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_73905/001_Westerdoksdijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "8f7ac091-584a-406c-a901-516abc34d852",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN691_73905/001_Centraal Station ",
+            "Type": "VVXNUMERIC",
+            "Output": "950"
+          },{
+            "Id": "28a0dde9-b889-4cd8-ab04-150db22263f3",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN692_73905/001_IJdock",
+            "Type": "VVXNUMERIC",
+            "Output": "170"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8714bdaf-62cb-4af6-bfc4-8a5c796ff293",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.95,
+        52.31745
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B02 - ZO-B02 Dollingadreef 01250/006",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "7e2f327e-546e-46a0-8d78-fd42010c9a9b",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B02_ KW_01250/006b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "c541b0b4-198e-495d-bee0-51db81bfb41b",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B02_KW_01250/006a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "3c55c114-9adb-42bd-a55c-842cb81b4f90",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.8767469,
+        52.377264
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_05397/003_Nassaukade Van Oldebarneveldtplein",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "27becf9e-13aa-40b2-8af6-023e001a69c3",
+            "OutputDescription": "VOL",
+            "Description": "FJ212CE_VVXN362_05397/003_De Hallen",
+            "Type": "VVXNUMERIC",
+            "Output": "VOL"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "538f2c32-4d77-45aa-95c8-a92318cffc20",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.882805,
+        52.386332
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_00783/021_Houtmankade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "483526c3-3299-4a62-ae19-778f19fc1312",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN229_00783/021_Willemspoort",
+            "Type": "VVXNUMERIC",
+            "Output": "18"
+          },{
+            "Id": "27ce6e55-de23-4246-b07b-78963ef4e3d2",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN230_00783/021_Europarking (Singelgrt)",
+            "Type": "VVXNUMERIC",
+            "Output": "150"
+          },{
+            "Id": "a54b9919-630c-4f06-83db-2d66451ec209",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN231_00783/021_Blindplaat (Europarking)",
+            "Type": "VVXNUMERIC",
+            "Output": "150"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "6105f2e4-30d4-4022-8566-bedc4d7066a6",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.911996,
+        52.371305
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09428/024&025_Prins Hendrikkade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "7594aab7-d2c1-445d-9dab-a3d100218b38",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN425_09428/024_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "650"
+          },{
+            "Id": "04edee93-63dd-44f2-a820-e6e067e03cc5",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN432_09428/025_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "550"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c3f01bc5-b5e4-4e10-8b88-4b97981b70eb",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.83115,
+        52.39157
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A96 - A96_Basisweg 05537/017",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "49e1ae60-a752-44bd-a56a-61e3d16d582e",
+            "OutputDescription": "X",
+            "Description": "A96_VVX_Sloterdijk",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "44af3a11-7fa9-4ae3-b0c2-0b4987cf3682",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.435509,
+        52.378824
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_00783/019_Haarlemmerweg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "aa3983a8-7a68-4c1f-a858-c81488ceb178",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN222_00783/019_Willemspoort",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "bbf33c6d-da20-4d25-9621-750c2d614303",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN223_00783/019_Europarking (Singelgrt)",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "efff1d6f-0dd1-469a-9fd8-2e14a1795e5a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN224_00783/019_Blindplaat (Europarking)",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "eeb6daaa-a2dd-4d2e-8ea7-6ee47fc51630",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.469613,
+        52.378698
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-CE-FP03-N Vijzelstraat - Reguliersdwarsstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "e9ef6539-84b5-4d34-a16c-009665a5abd5",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP55_VVXN_Reguliers",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "8b748f90-35d3-4b1b-9252-3978448a831a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP56_VVX_De Munt",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "79e7b0ae-5585-4711-b33c-d23991bf46cd",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.87455,
+        52.37092
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_01627/003_Nassaukade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "8749e035-e25f-4024-be9d-0941a18a0c29",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN250_01627/003_Jordaan",
+            "Type": "VVXNUMERIC",
+            "Output": "15"
+          },{
+            "Id": "237ef17a-06c6-43ee-8793-6610720204eb",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN251_01627/003_Europarking",
+            "Type": "VVXNUMERIC",
+            "Output": "150"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "cfad1a63-c610-4195-9ef6-399a7ffcccd5",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.915949,
+        52.347637
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-AM-FP01-W Meester Treublaan",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "c0a74eb4-2795-4bb1-8ff0-783aa9742ae0",
+            "OutputDescription": "",
+            "Description": "FP02_VVXN_Julianaplein",
+            "Type": "VVXNUMERIC",
+            "Output": "100"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "fa91fb5e-b043-4654-8c99-55420c6b90f9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93624,
+        52.3146
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B12 - ZO-B12 Burg.Stramanweg 02510/071",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "a978baa1-0a4f-4de4-98e2-66f4db4fb36c",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B12_VVX_02510/071 P2",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "69e6046c-3c91-4b27-bb43-05f9af0b05c0",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.355071,
+        52.330675
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03477/001_De Ruijterkade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "5720052a-2732-4ba5-9dfe-dfde728eb60c",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN320_03477/001_IJdock",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "d24348fc-0f47-436a-9bc4-9c976ecd4254",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN321_03477/001_CentraalStation",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "be77d634-40ad-43d7-a813-02cda73528d6",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.452564,
+        52.366978
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_60264/003&016_Piet Heintunnel",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "73206502-0f96-4eaa-a809-1105dacb5edb",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN537_60264/003_CentraalStation",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "2f1cc221-a69b-424b-9ac3-2fbe4af09016",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN544_60264/016_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "41d65a33-3300-469d-b2f6-87d9248f7788",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.90352,
+        52.33087
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1007 - A1007_A010-16,660-Re-1_P+R S109",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "warning",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "2f516db6-feea-4f61-8354-3dff4b1c8cfa",
+            "OutputDescription": "X",
+            "Description": "A1007_VVX_P+R S109 RAI Zuidas",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "ce18188d-0cd7-4d2f-86dd-c0b0fc8ef266",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.942536,
+        52.411184
+      ]
+    },
+      "properties": {
+        "Name": "FJ212N24701 - A1015_N247-29,8_P+R Noord",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "52b5c2d4-afbd-416e-b3cc-96d7916502de",
+            "OutputDescription": "VRIJ",
+            "Description": "N24701_VVX_P+R Noord",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "e86cb2bc-f42f-4802-a450-9109b3982481",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.874555,
+        52.372919
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_05397/001_Nassaukade Hugo de Grootkade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "9d3fac02-583f-4474-9dc3-8f84164e36ac",
+            "OutputDescription": "VOL",
+            "Description": "FJ212CE_VVXN355_05397/001_De Hallen",
+            "Type": "VVXNUMERIC",
+            "Output": "VOL"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "33f70f4a-fa24-48ba-b864-5768c48d93d1",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.469768,
+        52.3814
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-CE-FP02-Z Rokin - Spui",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "6d683221-f1ad-4579-b22e-b066897d11a2",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP52_VVXN_Beursplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "d2b10d48-6461-4223-a67c-7ad59eb415f2",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP53_VVXN_Nes",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "90cf0f4f-65a5-4bb4-a6a6-da6dd9d8c024",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP54_VVXN_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "68f9a6e0-23e1-4c01-9808-86b88c585a0c",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.441893,
+        52.395362
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_05393/011_Tasmanstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "c495f07b-c916-4957-9cdf-a35575874f5a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN348_05393/011_Centraal Station",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "0db4188c-ccd3-4784-95bd-73f19bec0b8d",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN349_05393/011_Jordaan",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "364e7cc2-5d56-44dd-9d56-8ce153db93b3",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9511,
+        52.3164
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B43 - ZO-B43 Bijlmerdreef 70223/003",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "84839ef3-2c3c-4bd2-b956-d3bb80a45f52",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B43_VVX_70223/003b P21",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "882267e8-ebc0-4cd2-af60-04c682be3cae",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B43_VVX_70223/003c P22",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c9e237c1-eb86-44c6-b82a-7b7fbb53caf2",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.94967,
+        52.3148
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B40 - ZO-B40 Bijlmerdreef 70222/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "7e693aec-b93b-449a-9c68-0eb76797ee2a",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B40_VVX_70222/001 P21",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "9b9bf50d-3f15-4684-a7fa-657bd3ab93aa",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.907094,
+        52.369607
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09471/011_Valkenburgerstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "8afcee43-e740-4413-9014-00df874d7216",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN488_09471/011_Markenhoven",
+            "Type": "VVXNUMERIC",
+            "Output": "38"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "42b89a01-14ad-4ecc-a085-c3f8d26af0dd",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.8636,
+        52.33556
+      ]
+    },
+      "properties": {
+        "Name": "FJ212ZD101 - ZD-101 De Boelelaan 73113/005abc",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "warning",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "ea05e50a-2bd0-4c4b-9cfb-df8925d1790e",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B101_VVX_73113/005a P1 VUmc",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "abeb9c0d-13ca-4345-bc7a-020a1bd661da",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B101_VVX_73113/005b P2 VUmc ",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "9ac64a86-5a7d-48b5-9578-2b0609a5622a",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B101_VVX_73113/705c P3 VU campus",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "28352915-1737-49fe-93cc-814064169ff3",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.298057,
+        52.508104
+      ]
+    },
+      "properties": {
+        "Name": "LDC draadloos TEST DISPLAY",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d06744b9-369c-4576-9a2e-ac7831e9e587",
+            "OutputDescription": "GEDOOFD",
+            "Description": "LDC Testpijl",
+            "Type": "ARROW",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "9dfebc8d-a607-4649-a140-a88663a724cd",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93472,
+        52.3149
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B17 - ZO-B29 Holterbergweg 16942/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "737c541a-752b-4ffa-bc38-b4a25b6388c1",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B29_TKST_16942/001",
+            "Type": "TEXT",
+            "Output": ""
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "55d3317a-d4e4-42ea-9d1b-cab7805246d6",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.33309,
+        52.295321
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_73905/002_Westerdoksdijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "ff2cd438-5001-4252-b1b4-b4ec417721f8",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN698_73905/002_IJdock",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8759e27d-61b5-417a-adcf-58201aa91f4f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.84135,
+        52.33876
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1014 - A1014_A010-21,220-Li-1_P+R S108",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "5eda740d-9495-4733-b853-017a5ac1e46e",
+            "OutputDescription": "VRIJ",
+            "Description": "A1014_VVX_P+R S108",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "21e2ac5f-a8d4-4ea3-ba75-752e28c3e703",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.425554,
+        52.382449
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09428/009_Prins Hendrikkade thv Valkenburgerstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "warning",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "9470d199-6c8d-4cad-a70f-36a55811dedd",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN418_09428/009_Markenhoven",
+            "Type": "VVXNUMERIC",
+            "Output": "30"
+          },{
+            "Id": "ba1f03bf-4f17-4f3c-a993-1340979624a1",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN419_09428/009_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "650"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "74d0310b-9a12-4f3f-a6a1-ef4bcf1c04d9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93665,
+        52.3113
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B23 - ZO-B23 Holterbergweg 13178/012",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "408612c7-0d19-4b4f-8550-a551a4c4fc9b",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B23_VVX_13178/012a P3",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "b7ebdba4-4d1e-4fd7-bf75-f92e97f6323f",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B23_VVX_13178/012b P4",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "cc340019-92b5-4d82-91ea-448b87f29f3d",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B23_VVX_13178/012c P5",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "c8a59a80-5bb4-42ac-92e7-447f79dfc607",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B23_VVX_13178/012d P6",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "b320efb2-aa22-4f55-a6a2-c72d75e8aa79",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.890739,
+        52.353467
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-DP-FP02-N&Z F.Bolstraat - E J vd Heijdenstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "35ed018a-4891-4bce-a9a8-675fe2154b04",
+            "OutputDescription": "VRIJ",
+            "Description": "FP12_VVXN_Ceintuurbaan",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          },{
+            "Id": "07b0e3d2-d700-41ab-968c-2d77699373ce",
+            "OutputDescription": "VRIJ",
+            "Description": "FP13_VVXN_Ferdinand Bolstraat",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          },{
+            "Id": "e609a002-2cc5-42d6-9f8e-c475a77e9896",
+            "OutputDescription": "VRIJ",
+            "Description": "FP14_VVXN_Ferdinand Bolstraat",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f9f8a9a9-3059-4f8d-b545-0966de6482af",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.95292,
+        52.3164
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B42 - ZO-B42 Bijlmerdreef 70223/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "4f3ac432-d94d-4e2d-9d42-0ea0c0c7efe7",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B42_VVX_70223/002b P21",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "055eae36-9be2-4a7e-b903-48d39facef7a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B42_VVX_70223/002c P22",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8be08824-5274-4584-a3ff-3d374a35a1ce",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93242,
+        52.31117
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B09 - ZO-B09 Burg.Stramanweg 02510/051",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d83a6fc1-1198-4e30-b587-53c4c9aef7e1",
+            "OutputDescription": "P-ring Arena Poort",
+            "Description": "ZO-B09_KW_02510/051",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "587e60f9-be0d-48f4-b52e-c64fa4761bf9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.450957,
+        52.412313
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_71927/003_Van Baerlestraat thv Paulus Potterstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "555aac14-c774-48f3-8abd-18b2dc668256",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN649_71927/003_Museumplein (bus)",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "767d0a84-6da7-41f1-95f9-c8e54aa75617",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.92131,
+        52.362953
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_04169/013_Mauritskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "0dd071d3-841b-428a-bd73-ca7d86e10873",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN334_04169/013_Oostpoort",
+            "Type": "VVXNUMERIC",
+            "Output": "317"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "ae378b29-fd91-4ca6-90be-5a6e42185e8d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.469443,
+        52.375788
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-CE-FP04-Z Vijzelstraat 49",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "668dd79d-25e3-4337-ba8f-efcc387454bd",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP57_VVX_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "c5a44b9f-092b-4901-b050-a3f6ddc96594",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP58_VVXN_De Munt",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "56f31fa9-1ef6-47f8-9bbb-d59537e82d93",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP59_VVXN_Reguliers",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "1b4abd93-dd16-44d8-ac1c-ba33d7c55228",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.408985,
+        52.326994
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_63225/018_Mauritskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1e96695c-11c2-4070-99bf-e9d9037d0f80",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN565_63225/018_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "c1176139-5053-49ff-b8cf-9ed4b4af77cb",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN566_63225/018_Muntplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "89829bb1-954f-4fbf-a170-03f22b79f3e9",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN567_63225/018_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c96d862b-2e7b-4942-acad-f3b9276e64ab",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.430437,
+        52.396995
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09471/028_IJtunneltraverse",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "4294907f-2c95-4e47-bcb6-871fd95be2ee",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN495_09471/028_Markenhoven",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "03117981-4f11-4aba-a810-55c4a21c9de2",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN496_09471/028_Waterlooplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "97a7fb84-e19e-4a97-9e2c-13d499e9c437",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN497_09471/028_Stadhuis",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "d85bb2cb-9c37-4dc1-ac39-197284ede222",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN498_09471/028_Rembrandtplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "2c446937-f647-44f6-a94e-31bed7fb0e31",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN499_09471/028_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "c3e63fbb-b2b8-4082-8b94-7609511bb5ce",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN500_09471/028_De Bijenkorf",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "4e93690c-48e6-4fcc-9570-5fc798e4ed6a",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.924252,
+        52.364676
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_04169/014_Zeeburgerdijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "01417dec-c37a-4324-afea-07521525d9bb",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN341_04169/014_Oostpoort",
+            "Type": "VVXNUMERIC",
+            "Output": "317"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8fb2ef55-6ebc-4b22-aac3-7e53648232a8",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.880491,
+        52.362586
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03277/006_Stadhouderskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "172602ef-dbcc-4893-b1e4-d68e2040061e",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN285_03277/006_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "600"
+          },{
+            "Id": "08d93cf9-c563-44fa-8d60-e9ada223b855",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN286_03277/006_Byzantium",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f65d0180-8d7f-42f1-9026-e08704b683c5",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.918201,
+        52.376898
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_64454/020_Piet Heinkade - ingang PTA",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "ca11e39e-7a4c-4740-b12c-0ad9a6692e24",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN600_64454/020_Piet Hein",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          },{
+            "Id": "bf07ffc1-1fff-44ef-85d7-665861634f53",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN601_64454/020_TTA",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "19b4b488-151b-4dec-859f-ef39d401fa1c",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.89289,
+        52.33425
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1009 - A1009_A010-17,430c-Li-1_P+R S109",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "7a90452f-6f94-4c1a-ba1c-effc670eb4c6",
+            "OutputDescription": "X",
+            "Description": "A1009_VVX_P+R S109 / RAI",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "890a4859-3791-457d-aa26-07b1aa9d437f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.432,
+        52.400985
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_66257/001_Rokin",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "8e6c53be-3fec-4d67-a3a0-5b28531ad96a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN614_66257/001_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "bd94b9aa-3e9b-46d4-9ade-71dcb5af4bb8",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN615_66257/001_De Bijenkorf",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "38c4524e-8da9-47cd-8480-4e59e327b04f",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN616_66257/001_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "60b57631-2bf7-4569-8667-6c6a71ebe7d9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9565,
+        52.31506
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B49 - ZO-B49 Flierbosdreef 70225/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "049d1e71-e04c-4817-a9dd-f1d05ec56cdf",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B49_VVX_70225/002 P24",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "351a49dd-6f7b-4aa4-9a1b-d66474e6b3bb",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.905924,
+        52.364904
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09470/044_Weesperstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "eb0b4ccc-d7ca-4442-be42-1b8c1c85aa97",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN467_09470/044_Markenhoven",
+            "Type": "VVXNUMERIC",
+            "Output": "10"
+          },{
+            "Id": "119df4de-7f2f-429b-9ee8-05dea8726bc8",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN468_09470/044_Stadhuis",
+            "Type": "VVXNUMERIC",
+            "Output": "150"
+          },{
+            "Id": "cf76aa00-dad8-4d3e-a151-d28d93fb68b8",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN469_09470/044_Rembrandtplein",
+            "Type": "VVXNUMERIC",
+            "Output": "150"
+          },{
+            "Id": "16ad5370-4f23-4508-be38-ed06a345aec0",
+            "OutputDescription": "X",
+            "Description": "FJ212CE_VVXN470_09470/044_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "X"
+          },{
+            "Id": "bd51957d-b050-45a9-a362-654152f77063",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN471_09470/044_De Bijenkorf",
+            "Type": "VVXNUMERIC",
+            "Output": "10"
+          },{
+            "Id": "10cfd1db-9986-4cd5-8bd7-4fcc65d8df8d",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN472_09470/044_Waterlooplein",
+            "Type": "VVXNUMERIC",
+            "Output": "75"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c13b2837-24da-4817-90de-97f5154d6210",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.84348,
+        52.3368
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A0401 - A0401_A004-0,180-Li-1_P+R S108",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "2e165220-6728-46dd-86fe-e211a80e8dcf",
+            "OutputDescription": "VRIJ",
+            "Description": "A0401_VVX_P+R S108",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "a30d7766-01e5-4d25-a1ab-6bc27abe0dbb",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.498529,
+        52.414942
+      ]
+    },
+      "properties": {
+        "Name": "Nog niet geplaatst FJ212ZD107_KW_04739/68 Europaboulevard-Pr.Kennedylaan",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "3be19d9e-7dd0-454b-bc7a-54b7d73fd9ad",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZD-B107_KW_04739/68_Milieuzone",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "a62723ae-c1a2-4cf1-bc91-0bdeda3581f5",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.885148,
+        52.360874
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_10638/005_Stadhouderskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "6aa47e87-0091-4ca6-92ce-5110aff32ff7",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN509_10638/005_Heinekenplein",
+            "Type": "VVXNUMERIC",
+            "Output": "119"
+          },{
+            "Id": "38dd2cbc-8f3d-40e6-8d1f-8ac30d34d54f",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN510_10638/005_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "867"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "718bd20d-2ab3-4384-9c94-5149a3a97465",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.439275,
+        52.387478
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_00783/012_Nassauplein Haarlemmerweg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "b24eb0d6-35d0-4ae1-9ea7-b0f3d8b92857",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN208_00783/012 Willemspoort",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "08371a02-a8c3-4689-8313-217cbf771113",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN209_00783/012 Jordaan",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "490b553f-c42b-4a23-ab49-ba6ee64aa97d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9405,
+        52.3069
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B38 - ZO-B38 Holterbergweg 70219/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "dc3b0886-b4b4-40f7-b386-3827518c5d12",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B38_VVX_70219/002 P10",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "20510236-0ce3-42dc-b7d8-bd31ba8dcd3a",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.881305,
+        52.385556
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_00783/004_Spaarndammerstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "60bace2f-c0f4-4144-9d16-e90831d5e50f",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN201_00783/004_Jordaan",
+            "Type": "VVXNUMERIC",
+            "Output": "170"
+          },{
+            "Id": "7a7fd7e7-a649-46cd-984e-694caa237d22",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN202_00783/004_Willemspoort",
+            "Type": "VVXNUMERIC",
+            "Output": "18"
+          },{
+            "Id": "d4b9516b-4988-4ee4-81f1-4349a8755474",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN203_00783/004_Westergasfabriek",
+            "Type": "VVXNUMERIC",
+            "Output": "205"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "92eb9458-ce82-4609-9e41-c450243edb6d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.880914,
+        52.383513
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_00783/014_Nassauplein",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d39de34b-262e-4361-8c5a-d67c90ea865e",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN215_00783/014_Westergasfabriek",
+            "Type": "VVXNUMERIC",
+            "Output": "205"
+          },{
+            "Id": "49c66eb2-1c4a-4c82-98db-a2c24be42de4",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN216_00783/014_Willemspoort",
+            "Type": "VVXNUMERIC",
+            "Output": "18"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c5a80495-b9b4-4040-a568-1a1932280552",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.84272,
+        52.358
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1006 - A1006_A010_23,550-Re-1_P+R Bos en Lommer",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "0890a05c-042b-4a37-8670-126e33cd3a68",
+            "OutputDescription": "VRIJ",
+            "Description": "A1006_VVX_P+R Bos en Lommer",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c8bdeed5-a813-4b5a-b8af-5ed0532e3b5c",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.944,
+        52.3149
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B14 - ZO-B14 Burg. Stramanweg 02510/075",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "fdc83674-eabd-4e7f-8966-1f07bc2cd12b",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B14_VVX_02510/075 P18",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "bd1d78ea-5d41-45ae-9a92-d9963fb13794",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.84483,
+        52.3844
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1003 - A1003_A010-26,310-Re-1_P+R Sloterdijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "9900ab38-af3c-47b3-bef1-30c70c84d69a",
+            "OutputDescription": "X",
+            "Description": "A1003_VVX_P+R Sloterdijk",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "b8b3101c-9533-49be-bef8-163d5799c459",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.456347,
+        52.421669
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_71953/004_Hobbemakade thv brandweerbrug",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "70567122-32d6-43c4-bf66-32317f504999",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN663_71953/004_Albert Cuyp",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "ab5101d5-28db-4489-8829-56cb455af238",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.85751,
+        52.33269
+      ]
+    },
+      "properties": {
+        "Name": "FJ212ZD102 - ZD-102 Amstelveenseweg 68994/002abc",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "af0c6dfe-4135-456f-b472-0e1ce8716df3",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B102_VVX_68994/002a P2 VUmc",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "59905c92-68b3-4d7a-8ab6-5c9eb8ce3f6e",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B102_VVX_68994/002b P3VU campus",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "6a59caa7-fc80-4ceb-ac0c-856bbabc466f",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B102_VVX_68994/002c P1 VUmc",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f69a6dea-f127-46fb-a677-9fe28b86caa1",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.887557,
+        52.359859
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_10638/001_Stadhouderskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "fe2d4eea-5fd9-4756-8155-5930d4be5922",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN502_10638/001_Byzantium",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          },{
+            "Id": "18460f44-c51c-47a2-afe4-a96a06f4aa40",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN503_10638/001_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "850"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "3c263745-245d-4e74-860d-49b2f9d8d3df",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93273,
+        52.31074
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B10 - ZO-B10 Burg.Stramanweg 02510/052",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "e7142693-5c47-4a31-a4ab-e99a592a02bc",
+            "OutputDescription": "P2 t/m P14",
+            "Description": "ZO-B10_KW_02510/052",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "485b4755-a391-4898-b116-3d3e4678ebb9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.858,
+        52.33597
+      ]
+    },
+      "properties": {
+        "Name": "FJ212ZD103 - ZD-103/104 Amstelveenseweg 11670/015abc",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "warning",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "32f9648b-4c1a-49b1-8eea-ece68b8f192b",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B103_VVX_11670/015a P2 VUmc ",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "a25ea766-c895-47b6-b01e-a4bcdce3e124",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B103_VVX_11670/015b P3 VU campus ",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "6256609e-60d2-4ae6-82df-8282c367d561",
+            "OutputDescription": "P+R VUmc",
+            "Description": "ZD-B104_KW_11670/015 P2",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "6f6ad756-dfed-4046-ad1c-ddb913a01afd",
+            "OutputDescription": "VU campus",
+            "Description": "ZD-B104_KW_11670/015 P3",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 1"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f28ffcf1-fb1b-4702-b310-684641ca4143",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9396,
+        52.3086
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B19 - ZO-B19 Hoogoorddreef 10662/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "4bdca7e5-3a3d-4d08-8c77-45d23dc1dd12",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B19_KW_10662/002a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "c220a04d-ab5f-4935-be67-e5dc9cae25ba",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B19_KW_10662/002b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "7da1849a-0dea-476a-9cb0-4be9822b6b30",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B19_KW_10662/002c",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "93027037-157d-4c5a-a465-67c23d3ecea1",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B19_KW_10662/002d",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8717b181-2b85-4ddb-95c0-bbee0e3fd266",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9537,
+        52.3162
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B44 - ZO-B44 Bijlmerdreef 70224/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f8f8b8a4-79ab-4a11-9859-eaa454696a3c",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B44_VVX_70224/001 P23",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "9c4f4dd1-5810-46ab-ad6e-b5d077af273d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.86074,
+        52.33741
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1013 - A1013_A010-19,850c-Li-1_P+R S108",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "warning",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "12e29b67-8a0f-47ad-b9fe-f8a76072bedc",
+            "OutputDescription": "VRIJ",
+            "Description": "A1013_VVX_P Olympisch Stadion",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "73ce3da1-5ab1-448c-9d73-bc218992ae77",
+            "OutputDescription": "VRIJ",
+            "Description": "A1013_VVX_P VUmc",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "2cd64deb-797a-48d1-92c4-36769bbe3179",
+            "OutputDescription": "VRIJ",
+            "Description": "A1013_VVX_P+R Olympisch Stadion",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "af7f03ad-ffc6-4322-983f-ca46f22c7bf8",
+            "OutputDescription": "VRIJ",
+            "Description": "A1013_VVX_P+R VUmc",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "5f4c3e9a-3cee-46d7-afec-30d1950de15a",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.863862,
+        52.385113
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CI88 - CE188_Haarlemmerweg 69982-002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "e77a892f-8d03-4fda-adbf-39225b552ad1",
+            "OutputDescription": "VRIJ",
+            "Description": "CE188_VVX_Haarlemmerweg 69982-002_P Westerpark",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "6aecb396-465e-4611-8e3e-9675f440d508",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.90261,
+        52.36759
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09470/008_Waterlooplein",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1335c709-964a-443d-84a9-86a07cdfd99a",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN446_09470/008_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "650"
+          },{
+            "Id": "94eadf40-6c25-41fa-9a6a-12a35cf4473e",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN447_09470/008_Stadhuis",
+            "Type": "VVXNUMERIC",
+            "Output": "160"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "97bfb14f-e1ce-4c00-a7a4-16db8deaa890",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.346459,
+        52.31992
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_71554/001_De Ruijterkade thv Oosterdokskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "335131ff-917f-4023-81f9-b400f8d298d6",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN628_71554/001_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "550"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "463a2ffc-4f8a-40eb-a8b0-c97533036518",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.418633,
+        52.347276
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03399/001_Stadhouderskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "warning",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "6c6dc16b-b360-4fe7-8029-5a620d85c4cc",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN292_03399/001_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "748"
+          },{
+            "Id": "db819b42-9042-4f98-aa4f-33fcf912d041",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN293_03399/001_Heinekenplein",
+            "Type": "VVXNUMERIC",
+            "Output": "119"
+          },{
+            "Id": "dd65beff-e2e2-42fd-97a8-4bedb458f7f1",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN294_03399/001_Muntplein",
+            "Type": "VVXNUMERIC",
+            "Output": "86"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "ceb115eb-5b43-4910-a553-1a21a45ecc94",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.877404,
+        52.34069
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-ZU-FP04-Z Beethovenstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "46a46ff7-48c9-452d-9fb1-1d4c65101955",
+            "OutputDescription": "",
+            "Description": "FP35_VVXN_Strawinskylaan",
+            "Type": "VVXNUMERIC",
+            "Output": "1350"
+          },{
+            "Id": "b229101c-7a68-4c18-a173-cf36598eb6e4",
+            "OutputDescription": "X",
+            "Description": "FP36_VVXN_Zuidplein",
+            "Type": "VVXNUMERIC",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "1d675e00-dbc7-4b8e-9eb7-4aa00ebee172",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.459028,
+        52.426111
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_71954/003_Overtoom - 2de Constantijn Huygenstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "fed3c154-570c-4632-ac8d-023100e5b6ce",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN670_71954/003_Byzantium",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "dbdac2be-97c6-4ac1-8670-e89f7c2dce28",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN671_71954/003_Heinekenplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "9f3709f0-c032-41c9-9a62-b358aa05061c",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN672_71954/003_Albert Cuyp",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "cc488968-13a3-42c2-9547-58f087409976",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN673_71954/003_Museumplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "35514448-58b4-48ba-b87b-01011c6a7898",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN674_71954/003_Museumplein (bus)",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "504f0cf2-e59b-44ac-9024-411830cd0d69",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.94419,
+        52.309964
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B28 - ZO-B28 Hoogoorddreef 14047/009",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "8275f3ba-6376-43d6-b8b3-196f0be4fee7",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B28_VVX_14047/009 P6",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "3c1dc869-a506-4ae9-bae5-895299fe7f5f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.41727,
+        52.343385
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03399/012_Stadhouderskade ",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "762c2574-9024-40e6-ab2b-5db7015066d3",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN306_03399/012_Heinekenplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "7b36bc88-a8b1-4674-9d01-7f5806bd12ca",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN307_03399/012_Byzantium",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "0ab68dc5-8fb5-4ab1-89c3-c269042612a3",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN308_03399/012_AlbertCuyp",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "91dbf528-9dc1-444b-a67e-4f8305e5960e",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN309_03399/012_Museumplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "891e29b0-4f42-4066-927c-078b3cc3c2e5",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN310_03399/012_Museumplein bussen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "39a81131-d5d1-4039-9519-8b05e841643e",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.8433,
+        52.39021
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1005 - A1005_A010-26,950-Li-1_P+R Bos en Lommer",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "6a2fbcd7-6d00-40d0-a6d8-9308c9f23b78",
+            "OutputDescription": "GEDOOFD",
+            "Description": "A1005_VVX_P+R Bos en Lommer",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c72399ef-5b75-4cfc-a85b-5c842b4112d8",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.430724,
+        52.361988
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_05397/007_Nassaukade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f08661c4-3812-40f8-ac82-74963fd05b71",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN369_05397/007_Jordaan",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "3a101236-2795-4ce8-9c1a-9cd77ab7ef6e",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN370_05397/007_Europarking",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "7d98c2fc-bbc9-4195-a815-83c6fe986993",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.407995,
+        52.393261
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_73751/002_Prins Hendrikkade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d6447020-1aa7-4290-9d62-ac441287a072",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN677_73751/002_Markenhoven",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "5109bc12-a8b3-4488-b09d-9734fb7c880d",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN678_73751/002_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "b53a87f6-b2e5-4469-8de9-77156f40d350",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.88884,
+        52.358534
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03399/002_Stadhouderskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "01b86001-2b38-4cb0-afef-8cb63227d416",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN299_03399/002_Muntplein",
+            "Type": "VVXNUMERIC",
+            "Output": "86"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "a55dc684-dba2-49f1-adb7-e7c4c7ec01f1",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.962141,
+        52.310678
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B39 - ZO-B39 Karspeldreef 70220/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "2729f6cd-5522-4bc4-bb06-b08ab69d4ccc",
+            "OutputDescription": "P-ring Arena Poort",
+            "Description": "ZO-B39_KW_70220/002a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "37a00ad2-b204-4fa1-b99b-55209fd42786",
+            "OutputDescription": "P1, P18 t/m P28",
+            "Description": "ZO-B39_KW_70220/002b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c5a6d5a0-fcfc-4aaa-a16d-b8489a032b6a",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9385,
+        52.3092
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B20 - ZO-B20 Holterbergweg 10662/005",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "35eca718-2ad0-4644-8836-b25392d6f409",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B20_KW_10662/005",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "4481ebcc-2557-4290-8e8c-dbc16b92cdd5",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9413,
+        52.3088
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B24 - ZO-B24 Hoogoorddreef 14047/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "0418a089-8e3f-4404-91e1-d14fc4cad15c",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B24_VVX_14047/001 P10",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "e0ca7838-439f-425a-883f-0544b0e6caab",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.95515,
+        52.31598
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B48 - ZO-B48 Flierbosdreef 70225/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "6d80ec3c-5084-4aa4-a918-1efbe71b502f",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B48_VVX_70225/001 P24",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "3f873965-7e19-4e42-a90f-4228165712de",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.94464,
+        52.30325
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B36 - ZO-B36 Holterbergweg 67909/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "487c161b-5dcb-4f4b-81d7-792ea187507b",
+            "OutputDescription": "P12 t/m P28",
+            "Description": "ZO-B36_KW_67909/001a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "c7eadb72-a1c7-4a5b-b45a-7a2adbf98278",
+            "OutputDescription": "P-ring Arena Poort",
+            "Description": "ZO-B36_KW_67909/001b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "3e1b2970-baae-4a3f-90d9-77354724d3a8",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.453751,
+        52.41724
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_71953/003_Hobbemakade thv brandweerbrug",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "036e6c8d-59bd-41a6-acdd-c529d7a320bd",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN656_71953/003_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "87010aa3-2c1c-4597-aa06-0aad6540ffb8",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN657_71953/003_Albert Cuyp",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "4d66f378-5f79-498e-b3a0-a62b8f5c09e7",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.87783,
+        52.33631
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-ZU-FP06-ZO Beethovenstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "e57040d3-0af8-4855-b1b6-378f114b7f28",
+            "OutputDescription": "",
+            "Description": "FP29_VVXN_Strawinskylaan",
+            "Type": "VVXNUMERIC",
+            "Output": "1350"
+          },{
+            "Id": "b3820323-dd04-4d6a-9325-406d9bccecb6",
+            "OutputDescription": "X",
+            "Description": "FP30_VVXN_Zuidplein",
+            "Type": "VVXNUMERIC",
+            "Output": "X"
+          },{
+            "Id": "aaa6af5d-fda0-450f-b59d-15416b8a7f1f",
+            "OutputDescription": "",
+            "Description": "FP31_VVXN_Mahlerplein",
+            "Type": "VVXNUMERIC",
+            "Output": "1950"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "53b46fba-f397-4504-b4f6-34da28cb0b34",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9393,
+        52.3099
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B22 - ZO-B22 Holterbergweg 13178/011",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "433f5e37-4964-4b79-a842-f7ddca7b93e1",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B22_VVX_13178/011a P3",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "f82cc03d-1910-488e-be19-cb6269507854",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B22_VVX_13178/011b P4",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "a6dd4d97-899e-4db1-bd5f-9e963f5b7ba5",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B22_VVX_13178/011c P5",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "b354d9c8-8704-47cd-8559-972a9bc39a7a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B22_VVX_13178/011d P6",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "0859fedc-1f5d-471d-b312-03e03bfaea9d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93926,
+        52.3092
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B21 - ZO-B21 Holterbergweg 10662/006",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "47f88c28-6b36-47b4-bf98-1716f0d6c0c6",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B21_KW_10662/006a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "b8cbf4e4-4436-4ed4-8792-470aa16ae89c",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B21_KW_10662/006b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "69699f9c-1f42-4edc-8771-98e662d91563",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.95149,
+        52.3154
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B41 - ZO-B41 Bijlmerdreef 70223/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "8d999a4c-a109-4256-8558-26d0feedde05",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B41_VVX_70223/001 P22",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f5ed2d3d-75dd-48d6-a172-6cc8f46c2de2",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9308,
+        52.31831
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B31 - ZO-B31 Holterbergweg 16942/007",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d8db22b3-be0d-4945-a1e7-b8f65a1ea6fe",
+            "OutputDescription": "GEDOOFD",
+            "Description": "ZO-B31_VVX_16942/007 P2",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "ebb7a818-5c2a-414e-8819-3cb91ecf4245",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.448724,
+        52.408381
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_08545/005_Hobbemakade thv Gerard ter Borgstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "03ff0c64-fd6a-4dd2-8763-12e1d65f427a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN383_08545/005_Albert Cuyp",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "1f8f831c-ef58-4ffb-9457-e7fc37aac464",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN384_08545/005_Museumplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "2b5a8612-d24b-4b20-878a-7e9d6cf0ea81",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN385_08545/005_Byzantium",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "192183a3-8779-46b3-89c2-9964945007ca",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN386_08545/005_Heinekenplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "f29e3511-f2f0-4d2d-8706-5c7abef970a6",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN387_08545/005_Museumplein bussen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "c4b0781f-f94f-462a-8049-1a5601e802f5",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.868109,
+        52.341033
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-ZU-FP02-N Parnassusweg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "986f1c7e-9d47-4262-b8b4-ff906f7318ad",
+            "OutputDescription": "",
+            "Description": "FP23_VVXN_Mahlerplein",
+            "Type": "VVXNUMERIC",
+            "Output": "1950"
+          },{
+            "Id": "6272f06d-e8d9-4463-b1c6-5b5a2bb0a7d0",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP24_VVXN_Zuidplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "5ecb8bd1-7883-45eb-ab15-5484edcb57e8",
+            "OutputDescription": "",
+            "Description": "FP25_VVXN_Strawinskylaan",
+            "Type": "VVXNUMERIC",
+            "Output": "1350"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f3d9035a-aac8-47c0-9dfd-f45867747f4c",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.446738,
+        52.40475
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_08545/001_Hobbemakade thv Roelof Hartstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "a30c1c5f-6344-4ffb-acee-03f53a7c2acb",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN377_08545/001_Albert Cuyp",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "d5bda7c1-19e8-4138-91a2-440f520052fb",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN378_08545/001_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "d0b7ef5f-f9d9-44dc-9952-d7cde2a8702d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.92033576575637,
+        52.3765552194491
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_64454/017_Piet Heinkade - ingang PTA",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "40b22ac6-2a99-4186-950d-0e7bc8fabbd7",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN593_64454/017_Oosterl_havengeb.",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          },{
+            "Id": "1e40dada-9791-4baf-bbb2-5c0e77cbf0a5",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN594_64454/017_IJ-oever_centrum",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "a0925abe-9987-433b-b667-f72684960a37",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.89161798000215,
+        52.3614290263806
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_74869/001_Nieuwe Vijzelstraat thv Noorderstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "cd9d75af-60ba-4df6-9c60-0166f78b2890",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN712_74869/001_Kalverstraat 30KM",
+            "Type": "VVXNUMERIC",
+            "Output": "40"
+          },{
+            "Id": "9597050d-9889-4bc8-94e7-4f5f21779379",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN713_74869/001_Prins & Keizer 30KM",
+            "Type": "VVXNUMERIC",
+            "Output": "38"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "e201c910-58c3-4d0f-b7f0-f62ae1c31faa",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.469069,
+        52.37021
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-CE-FP06-W Paleisstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f08a7315-4266-4685-8a05-aa4e5bb59138",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP63_VVXN_Nes",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "0200399d-27cc-482f-b906-f33186490269",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP64_VVXN_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "ea91109e-ae1f-43d2-b34b-1b301aa85afc",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP65_VVXN_Beursplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "e195d239-bb25-459d-a80d-182596cdc2a9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93061,
+        52.3103
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B06 - ZO-B06/07 Burg.Stramanweg 02510/048",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "e08266a8-8a56-41b8-9da2-ff4ab58c79ba",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ462B06 - 02510/948 VVX P+R/P1 ArenA",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "27550be6-1f26-4189-a24e-cb532f6f6f58",
+            "OutputDescription": "P-ring Arena Poort",
+            "Description": "ZO-B07_KW_02510/048b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "309033bf-a36f-4d74-9cfa-8a91fb3aebab",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.79,
+        52.394
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A0501 - A0501_A005-14,220-Re-1_ P+R Sloterdijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "afcd4ceb-8298-4089-b297-f0ff15a7854e",
+            "OutputDescription": "X",
+            "Description": "A0501_VVX_P+R Sloterdijk",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "f0fe1003-48a1-4bf8-9b08-d795907489e7",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.958756,
+        52.317853
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B47 - ZO-B47 Bijlmerdreef 70224/005",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "72d25f29-9c23-4a0d-bbc5-dbb423fd12fc",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B47_VVX_70224/005 P23",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "17bad249-9219-4926-aba2-7206d5c8b47d",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.345012,
+        52.317124
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_71554/002_De Ruijterkade thv Oosterdokskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f932f032-7e01-4dd4-8849-5d6b6a6b66bc",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN635_71554/002_CentraalStation",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "b50ac0a3-2f8c-42f9-9213-5bb0b3d69d31",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN636_71554/002_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "30b7cb9c-208a-4369-b8df-51c8bb6d93ed",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.901278,
+        52.366565
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09011/013_Blauwbrug Amstelstraat Amstel",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "9d5038c9-c37c-43f3-a460-d80409617f96",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN390_09011/013_Rembrandtplein",
+            "Type": "VVXNUMERIC",
+            "Output": "170"
+          },{
+            "Id": "bee3b5f1-91e8-4afe-8d53-ef3b6cd62626",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN391_09011/013_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "650"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "16b1d08f-6295-40ef-94e8-e51a7e364ed0",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.877349,
+        52.366518
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_01627/012_Nassaukade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "77a08295-7463-4c13-b41e-b0551214aa93",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN257_01627/012_Europarking",
+            "Type": "VVXNUMERIC",
+            "Output": "152"
+          },{
+            "Id": "461d0948-7dcf-4953-be2b-0cca91d8ef60",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN258_01627/012_Willemspoort (Singelgrt)",
+            "Type": "VVXNUMERIC",
+            "Output": "15"
+          },{
+            "Id": "6ced8d55-93b1-49a2-8b70-1065b44a3039",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN259_01627/012_Blindplaat (Willemsport)",
+            "Type": "VVXNUMERIC",
+            "Output": "18"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "927207a8-4fd8-4b2b-aeb0-e4b2a2793f3b",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.890305,
+        52.355321
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-DP-FP01-N F.Bolstraat-G.Douwstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "c278357a-b403-4140-a954-7fcabb5ed3fe",
+            "OutputDescription": "VRIJ",
+            "Description": "FP10_VVXN_Ceintuurbaan",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          },{
+            "Id": "40af88b5-f114-4570-9a46-46673eac1bda",
+            "OutputDescription": "VRIJ",
+            "Description": "FP11_VVXN_Ferdinand Bolstraat",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8d2c42f3-adb5-40f7-96a5-5fbb4ce8556f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.955872,
+        52.31399
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B54 - ZO-B54 Hoogoorddreef 70227/003",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "85651f2e-6222-4e30-aab7-6ce4f27613a1",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B54_VVX_70227/003 P24a",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "09a3e31d-f884-43bb-8f79-080a3073c994",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.8445,
+        52.39871
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1004 - A1004_A010-27,935-Li-1_P+R Sloterdijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "15cb74f5-c524-4a51-9745-7eb242370d6b",
+            "OutputDescription": "GEDOOFD",
+            "Description": "A1004_VVX_P+R Sloterdijk",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "cee5e7e5-ab28-43a7-b732-5b87be166585",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.94318,
+        52.3094
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B25 - ZO-B25 Hoogoorddreef 14047/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "3cdd137a-9014-4eb5-8fa5-51bb165ef5cf",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B25_VVX_14047/002 P6",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "326dd893-fab4-47cd-9e73-afc2c7b33c78",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.911543,
+        52.384841
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09428/001_Nieuwe Leeuwarderweg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "3135cfc6-24de-4a4e-9cb2-4d085ae7fbcd",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN397_09428/001_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "650"
+          },{
+            "Id": "7f83974d-b9d0-433a-865c-9218103809b0",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN398_09428/001_CentraalStation",
+            "Type": "VVXNUMERIC",
+            "Output": "950"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "2e3af61e-466f-4248-8154-0281a6852dca",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.868999,
+        52.336376
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-ZU-FP05-Z Parnassusweg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "5d4b3d17-4cde-4349-a021-7b29ac69b37d",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP26_VVXN_Strawinskylaan",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "fd0a619f-a210-4d6a-aab4-f8588b7d2ad0",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP27_VVXN_Zuidplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "401a2787-63ec-4761-81a8-5ba9ee03df74",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP28_VVXN_Mahlerplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "fdf6bc19-2c18-4d6e-9bbe-807cee52e3e9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.85696,
+        52.34405
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A95 - A95/ZD106_Amstelveenseweg 05399/006",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "2255561c-72b1-4957-8d12-e56a090c3db7",
+            "OutputDescription": "LINKS",
+            "Description": "A95_PIJL_ P+R Olympisch stadion (Pijl)",
+            "Type": "ARROW",
+            "Output": "LINKS"
+          },{
+            "Id": "e0551578-1cc4-4439-91b8-22a0fd2d3c73",
+            "OutputDescription": "VRIJ",
+            "Description": "A95_VVX_P+R Olympisch stadion",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "58fb9f48-3164-4031-8322-f57ded9dc0df",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B106_VVX_05399/006 Olympisch Stadion",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "ce241087-c2e0-47da-856b-29d4b90fc06a",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.96633,
+        52.35629
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1002 - A1002_A010-10,900-Li-1_P+R Zeeburg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "a913e184-adf0-4fd2-b14b-30da44828f55",
+            "OutputDescription": "VRIJ",
+            "Description": "A1002_VVX_P+R Zeeburg",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "77b72082-f9ba-4490-8144-49e3f757e7b4",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.420694,
+        52.412906
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09470/038_Mr. Visserplein",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "warning",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "5a4b4093-2067-4ee2-8393-2d47c441b6de",
+            "OutputDescription": "VRIJ",
+            "Description": "FJ212CE_VVXN460_09470/038_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          },{
+            "Id": "03a5001f-c702-45ee-affe-1c12ca9f187a",
+            "OutputDescription": "VRIJ",
+            "Description": "FJ212CE_VVXN461_09470/038_Muntplein",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          },{
+            "Id": "01722247-a235-456b-a2c1-590eab6a6095",
+            "OutputDescription": "VRIJ",
+            "Description": "FJ212CE_VVXN462_09470/038_Burgwallen(groep)",
+            "Type": "VVXNUMERIC",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "0b0f7f32-27f7-4bbc-b9cd-0fef023cf493",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.938,
+        52.311
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B11 - ZO-B11 Holterbergweg 02510/056",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "89b3dd66-23f1-405e-a6c9-8e057f1fe79c",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ462B11 - 02510/956 VVX P2 (Evenemententerrein)",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "01696d61-39df-4c2d-8c66-7e245b2c0a1b",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.94656,
+        52.316176
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B52 - ZO-B52 Stramanweg 02510/026",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "ecdf508b-2915-4278-86d0-783c4be6dd16",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B52_VVX_02510/026 P18",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "12a03a5b-498d-48cc-9cd8-2c277b495476",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.917,
+        52.376786
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_64454/015_Piet Heinkade - ingang PTA",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "255357f6-81e5-4a04-b726-118671e51045",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN579_64454/015_IJ-oever_centrum",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "cf4f81ef-3f5f-4aad-840e-e17f58988f17",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.879972,
+        52.356429
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_15249/006_Van Baerlestraat thv inrit P Museumplein",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "c9a055eb-294d-4f5c-b454-c42ce6cc3283",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN516_15249/006_Museumkwartier",
+            "Type": "VVXNUMERIC",
+            "Output": "850"
+          },{
+            "Id": "4a39efc3-ab38-47d6-93d5-35d09759edee",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN517_15249/006_Museumplein",
+            "Type": "VVXNUMERIC",
+            "Output": "330"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "6d733275-0b53-4f8a-a344-28699eb20536",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.89487,
+        52.37416
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_68464/004_Damrak, Beursplein ",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "84034143-f801-4be7-a4d9-6600e1033291",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN621_ 68464/004_Bijenkorf",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "2a629dc0-3e1c-4b9d-8c95-89069eb3193a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN622_ 68464/004_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "ad6f325b-d25b-484e-8ac5-491381279c81",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.405282,
+        52.323409
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_64454/009_Piet Heinkade - ingang PTA ",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1f7b58a8-fc98-4e39-8dfb-affb5232cb7e",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN572_64454/009_Oosterl_havengeb.",
+            "Type": "VVXNUMERIC",
+            "Output": "225"
+          },{
+            "Id": "dd968cf3-4e58-462c-b5fa-9bc61b99597f",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN573_64454/009_Piet Hein",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          },{
+            "Id": "bfc06352-cf79-4040-9346-72d0f9b01b0e",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN574_64454/009_TTA",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "e9a13d71-10cf-435e-86da-21189fe35a25",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.874438,
+        52.372751
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_01627/002_Nassaukade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "602166a8-fa15-492c-a82a-ba729a83c648",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN243_01627/002_Europarking",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "57b162c5-911e-45d1-8830-f3b1ae2b25c2",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.469198,
+        52.373215
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-CE-FP05-O Damstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "30a4dc8e-aa74-4c5b-ab64-2013cce247c4",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP60_VVXN_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "78a506b9-3141-4915-ab06-85949495f638",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP61_VVXN_Nes",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "a849dc9c-8168-4e39-8219-a4c426ea39ea",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP62_VVXN_Beursplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8581d53f-4b7f-4739-9594-2f43751077ed",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.892134,
+        52.341662
+      ]
+    },
+      "properties": {
+        "Name": "FJ212ZD108_KW_04739/69/72 Europaboulevard-Europaplein",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "a11f9542-6c56-4e85-ac08-9a8e88d1d6c7",
+            "OutputDescription": "Normaalstand",
+            "Description": "ZD-B108_KW_04739/69_Milieuzone",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "5a6b442b-aa67-4de6-8dc8-5e508d4834bc",
+            "OutputDescription": "Normaalstand",
+            "Description": "ZD-B108_KW_04739/72_Milieuzone",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "409fb4fc-da52-46ea-b507-76117145a89c",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.360665,
+        52.336218
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_64454/021_Piet Heinkade - ingang PTA",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "3c386c08-ebab-4b05-8bca-2ee16686dcfc",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN607_64454/021_IJ-oever_centrum",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "7fcd76e4-5645-4dae-afdf-27a0020d4ede",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN608_64454/021_Piet Hein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "32db3722-a314-4825-b041-191d7b9d27ff",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN609_64454/021_TTA",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "62e41dfd-04c1-439c-9aa5-5b3845a0c876",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.960072,
+        52.397733
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1016 - A1016_A010-6,000-Li-1_P+R Noord",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "868b1b42-8bb8-431e-9adb-e32d8a0c0168",
+            "OutputDescription": "VRIJ",
+            "Description": "A1016_VVX_P+R Noord",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "0ba3dc2c-a861-4bdb-94b1-2a9630e7d151",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9726,
+        52.38127
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1001 - A1001_A010-8,040-Re-1_P+R Zeeburg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "ede449d6-4a74-4b54-9ead-7404ab1686f5",
+            "OutputDescription": "VRIJ",
+            "Description": "A1001_VVX_P+R Zeeburg",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "9712c91c-089e-45ae-89f9-c06722385063",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9559,
+        52.3152
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B51 - ZO-B51 Flierbosdreef 70226/003",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f91f92b9-d717-4786-ac84-38b25c726f0e",
+            "OutputDescription": "P-ring Arena Poort",
+            "Description": "ZO-B51_KW_70226/003a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "cd4f883d-3f3a-4fc2-8597-854631495b2e",
+            "OutputDescription": "P13, P14",
+            "Description": "ZO-B51_KW_70226/003b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "559a4d14-c198-461b-a763-7da8efbf3558",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93093,
+        52.30987
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B08 - ZO-B08 Burg.Stramanweg 02510/049",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1d6cb3ac-bc2e-41f1-985e-3ed9c5683bf8",
+            "OutputDescription": "P2 t/m P14",
+            "Description": "ZO-B08_KW_02510/049",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "8dfcd499-e1a0-421c-b2d7-29a2703f60e8",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9489,
+        52.3186
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B01 - ZO-B01 Dolingadreef 01250/004",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "8a445018-8183-4941-9990-b0e34012e9af",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B01_KW_01250/004a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "c04f1f13-5119-4dba-9aeb-a953bd51c64c",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B01_KW_01250/004b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "3111ea0d-4714-4f56-b4b0-0f0a062b058c",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.95642,
+        52.31673
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B46 - ZO-B46 Bijlmerdreef 70224/003",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "5cd59405-6f50-4f01-8af1-e30f3234ee59",
+            "OutputDescription": "P1, P18 t/m P22",
+            "Description": "ZO-B46_KW_70224/003a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "bc6d8f6f-20b2-4b1c-b558-6d56b6c0ca75",
+            "OutputDescription": "P-ring Arena Poort",
+            "Description": "ZO-B46_KW_70224/003b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "cc78ffd9-e279-437f-b71b-852781f7a845",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.42493,
+        52.419848
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09470/034_Weesperstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "65841ff8-e2f5-41c0-882a-4d9b1095b501",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN453_09470/034_Markenhoven",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "93f54dcf-09f6-4bfa-b107-54d074690678",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN454_09470/034_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "70a3793c-90b5-4731-ac15-d2655b210a0f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.857,
+        52.33597
+      ]
+    },
+      "properties": {
+        "Name": "FJ212ZD105 - ZD-105 Amstelveenseweg 11670-003",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "bf3a0d4b-6637-4fe8-a750-2b0194836e73",
+            "OutputDescription": "VRIJ",
+            "Description": "ZD-B105_VVX_11670/003 P1 VUmc ",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "eff12abc-d4f0-4333-bec4-7995b67e2170",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.881551,
+        52.361874
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03277/005_Stadhouderskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "4ad738de-d093-4bda-b4b0-2897126287d0",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN278_03277/005_Byzantium",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "20f4a66d-9e4c-47fa-af0b-ed1033a19879",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.911142,
+        52.371832
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09471/005&006_IJtunneltraverse",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "2b7acc94-f585-43fd-ad3d-82f7d860befe",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN474_09471/005_Markenhoven",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "a5250066-b605-4fe9-99a7-4471e0bd2236",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN481_09471/006_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "dd3aae0a-6774-46f4-98aa-c1f655f42de9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.87856,
+        52.3396
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1011 - A1011_A010-18,720-Re-1_P+R S108",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f9cf612d-b73f-475d-8681-29483e7bb641",
+            "OutputDescription": "X",
+            "Description": "A1011_VVX_P+R S108",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "5f28814c-2f4d-4a13-bede-cf785285316f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93599,
+        52.35052
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE103 - CE103_Linnaeusstraat 04758/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "447e52d9-7388-4c80-9d5c-2b8748237f4b",
+            "OutputDescription": "VRIJ",
+            "Description": "CE103_VVX_P Oostpoort",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "4b111b6f-b213-4b43-8064-93470a70c0e9",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93739,
+        52.3132
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B08 - ZO-B15/16 Bug.Stramanweg 02510/077",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "9491bbe9-81ce-46f4-8565-77c7f2901d7d",
+            "OutputDescription": "Leeg",
+            "Description": "ZO-B15_TKST_02510/077a",
+            "Type": "TEXT",
+            "Output": ""
+          },{
+            "Id": "52223e0d-aca1-4be6-8ade-8d1fcfccc725",
+            "OutputDescription": "2 stroken rechtdoor",
+            "Description": "ZO-B16_KW_02510/077b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "50a4d0f2-51b7-4ea1-b8fd-d96c32e259ed",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93452,
+        52.30226
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A0202 - A0202_A002-34,420-Li-1_P+R Arena",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "b70dc231-e7db-4d14-b985-1e46675db6ac",
+            "OutputDescription": "X",
+            "Description": "A0202_VVX_P+R ArenA",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "0ded8aca-209a-43bc-859d-f07128919aea",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.92126224835393,
+        52.3764330409811
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_64454/016_Piet Heinkade - ingang PTA",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "43e5eb81-42ed-446c-927b-c99cb8b23353",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN586_64454/016_ IJ-oever centrum",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "300b2d4b-6af1-414f-992e-8b3f75c58535",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN587_64454/016_Piet Hein",
+            "Type": "VVXNUMERIC",
+            "Output": "230"
+          },{
+            "Id": "cd2e49a6-9cbb-4161-9ec3-1991c3b89cb0",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN588_64454/016_TTA",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "7f86226d-8636-4ac2-8af6-24cfafc59ddc",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.94271,
+        52.3054
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B37 - ZO-B37 Holterbergweg 70219/001",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "67a6e2fc-db12-40ff-a7bd-42c637c8140e",
+            "OutputDescription": "VRIJ",
+            "Description": "FJ462B37 - 70219/901 VVX P10 (Plaza ArenA)",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "9880fd67-5811-4c8d-94ef-c525c0dff093",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.95504,
+        52.3136
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B55 - ZO-B55 Hoogoorddreef 70227/004",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "368a590b-abff-43c4-8e25-87dc117eb957",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B55_VVX_70227/004 P24a",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "feb19891-d3fb-4581-a6d1-06252fda2b9f",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.908676,
+        52.377812
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_71554/012_De Ruijterkade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "54bf2034-37a0-449b-9038-3bd9aab51abd",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN642_71554/012_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "550"
+          },{
+            "Id": "b2ac32bf-98e7-4dfa-8a80-c30c8aa01e0d",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN643_71554/012_IJdock",
+            "Type": "VVXNUMERIC",
+            "Output": "175"
+          },{
+            "Id": "8396e99f-c106-45f4-b3c8-7a92861ac951",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN644_71554/012_Centraal",
+            "Type": "VVXNUMERIC",
+            "Output": "275"
+          },{
+            "Id": "a349a4bf-25f8-4ab5-a967-62b785f45768",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN645_71554/012_Nieuwendijk",
+            "Type": "VVXNUMERIC",
+            "Output": "200"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "96203f24-feb6-44bf-b5bb-e0d1c71e43b5",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.96223,
+        52.37133
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B61 - CE_P+R Zeeburg 1+2 02182/005",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1b781722-0471-4e35-866a-7bcf2757399e",
+            "OutputDescription": "VRIJ",
+            "Description": "CE-P+R Zeeburg_VVX1",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "a6827784-ee59-4dc8-8b21-654975ba4c68",
+            "OutputDescription": "VRIJ",
+            "Description": "CE-P+R Zeeburg_VVX2",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "cd6971e8-4727-4dde-862d-2df41febb713",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.917858,
+        52.348486
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-AM-FP02-NO Pr. Bernhardplein",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f98d3a2e-0ba9-445d-b7b9-4ab00151bfba",
+            "OutputDescription": "",
+            "Description": "FP01_VVXN_Julianaplein",
+            "Type": "VVXNUMERIC",
+            "Output": "100"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "99d4bf39-cfb2-4065-93b2-01f8601e0016",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.433894,
+        52.404878
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_73752/002_Kattenburgerstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1ff97307-b51c-498e-912a-b7cd22169324",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN684_73752/002_Plantage",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "f7d681b5-48e6-4022-a11c-69d349ca3194",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN685_73752/002_Waterlooplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "76894621-29e8-4c12-94f9-704e072c87fe",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN686_73752/002_Stadhuis",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "12514a10-dfe1-4e49-8d6c-e53b9fe906ca",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN687_73752/002_Rembrandtplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "b9768aca-cfeb-470e-803a-cf27e5103d22",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN688_73752/002_Rokin",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "aa356400-cdf2-4260-804e-c184704babac",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN689_73752/002_De Bijenkorf",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "2e8618b6-ad88-46a1-b999-b0db48a6d76e",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.457854,
+        52.350251
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_60264/001&002_Piet Heintunnel",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "10704269-a474-4580-9088-d74ad5fc3b6a",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN523_60264/001_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "4717c647-affa-49fa-9bfc-1219f158de87",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN530_60264/002_CentraalStation",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "be3d2159-9b67-4f92-a8a4-0e14d81ee13b",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.895636,
+        52.379003
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03274/025_Prins Hendrikkade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "04f28e0b-8f1d-4e6b-bd11-4a8cd6b3155a",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN271_03274/025_Centraal",
+            "Type": "VVXNUMERIC",
+            "Output": "275"
+          },{
+            "Id": "946ba298-a65e-46de-8a32-c0be6a767276",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN272_03274/025_Nieuwendijk",
+            "Type": "VVXNUMERIC",
+            "Output": "200"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "516e3a40-8150-46b4-9250-ae6c2d86df52",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.9558,
+        52.3158
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B45 - ZO-B45 Flierbosdreef 70224/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1d555117-6c50-404d-986e-fb4dcb15ed85",
+            "OutputDescription": "VRIJ",
+            "Description": "ZO-B45_VVX_70224/002 P23",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "25aff2bf-b188-4b6d-924a-29e6d5666d49",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.89243550575858,
+        52.3578912792143
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03399/014_Stadhouderskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "c7016f8a-d8d4-4770-9d66-efff3d724aec",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN313_03399/014_Heinekenplein",
+            "Type": "VVXNUMERIC",
+            "Output": "119"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "dbb67859-2cfe-4656-a1b5-a51bd1ef809b",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.426749,
+        52.346152
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09428/005&006_IJtunnel zuidelijke uitgang",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d886bf6a-4aa4-4427-a572-94bf7f0e57d7",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN404_09428/005_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "d614893e-5d49-4a5a-bcc0-32508a735489",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN411_09428/006_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "2ca5f313-b37a-4d88-b9bf-939e6444c075",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.349378,
+        52.324523
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03477/003_De Ruijterkade thv Droogbak",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "75cac374-5821-4bcd-a263-149885870466",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN327_03477/003_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "8aa285a1-490d-4cec-9f4b-521559f37832",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ212CE_VVXN328_03477/003_CentraalStation",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "3e5de784-da2c-4c3b-9ea6-8bf5230c40be",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.90592,
+        52.36925
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_09470/006_Valkenburgerstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "89e8e7fe-5f8d-47e1-8f16-72750a305d54",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN439_09470/006_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "650"
+          },{
+            "Id": "18691564-9966-40d6-9241-7c80ece1e8b5",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN440_09470/006_Waterlooplein",
+            "Type": "VVXNUMERIC",
+            "Output": "75"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "b9e95857-6972-4ab8-9b3a-7ad527ff0ce3",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.935,
+        52.3134
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B04 - ZO-B03/04 Holterbergweg 02510/009",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "1240e58f-a86a-4698-a9d0-bc4a4b395deb",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FJ462B04 - 02510/709 VVX P+R/P1 ArenA",
+            "Type": "VVX",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "a4e7afc4-e686-4165-b94d-319a4ffb4da5",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B03_KW_02510/009a",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          },{
+            "Id": "fab929ad-01ca-4fad-97cb-a497fb5d774a",
+            "OutputDescription": "DEFAULT",
+            "Description": "ZO-B03_KW_02510/009b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "0fd67a39-4b97-4091-869e-58d87a9ba534",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93227,
+        52.31609
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B18 - ZO-B30 Holterbergweg 16942/002",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "6345461b-6c35-4b1d-8599-1fe622e19ff1",
+            "OutputDescription": "Leeg",
+            "Description": "ZO-B30_TKST_16942/002",
+            "Type": "TEXT",
+            "Output": ""
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "e3503941-68b1-43a2-9226-4957b8acf3b5",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.469754,
+        52.384071
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-CE-FP01-Z Rokin - Wijde Lombardssteeg",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "error",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "f79458c3-bfa0-4b90-9ff2-533b18bbfde9",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP50_VVXN_Beursplein",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          },{
+            "Id": "ae746133-7839-4b0b-bf56-c77c0e3e6136",
+            "OutputDescription": "GEDOOFD",
+            "Description": "FP51_VVXN_Nes",
+            "Type": "VVXNUMERIC",
+            "Output": "GEDOOFD"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "b2cfafa2-18fd-4f3e-94a3-771215b7d761",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.876605,
+        52.341522
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-ZU-FP03-N Beethovenstraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "e6f105c6-6509-411e-892a-dd4be48e6c8e",
+            "OutputDescription": "",
+            "Description": "FP32_VVXN_Mahlerplein",
+            "Type": "VVXNUMERIC",
+            "Output": "1950"
+          },{
+            "Id": "cddf5b81-a7ea-4d60-91a5-4b73dd3c8afe",
+            "OutputDescription": "X",
+            "Description": "FP33_VVXN_Zuidplein",
+            "Type": "VVXNUMERIC",
+            "Output": "X"
+          },{
+            "Id": "2336c4e6-b7f7-46ee-9dbf-78ec6ef995d7",
+            "OutputDescription": "",
+            "Description": "FP34_VVXN_Strawinskylaan",
+            "Type": "VVXNUMERIC",
+            "Output": "1350"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "e31058c5-da1e-44f0-9e54-f2062b5ba396",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.337728,
+        52.303635
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_03274/013_NieuweZijdsVoorburgwl thv Nieuwendijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "a55885ce-a285-47dd-8bbd-6d8b61a4b4f6",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN264_03274/013_Nieuwendijk",
+            "Type": "VVXNUMERIC",
+            "Output": "200"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "cd4601ae-667e-40ad-861f-dc51b12b0a6b",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.917,
+        52.31805
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A0201 - A0201_A002-32,300-Re-1_P+R Arena",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "27bf7c05-83f2-4877-83ff-27aa2139f694",
+            "OutputDescription": "X",
+            "Description": "A0201_VVX_P+R Arena",
+            "Type": "VVX",
+            "Output": "X"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "fc47fd55-852b-4e0a-8eb4-16d5ca02765b",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.89160649053432,
+        52.3887426144119
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_73905/004_Westerdoksdijk",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "5b37a258-3ea2-4318-a09b-6b74c4bd0ff7",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN705_73905/004_IJdock",
+            "Type": "VVXNUMERIC",
+            "Output": "175"
+          },{
+            "Id": "dc1d4cf4-ea4e-4677-9e40-e7218cd04bdc",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN706_73905/004_Oosterdok",
+            "Type": "VVXNUMERIC",
+            "Output": "550"
+          },{
+            "Id": "b00bb1d2-113e-4f4f-a201-44854e9a334d",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN707_73905/004_Centraal",
+            "Type": "VVXNUMERIC",
+            "Output": "275"
+          },{
+            "Id": "92ec859e-3e72-4cd2-89ce-c68824e4cd1d",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN708_73905/004_Nieuwendijk",
+            "Type": "VVXNUMERIC",
+            "Output": "200"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "22f4783c-310b-49c6-8d56-3266f5f7bdb8",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.872772,
+        52.341803
+      ]
+    },
+      "properties": {
+        "Name": "FJ212-ZU-FP01-N Prinses Irenestraat",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "59a1e563-6a99-4b32-ab97-fde6915c07a9",
+            "OutputDescription": "",
+            "Description": "FP20_VVXN_Mahlerplein",
+            "Type": "VVXNUMERIC",
+            "Output": "1950"
+          },{
+            "Id": "f8a334e7-eb1c-489b-802d-38644add598b",
+            "OutputDescription": "X",
+            "Description": "FP21_VVXN_Zuidplein",
+            "Type": "VVXNUMERIC",
+            "Output": "X"
+          },{
+            "Id": "32b0ac22-0fcb-4ed3-be3f-bdc2575cc69a",
+            "OutputDescription": "",
+            "Description": "FP22_VVXN_Strawinskylaan",
+            "Type": "VVXNUMERIC",
+            "Output": "1350"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "fa154728-b140-4b85-97a3-9d97589cdd06",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.86126,
+        52.33945
+      ]
+    },
+      "properties": {
+        "Name": "FJ212A1012 - A1012_A010-19,830a-Re-1_P+R S108",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "ed50b6d6-ec97-4ff9-8f2c-bd1ef7d551ce",
+            "OutputDescription": "VRIJ",
+            "Description": "A1012_VVX_P Olympisch Stadion",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "fd28a3ea-3736-4284-9b48-62684aa6e101",
+            "OutputDescription": "VRIJ",
+            "Description": "A1012_VVX_P Vumc",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "ed1f47be-48e1-4d35-9495-679d094b6e72",
+            "OutputDescription": "VRIJ",
+            "Description": "A1012_VVX_P+R Olympisch Stadion",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          },{
+            "Id": "8ddee8f7-0d56-45b6-837e-7fc1bc1a14bf",
+            "OutputDescription": "VRIJ",
+            "Description": "A1012_VVX_P+R VUmc",
+            "Type": "VVX",
+            "Output": "VRIJ"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "4f0837c9-546a-48ac-b70b-a391bcffc9ab",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.93936,
+        52.31385
+      ]
+    },
+      "properties": {
+        "Name": "FJ462B09 - ZO-B17/18 Burg.Stramanweg 02510/078",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d0710de3-4d39-4891-8f0b-3c2175e6a058",
+            "OutputDescription": "Leeg",
+            "Description": "ZO-B17_TKST_02510/078a",
+            "Type": "TEXT",
+            "Output": ""
+          },{
+            "Id": "5dd700f1-08bb-4447-9713-6c0200027157",
+            "OutputDescription": "2 stroken rechtdoor",
+            "Description": "ZO-B18_KW_02510/078b",
+            "Type": "ROTATINGPANEL",
+            "Output": "STAND 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "Id": "b7d2112c-fa77-4ef7-bebe-321463d4843b",
+      "geometry": {
+      "type": "Point",
+      "coordinates": [
+        4.906251,
+        52.359196
+      ]
+    },
+      "properties": {
+        "Name": "FJ212CE_VVXN_63225/001_Mauritskade",
+        "PubDate": "2020-02-16T16:50:41.967Z",
+        "Removed": "false",
+        "Type": "guidancesign",
+        "State": "ok",
+        "ParkingguidanceDisplay": [
+          {
+            "Id": "d065174c-94d1-460b-94fc-384f9d7e3a8f",
+            "OutputDescription": "",
+            "Description": "FJ212CE_VVXN551_63225/001_Burgwallen",
+            "Type": "VVXNUMERIC",
+            "Output": "663"
+          }
+        ]
+      }
+    }
+  ]
+}
+    

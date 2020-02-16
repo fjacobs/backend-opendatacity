@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 
 // Returns a SynchronousSink for
 
-@Profile("GuidanceSign")
+@Profile("guidancesign")
 @Component
 public class DisplayDTODistinct implements DTODistinctInterface<GuidanceSignAggregate, DisplayDTO>
 {

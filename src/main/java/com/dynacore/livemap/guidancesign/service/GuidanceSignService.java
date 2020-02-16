@@ -24,6 +24,7 @@ import com.dynacore.livemap.guidancesign.repo.GuidanceSignRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class GuidanceSignService
 
   public GuidanceSignService(
       GuidanceSignProperties config,
-      GeoJsonAdapter adapter,
+      ObjectProvider<GeoJsonAdapter> adapter,
       GuidanceSignImporter importer,
       GuidanceSignRepo repo,
       DisplayDTODistinct entityDtoDistinct,
@@ -60,13 +61,20 @@ public class GuidanceSignService
       throws JsonProcessingException {
     super(config, adapter, importer, repo, entityDtoDistinct, featureDistinct);
 
-    if (config.isSaveToDbEnabled()) {
-      Flux.from(importedFlux)
-          .parallel(Runtime.getRuntime().availableProcessors())
-          .runOn(Schedulers.parallel())
-          .map(feature -> repo.save(new GuidanceSignAggregate(feature)))
-          .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
-    }
+    Flux.from(importedFlux)
+        .parallel(Runtime.getRuntime().availableProcessors())
+        .runOn(Schedulers.parallel())
+        .map(GuidanceSignAggregate::new)
+        .flatMap(
+            aggregate -> {
+              return repo.isNew(aggregate)
+                  .map(
+                      isNew -> {
+                        if (isNew) return repo.save(aggregate);
+                        return Mono.empty();
+                      });
+            })
+        .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
   }
 
   @Override

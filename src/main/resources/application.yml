@@ -1,4 +1,4 @@
-debug:  false
+debug:  true
 
 
 # Traffic Data Configuration
@@ -12,8 +12,8 @@ parking:
 guidancesign:
   url: http://opd.it-t.nl/Data/parkingdata/v1/amsterdam/GuidanceSign.json
   initialdelay: 0s
-  requestinterval: 60s
-  elementdelay: 0s
+  requestinterval: 5ms
+  elementdelay: 2ms
 
 traveltime:
   #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
@@ -30,14 +30,14 @@ logging:
     org:
       springframework:
         data:
-          r2dbc: info
+          r2dbc: debug
 spring:
 
   # dev || prod
   #traveltime && parking && guidancesign
   #http || file
   profiles:
-    include: dev, file, postgres, traveltime
+    include: dev, postgres, guidancesign
   rsocket:
     server:
       mapping-path: /traveltimesocket
@@ -54,7 +54,7 @@ spring:
 
   jpa:
     open-in-view: on
-    show-sql: off
+    show-sql: on
     generate-ddl: off
 
   hibernate:
@@ -73,22 +73,21 @@ spring:
   profiles: "!test"
 
 fileadapter:
-  folder: /traveltimedata/traveltimesmall/
+  folder: /guidancesign
 
 postgres:
-  host: localhost
+  host: 192.168.178.45
   port: 5432
-  user: postgres
-  password: admin
-  database: travel_time_small
-
+  user: pi
+  password: S99ncezg
+  database: trafficdata
 
 ---
 spring:
   profiles: test
 
 fileadapter:
-  folder: /traveltimedata/traveltimesmall/
+  testfolder: /traveltimedata/traveltimesmall/
 
 postgres:
   host: localhost

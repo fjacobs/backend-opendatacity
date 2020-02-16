@@ -10,9 +10,11 @@ import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
 import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
@@ -33,18 +35,22 @@ public abstract class GeoJsonReactorService<
 
   public GeoJsonReactorService(
       ServiceProperties generalConfig,
-      GeoJsonAdapter geoJsonAdapter,
+      ObjectProvider<GeoJsonAdapter> geoJsonAdapterObjectProvider,
       FeatureImporter<R> featureImporter,
       TrafficRepository<T> repo,
       DTODistinctInterface<T, D> DTODistinctInterface,
       FeatureDistinct<R, R> featureDistinct)
       throws JsonProcessingException {
-    this.geoJsonAdapter = geoJsonAdapter;
+
+    this.geoJsonAdapter =
+        geoJsonAdapterObjectProvider.getIfAvailable(() -> (serviceConfig) -> Flux.empty());
     this.generalConfig = generalConfig;
     this.repo = repo;
     this.DTODistinctInterface = DTODistinctInterface;
     this.featureDistinct = featureDistinct;
     this.featureImporter = featureImporter;
+
+    Flux<FeatureCollection> emptyFlux = Flux.empty();
 
     logger.info(this.generalConfig.getRequestInterval().toString());
     importedFlux = importFlux().cache(generalConfig.getRequestInterval());
@@ -53,10 +59,11 @@ public abstract class GeoJsonReactorService<
   protected Flux<R> importFlux() throws JsonProcessingException {
     return geoJsonAdapter
         .adapterHotSourceReq(generalConfig.getRequestInterval())
-        .doOnNext(
-            x -> {
-              logger.info("Retrieved new featurecollection, size: " + x.getFeatures().size());
-            })
+        //        .doOnNext(
+        //            x -> {
+        //              logger.info("Retrieved new featurecollection, size: " +
+        // x.getFeatures().size());
+        //            })
         .flatMapIterable(FeatureCollection::getFeatures)
         .map(featureImporter::importFeature);
   }
@@ -76,6 +83,6 @@ public abstract class GeoJsonReactorService<
         .windowUntilChanged(D::pubDate)
         .flatMap(Flux::buffer)
         .delayElements(interval)
-        .doOnNext(x ->logger.info("Amount of distinct features: " + x.size()));
+        .doOnNext(x -> logger.info("Amount of distinct features: " + x.size()));
   }
 }

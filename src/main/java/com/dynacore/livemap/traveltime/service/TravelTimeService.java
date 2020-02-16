@@ -24,6 +24,7 @@ import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -49,14 +50,14 @@ public class TravelTimeService
 
   public TravelTimeService(
           TravelTimeServiceConfig config,
-          GeoJsonAdapter adapter,
+          ObjectProvider<GeoJsonAdapter> geoJsonAdapterObjectProvider,
           TravelTimeImporter importer,
           TravelTimeRepo repo,
           TravelTimeDTODistinct entityDtoDistinct,
           TravelTimeFeatureDistinct featureDistinct
       )
       throws JsonProcessingException {
-    super(config, adapter, importer, repo,  entityDtoDistinct, featureDistinct);
+    super(config, geoJsonAdapterObjectProvider, importer, repo,  entityDtoDistinct, featureDistinct);
 
     if (config.isSaveToDbEnabled()) {
       Flux.from(importedFlux)
