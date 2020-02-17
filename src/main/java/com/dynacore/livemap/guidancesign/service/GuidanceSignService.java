@@ -20,13 +20,17 @@ import com.dynacore.livemap.core.service.GeoJsonReactorService;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeatureImpl;
+import com.dynacore.livemap.guidancesign.domain.InnerDisplayEntity;
 import com.dynacore.livemap.guidancesign.repo.GuidanceSignRepo;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -50,6 +54,8 @@ public class GuidanceSignService
     extends GeoJsonReactorService<GuidanceSignAggregate, GuidanceSignFeatureImpl, DisplayDTO> {
 
   Logger log = LoggerFactory.getLogger(GuidanceSignService.class);
+    @Autowired
+    DatabaseClient client;
 
   public GuidanceSignService(
       GuidanceSignProperties config,
@@ -61,21 +67,38 @@ public class GuidanceSignService
       throws JsonProcessingException {
     super(config, adapter, importer, repo, entityDtoDistinct, featureDistinct);
 
-    Flux.from(importedFlux)
-        .parallel(Runtime.getRuntime().availableProcessors())
-        .runOn(Schedulers.parallel())
-        .map(GuidanceSignAggregate::new)
-        .flatMap(
-            aggregate -> {
-              return repo.isNew(aggregate)
-                  .map(
-                      isNew -> {
-                        if (isNew) return repo.save(aggregate);
-                        return Mono.empty();
-                      });
-            })
-        .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
+          Flux.from(importedFlux)
+                  //          .parallel(Runtime.getRuntime().availableProcessors())
+                  //          .runOn(Schedulers.parallel())
+                  .map(GuidanceSignAggregate::new)
+                  .onBackpressureDrop(fc-> log.error("3. Drop on backpressure:" )    )
+                  .map(this::save)
+                  .onBackpressureDrop(fc-> log.error("4. Drop on backpressure:" )   )
+                  .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
   }
+
+    public Mono<Void> save(GuidanceSignAggregate aggregate) {
+
+        return client
+                .insert()
+                .into(GuidanceSignEntity.class)
+                .using(aggregate.getGuidanceSignEntity())
+                .map(
+                        (row, rowMetadata) -> {
+                            aggregate.setFk(row.get("pkey", Integer.class));
+                            return row;
+                        })
+                .one()
+                .then(
+                        client
+                                .insert()
+                                .into(InnerDisplayEntity .class)
+                                .using(aggregate.getInnerDisplayEntities())
+                                .fetch()
+                                .all()
+                                .then())
+                .then();
+    }
 
   @Override
   public Flux<List<DisplayDTO>> replayHistoryGroup(Duration interval) {

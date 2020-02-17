@@ -27,8 +27,8 @@ public class GuidanceSignEntity extends TrafficEntityImpl {
     pubDate = feature.getPubDate();
     removed = feature.getRemoved();
     state = feature.getState();
-    ourRetrieval = feature.getOurRetrieval();
-    Stream.of(id, name, removed, pubDate, state, ourRetrieval)
+   // ourRetrieval = feature.getOurRetrieval();
+    Stream.of(id, name, removed, pubDate, state)
         .filter(Objects::isNull)
         .findAny()
         .ifPresent(

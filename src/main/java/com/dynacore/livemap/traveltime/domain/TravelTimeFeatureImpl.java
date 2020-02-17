@@ -39,11 +39,11 @@ public class TravelTimeFeatureImpl extends TrafficFeatureImpl {
     super(feature, THEIR_PUB_DATE_KEY);
     try {
 
-      if (!feature.getProperties().containsKey(TRAVEL_TIME))
-        feature.getProperties().put(TRAVEL_TIME, -1);
-      if (!feature.getProperties().containsKey(VELOCITY)) feature.getProperties().put(VELOCITY, -1);
-      OffsetDateTime retrieved = OffsetDateTime.now(ZoneOffset.UTC);
-      feature.getProperties().put(OUR_CREATION_DATE, retrieved.toString());
+//      if (!feature.getProperties().containsKey(TRAVEL_TIME))
+//        feature.getProperties().put(TRAVEL_TIME, -1);
+//      if (!feature.getProperties().containsKey(VELOCITY)) feature.getProperties().put(VELOCITY, -1);
+//      OffsetDateTime retrieved = OffsetDateTime.now(ZoneOffset.UTC);
+//      feature.getProperties().put(OUR_CREATION_DATE, retrieved.toString());
       if (feature.getProperties().containsKey(ID)) {
         feature.setId(
             (String)

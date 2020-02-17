@@ -25,7 +25,6 @@ public class TrafficFeatureImpl implements TrafficFeature {
     setName(entity.getName());
     setPubDate(entity.getPubDate());
     setOurRetrieval(entity.getOurRetrieval());
-
   }
   // Different suppliers use different keys for the data publication timestamp:
   public TrafficFeatureImpl(Feature feature, String pubDateKey) {
@@ -90,16 +89,17 @@ public class TrafficFeatureImpl implements TrafficFeature {
 
   @Override
   public OffsetDateTime getOurRetrieval() {
-    if (feature.getProperties().get(OUR_CREATION_DATE) instanceof String) {
-      return OffsetDateTime.parse((String) feature.getProperties().get(OUR_CREATION_DATE));
-    } else {
-      return (OffsetDateTime) feature.getProperties().get(OUR_CREATION_DATE);
-    }
+//    if (feature.getProperties().get(OUR_CREATION_DATE) instanceof String) {
+//      return OffsetDateTime.parse((String) feature.getProperties().get(OUR_CREATION_DATE));
+//    } else {
+//      return (OffsetDateTime) feature.getProperties().get(OUR_CREATION_DATE);
+//    }
+    return null;
   }
 
   @Override
   public void setOurRetrieval(OffsetDateTime ourRetrieval) {
-    feature.getProperties().put(OUR_CREATION_DATE, ourRetrieval);
+//    feature.getProperties().put(OUR_CREATION_DATE, ourRetrieval);
   }
   public GeoJsonObject getGeometry() {
     return feature.getGeometry();

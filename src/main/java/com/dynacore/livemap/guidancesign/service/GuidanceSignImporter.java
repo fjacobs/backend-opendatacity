@@ -14,7 +14,7 @@ public class GuidanceSignImporter implements FeatureImporter<GuidanceSignFeature
 
   @Override
   public GuidanceSignFeatureImpl importFeature(Feature feature) {
-    feature.setProperty(OUR_CREATION_DATE, OffsetDateTime.now());
+  //  feature.setProperty(OUR_CREATION_DATE, OffsetDateTime.now());
     return new GuidanceSignFeatureImpl(feature);
   }
 }

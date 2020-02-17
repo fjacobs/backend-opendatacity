@@ -70,7 +70,9 @@ public class TravelTimeService
           //          .parallel(Runtime.getRuntime().availableProcessors())
           //          .runOn(Schedulers.parallel())
           .map(TravelTimeEntityImpl::new)
+          .onBackpressureDrop(fc-> log.error("3. Drop on backpressure:" )    )
           .map(this::save)
+          .onBackpressureDrop(fc-> log.error("4. Drop on backpressure:" )   )
           .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
     }
   }
@@ -83,8 +85,7 @@ public class TravelTimeService
         .using(entity)
         .fetch()
         .rowsUpdated()
-        .then()
-        .log();
+        .then();
   }
 
   //  public Mono<Void> save(TravelTimeEntityImpl entity) {

@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.ParallelFlux;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.List;
@@ -51,19 +53,23 @@ public abstract class GeoJsonReactorService<
     this.featureImporter = featureImporter;
 
     logger.info(this.generalConfig.getRequestInterval().toString());
-    importedFlux = importFlux().cache(generalConfig.getRequestInterval());
+   // importedFlux = importFlux().cache(generalConfig.getRequestInterval());
+    importedFlux = importFlux();
   }
 
   protected Flux<R> importFlux() throws JsonProcessingException {
     return geoJsonAdapter
         .adapterHotSourceReq(generalConfig.getRequestInterval())
-                .doOnNext(
-                    x -> {
-                      logger.info("Retrieved new featurecollection, size: " +
-         x.getFeatures().size());
-                    })
+        .doOnNext(
+            x -> {
+              logger.info("Retrieved new featurecollection, size: " + x.getFeatures().size());
+            })
+        .onBackpressureDrop(fc-> logger.error("2. Drop on backpressure:" + fc.getFeatures().get(0).getProperty("Timestamp") )   )
         .flatMapIterable(FeatureCollection::getFeatures)
+//        .parallel(Runtime.getRuntime().availableProcessors())
+//        .runOn(Schedulers.parallel())
         .map(featureImporter::importFeature);
+
   }
 
   public Flux<TrafficFeatureImpl> getFeatureRange(FeatureRequest range) {
