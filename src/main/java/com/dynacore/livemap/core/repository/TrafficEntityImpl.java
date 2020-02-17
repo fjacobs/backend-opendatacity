@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 
 import java.time.OffsetDateTime;
 
+@ToString
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

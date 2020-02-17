@@ -18,7 +18,6 @@ import reactor.core.scheduler.Schedulers;
 import java.io.File;
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -40,30 +39,40 @@ public class FileAdapter {
         new FileSystemResource(System.getProperty("user.home") + "/" + config.getFolder());
     File folder = resource.getFile();
     File[] files = folder.listFiles();
-    Arrays.sort(Objects.requireNonNull(files));
+
+    if (files == null) {
+      System.err.println("Error: Could not open folder......");
+      return interval -> Flux.empty();
+    }
+
+    Arrays.sort(files);
+
     var monoList = Arrays.stream(files).filter(File::isFile).collect(Collectors.toList());
 
     return new GeoJsonAdapter() {
-        @Override
-        public Flux<FeatureCollection> adapterHotSourceReq(Duration interval) throws JsonProcessingException {
-            return Flux.fromIterable(monoList)
-                    .map(
-                            file -> {
-                                Mono<FeatureCollection> blockingWrapper =
-                                        Mono.fromCallable(
-                                                () -> {
-                                                    FeatureCollection fc =
-                                                            new ObjectMapper()
-                                                                    .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
-                                                                    .readValue(file, FeatureCollection.class);
-                                                    return fc;
-                                                });
-                                blockingWrapper = blockingWrapper.subscribeOn(Schedulers.boundedElastic());
+      @Override
+      public Flux<FeatureCollection> adapterHotSourceReq(Duration interval)
+          throws JsonProcessingException {
+        return Flux.fromIterable(monoList)
+            .map(
+                file -> {
+                  Mono<FeatureCollection> blockingWrapper =
+                      Mono.fromCallable(
+                          () -> {
+                            FeatureCollection fc =
+                                new ObjectMapper()
+                                    .configure(
+                                        MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
+                                    .readValue(file, FeatureCollection.class);
+                            logger.info("Importing file: " + file.getName());
+                            return fc;
+                          });
+                  blockingWrapper = blockingWrapper.subscribeOn(Schedulers.boundedElastic());
 
-                                return blockingWrapper;
-                            })
-                    .flatMap(featureCollectionMono -> featureCollectionMono);
-        }
+                  return blockingWrapper;
+                })
+            .flatMap(featureCollectionMono -> featureCollectionMono);
+      }
     };
   }
 }

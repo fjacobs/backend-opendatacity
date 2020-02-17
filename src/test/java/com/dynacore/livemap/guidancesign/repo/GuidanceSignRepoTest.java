@@ -216,6 +216,12 @@ class GuidanceSignRepoTest {
   }
 
   @Test
+  void getLatest() {
+    //client.execute(  )
+  }
+
+
+  @Test
   void getAllAscending() {
     Hooks.onOperatorDebug();
 

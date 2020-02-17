@@ -25,12 +25,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
+import reactor.bool.BooleanUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
+import static org.springframework.data.r2dbc.query.Criteria.where;
 
 /**
  * Road traffic traveltime service
@@ -48,6 +53,9 @@ public class TravelTimeService
 
   Logger log = LoggerFactory.getLogger(TravelTimeService.class);
 
+  @Autowired
+  DatabaseClient client;
+
   public TravelTimeService(
           TravelTimeServiceConfig config,
           ObjectProvider<GeoJsonAdapter> geoJsonAdapterObjectProvider,
@@ -63,8 +71,32 @@ public class TravelTimeService
       Flux.from(importedFlux)
           .parallel(Runtime.getRuntime().availableProcessors())
           .runOn(Schedulers.parallel())
-          .map(feature -> repo.save(new TravelTimeEntityImpl(feature)))
-          .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
+          .map(TravelTimeEntityImpl::new)
+          .map(this::save)
+          .subscribe(Mono::subscribe,
+                  error -> log.error("Error: " + error)
+          );
     }
+  }
+
+  public Mono<Void> save(TravelTimeEntityImpl entity) {
+
+    return client
+            .select()
+            .from(TravelTimeEntityImpl.class)
+            .matching(where("id").is(entity.getId()).and("pubDate").is(entity.getPubDate()))
+            .fetch()
+            .first()
+            .hasElement()
+            .transform(BooleanUtils::not)
+            .filter(Boolean::booleanValue)
+         //   .doOnNext(x -> System.out.println("Saving " + entity ) )
+            .flatMap( newEntity ->
+                    client
+                            .insert()
+                            .into(TravelTimeEntityImpl.class)
+                            .using(entity)
+                            .fetch().rowsUpdated())
+            .then();
   }
 }

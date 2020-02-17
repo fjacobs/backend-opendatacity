@@ -85,9 +85,9 @@ class HttpIntegrationTest {
             .baseUrl(baseUrl.toString())
             .build();
 
-    GeoJsonReactorService service =
-        new TravelTimeService(serviceConfig, new HttpAdapter(webClient), new TravelTimeImporter(), repo, new TravelTimeDTODistinct(), new TravelTimeFeatureDistinct());
-    controller = new HttpSseController(service);
+//    GeoJsonReactorService service =
+//        new TravelTimeService(serviceConfig, new HttpAdapter(webClient), new TravelTimeImporter(), repo, new TravelTimeDTODistinct(), new TravelTimeFeatureDistinct());
+//    controller = new HttpSseController(service);
   }
 
   private String getString(String fileName) {

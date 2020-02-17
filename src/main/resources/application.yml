@@ -1,5 +1,13 @@
 debug:  true
 
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          r2dbc: debug
+
+  path: /home/stormraptor/log
 
 # Traffic Data Configuration
 
@@ -19,25 +27,18 @@ traveltime:
   #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
   url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
   initialdelay: 0s
-  requestinterval: 3s
-  elementdelay: 0s
+  requestinterval: 2048ms
+  elementdelay: 2ms
   saveToDbEnabled: true
 
 #local.server.port: 7777
-
-logging:
-  level:
-    org:
-      springframework:
-        data:
-          r2dbc: debug
 spring:
 
   # dev || prod
   #traveltime && parking && guidancesign
   #http || file
   profiles:
-    include: dev, postgres, guidancesign
+    include: dev, postgres, traveltime, file
   rsocket:
     server:
       mapping-path: /traveltimesocket
@@ -54,11 +55,11 @@ spring:
 
   jpa:
     open-in-view: on
-    show-sql: on
+    show-sql: off
     generate-ddl: off
 
   hibernate:
-    ddl-auto: none
+    ddl-auto: off
 
   banner:
     image:
@@ -68,12 +69,13 @@ spring:
     ansi:
       enabled: always
 
+
 ---
 spring:
   profiles: "!test"
 
 fileadapter:
-  folder: /guidancesign
+  folder: /traveltime
 
 postgres:
   host: 192.168.178.45

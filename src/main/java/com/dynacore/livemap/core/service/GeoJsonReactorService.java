@@ -50,8 +50,6 @@ public abstract class GeoJsonReactorService<
     this.featureDistinct = featureDistinct;
     this.featureImporter = featureImporter;
 
-    Flux<FeatureCollection> emptyFlux = Flux.empty();
-
     logger.info(this.generalConfig.getRequestInterval().toString());
     importedFlux = importFlux().cache(generalConfig.getRequestInterval());
   }
@@ -59,11 +57,11 @@ public abstract class GeoJsonReactorService<
   protected Flux<R> importFlux() throws JsonProcessingException {
     return geoJsonAdapter
         .adapterHotSourceReq(generalConfig.getRequestInterval())
-        //        .doOnNext(
-        //            x -> {
-        //              logger.info("Retrieved new featurecollection, size: " +
-        // x.getFeatures().size());
-        //            })
+                .doOnNext(
+                    x -> {
+                      logger.info("Retrieved new featurecollection, size: " +
+         x.getFeatures().size());
+                    })
         .flatMapIterable(FeatureCollection::getFeatures)
         .map(featureImporter::importFeature);
   }
