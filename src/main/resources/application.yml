@@ -27,8 +27,8 @@ traveltime:
   #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
   url: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson
   initialdelay: 0s
-  requestinterval: 2048ms
-  elementdelay: 2ms
+  requestinterval: 3072ms
+  elementdelay: 3ms
   saveToDbEnabled: true
 
 #local.server.port: 7777
@@ -78,11 +78,18 @@ fileadapter:
   folder: /traveltime
 
 postgres:
-  host: 192.168.178.45
+  host: localhost
   port: 5432
-  user: pi
-  password: S99ncezg
-  database: trafficdata
+  user: postgres
+  password: admin
+  database: temp_database
+
+#postgres:
+#  host: 192.168.178.45
+#  port: 5432
+#  user: pi
+#  password: S99ncezg
+#  database: trafficdata
 
 ---
 spring:

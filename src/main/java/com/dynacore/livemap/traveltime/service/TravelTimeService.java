@@ -53,50 +53,55 @@ public class TravelTimeService
 
   Logger log = LoggerFactory.getLogger(TravelTimeService.class);
 
-  @Autowired
-  DatabaseClient client;
+  @Autowired DatabaseClient client;
 
   public TravelTimeService(
-          TravelTimeServiceConfig config,
-          ObjectProvider<GeoJsonAdapter> geoJsonAdapterObjectProvider,
-          TravelTimeImporter importer,
-          TravelTimeRepo repo,
-          TravelTimeDTODistinct entityDtoDistinct,
-          TravelTimeFeatureDistinct featureDistinct
-      )
+      TravelTimeServiceConfig config,
+      ObjectProvider<GeoJsonAdapter> geoJsonAdapterObjectProvider,
+      TravelTimeImporter importer,
+      TravelTimeRepo repo,
+      TravelTimeDTODistinct entityDtoDistinct,
+      TravelTimeFeatureDistinct featureDistinct)
       throws JsonProcessingException {
-    super(config, geoJsonAdapterObjectProvider, importer, repo,  entityDtoDistinct, featureDistinct);
+    super(config, geoJsonAdapterObjectProvider, importer, repo, entityDtoDistinct, featureDistinct);
 
     if (config.isSaveToDbEnabled()) {
       Flux.from(importedFlux)
-          .parallel(Runtime.getRuntime().availableProcessors())
-          .runOn(Schedulers.parallel())
+          //          .parallel(Runtime.getRuntime().availableProcessors())
+          //          .runOn(Schedulers.parallel())
           .map(TravelTimeEntityImpl::new)
           .map(this::save)
-          .subscribe(Mono::subscribe,
-                  error -> log.error("Error: " + error)
-          );
+          .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
     }
   }
 
   public Mono<Void> save(TravelTimeEntityImpl entity) {
 
     return client
-            .select()
-            .from(TravelTimeEntityImpl.class)
-            .matching(where("id").is(entity.getId()).and("pubDate").is(entity.getPubDate()))
-            .fetch()
-            .first()
-            .hasElement()
-            .transform(BooleanUtils::not)
-            .filter(Boolean::booleanValue)
-         //   .doOnNext(x -> System.out.println("Saving " + entity ) )
-            .flatMap( newEntity ->
-                    client
-                            .insert()
-                            .into(TravelTimeEntityImpl.class)
-                            .using(entity)
-                            .fetch().rowsUpdated())
-            .then();
+        .insert()
+        .into(TravelTimeEntityImpl.class)
+        .using(entity)
+        .fetch()
+        .rowsUpdated()
+        .then()
+        .log();
   }
+
+  //  public Mono<Void> save(TravelTimeEntityImpl entity) {
+  //
+  //    return  client.execute("SELECT id, pub_date FROM travel_time_entity where id=:id and
+  // pub_date=:pub_date")
+  //            .bind("id", entity.getId())
+  //            .bind("pub_date", entity.getPubDate())
+  //            .fetch().one().hasElement()
+  //            .filter(Boolean::booleanValue)
+  //            .map( newEntity ->
+  //                    client
+  //                            .insert()
+  //                            .into(TravelTimeEntityImpl.class)
+  //                            .using(entity)
+  //                            .fetch().rowsUpdated())
+  //            .then()
+  //            .log();
+  //  }
 }
