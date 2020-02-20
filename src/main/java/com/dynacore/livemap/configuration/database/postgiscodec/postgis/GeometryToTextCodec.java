@@ -1,6 +1,5 @@
 package com.dynacore.livemap.configuration.database.postgiscodec.postgis;
 
-
 import com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary.BinaryParser;
 import com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary.ByteGetter;
 import com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary.ValueGetter;
@@ -9,6 +8,7 @@ import io.netty.buffer.ByteBufAllocator;
 import io.r2dbc.postgresql.client.Parameter;
 import io.r2dbc.postgresql.codec.Codec;
 import io.r2dbc.postgresql.message.Format;
+import org.locationtech.jts.geom.Geometry;
 
 public class GeometryToTextCodec implements Codec<Geometry> {
   private final int oid;
@@ -64,6 +64,6 @@ public class GeometryToTextCodec implements Codec<Geometry> {
 
   @Override
   public Class<?> type() {
-    return Geometry.class;
+    return GeometryTypes.class;
   }
 }
