@@ -1,4 +1,4 @@
-debug:  true
+debug:  false
 
 logging:
   level:
@@ -61,6 +61,7 @@ spring:
     open-in-view: on
     show-sql: off
     generate-ddl: off
+    properties: org.hibernate.spatial.dialect.postgis.PostgisDialect
 
   hibernate:
     ddl-auto: off
@@ -72,7 +73,6 @@ spring:
   output:
     ansi:
       enabled: always
-
 
 ---
 spring:

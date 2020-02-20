@@ -1,26 +1,99 @@
 package com.dynacore.livemap.traveltime.repo;
 
+import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
+import io.r2dbc.spi.Connection;
 import io.r2dbc.spi.ConnectionFactories;
+import io.r2dbc.spi.ConnectionFactory;
+import io.r2dbc.spi.Row;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.geojson.GeoJsonObject;
+import org.geojson.LineString;
+import org.geojson.LngLatAlt;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.mapping.OutboundRow;
+import org.springframework.data.r2dbc.mapping.SettableValue;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JavaType;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.type.TypeFactory;
 import reactor.test.StepVerifier;
 
+import javax.persistence.Id;
+import java.sql.DriverManager;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import static org.junit.Assert.*;
+import static org.springframework.data.r2dbc.query.Criteria.where;
 
 public class TravelTimeRepoTest {
 
-  private DatabaseClient client =
-      DatabaseClient.create(
-          ConnectionFactories.get(
-              "r2dbc:h2:mem:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"));
-  private TravelTimeRepo repo = new TravelTimeRepo(client);
+
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Data
+  static class ConvertedEntity {
+    @Id
+    Integer id;
+    String name;
+  }
+
+  Connection connection;
+
+  @WritingConverter
+  enum ConvertedEntityToRow implements Converter<ConvertedEntity, OutboundRow> {
+
+    INSTANCE;
+
+    @Override
+    public OutboundRow convert(ConvertedEntity convertedEntity) {
+
+      OutboundRow outboundRow = new OutboundRow();
+
+      if (convertedEntity.getId() != null) {
+        outboundRow.put("id", SettableValue.from(convertedEntity.getId()));
+      }
+
+      outboundRow.put("name", SettableValue.from("prefixed: " + convertedEntity.getName()));
+
+      return outboundRow;
+    }
+  }
+
+  @ReadingConverter
+  enum RowToConvertedEntity implements Converter<Row, ConvertedEntity> {
+
+    INSTANCE;
+
+    @Override
+    public ConvertedEntity convert(Row source) {
+
+      ConvertedEntity entity = new ConvertedEntity();
+      entity.setId(source.get("id", Integer.class));
+      entity.setName("read: " + source.get("name", String.class));
+
+      return entity;
+    }
+  }
+
+//      DatabaseClient.create(
+//          ConnectionFactories.get(
+//              "r2dbc:h2:mem:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"));
+
+
+  ConnectionFactory connectionFactory =  ConnectionFactories.get("r2dbc:h2:file://localhost/home/stormraptor/h2db/:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+  private final DatabaseClient client = DatabaseClient.create(connectionFactory);
+
+//  file:/Users/foo/data/db
+
+  private TravelTimeRepo repo;
 
   TravelTimeEntityImpl entityOne,
       entitySameAsOne,
@@ -29,9 +102,41 @@ public class TravelTimeRepoTest {
       entityTwo;
 
   @Before
-  public void setup() {
+  public void setup() throws ClassNotFoundException {
+
+//     Class.forName("org.h2.Driver");
+//        H2GISExtension.load(connection);
+
+//    connectionFactory.create().subscribe(connection->client );
+    repo  = new TravelTimeRepo(client);
+
+
     String pubDate = "2019-10-16T15:52:00Z";
     String retDate = "2019-10-16T16:00:00Z";
+
+//    try {
+//      Class.forName("org.h2.Driver");
+//      // Open memory H2 table
+//      try(Connection connection = DriverManager.getConnection("jdbc:h2:mem:syntax","sa", "sa");
+//          Statement st = connection.createStatement()) {
+//        // Import spatial functions, domains and drivers
+//        // If you are using a file database, you have to do only that once.
+//        H2GISExtension.load(connection);
+//        // Create a table
+//        st.execute("CREATE TABLE ROADS (the_geom MULTILINESTRING, speed_limit INT)");
+//        // Add some roads
+//        st.execute("INSERT INTO ROADS VALUES ('MULTILINESTRING((15 5, 20 6, 25 7))', 80)");
+//        st.execute("INSERT INTO ROADS VALUES ('MULTILINESTRING((20 6, 21 15, 21 25))', 50)");
+//        // Compute the sum of roads length
+//        try(ResultSet rs = st.executeQuery("SELECT SUM(ST_LENGTH(the_geom)) total_length from ROADS")) {
+//          if(rs.next()) {
+//            System.out.println("Total length of roads: "+rs.getDouble("total_length")+" m");
+//          }
+//        }
+//      }
+//    } catch (Exception ex) {
+//      ex.printStackTrace();
+//    }
 
     entityOne =
         new TravelTimeEntityImpl(
@@ -97,27 +202,56 @@ public class TravelTimeRepoTest {
             100);
   }
 
+
   public void dropCreate(DatabaseClient client) {
 
-    List<String> statements =
-        Arrays.asList( //
-            "DROP TABLE IF EXISTS travel_time_entity;",
-            "CREATE TABLE TRAVEL_TIME_ENTITY\n"
-                + "(\n"
-                + "    pkey SERIAL PRIMARY KEY,\n"
-                + "    id                         VARCHAR(200),\n"
-                + "    name                       VARCHAR(200),\n"
-                + "    pub_date                   TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
-                + "    our_retrieval TIMESTAMP WITH TIME ZONE  NOT NULL,\n"
-                + "    type                       VARCHAR(50),\n"
-                + "    length                     SMALLINT CHECK (length >= -1),\n"
-                + "    velocity                   SMALLINT CHECK (velocity >= -1),\n"
-                + "    travel_time                SMALLINT CHECK (travel_time >= -1),\n"
-                + "    unique (id, pub_date)\n"
-                + ");");
+    String dropTravelTime =  "DROP TABLE IF EXISTS travel_time_entity; ";
+    String dropGeometry = "DROP TABLE IF EXISTS geometries; ";
+    String createGeometry =      """
+                                create table geometries( pk serial not null
+                                                        constraint geometries_pk
+                                                        primary key,
+                                                        id varchar(200),
+                                                        type varchar(200),
+                                                        geotype varchar(200), 
+                                                        geom geometry );
+                                """;
 
 
 
+
+    String createTravelTime =
+                                """
+                                 create table travel_time_entity
+                                 (
+                                     pkey serial not null
+                                         constraint travel_time_entity_pkey
+                                             primary key,
+                                     id varchar(200),
+                                     name varchar(200),
+                                     pub_date timestamp with time zone not null,
+                                     our_retrieval timestamp with time zone,
+                                     type varchar(50),
+                                     length smallint
+                                         constraint travel_time_entity_length_check
+                                             check (length >= '-1'::integer),
+                                     velocity smallint
+                                         constraint travel_time_entity_velocity_check
+                                             check (velocity >= '-1'::integer),
+                                     travel_time smallint
+                                         constraint travel_time_entity_travel_time_check
+                                             check (travel_time >= '-1'::integer),
+                                     geometry varchar(200)
+                                         constraint travel_time_entity_geometries_id_fk
+                                             references geometries (id),
+                                     constraint travel_time_entity_id_pub_date_key
+                                         unique (id, pub_date)
+                                 );
+                                """;
+
+
+
+    List<String> statements = Arrays.asList(dropTravelTime,  dropGeometry,  createGeometry, createTravelTime);
     statements.forEach(
         it ->
             client
@@ -127,6 +261,9 @@ public class TravelTimeRepoTest {
                 .as(StepVerifier::create) //
                 .expectNext(0)
                 .verifyComplete());
+
+
+
   }
 
   @Test
@@ -156,8 +293,61 @@ public class TravelTimeRepoTest {
         .as(StepVerifier::create)
         .expectNext(1)
         .verifyComplete();
+  //  client.execute("select id from travel_time_entity").fetch().one().as(StepVerifier::create).expectSubscription().assertNext(map-> assertEquals( "002", map.get("ID"))).verifyComplete();
+  }
+ // {"type":"Feature","properties":{"Id":"RWS01_MONIBAS_0091hrl0356ra0","Name":"0091hrl0356ra0","Type":"H","Timestamp":"2020-02-07T21:51:00Z","Length":623},
+  // "geometry":{"type":"LineString","coordinates":[[4.776645712715283,52.338380232953895],[4.776853788479121,52.33827956952142],[4.77842037340242,52.337460757548655],[4.778671519814815,52.33733621949967],[4.780652279562285,52.336267847567214],[4.782159793662865,52.33546665913931],[4.782751047173977,52.335146118375064],[4.78306134179851,52.33498592177948],[4.78356224185475,52.33472011500613]]}}
+
+
+
+  record GeometryEntity(String id, String type, String geotype, LineString geom ) {  }
+
+  @Test
+  public void geometryInsertion() {
+    dropCreate(client);
+
+//    INSERT INTO geometries VALUES
+//    ('Linestring', 'LINESTRING(0 0, 1 1, 2 1, 2 2)'),
+
+    TravelTimeFeatureImpl travelTimeFeature = new TravelTimeFeatureImpl();
+    LineString lineString = new LineString(
+            new LngLatAlt(4.776645712715283,52.338380232953895),
+            new LngLatAlt(4.776853788479121,52.33827956952142),
+            new LngLatAlt(4.77842037340242,52.337460757548655),
+            new LngLatAlt(4.778671519814815,52.33733621949967),
+            new LngLatAlt(4.780652279562285,52.336267847567214),
+            new LngLatAlt(4.782159793662865,52.33546665913931));
+
+    var geoEntity = new GeometryEntity("002", "TravelTime", "LineString", lineString);
+           // .matching(where("id").is("002"))
+
+    System.out.println( lineString.toString() );
+
+//    client.insert()
+//            .into("geometries")
+//            .value("id", "002")
+//            .value("geom", lineString.toString() )
+//            .value("type", "TravelTime")
+//            .value("geotype", "LineString")
+//            .fetch()
+//            .rowsUpdated()
+//            .block();
+
+//    var object = client.execute( "select id, type, geotype, geom FROM geometries")
+//            .fetch().one()
+//            .map(row -> {
+//
+//                System.out.println( row.get("geom"));
+//         //       return new GeometryEntity( "idtest",  "typetest", "geotypetest", new LineString() );
+//            //  return row.get("geom");
+//              //return new GeometryEntity( (String ) row.get("ID"),  (String )row.get("TYPE"), (String )row.get("GEOTYPE"), new LineString() );
+//              return row;
+//            }).then().block();
+
+    System.out.println("hello");
   }
 
+  //  assertNext(id-> assertEquals(id, entityOne.getId())
   @Test
   public void isNew() {
 

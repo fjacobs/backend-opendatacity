@@ -13,6 +13,7 @@ import java.util.Objects;
 @Table("travel_time_entity")
 @ToString
 @Getter @Setter
+@AllArgsConstructor
 public class TravelTimeEntityImpl extends TrafficEntityImpl {
 
   private static final Logger log = LoggerFactory.getLogger(TravelTimeEntityImpl.class);
@@ -21,8 +22,6 @@ public class TravelTimeEntityImpl extends TrafficEntityImpl {
   private Integer length;
   private Integer travel_time;
   private Integer velocity;
-
-  public TravelTimeEntityImpl() { }
 
   public TravelTimeEntityImpl(TravelTimeFeatureImpl feature) {
 

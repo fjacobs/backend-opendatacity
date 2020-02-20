@@ -52,8 +52,6 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
                     .using(newEntity)
                     .fetch().rowsUpdated())
             .then();
-
-
   }
 
   @Override

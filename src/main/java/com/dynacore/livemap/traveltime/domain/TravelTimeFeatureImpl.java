@@ -3,6 +3,8 @@ package com.dynacore.livemap.traveltime.domain;
 import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import org.geojson.Feature;
+import org.geojson.Geometry;
+import org.geojson.LineString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,6 +95,12 @@ public class TravelTimeFeatureImpl extends TrafficFeatureImpl {
     feature.getProperties().put(VELOCITY, velocity);
   }
 
+  public LineString getGeometry() {
+    if( feature.getGeometry() instanceof LineString lineString ) {
+      return lineString;
+    }
+    throw new IllegalArgumentException("Road is not a LineString");
+  }
 
   @Override
   public String toString() {

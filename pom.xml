@@ -119,14 +119,12 @@
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
             <version>${r2dbc-driver-snapshot.version}</version>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-pool</artifactId>
             <version>${r2dbc-driver-snapshot.version}</version>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -135,6 +133,23 @@
             <version>${r2dbc-driver-snapshot.version}</version>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>5.4.12.Final</version>
+        </dependency>
+
+<!-- h2gis 1.5.0 needs H2 1.4.197 and isn't compatible with H2 1.4.200
+      R2DBC needs H2 1.4.200 ..............
+      dev branch is also not ready yet
+-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.orbisgis</groupId>-->
+<!--            <artifactId>h2gis</artifactId>-->
+<!--            <version>1.5.0</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -194,6 +209,8 @@
             <version>2.9.9</version>
             <scope>test</scope>
         </dependency>
+
+
 
     </dependencies>
     <dependencyManagement>

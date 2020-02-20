@@ -6,7 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
+import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+
+import javax.persistence.Converter;
 
 import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
@@ -34,5 +37,7 @@ public class PostgresR2dbcFactoryConfig extends AbstractR2dbcConfiguration {
             .option(PASSWORD, config.getPassword())
             .option(DATABASE, config.getDatabase())
             .build());
+
+
   }
 }

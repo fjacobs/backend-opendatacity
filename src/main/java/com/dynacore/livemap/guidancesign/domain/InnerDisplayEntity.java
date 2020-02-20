@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Setter
 public class InnerDisplayEntity {
 
+    @Id
     private Integer fk;
     private String id;
     private String outputDescription;

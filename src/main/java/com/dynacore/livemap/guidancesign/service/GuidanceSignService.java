@@ -38,7 +38,8 @@ import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.List;
-
+//4.3.2. The GEOMETRY_COLUMNS VIEW
+//    GEOMETRY_COLUMNS is a view reading from database system catalogs.
 /**
  * Road traffic traveltime service
  *
