@@ -91,6 +91,13 @@
         </dependency>
 
         <dependency>
+            <groupId>net.postgis</groupId>
+            <artifactId>postgis-jdbc</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>de.grundid.opendatalab</groupId>
             <artifactId>geojson-jackson</artifactId>
             <version>${geojson-jackson.version}</version>

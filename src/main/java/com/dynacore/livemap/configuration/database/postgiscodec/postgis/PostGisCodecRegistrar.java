@@ -66,7 +66,9 @@ public class PostGisCodecRegistrar implements CodecRegistrar {
               final Integer oid = row.get(1, Integer.class);
 
               if (typeName == null || oid == null) {
-                throw new IllegalStateException("query failed");
+                  assert false;
+
+                  throw new IllegalStateException("query failed");
               }
 
               return Tuples.of(typeName, oid);
