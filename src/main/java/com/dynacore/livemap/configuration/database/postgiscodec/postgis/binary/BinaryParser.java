@@ -2,9 +2,14 @@ package com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary;
 
 
 import com.dynacore.livemap.configuration.database.postgiscodec.postgis.Geometry;
+import com.dynacore.livemap.configuration.database.postgiscodec.postgis.LineString;
 import com.dynacore.livemap.configuration.database.postgiscodec.postgis.Point;
+import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory;
+import org.locationtech.jts.geom.impl.PackedCoordinateSequence;
+import org.postgis.binary.BinaryParser.*;
 public class BinaryParser {
   public static Geometry parseGeometry(final ValueGetter data) {
     final int typeWord = data.readInt();
@@ -58,8 +63,11 @@ public class BinaryParser {
 
   private static Geometry parseLineString(final ValueGetter data, final int srid, final boolean haveZ, final boolean haveM) {
     GeometryFactory geometryFactory = new GeometryFactory();
-   // geometryFactory.createLineString(data.)
-    return null;
+
+    int dims = haveZ ? 3 : 2;
+    LineString lineString = new LineString(dims,haveM,srid);
+    lineString.setLineString(geometryFactory.createLineString(parseCS(data,haveZ,haveM)));
+    return lineString;
   }
 
   /**
@@ -69,26 +77,23 @@ public class BinaryParser {
    * @param haveZ
    * @param haveM
    */
-  private CoordinateSequence parseCS(ValueGetter data, boolean haveZ, boolean haveM) {
-//    int count = data.readInt();
-//
-//    double[] x = new double[count];
-//
-//
-//
-//    int dims = haveZ ? 3 : 2;
-//    CoordinateSequence cs = new PackedCoordinateSequence.Double(x, dims);
-//
-//    for (int i = 0; i < count; i++) {
-//      for (int d = 0; d < dims; d++) {
-//        cs.setOrdinate(i, d, data.readDouble());
-//      }
-//      if (haveM) { // skip M value
-//        data.readDouble();
-//      }
-//    }
-//    return cs;
-//  }
-    return null;
+  private static CoordinateSequence parseCS(ValueGetter data, boolean haveZ, boolean haveM) {
+    int count = data.readInt();
+    int dims = haveZ ? 3 : 2;
+
+//    LINESTRING(77.29 29.07,77.42 29.26)
+    CoordinateSequence cs = CoordinateArraySequenceFactory.instance().create(count,dims);
+
+    for (int i = 0; i < count; i++) {
+      for (int d = 0; d < dims; d++) {
+        cs.setOrdinate(i, d, data.readDouble());
+      }
+      if (haveM) { // skip M value
+        data.readDouble();
+      }
+    }
+
+    return cs;
   }
+
 }
