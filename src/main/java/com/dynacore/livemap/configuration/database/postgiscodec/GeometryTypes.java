@@ -1,4 +1,4 @@
-package com.dynacore.livemap.configuration.database.postgiscodec.postgis;
+package com.dynacore.livemap.configuration.database.postgiscodec;
 
 public abstract class GeometryTypes {
   public static final int LINEARRING = 0;

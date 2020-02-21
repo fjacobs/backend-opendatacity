@@ -23,10 +23,11 @@ public class TravelTimeEntityImpl extends TrafficEntityImpl {
   private Integer travel_time;
   private Integer velocity;
 
+  public TravelTimeEntityImpl() {}
+
   public TravelTimeEntityImpl(TravelTimeFeatureImpl feature) {
 
     super(null, feature.getId(), feature.getName(), feature.getPubDate(), feature.getOurRetrieval());
-//    System.out.println("printing casted feature to tt:" + feature);
     setLength(feature.getLength());
     setTravel_time(feature.getTravelTime());
     setType(feature.getType());
@@ -53,8 +54,7 @@ public class TravelTimeEntityImpl extends TrafficEntityImpl {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof TravelTimeEntityImpl)) return false;
-    TravelTimeEntityImpl that = (TravelTimeEntityImpl) o;
+    if (!(o instanceof TravelTimeEntityImpl that)) return false;
     return Objects.equals(length, that.length)
         && Objects.equals(travel_time, that.travel_time)
         && Objects.equals(velocity, that.velocity);

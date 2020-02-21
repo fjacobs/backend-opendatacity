@@ -1,0 +1,49 @@
+create table geometries
+(
+    pk serial not null
+        constraint geometries_pk
+            primary key,
+    type varchar(200),
+    id varchar(200),
+    geom geometry
+);
+
+create unique index geometries_id_geom_uindex
+    on geometries (id, geom);
+
+
+alter table geometries owner to postgres;
+
+-----------------------------------------
+//spring.jpa.database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
+
+
+create table travel_time_entity
+(
+	pkey serial not null
+		constraint travel_time_entity_pkey
+			primary key,
+	id varchar(200),
+	name varchar(200),
+	pub_date timestamp with time zone not null,
+	our_retrieval timestamp with time zone,
+	type varchar(50),
+	length smallint
+		constraint travel_time_entity_length_check
+			check (length >= '-1'::integer),
+	velocity smallint
+		constraint travel_time_entity_velocity_check
+			check (velocity >= '-1'::integer),
+	travel_time smallint
+		constraint travel_time_entity_travel_time_check
+			check (travel_time >= '-1'::integer),
+	geometry varchar(200)
+		constraint travel_time_entity_geometries_id_fk
+			references geometries (id),
+	constraint travel_time_entity_id_pub_date_key
+		unique (id, pub_date)
+);
+
+alter table travel_time_entity owner to postgres;
+
+

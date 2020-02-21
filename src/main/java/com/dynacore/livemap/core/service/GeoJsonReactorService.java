@@ -1,23 +1,20 @@
 package com.dynacore.livemap.core.service;
 
-import com.dynacore.livemap.core.EntityToDtoMapper;
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.model.TrafficDTO;
-import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.dynacore.livemap.core.model.TrafficFeature;
+import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
-import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.ParallelFlux;
-import reactor.core.scheduler.Schedulers;
+import reactor.core.publisher.Hooks;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.List;
@@ -38,7 +35,7 @@ public abstract class GeoJsonReactorService<
   public GeoJsonReactorService(
       ServiceProperties generalConfig,
       ObjectProvider<GeoJsonAdapter> geoJsonAdapterObjectProvider,
-      FeatureImporter<R> featureImporter,
+      FeatureImporter<R> featureMapper,
       TrafficRepository<T> repo,
       DTODistinctInterface<T, D> DTODistinctInterface,
       FeatureDistinct<R, R> featureDistinct)
@@ -50,26 +47,23 @@ public abstract class GeoJsonReactorService<
     this.repo = repo;
     this.DTODistinctInterface = DTODistinctInterface;
     this.featureDistinct = featureDistinct;
-    this.featureImporter = featureImporter;
+    this.featureImporter = featureMapper;
 
     logger.info(this.generalConfig.getRequestInterval().toString());
-   // importedFlux = importFlux().cache(generalConfig.getRequestInterval());
+    // importedFlux = importFlux().cache(generalConfig.getRequestInterval());
     importedFlux = importFlux();
   }
 
   protected Flux<R> importFlux() throws JsonProcessingException {
+    Hooks.onOperatorDebug();
     return geoJsonAdapter
         .adapterHotSourceReq(generalConfig.getRequestInterval())
         .doOnNext(
             x -> {
-              logger.info("Retrieved new featurecollection, size: " + x.getFeatures().size());
+              logger.info("Retrieved new fc, size: " + x.getFeatures().size());
             })
-        .onBackpressureDrop(fc-> logger.error("2. Drop on backpressure:" + fc.getFeatures().get(0).getProperty("Timestamp") )   )
         .flatMapIterable(FeatureCollection::getFeatures)
-//        .parallel(Runtime.getRuntime().availableProcessors())
-//        .runOn(Schedulers.parallel())
         .map(featureImporter::importFeature);
-
   }
 
   public Flux<TrafficFeatureImpl> getFeatureRange(FeatureRequest range) {
@@ -89,4 +83,9 @@ public abstract class GeoJsonReactorService<
         .delayElements(interval)
         .doOnNext(x -> logger.info("Amount of distinct features: " + x.size()));
   }
+
+  public Mono<FeatureCollection> retrieveLocations() {
+    return null;
+  }
+
 }

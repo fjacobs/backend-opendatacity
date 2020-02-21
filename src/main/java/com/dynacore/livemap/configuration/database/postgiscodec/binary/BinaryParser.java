@@ -1,6 +1,6 @@
-package com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary;
+package com.dynacore.livemap.configuration.database.postgiscodec.binary;
 
-import com.dynacore.livemap.configuration.database.postgiscodec.postgis.GeometryTypes;
+import com.dynacore.livemap.configuration.database.postgiscodec.GeometryTypes;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory;
 import org.slf4j.Logger;

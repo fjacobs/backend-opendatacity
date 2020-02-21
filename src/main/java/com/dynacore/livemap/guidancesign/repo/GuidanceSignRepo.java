@@ -1,6 +1,7 @@
 package com.dynacore.livemap.guidancesign.repo;
 
 import com.dynacore.livemap.core.PubDateSizeResponse;
+import com.dynacore.livemap.core.repository.GeometryEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
@@ -57,9 +58,15 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate
     return null;
   }
 
-  @Override
-  public Mono<Void> save(GuidanceSignAggregate aggregate) {
+  public Mono<Void> saveGeometry(GeometryEntity geometryEntity) {
+    return databaseClient
+            .execute("INSERT into geometries(id, geo_type, data_type, geom) VALUES( '" + geometryEntity.id() + "', '" + geometryEntity.geo_type() + "', '" + geometryEntity.data_type() + "', ST_GeomFromText('" + geometryEntity.geom().toString() + "',4326));")
+            .fetch()
+            .rowsUpdated()
+            .then();
+  }
 
+  public Mono<Void> save(GuidanceSignAggregate aggregate) {
     return databaseClient
         .insert()
         .into(GuidanceSignEntity.class)
@@ -71,7 +78,7 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate
             })
         .one()
         .then(
-            databaseClient
+              databaseClient
                 .insert()
                 .into(InnerDisplayEntity.class)
                 .using(aggregate.getInnerDisplayEntities())

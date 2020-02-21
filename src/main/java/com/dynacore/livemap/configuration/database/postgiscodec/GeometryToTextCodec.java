@@ -1,8 +1,8 @@
-package com.dynacore.livemap.configuration.database.postgiscodec.postgis;
+package com.dynacore.livemap.configuration.database.postgiscodec;
 
-import com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary.BinaryParser;
-import com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary.ByteGetter;
-import com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary.ValueGetter;
+import com.dynacore.livemap.configuration.database.postgiscodec.binary.BinaryParser;
+import com.dynacore.livemap.configuration.database.postgiscodec.binary.ByteGetter;
+import com.dynacore.livemap.configuration.database.postgiscodec.binary.ValueGetter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.r2dbc.postgresql.client.Parameter;

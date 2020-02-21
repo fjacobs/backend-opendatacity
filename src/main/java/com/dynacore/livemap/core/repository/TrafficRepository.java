@@ -20,4 +20,6 @@ public interface TrafficRepository<T extends TrafficEntity> {
   Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end);
 
   Flux<T> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end);
+
+  Mono<Void> saveGeometry(GeometryEntity locationEntityConvertor);
 }

@@ -1,4 +1,4 @@
-package com.dynacore.livemap.configuration.database.postgiscodec.postgis;
+package com.dynacore.livemap.configuration.database.postgiscodec;
 
 import io.netty.buffer.ByteBufAllocator;
 import io.r2dbc.postgresql.api.PostgresqlConnection;
@@ -14,8 +14,11 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class PostGisCodecRegistrar implements CodecRegistrar {
+
   private static final String GEOMETRY_TYPENAME = "geometry";
   private static final Collection<String> ALL_TYPENAMES = Collections.singleton(GEOMETRY_TYPENAME);
+
+  public PostGisCodecRegistrar() {}
 
   @Override
   public Publisher<Void> register(
@@ -74,6 +77,4 @@ public class PostGisCodecRegistrar implements CodecRegistrar {
               return Tuples.of(typeName, oid);
             }));
   }
-
-
 }

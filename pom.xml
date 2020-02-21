@@ -161,9 +161,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>test</scope>
         </dependency>
-
 
         <!-- Testing -->
 
@@ -216,8 +214,6 @@
             <version>2.9.9</version>
             <scope>test</scope>
         </dependency>
-
-
 
     </dependencies>
     <dependencyManagement>

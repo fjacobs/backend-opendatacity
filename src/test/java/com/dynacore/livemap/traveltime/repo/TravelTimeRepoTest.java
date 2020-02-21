@@ -35,60 +35,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 
 public class TravelTimeRepoTest {
 
-
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @Data
-  static class ConvertedEntity {
-    @Id
-    Integer id;
-    String name;
-  }
-
-  Connection connection;
-
-  @WritingConverter
-  enum ConvertedEntityToRow implements Converter<ConvertedEntity, OutboundRow> {
-
-    INSTANCE;
-
-    @Override
-    public OutboundRow convert(ConvertedEntity convertedEntity) {
-
-      OutboundRow outboundRow = new OutboundRow();
-
-      if (convertedEntity.getId() != null) {
-        outboundRow.put("id", SettableValue.from(convertedEntity.getId()));
-      }
-
-      outboundRow.put("name", SettableValue.from("prefixed: " + convertedEntity.getName()));
-
-      return outboundRow;
-    }
-  }
-
-  @ReadingConverter
-  enum RowToConvertedEntity implements Converter<Row, ConvertedEntity> {
-
-    INSTANCE;
-
-    @Override
-    public ConvertedEntity convert(Row source) {
-
-      ConvertedEntity entity = new ConvertedEntity();
-      entity.setId(source.get("id", Integer.class));
-      entity.setName("read: " + source.get("name", String.class));
-
-      return entity;
-    }
-  }
-
-//      DatabaseClient.create(
-//          ConnectionFactories.get(
-//              "r2dbc:h2:mem:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"));
-
-
-  ConnectionFactory connectionFactory =  ConnectionFactories.get("r2dbc:h2:file://localhost/home/stormraptor/h2db/:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+  ConnectionFactory connectionFactory =  ConnectionFactories.get("r2dbc:h2:mem://localhost/home/stormraptor/h2db/:///test;MODE=postgresql?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
   private final DatabaseClient client = DatabaseClient.create(connectionFactory);
 
 //  file:/Users/foo/data/db
@@ -104,39 +51,11 @@ public class TravelTimeRepoTest {
   @Before
   public void setup() throws ClassNotFoundException {
 
-//     Class.forName("org.h2.Driver");
-//        H2GISExtension.load(connection);
-
-//    connectionFactory.create().subscribe(connection->client );
     repo  = new TravelTimeRepo(client);
 
 
     String pubDate = "2019-10-16T15:52:00Z";
     String retDate = "2019-10-16T16:00:00Z";
-
-//    try {
-//      Class.forName("org.h2.Driver");
-//      // Open memory H2 table
-//      try(Connection connection = DriverManager.getConnection("jdbc:h2:mem:syntax","sa", "sa");
-//          Statement st = connection.createStatement()) {
-//        // Import spatial functions, domains and drivers
-//        // If you are using a file database, you have to do only that once.
-//        H2GISExtension.load(connection);
-//        // Create a table
-//        st.execute("CREATE TABLE ROADS (the_geom MULTILINESTRING, speed_limit INT)");
-//        // Add some roads
-//        st.execute("INSERT INTO ROADS VALUES ('MULTILINESTRING((15 5, 20 6, 25 7))', 80)");
-//        st.execute("INSERT INTO ROADS VALUES ('MULTILINESTRING((20 6, 21 15, 21 25))', 50)");
-//        // Compute the sum of roads length
-//        try(ResultSet rs = st.executeQuery("SELECT SUM(ST_LENGTH(the_geom)) total_length from ROADS")) {
-//          if(rs.next()) {
-//            System.out.println("Total length of roads: "+rs.getDouble("total_length")+" m");
-//          }
-//        }
-//      }
-//    } catch (Exception ex) {
-//      ex.printStackTrace();
-//    }
 
     entityOne =
         new TravelTimeEntityImpl(
@@ -216,9 +135,6 @@ public class TravelTimeRepoTest {
                                                         geotype varchar(200), 
                                                         geom geometry );
                                 """;
-
-
-
 
     String createTravelTime =
                                 """

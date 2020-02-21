@@ -1,4 +1,4 @@
-package com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary;
+package com.dynacore.livemap.configuration.database.postgiscodec.binary;
 
 import io.netty.buffer.ByteBuf;
 import io.r2dbc.postgresql.message.Format;

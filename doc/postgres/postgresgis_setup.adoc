@@ -1,0 +1,71 @@
+How to create a postgis database.
+----------
+
+sudo -u postgres psql
+
+CREATE DATABASE postgisdb;
+\c postgisdb;
+CREATE EXTENSION postgis; (ie. postgis and not the db name...)
+
+
+//example:
+CREATE TABLE geometries (name varchar, geom geometry);
+
+INSERT INTO geometries VALUES
+  ('Point', 'POINT(0 0)'),
+  ('Linestring', 'LINESTRING(0 0, 1 1, 2 1, 2 2)'),
+  ('Polygon', 'POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))'),
+  ('PolygonWithHole', 'POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(1 1, 1 2, 2 2, 2 1, 1 1))'),
+  ('Collection', 'GEOMETRYCOLLECTION(POINT(2 0),POLYGON((0 0, 1 0, 1 1, 0 1, 0 0)))');
+
+
+
+
+postgisdb=# SELECT name, ST_AsText(geom) FROM geometries;
+
+      name       |                           st_astext                           
+-----------------+---------------------------------------------------------------
+ Point           | POINT(0 0)
+ Linestring      | LINESTRING(0 0,1 1,2 1,2 2)
+ Polygon         | POLYGON((0 0,1 0,1 1,0 1,0 0))
+ PolygonWithHole | POLYGON((0 0,10 0,10 10,0 10,0 0),(1 1,1 2,2 2,2 1,1 1))
+ Collection      | GEOMETRYCOLLECTION(POINT(2 0),POLYGON((0 0,1 0,1 1,0 1,0 0)))
+
+
+
+
+----- Additional commands: 
+
+\l (list of all databases)
+\dt (show all tables)
+
+
+---- Additional apps 
+
+postgresql-autodoc
+
+--- references 
+
+
+OpenGIS Implementation Specification for Geographic information - Simple feature access.
+
+7.1.4 Feature tables
+
+The general format of a feature table shall be as follows:
+CREATE TABLE <feature table name> (
+<primary key column name> <primary key column type>,… (other attributes for this feature table)
+<geometry column name> <geometry column type>,… (other geometry columns for this feature table)
+PRIMARY KEY <primary key column name>,
+FOREIGN KEY <geometry column name> REFERENCES <geometry table name>,
+… (other geometry column constraints for this feature table)
+)
+
+
+
+
+
+
+
+
+
+

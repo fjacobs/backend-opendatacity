@@ -50,6 +50,7 @@ import static org.junit.Assert.assertTrue;
 
   @Autowired private Environment environment;
 
+  @Ignore
   @Test
   public void testLiveStream() {
     Hooks.onOperatorDebug();
@@ -133,7 +134,7 @@ import static org.junit.Assert.assertTrue;
 
       return (interval) ->
           Flux.fromIterable(
-                  FileToGeojson.readCollection(new File("/traveltimedata/blinkingsmall/")))
+                  FileToGeojson.readCollection(new File("/traveltimedata/traveltimesmall/")))
               .delayElements(interval)
               .repeat(10);
     }

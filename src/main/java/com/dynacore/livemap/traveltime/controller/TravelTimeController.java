@@ -58,4 +58,13 @@ public class TravelTimeController implements TrafficController {
 
   }
 
+  /*  Returns geojson FeatureCollection with locations
+   */
+  @CrossOrigin(origins = "http://localhost:9000")
+  @MessageMapping("TRAVELTIME_INIT")
+  public Flux<TravelTimeMapDTO> getFeatureCollection() {
+    logger.info("Enter TravelTimeGeoJsonController::getFeatureRange");
+    return null;
+  }
+
 }

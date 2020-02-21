@@ -1,4 +1,4 @@
-package com.dynacore.livemap.configuration.database.postgiscodec.postgis.binary;
+package com.dynacore.livemap.configuration.database.postgiscodec.binary;
 
 public abstract class ValueGetter {
   protected final ByteGetter buffer;

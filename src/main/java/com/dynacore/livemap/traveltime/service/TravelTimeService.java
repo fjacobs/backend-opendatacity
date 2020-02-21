@@ -16,6 +16,8 @@
 package com.dynacore.livemap.traveltime.service;
 
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
+import com.dynacore.livemap.core.model.TrafficFeatureImpl;
+import com.dynacore.livemap.core.repository.EntityMapper;
 import com.dynacore.livemap.core.service.GeoJsonReactorService;
 import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
@@ -30,12 +32,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
-import reactor.bool.BooleanUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
-import static org.springframework.data.r2dbc.query.Criteria.where;
 
 /**
  * Road traffic traveltime service
@@ -67,42 +65,14 @@ public class TravelTimeService
 
     if (config.isSaveToDbEnabled()) {
       Flux.from(importedFlux)
-          //          .parallel(Runtime.getRuntime().availableProcessors())
-          //          .runOn(Schedulers.parallel())
-          .map(TravelTimeEntityImpl::new)
           .onBackpressureDrop(fc-> log.error("3. Drop on backpressure:" )    )
-          .map(this::save)
+          .map(this::saveLocation)
           .onBackpressureDrop(fc-> log.error("4. Drop on backpressure:" )   )
           .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
     }
   }
 
-  public Mono<Void> save(TravelTimeEntityImpl entity) {
-
-    return client
-        .insert()
-        .into(TravelTimeEntityImpl.class)
-        .using(entity)
-        .fetch()
-        .rowsUpdated()
-        .then();
+  public Mono<Void> saveLocation(TrafficFeatureImpl feature) {
+    return repo.saveGeometry(EntityMapper.geometryEntityConvertor(feature));
   }
-
-  //  public Mono<Void> save(TravelTimeEntityImpl entity) {
-  //
-  //    return  client.execute("SELECT id, pub_date FROM travel_time_entity where id=:id and
-  // pub_date=:pub_date")
-  //            .bind("id", entity.getId())
-  //            .bind("pub_date", entity.getPubDate())
-  //            .fetch().one().hasElement()
-  //            .filter(Boolean::booleanValue)
-  //            .map( newEntity ->
-  //                    client
-  //                            .insert()
-  //                            .into(TravelTimeEntityImpl.class)
-  //                            .using(entity)
-  //                            .fetch().rowsUpdated())
-  //            .then()
-  //            .log();
-  //  }
 }

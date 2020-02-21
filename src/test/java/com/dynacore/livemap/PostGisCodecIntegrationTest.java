@@ -1,6 +1,6 @@
 package com.dynacore.livemap;
 
-import com.dynacore.livemap.configuration.database.postgiscodec.postgis.PostGisCodecRegistrar;
+import com.dynacore.livemap.configuration.database.postgiscodec.PostGisCodecRegistrar;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 
@@ -8,6 +8,7 @@ import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
@@ -16,6 +17,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
 class PostGisCodecIntegrationTest {
+
+    @Autowired
+    DatabaseClient client;
 
     @Test
     void testPoint() {
