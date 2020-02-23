@@ -7,9 +7,11 @@ import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.DatabaseClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
 
@@ -77,9 +79,35 @@ class PostGisCodecIntegrationTest {
                 .map((row, rowMetadata) -> row.get(0))
                 .one()
                 .cast(Geometry.class)
+                .doOnNext(System.out::println)
                 .block();
 
         System.out.println(line);
+    }
 
+
+    record idLoc(String id, Geometry geom){};
+
+    @Test
+    void getInitLocations() {
+        Hooks.onOperatorDebug();
+        ConnectionFactory connectionFactory =
+                new PostgresqlConnectionFactory(
+                        PostgresqlConnectionConfiguration.builder()
+                                .host("localhost")
+                                .port(5432) // optional, defaults to 5432
+                                .username("postgres")
+                                .password("admin")
+                                .database("test_db")
+                                .codecRegistrar(new PostGisCodecRegistrar())
+                                .build());
+
+        DatabaseClient client = DatabaseClient.create(connectionFactory);
+
+        client.execute("SELECT id, geom FROM geometries where geom && ST_MakeEnvelope(4.577447733334896,52.28670934090339,  5.22255118792474, 52.45440226066263,  4326)")
+            .map((row, rowMetadata) -> new idLoc((String) row.get(0), (Geometry) row.get(1)) )
+            .all()
+            .doOnNext(xx-> System.out.println("id" + xx.id() + "geom: " + xx.geom.toString() ))
+            .blockLast();
     }
 }

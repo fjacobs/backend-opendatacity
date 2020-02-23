@@ -70,8 +70,9 @@ public class LocalDbPostGisTest {
     Geometry line = client.execute("SELECT * FROM codec_geometry where data_type=" + "'travel_time'")
             .map((row, rowMetadata) -> row.get(4))
             .one()
-            .doOnNext(System.out::println)
             .cast(Geometry.class)
+            .doOnNext(System.out::println)
+
             .block();
   }
 }

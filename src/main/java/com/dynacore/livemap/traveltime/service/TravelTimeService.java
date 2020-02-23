@@ -75,4 +75,9 @@ public class TravelTimeService
   public Mono<Void> saveLocation(TrafficFeatureImpl feature) {
     return repo.saveGeometry(EntityMapper.geometryEntityConvertor(feature));
   }
+
+  public Flux<TravelTimeRepo.IdLoc> getLocations(double yMin, double xMin, double yMax, double xMax) {
+    return ((TravelTimeRepo) repo).getLocationsWithin(yMin, xMin,yMax,xMax);
+  }
+
 }

@@ -42,7 +42,7 @@ spring:
   #traveltime && parking && guidancesign
   #http || file
   profiles:
-    include: dev, postgres, guidancesign, file
+    include: dev, postgres, traveltime
   rsocket:
     server:
       mapping-path: /traveltimesocket

@@ -5,13 +5,18 @@ import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.model.TrafficDTO;
 import com.dynacore.livemap.core.model.TrafficFeature;
 import com.dynacore.livemap.core.model.TrafficFeatureImpl;
+import com.dynacore.livemap.core.repository.GeometryEntity;
 import com.dynacore.livemap.core.repository.TrafficEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
+import com.dynacore.livemap.traveltime.controller.LatLngBounds;
+import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.geojson.FeatureCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
@@ -50,8 +55,8 @@ public abstract class GeoJsonReactorService<
     this.featureImporter = featureMapper;
 
     logger.info(this.generalConfig.getRequestInterval().toString());
-    // importedFlux = importFlux().cache(generalConfig.getRequestInterval());
-    importedFlux = importFlux();
+    importedFlux = importFlux().cache(generalConfig.getRequestInterval());
+   // importedFlux = importFlux();
   }
 
   protected Flux<R> importFlux() throws JsonProcessingException {
@@ -84,8 +89,5 @@ public abstract class GeoJsonReactorService<
         .doOnNext(x -> logger.info("Amount of distinct features: " + x.size()));
   }
 
-  public Mono<FeatureCollection> retrieveLocations() {
-    return null;
-  }
 
 }

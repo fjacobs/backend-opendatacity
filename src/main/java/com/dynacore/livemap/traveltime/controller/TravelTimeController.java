@@ -39,12 +39,15 @@ public class TravelTimeController implements TrafficController {
     return service.getLiveData();
   }
 
-  @Override
+  record RequestOptions(Long replayInterval, LatLngBounds currentBounds) {}
+
+//  @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("TRAVELTIME_REPLAY")
-  public Flux<List<TravelTimeMapDTO>> replayAllDistinct(Integer intervalMilliSec) {
+  public Flux<List<TravelTimeMapDTO>> replayAllDistinct(RequestOptions params ) {
     logger.info("Enter TravelTimeGeoJsonController::replayAllDistinct");
-    return service.replayHistoryGroup(Duration.ofMillis(intervalMilliSec));
+
+    return service.replayHistoryGroup(Duration.ofSeconds(params.replayInterval()));
   }
 
   /*  Returns Feature properties without geolocation

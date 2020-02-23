@@ -39,7 +39,7 @@ public class GuidanceSignController implements TrafficController {
     return service.getLiveData();
   }
 
-  @Override
+//  @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("GUIDANCESIGN_REPLAY")
   public Flux<List<DisplayDTO>> replayAllDistinct(Integer intervalMilliSec) {

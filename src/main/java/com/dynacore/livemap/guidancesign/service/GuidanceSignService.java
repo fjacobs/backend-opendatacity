@@ -74,7 +74,7 @@ public class GuidanceSignService
         .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
   }
 
-  @Override
+ // @Override
   public Flux<List<DisplayDTO>> replayHistoryGroup(Duration interval) {
     return repo.getAllAscending()
         .flatMap(
