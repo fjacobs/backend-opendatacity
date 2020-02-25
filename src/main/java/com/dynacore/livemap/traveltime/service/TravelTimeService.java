@@ -63,20 +63,22 @@ public class TravelTimeService
       throws JsonProcessingException {
     super(config, geoJsonAdapterObjectProvider, importer, repo, entityDtoDistinct, featureDistinct);
 
-    if (config.isSaveToDbEnabled()) {
-      Flux.from(importedFlux)
+//    if (config.isSaveToDbEnabled()) {
+     importedFlux
           .onBackpressureDrop(fc-> log.error("3. Drop on backpressure:" )    )
-          .map(this::saveLocation)
+          .map(TravelTimeEntityImpl::new)
+          .map(repo::save)
           .onBackpressureDrop(fc-> log.error("4. Drop on backpressure:" )   )
           .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
-    }
+
+  //  }
   }
 
   public Mono<Void> saveLocation(TrafficFeatureImpl feature) {
     return repo.saveGeometry(EntityMapper.geometryEntityConvertor(feature));
   }
 
-  public Flux<TravelTimeRepo.IdLoc> getLocations(double yMin, double xMin, double yMax, double xMax) {
+  public Flux<TravelTimeRepo.IdLoc> getLocationFlux(double yMin, double xMin, double yMax, double xMax) {
     return ((TravelTimeRepo) repo).getLocationsWithin(yMin, xMin,yMax,xMax);
   }
 

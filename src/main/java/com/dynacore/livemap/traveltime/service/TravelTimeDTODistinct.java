@@ -13,22 +13,24 @@ import java.util.function.BiConsumer;
 
 @Profile("traveltime")
 @Component
-public class TravelTimeDTODistinct implements DTODistinctInterface<TravelTimeEntityImpl, TravelTimeMapDTO> {
-
+public class TravelTimeDTODistinct
+    implements DTODistinctInterface<TravelTimeEntityImpl, TravelTimeMapDTO> {
 
   Map<String, TravelTimeMapDTO> dtoStore = new HashMap<>();
 
   @Override
   public BiConsumer<TravelTimeEntityImpl, SynchronousSink<TravelTimeMapDTO>> filter() {
     return (entity, sink) -> {
-
       TravelTimeMapDTO newDTO = new TravelTimeMapDTO(entity);
       TravelTimeMapDTO lastChangedDTO;
       if ((lastChangedDTO = dtoStore.get(newDTO.getId())) != null) {
         if (!lastChangedDTO.equals(newDTO)) {
           dtoStore.put(newDTO.getId(), newDTO);
-          if (!(lastChangedDTO.getVelocity().equals(newDTO.getVelocity()))) {
-            sink.next(newDTO);
+
+          if ((lastChangedDTO.getVelocity() != null) && (newDTO.getVelocity() != null)) {
+            if (!(lastChangedDTO.getVelocity().equals(newDTO.getVelocity()))) {
+              sink.next(newDTO);
+            }
           }
         }
       } else {

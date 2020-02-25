@@ -1,6 +1,7 @@
 package com.dynacore.livemap.core.model;
 
 import com.dynacore.livemap.core.repository.TrafficEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.geojson.Feature;
 import org.geojson.GeoJsonObject;
@@ -13,6 +14,8 @@ import java.time.OffsetDateTime;
 @JsonTypeName("Feature")
 public class TrafficFeatureImpl implements TrafficFeature {
   Logger log = LoggerFactory.getLogger(TrafficFeatureImpl.class);
+
+  @JsonIgnore
   protected Feature feature;
 
   public TrafficFeatureImpl() {
@@ -105,6 +108,7 @@ public class TrafficFeatureImpl implements TrafficFeature {
     return feature.getGeometry();
   }
 
+  @JsonIgnore
   public Feature getGenericGeoJson() {
     return feature;
   }

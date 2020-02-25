@@ -1,5 +1,6 @@
 package com.dynacore.livemap.guidancesign.repo;
 
+import com.dynacore.livemap.core.Direction;
 import com.dynacore.livemap.core.PubDateSizeResponse;
 import com.dynacore.livemap.core.repository.GeometryEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
@@ -60,32 +61,42 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate
 
   public Mono<Void> saveGeometry(GeometryEntity geometryEntity) {
     return databaseClient
-            .execute("INSERT into geometries(id, geo_type, data_type, geom) VALUES( '" + geometryEntity.id() + "', '" + geometryEntity.geo_type() + "', '" + geometryEntity.data_type() + "', ST_GeomFromText('" + geometryEntity.geom().toString() + "',4326));")
+            .execute("INSERT into guidancesign_geometries(id, geo_type, data_type, geom) VALUES( '" + geometryEntity.id() + "', '" + geometryEntity.geo_type() + "', '" + geometryEntity.data_type() + "', ST_GeomFromText('" + geometryEntity.geom().toString() + "',4326));")
             .fetch()
             .rowsUpdated()
             .then();
   }
 
-  public Mono<Void> save(GuidanceSignAggregate aggregate) {
-    return databaseClient
-        .insert()
-        .into(GuidanceSignEntity.class)
-        .using(aggregate.getGuidanceSignEntity())
-        .map(
-            (row, rowMetadata) -> {
-              aggregate.setFk(row.get("pkey", Integer.class));
-              return row;
-            })
-        .one()
-        .then(
-              databaseClient
-                .insert()
-                .into(InnerDisplayEntity.class)
-                .using(aggregate.getInnerDisplayEntities())
-                .fetch()
-                .all()
-                .then())
-        .then();
+    @Override
+    public Flux<GuidanceSignAggregate> getReplayData(OffsetDateTime start, Direction streamDirection) {
+        return null;
+    }
+
+    public Mono<Void> save(GuidanceSignAggregate aggregate) {
+
+    return Mono.just(aggregate).flatMap(
+            aggregate1 ->      databaseClient
+            .insert()
+            .into(GuidanceSignEntity.class)
+            .using(aggregate.getGuidanceSignEntity())
+            .map(
+                    (row, rowMetadata) -> {
+                      aggregate.setFk(row.get("pkey", Integer.class));
+                      return row;
+                    })
+            .one()
+            .then(
+                    databaseClient
+                            .insert()
+                            .into(InnerDisplayEntity.class)
+                            .using(aggregate.getInnerDisplayEntities())
+                            .fetch()
+                            .all()
+                            .then())
+            .then()).onErrorResume(x-> {
+                log.warn("Error writing to db: " + x.getMessage());
+                return Mono.empty();
+            });
   }
 
   @Override

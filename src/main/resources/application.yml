@@ -1,4 +1,4 @@
-debug:  false
+debug:  true
 
 logging:
   level:
@@ -22,6 +22,7 @@ guidancesign:
   initialdelay: 0s
   requestinterval: 600ms
   elementdelay: 0ms
+  saveToDbEnabled: true
 
 traveltime:
   #dataset webpage: https://data.amsterdam.nl/datasets/KDrDITPUOgY4wQ/
@@ -30,7 +31,7 @@ traveltime:
 #  requestinterval: 3072ms
 #  elementdelay: 3ms
 
-  requestinterval: 600ms
+  requestinterval: 0ms
   elementdelay: 0ms
 
   saveToDbEnabled: true
@@ -42,7 +43,7 @@ spring:
   #traveltime && parking && guidancesign
   #http || file
   profiles:
-    include: dev, postgres, traveltime
+    include: dev, postgres, guidancesign, file
   rsocket:
     server:
       mapping-path: /traveltimesocket
@@ -78,7 +79,7 @@ spring:
   profiles: "!test"
 
 fileadapter:
-  folder: /guidancesign
+  folder: /trafficdata/new/guidancesign
 
 postgres:
   host: localhost

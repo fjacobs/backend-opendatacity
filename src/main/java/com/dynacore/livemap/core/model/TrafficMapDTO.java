@@ -1,6 +1,8 @@
 package com.dynacore.livemap.core.model;
 
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
+import org.geojson.Geometry;
+import org.geojson.LineString;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;

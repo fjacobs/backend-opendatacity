@@ -1,6 +1,8 @@
 package com.dynacore.livemap.core.repository;
 
+import com.dynacore.livemap.core.Direction;
 import com.dynacore.livemap.core.PubDateSizeResponse;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -22,4 +24,6 @@ public interface TrafficRepository<T extends TrafficEntity> {
   Flux<T> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end);
 
   Mono<Void> saveGeometry(GeometryEntity locationEntityConvertor);
+
+   Flux<T> getReplayData(OffsetDateTime start, Direction streamDirection);
 }

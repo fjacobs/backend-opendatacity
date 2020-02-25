@@ -1,15 +1,7 @@
 package com.dynacore.livemap.core;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import java.time.Duration;
 import java.time.OffsetDateTime;
 
-/** Request class for filtering a stream of features with an interval between each new pubDate. */
-@Data
-@NoArgsConstructor
-public class FeatureRequest {
+public record FeatureRequest (Direction direction, OffsetDateTime startDate, Duration interval) { }
 
-  private OffsetDateTime startDate;
-  private OffsetDateTime endDate;
-}

@@ -1,5 +1,6 @@
 package com.dynacore.livemap.traveltime.repo;
 
+import com.dynacore.livemap.core.Direction;
 import com.dynacore.livemap.core.PubDateSizeResponse;
 import com.dynacore.livemap.core.repository.GeometryEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
@@ -45,28 +46,29 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
     public Mono<Void> save(TravelTimeEntityImpl entity) {
 
         return Mono.just(entity)
-                .flatMap(x-> isNew(x).filter(y->y).map(j->entity))
-                .map(
+             //   .flatMap(x-> isNew(x).filter(y->y).map(j->entity))
+                .flatMap(
                         newEntity ->
                                 r2dbcClient
                                         .insert()
                                         .into(TravelTimeEntityImpl.class)
                                         .using(newEntity)
                                         .fetch()
-                                        .rowsUpdated())
+                                        .rowsUpdated().then())
                 .then();
     }
 
     public Mono<Void> saveGeometry(GeometryEntity geometryEntity) {
         return r2dbcClient
-                .execute("UPDATE geometries(id, geo_type, data_type, geom) VALUES( '" + geometryEntity.id() + "', '" + geometryEntity.geo_type() + "', '" + geometryEntity.data_type() + "', ST_GeomFromText('" + geometryEntity.geom().toString() + "',4326));")
+                .execute("UPDATE traveltime_geometries(id, geo_type, data_type, geom) VALUES( '" + geometryEntity.id() + "', '" + geometryEntity.geo_type() + "', '" + geometryEntity.data_type() + "', ST_GeomFromText('" + geometryEntity.geom().toString() + "',4326));")
                 .fetch()
                 .rowsUpdated()
                 .then();
     }
     public record IdLoc(String id, Geometry geom){};
     public Flux<IdLoc> getLocationsWithin(double yMin, double xMin, double yMax, double xMax) {
-           return r2dbcClient.execute("SELECT id, geom FROM geometries where geom && ST_MakeEnvelope(" + yMin + ", "+ xMin +"," + yMax + "," + xMax + ", 4326)")
+
+        return r2dbcClient.execute("SELECT id, geom FROM traveltime_geometries where geom && ST_MakeEnvelope(" + xMin  + ", "+ yMin  +"," + xMax  + "," + yMax + ", 4326)")
                     .map((row, rowMetadata) -> new IdLoc((String) row.get(0), (Geometry) row.get(1)) )
             .all();
     }
@@ -90,6 +92,34 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
     public Flux<TravelTimeEntityImpl> getAllAscending() {
         return r2dbcClient
                 .execute("SELECT * FROM public.travel_time_entity ORDER BY pub_date ASC")
+                .as(TravelTimeEntityImpl.class)
+                .fetch()
+                .all();
+    }
+
+    @Override
+    public Flux<TravelTimeEntityImpl> getReplayData(OffsetDateTime start, Direction streamDirection) {
+
+        String orderDirection;
+        if(streamDirection == Direction.FORWARD)        {
+            orderDirection = "ASC";
+        } else if(streamDirection == Direction.BACKWARD)  {
+            orderDirection = "DESC";
+        } else {
+            throw new IllegalArgumentException("Error unknown order direction: " + streamDirection);
+        }
+
+        return r2dbcClient
+                .execute(
+                        "    SELECT pub_date, COUNT (pub_date)\n"
+                                + "    FROM\n"
+                                + "             public.travel_time_entity\n"
+                                + "    WHERE\n"
+                                + "    pub_date >= '"
+                                + start
+                                + "'\n"
+                                + "\n"
+                                + "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date " + orderDirection +";")
                 .as(TravelTimeEntityImpl.class)
                 .fetch()
                 .all();
@@ -136,9 +166,6 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
                                 + "    WHERE\n"
                                 + "    pub_date >= '"
                                 + start
-                                + "'\n"
-                                + "    AND    pub_date <= '"
-                                + end
                                 + "'\n"
                                 + "\n"
                                 + "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date DESC;")

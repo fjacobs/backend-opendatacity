@@ -22,6 +22,7 @@ import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeatureImpl;
 import com.dynacore.livemap.guidancesign.repo.GuidanceSignRepo;
+import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.List;
@@ -66,15 +68,27 @@ public class GuidanceSignService
       throws JsonProcessingException {
     super(config, adapter, importer, repo, entityDtoDistinct, featureDistinct);
     Hooks.onOperatorDebug();
+
+    importedFlux
+              // .map(GuidanceSignAggregate::new)
+              .onBackpressureDrop(fc -> log.error("3. Drop on backpressure:"))
+              .parallel(4)
+              .runOn(Schedulers.parallel())
+              .flatMap(guidanceSignFeature -> repo.save( new GuidanceSignAggregate(guidanceSignFeature)) )
+              .subscribe();
+           //   .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
+  }
+
+  private void saveGeometry(GuidanceSignRepo repo) {
     Flux.from(importedFlux)
-        //.map(GuidanceSignAggregate::new)
+        // .map(GuidanceSignAggregate::new)
         .onBackpressureDrop(fc -> log.error("3. Drop on backpressure:"))
         .map(EntityMapper::geometryEntityConvertor)
         .map(repo::saveGeometry)
         .subscribe(Mono::subscribe, error -> log.error("Error: " + error));
   }
 
- // @Override
+  // @Override
   public Flux<List<DisplayDTO>> replayHistoryGroup(Duration interval) {
     return repo.getAllAscending()
         .flatMap(

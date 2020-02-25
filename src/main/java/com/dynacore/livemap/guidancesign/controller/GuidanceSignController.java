@@ -2,9 +2,10 @@ package com.dynacore.livemap.guidancesign.controller;
 
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.TrafficController;
-import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeatureImpl;
+import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.dynacore.livemap.guidancesign.service.DisplayDTO;
 import com.dynacore.livemap.guidancesign.service.GuidanceSignService;
+import org.geojson.Feature;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +35,12 @@ public class GuidanceSignController implements TrafficController {
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("GUIDANCESIGN_STREAM")
-  public Flux<GuidanceSignFeatureImpl> streamLiveData() {
+  public Flux<Feature> streamLiveData() {
     logger.info("Enter GuidanceSignGeoJsonController::streamLiveData");
-    return service.getLiveData();
+    return service.getLiveData().map(TrafficFeatureImpl::getGenericGeoJson);
   }
 
-//  @Override
+  //  @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("GUIDANCESIGN_REPLAY")
   public Flux<List<DisplayDTO>> replayAllDistinct(Integer intervalMilliSec) {
@@ -54,7 +55,8 @@ public class GuidanceSignController implements TrafficController {
   @MessageMapping("GUIDANCESIGN_HISTORY")
   public Flux<DisplayDTO> getFeatureRange(FeatureRequest request) {
     logger.info("Enter GuidanceSignJsonController::getFeatureRange");
-    return service.getFeatureRange(request).map(feature-> modelMapper.map(feature, DisplayDTO.class));
-
+    return service
+        .getFeatureRange(request)
+        .map(feature -> modelMapper.map(feature, DisplayDTO.class));
   }
 }

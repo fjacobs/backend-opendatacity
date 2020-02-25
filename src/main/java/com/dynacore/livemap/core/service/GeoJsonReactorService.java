@@ -55,8 +55,8 @@ public abstract class GeoJsonReactorService<
     this.featureImporter = featureMapper;
 
     logger.info(this.generalConfig.getRequestInterval().toString());
-    importedFlux = importFlux().cache(generalConfig.getRequestInterval());
-   // importedFlux = importFlux();
+ //   importedFlux = importFlux().cache(generalConfig.getRequestInterval());
+    importedFlux = importFlux();
   }
 
   protected Flux<R> importFlux() throws JsonProcessingException {
@@ -72,12 +72,12 @@ public abstract class GeoJsonReactorService<
   }
 
   public Flux<TrafficFeatureImpl> getFeatureRange(FeatureRequest range) {
-    return repo.getFeatureDateRange(range.getStartDate(), range.getEndDate())
+    return repo.getReplayData(range.startDate(), range.direction())
         .map(TrafficFeatureImpl::new);
   }
 
   public Flux<R> getLiveData() {
-    return Flux.from(importedFlux).handle(featureDistinct.getFilter());
+     return Flux.from(importedFlux).handle(featureDistinct.getFilter()).log();
   }
 
   public Flux<List<D>> replayHistoryGroup(Duration interval) {
@@ -88,6 +88,4 @@ public abstract class GeoJsonReactorService<
         .delayElements(interval)
         .doOnNext(x -> logger.info("Amount of distinct features: " + x.size()));
   }
-
-
 }

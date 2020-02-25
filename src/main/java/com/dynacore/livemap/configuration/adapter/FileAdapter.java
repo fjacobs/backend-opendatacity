@@ -16,6 +16,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -24,54 +25,50 @@ public class FileAdapter {
   private final Logger logger = LoggerFactory.getLogger(FileAdapter.class);
   private final FileAdapterConfig config;
 
+  File[] files;
+  List<File> monoList;
+
   public FileAdapter(FileAdapterConfig config) {
     this.config = config;
-  }
-
-  Mono<FeatureCollection> readFile(File file) {
-    Mono<FeatureCollection> blockingWrapper =
-        Mono.fromCallable(
-                () -> {
-                  FeatureCollection fc =
-                      new ObjectMapper()
-                          .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
-                          .readValue(file, FeatureCollection.class);
-                  logger.info("Importing file: " + file.getName());
-                  return fc;
-                })
-            .cast(FeatureCollection.class);
-
-    return blockingWrapper.subscribeOn(Schedulers.boundedElastic());
-  }
-
-  @Profile("file")
-  @Bean(name = "fileReader")
-  GeoJsonAdapter fileReader() {
     logger.info("Bean: fileReader ");
     logger.info("Reading file contents from folder: " + config.getFolder());
 
     FileSystemResource resource =
         new FileSystemResource(System.getProperty("user.home") + "/" + config.getFolder());
     File folder = resource.getFile();
-    File[] files = folder.listFiles();
-
+    files = folder.listFiles();
     if (files == null) {
       System.err.println("Error: Could not open folder: " + config.getFolder());
-      return interval -> Flux.empty();
+      //     return interval -> Flux.empty();
     }
-
     Arrays.sort(files);
-    var monoList = Arrays.stream(files).filter(File::isFile).collect(Collectors.toList());
+    monoList = Arrays.stream(files).filter(File::isFile).collect(Collectors.toList());
+  }
 
-    return interval -> {
-        return Flux.fromIterable(monoList)
-                .delayElements(interval)
-                .flatMap(this::readFile)
-                .onBackpressureDrop(
-                        fc ->
-                                logger.error(
-                                        "Drop on backpressure:"
-                                                + fc.getFeatures().get(0).getProperty("Timestamp")));
-    };
+  Mono<FeatureCollection> readFile(File file) {
+
+    return Mono.fromCallable(
+            () -> {
+              FeatureCollection fc =
+                  new ObjectMapper()
+                      .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
+                      .readValue(file, FeatureCollection.class);
+              logger.info("Importing file: " + file.getName());
+              return fc;
+            })
+            .onErrorResume(throwable -> {
+              logger.warn("Error parsing geojson file: " + file.getName() + "with error: "  + throwable.getMessage());
+              return Mono.empty();
+            } )
+            .subscribeOn(Schedulers.boundedElastic());
+  }
+
+  @Profile("file")
+  @Bean(name = "fileReader")
+  GeoJsonAdapter fileReader() {
+    return interval ->
+        Flux.fromIterable(monoList)
+            .delayElements(interval)
+            .flatMap(this::readFile);
   }
 }

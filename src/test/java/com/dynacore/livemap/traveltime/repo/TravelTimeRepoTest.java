@@ -1,5 +1,6 @@
 package com.dynacore.livemap.traveltime.repo;
 
+import com.dynacore.livemap.core.Direction;
 import com.dynacore.livemap.traveltime.domain.TravelTimeFeatureImpl;
 import io.r2dbc.spi.Connection;
 import io.r2dbc.spi.ConnectionFactories;
@@ -12,6 +13,7 @@ import org.geojson.GeoJsonObject;
 import org.geojson.LineString;
 import org.geojson.LngLatAlt;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -211,19 +213,42 @@ public class TravelTimeRepoTest {
         .verifyComplete();
   //  client.execute("select id from travel_time_entity").fetch().one().as(StepVerifier::create).expectSubscription().assertNext(map-> assertEquals( "002", map.get("ID"))).verifyComplete();
   }
- // {"type":"Feature","properties":{"Id":"RWS01_MONIBAS_0091hrl0356ra0","Name":"0091hrl0356ra0","Type":"H","Timestamp":"2020-02-07T21:51:00Z","Length":623},
-  // "geometry":{"type":"LineString","coordinates":[[4.776645712715283,52.338380232953895],[4.776853788479121,52.33827956952142],[4.77842037340242,52.337460757548655],[4.778671519814815,52.33733621949967],[4.780652279562285,52.336267847567214],[4.782159793662865,52.33546665913931],[4.782751047173977,52.335146118375064],[4.78306134179851,52.33498592177948],[4.78356224185475,52.33472011500613]]}}
 
+    @Test
+    public void getReplayData() {
+
+      dropCreate(client);
+      insertEntityOne();
+      repo.save(entitySameAsOneWithNewPubDate).block();
+//      "2019-10-16T15:52:00Z"
+//      "2019-10-16T15:53:00Z";
+
+      repo.getReplayData(OffsetDateTime.parse("2019-10-16T15:52:00Z"), Direction.FORWARD)
+              .as(StepVerifier::create)
+              .assertNext(entity-> assertTrue( entity.getPubDate().isEqual(OffsetDateTime.parse("2019-10-16T15:52:00Z"))))
+              .assertNext(entity-> assertTrue( entity.getPubDate().isEqual(OffsetDateTime.parse("2019-10-16T15:53:00Z"))))
+              .verifyComplete();
+
+      repo.getReplayData(OffsetDateTime.parse("2019-10-16T15:52:00Z"), Direction.BACKWARD)
+              .as(StepVerifier::create)
+              .assertNext(entity-> assertTrue( entity.getPubDate().isEqual(OffsetDateTime.parse("2019-10-16T15:53:00Z"))))
+              .assertNext(entity-> assertTrue( entity.getPubDate().isEqual(OffsetDateTime.parse("2019-10-16T15:52:00Z"))))
+              .verifyComplete();
+    }
 
 
   record GeometryEntity(String id, String type, String geotype, LineString geom ) {  }
 
+  @Ignore
   @Test
   public void geometryInsertion() {
     dropCreate(client);
 
 //    INSERT INTO geometries VALUES
 //    ('Linestring', 'LINESTRING(0 0, 1 1, 2 1, 2 2)'),
+    // {"type":"Feature","properties":{"Id":"RWS01_MONIBAS_0091hrl0356ra0","Name":"0091hrl0356ra0","Type":"H","Timestamp":"2020-02-07T21:51:00Z","Length":623},
+    // "geometry":{"type":"LineString","coordinates":[[4.776645712715283,52.338380232953895],[4.776853788479121,52.33827956952142],[4.77842037340242,52.337460757548655],[4.778671519814815,52.33733621949967],[4.780652279562285,52.336267847567214],[4.782159793662865,52.33546665913931],[4.782751047173977,52.335146118375064],[4.78306134179851,52.33498592177948],[4.78356224185475,52.33472011500613]]}}
+
 
     TravelTimeFeatureImpl travelTimeFeature = new TravelTimeFeatureImpl();
     LineString lineString = new LineString(
@@ -360,6 +385,7 @@ public class TravelTimeRepoTest {
     assertTrue(entityOne.getPubDate().isEqual(entityTwo.getPubDate()));
   }
 
+  @Ignore
   @Test
   public void saveOneThenIgnoreSame() {
 

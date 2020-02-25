@@ -3,6 +3,8 @@ package com.dynacore.livemap.traveltime.domain;
 import com.dynacore.livemap.core.model.TrafficMapDTO;
 import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import lombok.NoArgsConstructor;
+import org.geojson.Geometry;
+import org.geojson.LineString;
 
 @NoArgsConstructor
 public class TravelTimeMapDTO extends TrafficMapDTO {
@@ -10,7 +12,11 @@ public class TravelTimeMapDTO extends TrafficMapDTO {
   public TravelTimeMapDTO(TravelTimeEntityImpl entity) {
     setId(entity.getId());
     setPubDate(entity.getPubDate());
-    setVelocity(entity.getVelocity());
+
+    if(entity.getVelocity() == null) { setVelocity(-1);
+    } else{
+      setVelocity(entity.getVelocity());
+    }
   }
 
   public void setType(String type) {
@@ -43,5 +49,9 @@ public class TravelTimeMapDTO extends TrafficMapDTO {
 
   public String getType() {
     return (String) get(TravelTimeFeatureImpl.TYPE);
+  }
+
+  public void setGeometry(Geometry<LineString> geometry) {
+
   }
 }

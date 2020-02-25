@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+@Ignore  //JDK 14 record incompatibility
 @SpringBootTest(
     properties = {
       "spring.main.web-application-type=reactive",
@@ -39,7 +40,7 @@ import static org.junit.Assert.assertTrue;
     },
     webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-@Ignore class RSocketIntegrationTest {
+class RSocketIntegrationTest {
 
   @Value("${spring.rsocket.server.port}")
   private int serverPort;
@@ -50,7 +51,7 @@ import static org.junit.Assert.assertTrue;
 
   @Autowired private Environment environment;
 
-  @Ignore
+  @Ignore  //JDK 14 record incompatibility
   @Test
   public void testLiveStream() {
     Hooks.onOperatorDebug();
@@ -74,6 +75,7 @@ import static org.junit.Assert.assertTrue;
         .verify();
   }
 
+  @Ignore  //JDK 14 record incompatibility
   @Test
   public void testReplayAll() {
 
