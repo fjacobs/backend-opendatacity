@@ -1,6 +1,9 @@
 package com.dynacore.livemap;
 
 import com.dynacore.livemap.configuration.database.postgiscodec.PostGisCodecRegistrar;
+import com.dynacore.livemap.core.Direction;
+import com.dynacore.livemap.core.model.TrafficFeatureImpl;
+import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 
@@ -15,6 +18,9 @@ import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
+
+import java.time.Duration;
+import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -133,7 +139,9 @@ class PostGisCodecIntegrationTest {
         .block();
     client
         .execute(
-             // Binary in 'VALUES' below is the same as using: ST_GeomFromText('LINESTRING(4.93074407259659 52.305265175062,4.93308922656803 52.3030160425161)',4326)
+            // Binary in 'VALUES' below is the same as using:
+            // ST_GeomFromText('LINESTRING(4.93074407259659 52.305265175062,4.93308922656803
+            // 52.3030160425161)',4326)
             "INSERT INTO codec_geometry_test VALUES('0102000020E6100000020000002DFE62F914B91340E3BFE3ED12274A40427001BE7BBB13408F62CC3AC9264A40');")
         .fetch()
         .rowsUpdated()
@@ -155,5 +163,27 @@ class PostGisCodecIntegrationTest {
         .as(StepVerifier::create)
         .expectNextCount(1)
         .verifyComplete();
+  }
+
+  @Test
+  void getDecreasing() {
+    Hooks.onOperatorDebug();
+    ConnectionFactory connectionFactory =
+        new PostgresqlConnectionFactory(
+            PostgresqlConnectionConfiguration.builder()
+                .host("localhost")
+                .port(5432) // optional, defaults to 5432
+                .username("postgres")
+                .password("admin")
+                .database("test_db")
+                .codecRegistrar(new PostGisCodecRegistrar())
+                .build());
+//    2020-02-24 15:00:01.000000
+
+    DatabaseClient client = DatabaseClient.create(connectionFactory);
+    TravelTimeRepo repo = new TravelTimeRepo(client);
+    repo.getReplayData(OffsetDateTime.parse("2020-02-24T15:00:01+00:00"), Direction.BACKWARD)
+            .doOnNext(System.out::println)
+            .blockLast();
   }
 }

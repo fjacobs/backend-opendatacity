@@ -19,7 +19,7 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 import java.util.List;
 
-@Profile("traveltime")
+@Profile("guidancesign")
 @Controller
 public class GuidanceSignController implements TrafficController {
 
@@ -53,10 +53,11 @@ public class GuidanceSignController implements TrafficController {
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("GUIDANCESIGN_HISTORY")
-  public Flux<DisplayDTO> getFeatureRange(FeatureRequest request) {
+  public Flux<List<DisplayDTO>> replayDistinctFeatures(FeatureRequest request) {
     logger.info("Enter GuidanceSignJsonController::getFeatureRange");
-    return service
-        .getFeatureRange(request)
-        .map(feature -> modelMapper.map(feature, DisplayDTO.class));
+//    return service
+//        .getFeatureRange(request)
+//        .map(feature -> modelMapper.map(feature, DisplayDTO.class));
+    return null;
   }
 }

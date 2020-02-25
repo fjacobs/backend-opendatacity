@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-@Ignore  //JDK 14 record incompatibility
 @SpringBootTest(
     properties = {
       "spring.main.web-application-type=reactive",
@@ -51,7 +50,6 @@ class RSocketIntegrationTest {
 
   @Autowired private Environment environment;
 
-  @Ignore  //JDK 14 record incompatibility
   @Test
   public void testLiveStream() {
     Hooks.onOperatorDebug();
@@ -75,7 +73,6 @@ class RSocketIntegrationTest {
         .verify();
   }
 
-  @Ignore  //JDK 14 record incompatibility
   @Test
   public void testReplayAll() {
 
@@ -136,7 +133,7 @@ class RSocketIntegrationTest {
 
       return (interval) ->
           Flux.fromIterable(
-                  FileToGeojson.readCollection(new File("/traveltimedata/traveltimesmall/")))
+                  FileToGeojson.readCollection(new File("/traveltimesmall/")))
               .delayElements(interval)
               .repeat(10);
     }

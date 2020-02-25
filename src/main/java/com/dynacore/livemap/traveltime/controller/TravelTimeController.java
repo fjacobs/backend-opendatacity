@@ -2,6 +2,7 @@ package com.dynacore.livemap.traveltime.controller;
 
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.TrafficController;
+import com.dynacore.livemap.core.model.TrafficDTO;
 import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.dynacore.livemap.traveltime.Mapper;
 import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
@@ -45,6 +46,7 @@ public class TravelTimeController implements TrafficController {
     return service.getLiveData().map(TrafficFeatureImpl::getGenericGeoJson);
   }
 
+
   record RequestOptions(Long replayInterval, LatLngBounds currentBounds) {}
 
   @CrossOrigin(origins = "http://localhost:9000")
@@ -56,16 +58,23 @@ public class TravelTimeController implements TrafficController {
         .doOnNext(dto -> System.out.println("sending:" + dto));
   }
 
+  @Override
+  public Flux<? extends List<? extends TrafficDTO>> replayAllDistinct(Integer intervalMilliSec) {
+    return null;
+  }
+
+
+
   /*  Returns Feature properties without geolocation
    */
   @Override
   @CrossOrigin(origins = "http://localhost:9000")
-  @MessageMapping("TRAVELTIME_HISTORY")
-  public Flux<TravelTimeMapDTO> getFeatureRange(FeatureRequest request) {
-    logger.info("Enter TravelTimeGeoJsonController::getFeatureRange");
+  @MessageMapping("TRAVELTIME_REPLAYV2")
+  public Flux<List<TravelTimeMapDTO>> replayDistinctFeatures(FeatureRequest request) {
+    logger.info("Enter TravelTimeGeoJsonController::replayDistinctFeatures");
+    logger.info("Received requestOptions: " + request);
     return service
-        .getFeatureRange(request)
-        .map(feature -> modelMapper.map(feature, TravelTimeMapDTO.class));
+        .getFeatureRange(request.startDate(), request.direction(), Duration.ofMillis(request.intervalMilliSec()));
   }
   //  public Flux<TravelTimeRepo.IdLoc> getLocations(double yMin, double xMin, double yMax, double
   // xMax) {

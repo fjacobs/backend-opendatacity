@@ -1,5 +1,6 @@
 package com.dynacore.livemap.core.service;
 
+import com.dynacore.livemap.core.Direction;
 import com.dynacore.livemap.core.FeatureRequest;
 import com.dynacore.livemap.core.adapter.GeoJsonAdapter;
 import com.dynacore.livemap.core.model.TrafficDTO;
@@ -17,11 +18,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.lang.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public abstract class GeoJsonReactorService<
@@ -55,7 +58,7 @@ public abstract class GeoJsonReactorService<
     this.featureImporter = featureMapper;
 
     logger.info(this.generalConfig.getRequestInterval().toString());
- //   importedFlux = importFlux().cache(generalConfig.getRequestInterval());
+    //importedFlux = importFlux().cache(generalConfig.getRequestInterval());
     importedFlux = importFlux();
   }
 
@@ -65,19 +68,26 @@ public abstract class GeoJsonReactorService<
         .adapterHotSourceReq(generalConfig.getRequestInterval())
         .doOnNext(
             x -> {
-              logger.info("Retrieved new fc, size: " + x.getFeatures().size());
+              logger.info("Imported external fc of size: " + x.getFeatures().size());
             })
         .flatMapIterable(FeatureCollection::getFeatures)
         .map(featureImporter::importFeature);
   }
 
-  public Flux<TrafficFeatureImpl> getFeatureRange(FeatureRequest range) {
-    return repo.getReplayData(range.startDate(), range.direction())
-        .map(TrafficFeatureImpl::new);
+  public Flux<List<D>> getFeatureRange(
+      @NonNull OffsetDateTime startDate, @NonNull Direction direction, @NonNull Duration interval) {
+    logger.info("Request date: " + startDate + " direction: " + direction + ", interval: " + interval.toString());
+    return repo.getReplayData(startDate, direction)
+        .handle(DTODistinctInterface.filter())
+        .windowUntilChanged(D::pubDate)
+        .flatMap(Flux::buffer)
+        .delayElements(interval)
+        .log()
+        .doOnNext(x -> logger.info("Distinct feature count: " + x.size()));
   }
 
   public Flux<R> getLiveData() {
-     return Flux.from(importedFlux).handle(featureDistinct.getFilter()).log();
+    return Flux.from(importedFlux).handle(featureDistinct.getFilter());
   }
 
   public Flux<List<D>> replayHistoryGroup(Duration interval) {
@@ -86,6 +96,6 @@ public abstract class GeoJsonReactorService<
         .windowUntilChanged(D::pubDate)
         .flatMap(Flux::buffer)
         .delayElements(interval)
-        .doOnNext(x -> logger.info("Amount of distinct features: " + x.size()));
+        .doOnNext(x -> logger.info("Distinct feature count: " + x.size()));
   }
 }

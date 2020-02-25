@@ -1,0 +1,2 @@
+sudo ls -Q guidancesign | head -1000 | xargs -i sudo mv guidancesign/{} g1/
+

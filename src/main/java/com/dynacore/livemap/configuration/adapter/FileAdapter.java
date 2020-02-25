@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class FileAdapter {
   private final FileAdapterConfig config;
 
   File[] files;
-  List<File> monoList;
+  List<File> fileList;
 
   public FileAdapter(FileAdapterConfig config) {
     this.config = config;
@@ -37,12 +38,13 @@ public class FileAdapter {
         new FileSystemResource(System.getProperty("user.home") + "/" + config.getFolder());
     File folder = resource.getFile();
     files = folder.listFiles();
-    if (files == null) {
+    if (files != null) {
+      Arrays.sort(files);
+      fileList = Arrays.stream(files).filter(File::isFile).collect(Collectors.toList());
+    } else {
       System.err.println("Error: Could not open folder: " + config.getFolder());
-      //     return interval -> Flux.empty();
+      fileList = new ArrayList<>();
     }
-    Arrays.sort(files);
-    monoList = Arrays.stream(files).filter(File::isFile).collect(Collectors.toList());
   }
 
   Mono<FeatureCollection> readFile(File file) {
@@ -67,8 +69,9 @@ public class FileAdapter {
   @Bean(name = "fileReader")
   GeoJsonAdapter fileReader() {
     return interval ->
-        Flux.fromIterable(monoList)
+        Flux.fromIterable(fileList)
             .delayElements(interval)
-            .flatMap(this::readFile);
+            .flatMap(this::readFile)
+            .repeat();
   }
 }

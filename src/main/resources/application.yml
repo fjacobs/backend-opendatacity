@@ -1,11 +1,11 @@
-debug:  true
+debug:  false
 
 logging:
   level:
     org:
       springframework:
         data:
-          r2dbc: debug
+          r2dbc: info
 
   path: /home/stormraptor/log
 
@@ -31,19 +31,18 @@ traveltime:
 #  requestinterval: 3072ms
 #  elementdelay: 3ms
 
-  requestinterval: 0ms
+  requestinterval: 1000ms
   elementdelay: 0ms
-
   saveToDbEnabled: true
 
 #local.server.port: 7777
 spring:
 
-  # dev || prod
+  #dev ||
   #traveltime && parking && guidancesign
   #http || file
   profiles:
-    include: dev, postgres, guidancesign, file
+    include: dev, postgres, traveltime, file
   rsocket:
     server:
       mapping-path: /traveltimesocket
@@ -79,7 +78,10 @@ spring:
   profiles: "!test"
 
 fileadapter:
-  folder: /trafficdata/new/guidancesign
+  folder: /testfiles/
+
+#   import folder:
+#  folder: /trafficdata/new/guidancesign
 
 postgres:
   host: localhost
