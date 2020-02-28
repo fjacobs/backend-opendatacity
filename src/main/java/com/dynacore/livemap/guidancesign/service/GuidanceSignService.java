@@ -22,7 +22,6 @@ import com.dynacore.livemap.guidancesign.domain.GuidanceSignAggregate;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignEntity;
 import com.dynacore.livemap.guidancesign.domain.GuidanceSignFeatureImpl;
 import com.dynacore.livemap.guidancesign.repo.GuidanceSignRepo;
-import com.dynacore.livemap.traveltime.repo.TravelTimeEntityImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +68,7 @@ public class GuidanceSignService
     super(config, adapter, importer, repo, entityDtoDistinct, featureDistinct);
     Hooks.onOperatorDebug();
 
-    importedFlux
+    importedFeatures
               // .map(GuidanceSignAggregate::new)
               .onBackpressureDrop(fc -> log.error("3. Drop on backpressure:"))
               .parallel(4)
@@ -80,7 +79,7 @@ public class GuidanceSignService
   }
 
   private void saveGeometry(GuidanceSignRepo repo) {
-    Flux.from(importedFlux)
+    Flux.from(importedFeatures)
         // .map(GuidanceSignAggregate::new)
         .onBackpressureDrop(fc -> log.error("3. Drop on backpressure:"))
         .map(EntityMapper::geometryEntityConvertor)

@@ -20,6 +20,4 @@ public class ServiceProperties {
   public Boolean isSaveToDbEnabled() {
     return saveToDbEnabled;
   }
-
-
 }

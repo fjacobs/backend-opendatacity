@@ -75,6 +75,38 @@
         </dependency>
 
         <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-pool</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.postgis</groupId>
+            <artifactId>postgis-jdbc</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>5.4.12.Final</version>
+        </dependency>
+
+        <!-- h2gis 1.5.0 needs H2 1.4.197 and isn't compatible with H2 1.4.200
+              R2DBC needs H2 1.4.200 ..............
+              dev branch is also not ready yet
+        -->
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -91,13 +123,6 @@
         </dependency>
 
         <dependency>
-            <groupId>net.postgis</groupId>
-            <artifactId>postgis-jdbc</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>de.grundid.opendatalab</groupId>
             <artifactId>geojson-jackson</artifactId>
             <version>${geojson-jackson.version}</version>
@@ -110,60 +135,10 @@
         </dependency>
 
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.1.11</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>2.3.5</version>
         </dependency>
-        <!--    DB drivers -->
-
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-postgresql</artifactId>
-            <version>${r2dbc-driver-snapshot.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-pool</artifactId>
-            <version>${r2dbc-driver-snapshot.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <version>${r2dbc-driver-snapshot.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-spatial</artifactId>
-            <version>5.4.12.Final</version>
-        </dependency>
-
-<!-- h2gis 1.5.0 needs H2 1.4.197 and isn't compatible with H2 1.4.200
-      R2DBC needs H2 1.4.200 ..............
-      dev branch is also not ready yet
--->
-
-<!--        <dependency>-->
-<!--            <groupId>org.orbisgis</groupId>-->
-<!--            <artifactId>h2gis</artifactId>-->
-<!--            <version>1.5.0</version>-->
-<!--        </dependency>-->
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-
-        <!-- Testing -->
 
         <dependency>
             <groupId>io.projectreactor</groupId>
@@ -226,6 +201,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>io.r2dbc</groupId>
+                <artifactId>r2dbc-bom</artifactId>
+                <version>Arabba-SR2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

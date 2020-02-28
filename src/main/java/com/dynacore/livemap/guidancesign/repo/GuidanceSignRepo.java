@@ -16,6 +16,7 @@ import reactor.bool.BooleanUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 
 import static org.springframework.data.r2dbc.query.Criteria.where;
@@ -67,8 +68,12 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate
             .then();
   }
 
-    @Override
     public Flux<GuidanceSignAggregate> getReplayData(OffsetDateTime start, Direction streamDirection) {
+        return null;
+    }
+
+    @Override
+    public Flux<GuidanceSignAggregate> getReplayDataTest(OffsetDateTime start, Direction streamDirection, Duration interval) {
         return null;
     }
 

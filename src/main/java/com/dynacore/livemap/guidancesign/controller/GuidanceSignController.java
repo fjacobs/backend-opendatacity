@@ -50,7 +50,6 @@ public class GuidanceSignController implements TrafficController {
 
   /*  Returns Feature properties without geolocation
    */
-  @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("GUIDANCESIGN_HISTORY")
   public Flux<List<DisplayDTO>> replayDistinctFeatures(FeatureRequest request) {

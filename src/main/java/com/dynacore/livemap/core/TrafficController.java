@@ -13,6 +13,6 @@ public interface TrafficController {
 
     Flux< ? extends List<? extends TrafficDTO>> replayAllDistinct(Integer intervalMilliSec);
 
-    Flux< ? extends List<? extends TrafficDTO>> replayDistinctFeatures(FeatureRequest request);
+  //  Flux< ? extends List<? extends TrafficDTO>> replayDistinctFeatures(FeatureRequest request);
 
 }

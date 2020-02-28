@@ -67,14 +67,13 @@ public class TravelTimeController implements TrafficController {
 
   /*  Returns Feature properties without geolocation
    */
-  @Override
   @CrossOrigin(origins = "http://localhost:9000")
   @MessageMapping("TRAVELTIME_REPLAYV2")
   public Flux<List<TravelTimeMapDTO>> replayDistinctFeatures(FeatureRequest request) {
-    logger.info("Enter TravelTimeGeoJsonController::replayDistinctFeatures");
+    logger.info("Enter TRAVELTIME_REPLAYV2");
     logger.info("Received requestOptions: " + request);
     return service
-        .getFeatureRange(request.startDate(), request.direction(), Duration.ofMillis(request.intervalMilliSec()));
+        .getPubDateReplay(request.startDate(), request.direction(), Duration.ofMillis(request.intervalMilliSec()));
   }
   //  public Flux<TravelTimeRepo.IdLoc> getLocations(double yMin, double xMin, double yMax, double
   // xMax) {
