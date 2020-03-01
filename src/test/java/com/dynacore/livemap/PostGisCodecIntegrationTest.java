@@ -1,8 +1,6 @@
 package com.dynacore.livemap;
 
 import com.dynacore.livemap.configuration.database.postgiscodec.PostGisCodecRegistrar;
-import com.dynacore.livemap.core.Direction;
-import com.dynacore.livemap.core.model.TrafficFeatureImpl;
 import com.dynacore.livemap.traveltime.repo.TravelTimeRepo;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
@@ -11,16 +9,15 @@ import io.r2dbc.spi.ConnectionFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.DatabaseClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Hooks;
 import reactor.test.StepVerifier;
+import reactor.util.function.Tuple2;
 
-import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.Comparator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -167,7 +164,7 @@ class PostGisCodecIntegrationTest {
 
   @Test
   void getDecreasing() {
-    Hooks.onOperatorDebug();
+   // Hooks.onOperatorDebug();
     ConnectionFactory connectionFactory =
         new PostgresqlConnectionFactory(
             PostgresqlConnectionConfiguration.builder()

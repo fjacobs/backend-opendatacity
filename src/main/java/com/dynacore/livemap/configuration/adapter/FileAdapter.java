@@ -55,7 +55,7 @@ public class FileAdapter {
                   new ObjectMapper()
                       .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
                       .readValue(file, FeatureCollection.class);
-              logger.info("Importing file: " + file.getName());
+           //   logger.info("Importing file: " + file.getName());
               return fc;
             })
             .onErrorResume(throwable -> {
@@ -71,7 +71,7 @@ public class FileAdapter {
     return interval ->
         Flux.fromIterable(fileList)
             .delayElements(interval)
-            .flatMap(this::readFile)
-            .repeat();
+            .flatMap(this::readFile);
+       //     .repeat();
   }
 }

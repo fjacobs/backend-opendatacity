@@ -25,8 +25,8 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 @Repository("guidanceSignRepository")
 public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate> {
 
-  private final DatabaseClient databaseClient;
   private static final Logger log = LoggerFactory.getLogger(GuidanceSignRepo.class);
+  private final DatabaseClient databaseClient;
 
   public GuidanceSignRepo(DatabaseClient databaseClient) {
     this.databaseClient = databaseClient;
@@ -46,16 +46,6 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate
   }
 
   @Override
-  public Flux<PubDateSizeResponse> getReplayMetaData() {
-    return null;
-  }
-
-  @Override
-  public Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end) {
-    return null;
-  }
-
-  @Override
   public Flux<GuidanceSignAggregate> getFeatureDateRange(OffsetDateTime start, OffsetDateTime end) {
     return null;
   }
@@ -68,39 +58,44 @@ public class GuidanceSignRepo implements TrafficRepository<GuidanceSignAggregate
             .then();
   }
 
-    public Flux<GuidanceSignAggregate> getReplayData(OffsetDateTime start, Direction streamDirection) {
-        return null;
-    }
+  public Flux<GuidanceSignAggregate> getReplayPubDate(
+      OffsetDateTime start, Direction streamDirection) {
+    return null;
+  }
 
-    @Override
-    public Flux<GuidanceSignAggregate> getReplayDataTest(OffsetDateTime start, Direction streamDirection, Duration interval) {
-        return null;
-    }
+  @Override
+  public Flux<Tuple2<OffsetDateTime, Flux<TravelTimeEntityImpl>>> getReplayQueries() {
+    return null;
+  }
 
-    public Mono<Void> save(GuidanceSignAggregate aggregate) {
+  public Mono<Void> save(GuidanceSignAggregate aggregate) {
 
-    return Mono.just(aggregate).flatMap(
-            aggregate1 ->      databaseClient
-            .insert()
-            .into(GuidanceSignEntity.class)
-            .using(aggregate.getGuidanceSignEntity())
-            .map(
-                    (row, rowMetadata) -> {
-                      aggregate.setFk(row.get("pkey", Integer.class));
-                      return row;
-                    })
-            .one()
-            .then(
-                    databaseClient
+    return Mono.just(aggregate)
+        .flatMap(
+            aggregate1 ->
+                databaseClient
+                    .insert()
+                    .into(GuidanceSignEntity.class)
+                    .using(aggregate.getGuidanceSignEntity())
+                    .map(
+                        (row, rowMetadata) -> {
+                          aggregate.setFk(row.get("pkey", Integer.class));
+                          return row;
+                        })
+                    .one()
+                    .then(
+                        databaseClient
                             .insert()
                             .into(InnerDisplayEntity.class)
                             .using(aggregate.getInnerDisplayEntities())
                             .fetch()
                             .all()
                             .then())
-            .then()).onErrorResume(x-> {
-                log.warn("Error writing to db: " + x.getMessage());
-                return Mono.empty();
+                    .then())
+        .onErrorResume(
+            x -> {
+              log.warn("Error writing to db: " + x.getMessage());
+              return Mono.empty();
             });
   }
 

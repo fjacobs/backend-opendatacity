@@ -17,7 +17,7 @@ public class TravelTimeImporter implements FeatureImporter<TravelTimeFeatureImpl
       travelTimeFeature = new TravelTimeFeatureImpl(feature);
 
     } catch (Exception e) {
-      System.err.println("Could not import feature: " + feature);
+        System.err.println("Could not import feature: " + feature);
       assert false;
     }
 

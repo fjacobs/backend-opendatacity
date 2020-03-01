@@ -62,7 +62,7 @@ public abstract class GeoJsonReactorService<
     Hooks.onOperatorDebug();
     return geoJsonAdapter
         .adapterHotSourceReq(generalConfig.getRequestInterval())
-        .doOnNext(x -> log.info("Imported external fc of size: " + x.getFeatures().size()))
+       // .doOnNext(x -> log.info("Imported external fc of size: " + x.getFeatures().size()))
         .flatMapIterable(FeatureCollection::getFeatures)
         .map(featureImporter::importFeature);
   }

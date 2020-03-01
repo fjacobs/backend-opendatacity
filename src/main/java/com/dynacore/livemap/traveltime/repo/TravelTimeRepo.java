@@ -5,6 +5,7 @@ import com.dynacore.livemap.core.PubDateSizeResponse;
 import com.dynacore.livemap.core.model.TrafficDTO;
 import com.dynacore.livemap.core.repository.GeometryEntity;
 import com.dynacore.livemap.core.repository.TrafficRepository;
+import com.dynacore.livemap.traveltime.domain.FeatureLocation;
 import com.dynacore.livemap.traveltime.domain.TravelTimeMapDTO;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
@@ -85,7 +86,13 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
         .then();
   }
 
-  public Flux<IdLoc> getLocationsWithin(double yMin, double xMin, double yMax, double xMax) {
+  @Override
+  public Flux<TravelTimeEntityImpl> getReplayPubDate(OffsetDateTime start, Direction streamDirection) {
+    return null;
+  }
+
+  public Flux<FeatureLocation> getLocationsWithin(
+      double yMin, double xMin, double yMax, double xMax) {
 
     return r2dbcClient
         .execute(
@@ -98,7 +105,7 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
                 + ","
                 + yMax
                 + ", 4326)")
-        .map((row, rowMetadata) -> new IdLoc((String) row.get(0), (Geometry) row.get(1)))
+        .map((row, rowMetadata) -> new FeatureLocation((String) row.get(0), (Geometry) row.get(1)))
         .all();
   };
 
@@ -151,79 +158,32 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
                     .all());
   }
 
-  public Flux<TravelTimeEntityImpl> getReplayData(OffsetDateTime startDate, Direction direction) {
-    return null;
-  }
-
-  // public Flux<Flux<TravelTimeEntityImpl>> getReplayDataTest(OffsetDateTime startDate, Direction
-  // direction, Duration interval) {
-  public Flux<TravelTimeEntityImpl> getReplayDataTest(
-      OffsetDateTime startDate, Direction direction, Duration interval) {
-
-    String sortDirection = direction.equals(Direction.BACKWARD) ? "desc" : "asc";
-    char startDirection = direction.equals(Direction.BACKWARD) ? '<' : '>';
-
-    String queryList;
-    if (startDate == null) {
-      queryList = "select pub_date from travel_time_entity group by pub_date";
-    } else {
-      queryList =
-          String.format(
-              "select pub_date from travel_time_entity where pub_date %c '%s' group by pub_date order by pub_date %s",
-              startDirection, startDate, sortDirection);
-    }
+  @Override
+  public Flux<Tuple2<OffsetDateTime, Flux<TravelTimeEntityImpl>>> getReplayQueries() {
 
     Mono<List<OffsetDateTime>> monoQueryList =
         r2dbcClient
-            .execute(queryList)
+            .execute("select pub_date from travel_time_entity group by pub_date")
             .as(OffsetDateTime.class)
             .fetch()
             .all()
-            .collectList(); // Consume queryList from db, see
-    // https://gitter.im/R2DBC/r2dbc?at=5e4ee827c2c73b70a44a2bfe
+            .collectList(); // Consume queryList from db,
+                            // https://gitter.im/R2DBC/r2dbc?at=5e4ee827c2c73b70a44a2bfe
 
     return monoQueryList
         .flatMapIterable(Function.identity()) // Transform strings into publishers
-        .delayElements(interval)
-        .concatMap(
+        .map(
             pub_date ->
-                r2dbcClient
-                    .select()
-                    .from(TravelTimeEntityImpl.class)
-                    .matching(where("pub_date").is(pub_date))
-                    .fetch()
-                    .all());
-  }
-
-  @Override
-  public Flux<PubDateSizeResponse> getReplayMetaData() {
-    return r2dbcClient
-        .execute(
-            " SELECT pub_date, COUNT (pub_date) FROM public.travel_time_entity GROUP BY travel_time_entity.pub_date ORDER BY pub_date ASC;")
-        .as(PubDateSizeResponse.class)
-        .fetch()
-        .all();
-  }
-
-  @Override
-  public Flux<PubDateSizeResponse> getReplayMetaData(OffsetDateTime start, OffsetDateTime end) {
-    return r2dbcClient
-        .execute(
-            "    SELECT pub_date, COUNT (pub_date)\n"
-                + "    FROM\n"
-                + "             public.travel_time_entity\n"
-                + "    WHERE\n"
-                + "    pub_date >= '"
-                + start
-                + "'\n"
-                + "    AND    pub_date <='"
-                + end
-                + "'\n"
-                + "\n"
-                + "    GROUP BY travel_time_entity.pub_date ORDER BY pub_date ASC;")
-        .as(PubDateSizeResponse.class)
-        .fetch()
-        .all();
+                Tuples.of(
+                    pub_date,
+                    Flux.defer(
+                        () ->
+                            r2dbcClient
+                                .select()
+                                .from(TravelTimeEntityImpl.class)
+                                .matching(where("pub_date").is(pub_date))
+                                .fetch()
+                                .all())));
   }
 
   @Override
@@ -244,5 +204,4 @@ public class TravelTimeRepo implements TrafficRepository<TravelTimeEntityImpl> {
         .all();
   }
 
-  public record IdLoc(String id, Geometry geom) {}
 }

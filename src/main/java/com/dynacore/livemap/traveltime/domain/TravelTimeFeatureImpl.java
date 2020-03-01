@@ -40,12 +40,6 @@ public class TravelTimeFeatureImpl extends TrafficFeatureImpl {
   public TravelTimeFeatureImpl(Feature feature) {
     super(feature, THEIR_PUB_DATE_KEY);
     try {
-
-//      if (!feature.getProperties().containsKey(TRAVEL_TIME))
-//        feature.getProperties().put(TRAVEL_TIME, -1);
-//      if (!feature.getProperties().containsKey(VELOCITY)) feature.getProperties().put(VELOCITY, -1);
-//      OffsetDateTime retrieved = OffsetDateTime.now(ZoneOffset.UTC);
-//      feature.getProperties().put(OUR_CREATION_DATE, retrieved.toString());
       if (feature.getProperties().containsKey(ID)) {
         feature.setId(
             (String)
@@ -56,8 +50,6 @@ public class TravelTimeFeatureImpl extends TrafficFeatureImpl {
                               // level member
         feature.getProperties().remove(ID); // and not as a member of properties
       }
-//      if (!feature.getProperties().containsKey(TYPE)) throw new NoSuchElementException(TYPE);
-//      if (!feature.getProperties().containsKey(LENGTH)) throw new NoSuchElementException(LENGTH);
     } catch (NoSuchElementException error) {
       log.error(error.getMessage());
     }
@@ -99,7 +91,7 @@ public class TravelTimeFeatureImpl extends TrafficFeatureImpl {
     if( feature.getGeometry() instanceof LineString lineString ) {
       return lineString;
     }
-    throw new IllegalArgumentException("Road is not a LineString");
+    throw new IllegalArgumentException("Road Geometry should be a LineString");
   }
 
   @Override
